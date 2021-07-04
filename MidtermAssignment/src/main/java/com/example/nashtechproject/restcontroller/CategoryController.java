@@ -37,7 +37,7 @@ public class CategoryController {
     @PostMapping
     public Category saveCategory(@RequestBody Category category)
     {
-        List<Category> categories = categoryService.retrieveCategories();
+//        List<Category> categories = categoryService.retrieveCategories();
 //        for (Category emp:categories) {
 //            if (category.getName().equals(emp.getName()))
 //            {
