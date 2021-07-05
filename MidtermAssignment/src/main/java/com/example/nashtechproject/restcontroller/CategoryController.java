@@ -59,6 +59,7 @@ public class CategoryController {
         {
             category.setName(categoryDetails.getName());
             category.setDescription(categoryDetails.getDescription());
+            category.setProducts(categoryDetails.getProducts());
             categoryService.updateCategory(category);
         }
         return category;

@@ -1,6 +1,9 @@
 package com.example.nashtechproject.service.impl;
 
+import com.example.nashtechproject.entity.Category;
 import com.example.nashtechproject.entity.Product;
+import com.example.nashtechproject.exception.CategoryException;
+import com.example.nashtechproject.repository.CategoryRepository;
 import com.example.nashtechproject.repository.ProductRepository;
 import com.example.nashtechproject.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +15,8 @@ import java.util.List;
 public class ProductServiceImpl implements ProductService {
     @Autowired
     private ProductRepository productRepository;
+    @Autowired
+    private CategoryRepository categoryRepository;
 
     public void setProductRepository(ProductRepository productRepository)
     {
@@ -31,7 +36,13 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Product saveProduct(Product pro) {
+    public Product saveProduct(Product pro, Long categoryId) {
+        Category cate = categoryRepository.findById(categoryId).get();
+        if (cate == null)
+        {
+            throw new CategoryException(categoryId);
+        }
+        pro.setCategory(cate);
         return productRepository.save(pro);
     }
 
@@ -43,7 +54,13 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void updateProduct(Product pro) {
+    public void updateProduct(Product pro, Long categoryId) {
+        Category cate = categoryRepository.findById(categoryId).get();
+        if (cate == null)
+        {
+            throw new CategoryException(categoryId);
+        }
+        pro.setCategory(cate);
         productRepository.save(pro);
     }
 }

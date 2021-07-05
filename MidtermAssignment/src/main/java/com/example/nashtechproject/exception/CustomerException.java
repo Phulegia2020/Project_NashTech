@@ -5,4 +5,9 @@ public class CustomerException extends RuntimeException{
     {
         super("Could not find customer with id = " + id);
     }
+
+    public CustomerException(String account)
+    {
+        super(account + " is existed");
+    }
 }

@@ -1,6 +1,7 @@
 package com.example.nashtechproject.service.impl;
 
 import com.example.nashtechproject.entity.Customer;
+import com.example.nashtechproject.exception.CustomerException;
 import com.example.nashtechproject.repository.CustomerRepository;
 import com.example.nashtechproject.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,12 @@ public class CustomerServiceImpl implements CustomerService {
     public List<Customer> retrieveCustomers()
     {
         List<Customer> customers = customerRepository.findAll();
+        return customers;
+    }
+
+    public List<Customer> getCustomerByAccount(String account)
+    {
+        List<Customer> customers = customerRepository.findByAccount(account);
         return customers;
     }
 

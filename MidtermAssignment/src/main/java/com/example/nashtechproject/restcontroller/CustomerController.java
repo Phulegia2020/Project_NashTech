@@ -45,6 +45,11 @@ public class CustomerController {
 //                throw new CustomerException(Customer.getName());
 //            }
 //        }
+        List<Customer> customers = customerService.getCustomerByAccount(customer.getAccount());
+        if (customers.size() > 0)
+        {
+            throw new CustomerException(customer.getAccount());
+        }
         return customerService.saveCustomer(customer);
     }
 

@@ -1,5 +1,8 @@
 package com.example.nashtechproject.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
@@ -25,11 +28,16 @@ public class Product {
     @Column(name = "createddate")
     private LocalDateTime createddate;
 
+    @JsonFormat(pattern="dd/MM/yyyy")
     @Column(name = "updateddate")
     private LocalDateTime updateddate;
 
     @Column(name = "imageURL")
     private String imageurl;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "category_id")
+    private Category category;
 
     public Long getId() {
         return id;
@@ -93,5 +101,13 @@ public class Product {
 
     public void setImageurl(String imageurl) {
         this.imageurl = imageurl;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 }
