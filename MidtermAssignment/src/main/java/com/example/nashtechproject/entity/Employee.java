@@ -1,6 +1,8 @@
 package com.example.nashtechproject.entity;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Size;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -29,15 +31,20 @@ public class Employee {
     private String address;
 
     @Column(name = "email")
+    @Size(max = 50)
+    @Email
     private String email;
 
     @Column(name = "phone")
+    @Size(max = 10)
     private String phone;
 
     @Column(name = "account")
+    @Size(min = 3, max = 20)
     private String account;
 
     @Column(name = "password")
+    @Size(min = 6)
     private String password;
 
     @Column(name = "active_status")

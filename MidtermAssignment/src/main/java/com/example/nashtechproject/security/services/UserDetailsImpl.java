@@ -13,7 +13,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.nashtech.rookies.model.User;
 
 public class UserDetailsImpl implements UserDetails {
     private static final long serialVersionUID = 1L;
@@ -44,7 +43,7 @@ public class UserDetailsImpl implements UserDetails {
 //            .collect(Collectors.toList());
 
         Stream<Employee> stream = Stream.of(user);
-        List<GrantedAuthority> authorities = stream.map(role -> new SimpleGrantedAuthority(role.getName()))
+        List<GrantedAuthority> authorities = stream.map(role -> new SimpleGrantedAuthority(role.getRole().getName().name()))
                 .collect(Collectors.toList());
 
         return new UserDetailsImpl(

@@ -19,7 +19,7 @@ public class Role {
 
     @Enumerated(EnumType.STRING)
     @NaturalId
-    @Column(name = "role_description", length = 60)
+    @Column(name = "description", length = 60)
     private RoleName name;
 
 	@OneToMany(mappedBy = "role", cascade = CascadeType.ALL,fetch = FetchType.EAGER)
