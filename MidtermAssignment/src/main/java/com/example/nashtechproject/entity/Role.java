@@ -11,7 +11,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.NaturalId;
 
 @Entity
-@Table(name = "role")
+@Table(name = "role", schema = "public")
 public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,7 +24,7 @@ public class Role {
 
 	@OneToMany(mappedBy = "role", cascade = CascadeType.ALL,fetch = FetchType.EAGER)
 	@JsonIgnore
-	private List<Employee> employees = new ArrayList<>();
+	private List<User> users = new ArrayList<>();
 
 	public Role() {
 		super();
@@ -52,12 +52,12 @@ public class Role {
 		this.name = name;
 	}
 
-	public List<Employee> getEmployees() {
-		return employees;
+	public List<User> getUsers() {
+		return users;
 	}
 
-	public void setEmployees(List<Employee> employees) {
-		this.employees = employees;
+	public void setUsers(List<User> users) {
+		this.users = users;
 	}
 
 	@Override

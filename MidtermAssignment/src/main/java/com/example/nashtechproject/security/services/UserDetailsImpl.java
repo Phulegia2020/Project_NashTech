@@ -6,7 +6,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import com.example.nashtechproject.entity.Employee;
+import com.example.nashtechproject.entity.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -37,12 +37,12 @@ public class UserDetailsImpl implements UserDetails {
         this.authorities = authorities;
     }
 
-    public static UserDetailsImpl build(Employee user) {
+    public static UserDetailsImpl build(User user) {
 //        List<GrantedAuthority> authorities = user.getRole().stream()
 //            .map(role -> new SimpleGrantedAuthority(role.getName().name()))
 //            .collect(Collectors.toList());
 
-        Stream<Employee> stream = Stream.of(user);
+        Stream<User> stream = Stream.of(user);
         List<GrantedAuthority> authorities = stream.map(role -> new SimpleGrantedAuthority(role.getRole().getName().name()))
                 .collect(Collectors.toList());
 

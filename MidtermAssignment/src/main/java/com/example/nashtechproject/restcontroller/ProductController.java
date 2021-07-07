@@ -40,6 +40,8 @@ public class ProductController {
     @PostMapping("/{categoryId}")
     public Product saveProduct(@PathVariable(name = "categoryId") Long categoryId,@RequestBody Product product)
     {
+        product.setCreateddate(LocalDateTime.now());
+        product.setUpdateddate(LocalDateTime.now());
         return productService.saveProduct(product, categoryId);
     }
 

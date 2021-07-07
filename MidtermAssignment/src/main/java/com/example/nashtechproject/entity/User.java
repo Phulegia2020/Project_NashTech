@@ -3,20 +3,18 @@ package com.example.nashtechproject.entity;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Size;
-import java.util.HashSet;
 import java.util.Objects;
-import java.util.Set;
 
 @Entity
-@Table(name = "employee", uniqueConstraints = {
+@Table(name = "user", schema = "public", uniqueConstraints = {
         @UniqueConstraint(columnNames = {
                 "account"
         }),
         @UniqueConstraint(columnNames = {
                 "email"
-        })
+        }),
 })
-public class Employee {
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -50,20 +48,29 @@ public class Employee {
     @Column(name = "active_status")
     private String active_status;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id")
     private Role role;
 
-    public Employee() {
+    public User() {
     }
 
-    public Employee(String name, String username, String email, String password) {
+    public User(String name, String username, String email, String password) {
         this.name = name;
         this.account = username;
         this.email = email;
         this.password = password;
     }
 
+    public User(String name, String gender, String address, String email, String phone, String account, String password) {
+        this.name = name;
+        this.gender = gender;
+        this.address = address;
+        this.email = email;
+        this.phone = phone;
+        this.account = account;
+        this.password = password;
+    }
 
     public Long getId() {
         return id;
@@ -158,7 +165,7 @@ public class Employee {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        Employee other = (Employee) obj;
+        User other = (User) obj;
         return Objects.equals(id, other.id);
     }
 

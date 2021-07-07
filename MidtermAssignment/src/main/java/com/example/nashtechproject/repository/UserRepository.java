@@ -1,14 +1,14 @@
 package com.example.nashtechproject.repository;
 
-import com.example.nashtechproject.entity.Employee;
+import com.example.nashtechproject.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 
 import java.util.Optional;
 
-public interface UserRepository extends JpaRepository<Employee, Long> {
+public interface UserRepository extends JpaRepository<User, Long> {
 
-    Optional<Employee> findByAccount(String account);
+    Optional<User> findByAccount(String account);
 
     Boolean existsByAccount(String account);
 
