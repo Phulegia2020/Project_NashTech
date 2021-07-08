@@ -81,6 +81,7 @@ public class ProductController {
             product.setPrice(productDetails.getPrice());
             product.setUpdateddate(LocalDateTime.now());
             product.setCategory(productDetails.getCategory());
+            product.setSupplier(productDetails.getSupplier());
             productService.updateProduct(product, productDetails.getCategory().getId());
         }
         return product;

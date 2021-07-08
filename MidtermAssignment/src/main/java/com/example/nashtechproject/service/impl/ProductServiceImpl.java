@@ -2,9 +2,12 @@ package com.example.nashtechproject.service.impl;
 
 import com.example.nashtechproject.entity.Category;
 import com.example.nashtechproject.entity.Product;
+import com.example.nashtechproject.entity.Supplier;
 import com.example.nashtechproject.exception.CategoryException;
+import com.example.nashtechproject.exception.SupplierException;
 import com.example.nashtechproject.repository.CategoryRepository;
 import com.example.nashtechproject.repository.ProductRepository;
+import com.example.nashtechproject.repository.SupplierRepository;
 import com.example.nashtechproject.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +21,8 @@ public class ProductServiceImpl implements ProductService {
     private ProductRepository productRepository;
     @Autowired
     private CategoryRepository categoryRepository;
+    @Autowired
+    private SupplierRepository supplierRepository;
 
     public void setProductRepository(ProductRepository productRepository)
     {
@@ -43,7 +48,13 @@ public class ProductServiceImpl implements ProductService {
         {
             throw new CategoryException(categoryId);
         }
+        Supplier sup = supplierRepository.findById(pro.getSupplier().getId()).get();
+        if (sup == null)
+        {
+            throw new SupplierException(pro.getSupplier().getId());
+        }
         pro.setCategory(cate);
+        pro.setSupplier(sup);
         return productRepository.save(pro);
     }
 
@@ -61,7 +72,13 @@ public class ProductServiceImpl implements ProductService {
         {
             throw new CategoryException(categoryId);
         }
+        Supplier sup = supplierRepository.findById(pro.getSupplier().getId()).get();
+        if (sup == null)
+        {
+            throw new SupplierException(pro.getSupplier().getId());
+        }
         pro.setCategory(cate);
+        pro.setSupplier(sup);
         productRepository.save(pro);
     }
 }
