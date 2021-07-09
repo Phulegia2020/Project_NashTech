@@ -1,12 +1,18 @@
 package com.example.nashtechproject.restcontroller;
 
 import com.example.nashtechproject.entity.Bill;
+import com.example.nashtechproject.entity.BillStatus;
+import com.example.nashtechproject.entity.User;
 import com.example.nashtechproject.exception.BillException;
+import com.example.nashtechproject.exception.BillStatusException;
+import com.example.nashtechproject.exception.UserException;
 import com.example.nashtechproject.service.BillService;
+import com.example.nashtechproject.service.BillStatusService;
+import com.example.nashtechproject.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
@@ -16,6 +22,12 @@ import java.util.List;
 public class BillController {
     @Autowired
     private BillService billService;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private BillStatusService billStatusService;
 
     @GetMapping
     public List<Bill> getAllBills()
@@ -36,34 +48,26 @@ public class BillController {
     }
 
     @PostMapping()
-    public Bill saveBill(@RequestBody Bill Bill)
+    public Bill saveBill(@RequestBody Bill bill)
     {
-        Bill.setCreateddate(LocalDateTime.now());
-        return billService.saveBill(Bill);
+        User u = userService.getUser(bill.getUser().getId());
+        if (u == null)
+        {
+            throw new UserException(u.getId());
+        }
+        BillStatus bs = billStatusService.getBillStatus(bill.getBillStatus().getId());
+        if (bs == null)
+        {
+            throw new BillStatusException(bs.getId());
+        }
+        bill.setUser(u);
+        bill.setBillStatus(bs);
+        bill.setCreateddate(LocalDateTime.now());
+        return billService.saveBill(bill);
     }
 
-    //    @PutMapping("/{BillId}/{categoryId}")
-//    public Bill updateBill(@PathVariable(name = "categoryId") Long categoryId, @PathVariable(name = "BillId") Long BillId, @Validated @RequestBody Bill BillDetails)
-//    {
-//        Bill Bill = BillService.getBill(BillId);
-//        if (Bill == null)
-//        {
-//            throw new BillException(BillId);
-//        }
-//        else
-//        {
-//            Bill.setName(BillDetails.getName());
-//            Bill.setDescription(BillDetails.getDescription());
-//            Bill.setQuantity(BillDetails.getQuantity());
-//            Bill.setPrice(BillDetails.getPrice());
-//            Bill.setUpdateddate(LocalDateTime.now());
-//            Bill.setCategory(BillDetails.getCategory());
-//            BillService.updateBill(Bill, categoryId);
-//        }
-//        return Bill;
-//    }
     @PutMapping("/{billId}")
-    public Bill updateBill(@PathVariable(name = "billId") Long billId, @Validated @RequestBody Bill billDetails)
+    public Bill updateBill(@PathVariable(name = "billId") Long billId, @Valid @RequestBody Bill billDetails)
     {
         Bill bill = billService.getBill(billId);
         if (bill == null)
@@ -72,6 +76,16 @@ public class BillController {
         }
         else
         {
+            User u = userService.getUser(billDetails.getUser().getId());
+            if (u == null)
+            {
+                throw new UserException(u.getId());
+            }
+            BillStatus bs = billStatusService.getBillStatus(billDetails.getBillStatus().getId());
+            if (bs == null)
+            {
+                throw new BillStatusException(bs.getId());
+            }
             bill.setTotal(billDetails.getTotal());
             bill.setCheckout_date(LocalDateTime.now());
             bill.setUser(billDetails.getUser());

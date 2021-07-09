@@ -9,9 +9,11 @@ public interface ProductService {
 
     public Product getProduct(Long productId);
 
-    public Product saveProduct(Product product, Long categoryId);
+    public Product saveProduct(Product product);
 
     public void deleteProduct(Long productId);
 
-    public void updateProduct(Product product, Long categoryId);
+    public void updateProduct(Product product);
+
+    public List<Product> getProductsByCategory(Long categoryId);
 }

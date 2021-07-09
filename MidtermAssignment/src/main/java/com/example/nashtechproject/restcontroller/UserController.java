@@ -4,9 +4,9 @@ import com.example.nashtechproject.entity.User;
 import com.example.nashtechproject.exception.UserException;
 import com.example.nashtechproject.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
@@ -50,11 +50,12 @@ public class UserController {
         {
             throw new UserException(user.getAccount());
         }
+        user.setActive_status("Active");
         return userService.saveUser(user);
     }
 
     @PutMapping("/{userId}")
-    public User updateUser(@PathVariable(name = "userId") Long userId, @Validated @RequestBody User userDetails)
+    public User updateUser(@PathVariable(name = "userId") Long userId, @Valid @RequestBody User userDetails)
     {
         User user = userService.getUser(userId);
         if (user == null)

@@ -21,12 +21,16 @@ public class SignupRequest {
     @Size(min = 6, max = 40)
     private String password;
 
+    @NotBlank
     private String gender;
 
+    @NotBlank
     private String address;
 
+    @NotBlank
     private String phone;
 
+    @NotBlank
     private String name;
 
     public String getUsername() {

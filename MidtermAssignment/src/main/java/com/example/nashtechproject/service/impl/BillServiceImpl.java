@@ -42,18 +42,6 @@ public class BillServiceImpl implements BillService {
 
     @Override
     public Bill saveBill(Bill bill) {
-        User u = userRepository.findById(bill.getUser().getId()).get();
-        if (u == null)
-        {
-            throw new UserException(u.getId());
-        }
-        BillStatus bs = billStatusRepository.findById(bill.getBillStatus().getId()).get();
-        if (bs == null)
-        {
-            throw new BillStatusException(bs.getId());
-        }
-        bill.setUser(u);
-        bill.setBillStatus(bs);
         return billRepository.save(bill);
     }
 
@@ -66,18 +54,6 @@ public class BillServiceImpl implements BillService {
 
     @Override
     public void updateBill(Bill bill) {
-        User u = userRepository.findById(bill.getUser().getId()).get();
-        if (u == null)
-        {
-            throw new UserException(u.getId());
-        }
-        BillStatus bs = billStatusRepository.findById(bill.getBillStatus().getId()).get();
-        if (bs == null)
-        {
-            throw new BillStatusException(bs.getId());
-        }
-        bill.setUser(u);
-        bill.setBillStatus(bs);
         billRepository.save(bill);
     }
 }

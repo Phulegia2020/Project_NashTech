@@ -2,13 +2,17 @@ package com.example.nashtechproject.restcontroller;
 
 import com.example.nashtechproject.entity.Category;
 import com.example.nashtechproject.entity.Product;
+import com.example.nashtechproject.entity.Supplier;
 import com.example.nashtechproject.exception.CategoryException;
 import com.example.nashtechproject.exception.ProductException;
+import com.example.nashtechproject.exception.SupplierException;
+import com.example.nashtechproject.service.CategoryService;
 import com.example.nashtechproject.service.ProductService;
+import com.example.nashtechproject.service.SupplierService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
@@ -18,6 +22,12 @@ import java.util.List;
 public class ProductController {
     @Autowired
     private ProductService productService;
+
+    @Autowired
+    private CategoryService categoryService;
+
+    @Autowired
+    private SupplierService supplierService;
 
     @GetMapping
     public List<Product> getAllProducts()
@@ -37,36 +47,40 @@ public class ProductController {
         return productService.getProduct(productId);
     }
 
-    @PostMapping("/{categoryId}")
-    public Product saveProduct(@PathVariable(name = "categoryId") Long categoryId,@RequestBody Product product)
+    @GetMapping("/search")
+    public List<Product> getAllProductsByCategory(@RequestParam Long categoryId)
     {
-        product.setCreateddate(LocalDateTime.now());
-        product.setUpdateddate(LocalDateTime.now());
-        return productService.saveProduct(product, categoryId);
+        Category cate = categoryService.getCategory(categoryId);
+        if (cate == null)
+        {
+            throw new CategoryException(cate.getId());
+        }
+        List<Product> products = productService.getProductsByCategory(categoryId);
+        return products;
     }
 
-//    @PutMapping("/{productId}/{categoryId}")
-//    public Product updateProduct(@PathVariable(name = "categoryId") Long categoryId, @PathVariable(name = "productId") Long productId, @Validated @RequestBody Product productDetails)
-//    {
-//        Product product = productService.getProduct(productId);
-//        if (product == null)
-//        {
-//            throw new ProductException(productId);
-//        }
-//        else
-//        {
-//            product.setName(productDetails.getName());
-//            product.setDescription(productDetails.getDescription());
-//            product.setQuantity(productDetails.getQuantity());
-//            product.setPrice(productDetails.getPrice());
-//            product.setUpdateddate(LocalDateTime.now());
-//            product.setCategory(productDetails.getCategory());
-//            productService.updateProduct(product, categoryId);
-//        }
-//        return product;
-//    }
+    @PostMapping()
+    public Product saveProduct(@RequestBody Product product)
+    {
+        Category cate = categoryService.getCategory(product.getCategory().getId());
+        if (cate == null)
+        {
+            throw new CategoryException(cate.getId());
+        }
+        Supplier sup = supplierService.getSupplier(product.getSupplier().getId());
+        if (sup == null)
+        {
+            throw new SupplierException(sup.getId());
+        }
+        product.setCreateddate(LocalDateTime.now());
+        product.setUpdateddate(LocalDateTime.now());
+        product.setCategory(cate);
+        product.setSupplier(sup);
+        return productService.saveProduct(product);
+    }
+
     @PutMapping("/{productId}")
-    public Product updateProduct(@PathVariable(name = "productId") Long productId, @Validated @RequestBody Product productDetails)
+    public Product updateProduct(@PathVariable(name = "productId") Long productId, @Valid @RequestBody Product productDetails)
     {
         Product product = productService.getProduct(productId);
         if (product == null)
@@ -75,6 +89,14 @@ public class ProductController {
         }
         else
         {
+            if (categoryService.getCategory(productDetails.getCategory().getId()) == null)
+            {
+                throw new CategoryException(productDetails.getCategory().getId());
+            }
+            if (supplierService.getSupplier(productDetails.getSupplier().getId()) == null)
+            {
+                throw new SupplierException(productDetails.getSupplier().getId());
+            }
             product.setName(productDetails.getName());
             product.setDescription(productDetails.getDescription());
             product.setQuantity(productDetails.getQuantity());
@@ -82,7 +104,7 @@ public class ProductController {
             product.setUpdateddate(LocalDateTime.now());
             product.setCategory(productDetails.getCategory());
             product.setSupplier(productDetails.getSupplier());
-            productService.updateProduct(product, productDetails.getCategory().getId());
+            productService.updateProduct(product);
         }
         return product;
     }

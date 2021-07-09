@@ -4,9 +4,9 @@ import com.example.nashtechproject.entity.BillStatus;
 import com.example.nashtechproject.exception.BillStatusException;
 import com.example.nashtechproject.service.BillStatusService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
 
@@ -48,7 +48,7 @@ public class BillStatusController {
     }
 
     @PutMapping("/{billStatusId}")
-    public BillStatus updateBillStatus(@PathVariable(name = "billStatusId") Long billStatusId, @Validated @RequestBody BillStatus billStatusDetails)
+    public BillStatus updateBillStatus(@PathVariable(name = "billStatusId") Long billStatusId, @Valid @RequestBody BillStatus billStatusDetails)
     {
         BillStatus billStatus = billStatusService.getBillStatus(billStatusId);
         if (billStatus == null)

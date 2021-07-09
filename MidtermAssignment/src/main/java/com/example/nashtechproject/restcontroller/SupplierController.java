@@ -4,9 +4,9 @@ import com.example.nashtechproject.entity.Supplier;
 import com.example.nashtechproject.exception.SupplierException;
 import com.example.nashtechproject.service.SupplierService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
 
@@ -48,7 +48,7 @@ public class SupplierController {
     }
 
     @PutMapping("/{supplierId}")
-    public Supplier updateSupplier(@PathVariable(name = "supplierId") Long supplierId, @Validated @RequestBody Supplier supplierDetails)
+    public Supplier updateSupplier(@PathVariable(name = "supplierId") Long supplierId, @Valid @RequestBody Supplier supplierDetails)
     {
         Supplier supplier = supplierService.getSupplier(supplierId);
         if (supplier == null)

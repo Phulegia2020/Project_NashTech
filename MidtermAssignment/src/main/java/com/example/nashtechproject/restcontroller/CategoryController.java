@@ -4,9 +4,9 @@ import com.example.nashtechproject.entity.Category;
 import com.example.nashtechproject.exception.CategoryException;
 import com.example.nashtechproject.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
 
@@ -48,7 +48,7 @@ public class CategoryController {
     }
 
     @PutMapping("/{categoryId}")
-    public Category updateCategory(@PathVariable(name = "categoryId") Long categoryId, @Validated @RequestBody Category categoryDetails)
+    public Category updateCategory(@PathVariable(name = "categoryId") Long categoryId, @Valid @RequestBody Category categoryDetails)
     {
         Category category = categoryService.getCategory(categoryId);
         if (category == null)

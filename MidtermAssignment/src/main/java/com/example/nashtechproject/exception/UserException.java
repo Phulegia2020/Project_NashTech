@@ -6,8 +6,8 @@ public class UserException extends RuntimeException{
         super("Could not find user with id = " + id);
     }
 
-    public UserException(String account)
+    public UserException(String existed)
     {
-        super(account + " is existed");
+        super(existed + " is existed");
     }
 }

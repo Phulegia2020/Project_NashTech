@@ -19,10 +19,6 @@ import java.util.List;
 public class ProductServiceImpl implements ProductService {
     @Autowired
     private ProductRepository productRepository;
-    @Autowired
-    private CategoryRepository categoryRepository;
-    @Autowired
-    private SupplierRepository supplierRepository;
 
     public void setProductRepository(ProductRepository productRepository)
     {
@@ -42,19 +38,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Product saveProduct(Product pro, Long categoryId) {
-        Category cate = categoryRepository.findById(categoryId).get();
-        if (cate == null)
-        {
-            throw new CategoryException(categoryId);
-        }
-        Supplier sup = supplierRepository.findById(pro.getSupplier().getId()).get();
-        if (sup == null)
-        {
-            throw new SupplierException(pro.getSupplier().getId());
-        }
-        pro.setCategory(cate);
-        pro.setSupplier(sup);
+    public Product saveProduct(Product pro) {
         return productRepository.save(pro);
     }
 
@@ -66,19 +50,13 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void updateProduct(Product pro, Long categoryId) {
-        Category cate = categoryRepository.findById(categoryId).get();
-        if (cate == null)
-        {
-            throw new CategoryException(categoryId);
-        }
-        Supplier sup = supplierRepository.findById(pro.getSupplier().getId()).get();
-        if (sup == null)
-        {
-            throw new SupplierException(pro.getSupplier().getId());
-        }
-        pro.setCategory(cate);
-        pro.setSupplier(sup);
+    public void updateProduct(Product pro) {
         productRepository.save(pro);
+    }
+
+    public List<Product> getProductsByCategory(Long categoryId)
+    {
+        List<Product> products = productRepository.findByCategoryId(categoryId);
+        return products;
     }
 }
