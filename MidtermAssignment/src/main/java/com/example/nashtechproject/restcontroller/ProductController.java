@@ -1,5 +1,6 @@
 package com.example.nashtechproject.restcontroller;
 
+import com.example.nashtechproject.dto.ProductDTO;
 import com.example.nashtechproject.entity.Category;
 import com.example.nashtechproject.entity.Product;
 import com.example.nashtechproject.entity.Supplier;
@@ -9,13 +10,16 @@ import com.example.nashtechproject.exception.SupplierException;
 import com.example.nashtechproject.service.CategoryService;
 import com.example.nashtechproject.service.ProductService;
 import com.example.nashtechproject.service.SupplierService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/products")
@@ -29,26 +33,34 @@ public class ProductController {
     @Autowired
     private SupplierService supplierService;
 
+    @Autowired
+    private ModelMapper modelMapper;
+
     @GetMapping
-    public List<Product> getAllProducts()
+    public List<ProductDTO> getAllProducts()
     {
+        List<ProductDTO> prosDTO = new ArrayList<>();
         List<Product> products = productService.retrieveProducts();
-        return products;
+        for (int i = 0; i < products.size(); i++) {
+            ProductDTO p = convertToDTO(products.get(i));
+            prosDTO.add(p);
+        }
+        return prosDTO;
     }
 
     @GetMapping("/{productId}")
-    public Product findProduct(@PathVariable Long productId)
+    public ProductDTO findProduct(@PathVariable Long productId)
     {
         Product pro = productService.getProduct(productId);
         if (pro == null)
         {
             throw new ProductException(productId);
         }
-        return productService.getProduct(productId);
+        return convertToDTO(productService.getProduct(productId));
     }
 
     @GetMapping("/search")
-    public List<Product> getAllProductsByCategory(@RequestParam Long categoryId)
+    public List<ProductDTO> getAllProductsByCategory(@RequestParam Long categoryId)
     {
         Category cate = categoryService.getCategory(categoryId);
         if (cate == null)
@@ -56,11 +68,13 @@ public class ProductController {
             throw new CategoryException(cate.getId());
         }
         List<Product> products = productService.getProductsByCategory(categoryId);
-        return products;
+        return products.stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
     }
 
     @PostMapping()
-    public Product saveProduct(@RequestBody Product product)
+    public ProductDTO saveProduct(@RequestBody Product product)
     {
         Category cate = categoryService.getCategory(product.getCategory().getId());
         if (cate == null)
@@ -76,11 +90,11 @@ public class ProductController {
         product.setUpdateddate(LocalDateTime.now());
         product.setCategory(cate);
         product.setSupplier(sup);
-        return productService.saveProduct(product);
+        return convertToDTO(productService.saveProduct(product));
     }
 
     @PutMapping("/{productId}")
-    public Product updateProduct(@PathVariable(name = "productId") Long productId, @Valid @RequestBody Product productDetails)
+    public ProductDTO updateProduct(@PathVariable(name = "productId") Long productId, @Valid @RequestBody Product productDetails)
     {
         Product product = productService.getProduct(productId);
         if (product == null)
@@ -106,7 +120,7 @@ public class ProductController {
             product.setSupplier(productDetails.getSupplier());
             productService.updateProduct(product);
         }
-        return product;
+        return convertToDTO(product);
     }
 
     @DeleteMapping("/{productId}")
@@ -121,5 +135,15 @@ public class ProductController {
         HashMap<String, String> map = new HashMap<>();
         map.put("message", "Delete Succesfully!");
         return map;
+    }
+
+    private ProductDTO convertToDTO(Product p)
+    {
+        ProductDTO prodto = modelMapper.map(p, ProductDTO.class);
+        String cate_id = String.valueOf(p.getCategory().getId());
+        prodto.setCategory_id(cate_id);
+        String sup = String.valueOf(p.getSupplier().getId());
+        prodto.setSupplier_id(sup);
+        return prodto;
     }
 }

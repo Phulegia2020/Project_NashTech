@@ -1,5 +1,6 @@
 package com.example.nashtechproject.restcontroller;
 
+import com.example.nashtechproject.dto.BillDTO;
 import com.example.nashtechproject.entity.Bill;
 import com.example.nashtechproject.entity.BillStatus;
 import com.example.nashtechproject.entity.User;
@@ -9,6 +10,7 @@ import com.example.nashtechproject.exception.UserException;
 import com.example.nashtechproject.service.BillService;
 import com.example.nashtechproject.service.BillStatusService;
 import com.example.nashtechproject.service.UserService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,6 +18,7 @@ import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/bills")
@@ -29,26 +32,31 @@ public class BillController {
     @Autowired
     private BillStatusService billStatusService;
 
+    @Autowired
+    private ModelMapper modelMapper;
+
     @GetMapping
-    public List<Bill> getAllBills()
+    public List<BillDTO> getAllBills()
     {
         List<Bill> bills = billService.retrieveBills();
-        return bills;
+        return bills.stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/{billId}")
-    public Bill findBill(@PathVariable Long billId)
+    public BillDTO findBill(@PathVariable Long billId)
     {
         Bill bill = billService.getBill(billId);
         if (bill == null)
         {
             throw new BillException(billId);
         }
-        return billService.getBill(billId);
+        return convertToDTO(billService.getBill(billId));
     }
 
     @PostMapping()
-    public Bill saveBill(@RequestBody Bill bill)
+    public BillDTO saveBill(@RequestBody Bill bill)
     {
         User u = userService.getUser(bill.getUser().getId());
         if (u == null)
@@ -63,11 +71,12 @@ public class BillController {
         bill.setUser(u);
         bill.setBillStatus(bs);
         bill.setCreateddate(LocalDateTime.now());
-        return billService.saveBill(bill);
+        bill.setCheckout_date(LocalDateTime.now());
+        return convertToDTO(billService.saveBill(bill));
     }
 
     @PutMapping("/{billId}")
-    public Bill updateBill(@PathVariable(name = "billId") Long billId, @Valid @RequestBody Bill billDetails)
+    public BillDTO updateBill(@PathVariable(name = "billId") Long billId, @Valid @RequestBody Bill billDetails)
     {
         Bill bill = billService.getBill(billId);
         if (bill == null)
@@ -92,7 +101,7 @@ public class BillController {
             bill.setBillStatus(billDetails.getBillStatus());
             billService.updateBill(bill);
         }
-        return bill;
+        return convertToDTO(bill);
     }
 
     @DeleteMapping("/{billId}")
@@ -107,5 +116,11 @@ public class BillController {
         HashMap<String, String> map = new HashMap<>();
         map.put("message", "Delete Succesfully!");
         return map;
+    }
+    private BillDTO convertToDTO(Bill b)
+    {
+        BillDTO billDTO = modelMapper.map(b, BillDTO.class);
+        billDTO.getUser().setRole_id(String.valueOf(b.getUser().getRole().getId()));
+        return billDTO;
     }
 }

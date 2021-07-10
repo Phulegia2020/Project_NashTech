@@ -1,42 +1,24 @@
-package com.example.nashtechproject.entity;
+package com.example.nashtechproject.dto;
 
+import com.example.nashtechproject.entity.BillStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
-@Entity
-@Table(name = "bill")
-public class Bill {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class BillDTO {
     private Long id;
 
-    @Column(name = "total")
     private float total;
 
     @JsonFormat(pattern="dd/MM/yyyy")
-    @Column(name = "createddate")
     private LocalDateTime createddate;
 
     @JsonFormat(pattern="dd/MM/yyyy")
-    @Column(name = "checkout_date")
     private LocalDateTime checkout_date;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id")
-    private User user;
+    private UserDTO user;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "billstatus_id")
     private BillStatus billStatus;
-
-    @OneToMany(mappedBy = "bill", cascade = CascadeType.ALL,fetch = FetchType.EAGER)
-    @JsonIgnore
-    private List<BillDetails> products = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -70,11 +52,11 @@ public class Bill {
         this.checkout_date = checkout_date;
     }
 
-    public User getUser() {
+    public UserDTO getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(UserDTO user) {
         this.user = user;
     }
 

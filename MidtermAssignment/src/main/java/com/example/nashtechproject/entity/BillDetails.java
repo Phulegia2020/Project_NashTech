@@ -1,20 +1,24 @@
 package com.example.nashtechproject.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
-@Table(name = "rating")
-public class Rating {
+@Table(name = "billdetails")
+public class BillDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "ratingpoint")
-    private float ratingPoint;
+    @Column(name = "quantity")
+    private int quantity;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "bill_id")
+    private Bill bill;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "product_id")
@@ -28,29 +32,20 @@ public class Rating {
         this.id = id;
     }
 
-    public float getRatingPoint() {
-        return ratingPoint;
+    public int getQuantity() {
+        return quantity;
     }
 
-    public void setRatingPoint(float ratingPoint) {
-        this.ratingPoint = ratingPoint;
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 
-//    public User getCustomer() {
-//        return customer;
-//    }
-//
-//    public void setCustomer(User customer) {
-//        this.customer = customer;
-//    }
-
-
-    public User getUser() {
-        return user;
+    public Bill getBill() {
+        return bill;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setBill(Bill bill) {
+        this.bill = bill;
     }
 
     public Product getProduct() {

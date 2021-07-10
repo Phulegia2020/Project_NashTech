@@ -18,10 +18,6 @@ import java.util.List;
 public class BillServiceImpl implements BillService {
     @Autowired
     private BillRepository billRepository;
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private BillStatusRepository billStatusRepository;
 
     public void setBillRepository(BillRepository billRepository)
     {
