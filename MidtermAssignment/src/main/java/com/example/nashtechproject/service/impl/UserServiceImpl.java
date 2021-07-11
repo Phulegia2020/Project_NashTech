@@ -25,15 +25,15 @@ public class UserServiceImpl implements UserService {
         return users;
     }
 
-    public boolean getUserByAccount(String account)
+    public Optional<User> getUserByAccount(String account)
     {
-        if (userRepository.existsByAccount(account))
-        {
-            return true;
-        }
-        return false;
-//        Optional<User> users = userRepository.findByAccount(account);
-//        return users;
+//        if (userRepository.existsByAccount(account))
+//        {
+//            return true;
+//        }
+//        return false;
+        Optional<User> users = userRepository.findByAccount(account);
+        return users;
     }
 
     public User getUser(Long userId)

@@ -6,8 +6,10 @@ import com.example.nashtechproject.exception.UserException;
 import com.example.nashtechproject.service.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import javax.print.attribute.standard.Media;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,7 +25,7 @@ public class UserController {
     @Autowired
     private ModelMapper modelMapper;
 
-    @GetMapping
+    @GetMapping()
     public List<UserDTO> getAllUsers()
     {
         List<UserDTO> usersDTO = new ArrayList<>();
@@ -46,16 +48,21 @@ public class UserController {
         return convertToDTO(userService.getUser(userId));
     }
 
-    @PostMapping
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public UserDTO saveUser(@RequestBody User user)
     {
-//        Optional<User> users = userService.getUserByAccount(user.getAccount());
-        if (userService.getUserByAccount(user.getAccount()) == true)
+        Optional<User> users = userService.getUserByAccount(user.getAccount());
+//        if (userService.getUserByAccount(user.getAccount()) == true)
+//        {
+//            throw new UserException(user.getAccount());
+//        }
+        if (users.isPresent())
         {
             throw new UserException(user.getAccount());
         }
         user.setActive_status("Active");
-        return convertToDTO(userService.saveUser(user));
+        UserDTO userDTO = convertToDTO(userService.saveUser(user));
+        return userDTO;
     }
 
     @PutMapping("/{userId}")
@@ -98,8 +105,15 @@ public class UserController {
     private UserDTO convertToDTO(User u)
     {
         UserDTO udto = modelMapper.map(u, UserDTO.class);
-        String role_id = String.valueOf(u.getRole().getId());
-        udto.setRole_id(role_id);
+        if (u.getRole() != null)
+        {
+            String role_id = String.valueOf(u.getRole().getId());
+            udto.setRole_id(role_id);
+        }
+        else
+        {
+            udto.setRole_id("");
+        }
         return udto;
     }
 }

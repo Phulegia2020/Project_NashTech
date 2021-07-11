@@ -55,6 +55,23 @@ public class Product {
     @JsonIgnore
     private Collection<BillDetails> products;
 
+    public Product() {
+    }
+
+    public Product(String name, String description, int quantity, int price, LocalDateTime createddate, LocalDateTime updateddate, String imageurl, Category category, Supplier supplier, List<Rating> ratings, Collection<BillDetails> products) {
+        this.name = name;
+        this.description = description;
+        this.quantity = quantity;
+        this.price = price;
+        this.createddate = createddate;
+        this.updateddate = updateddate;
+        this.imageurl = imageurl;
+        this.category = category;
+        this.supplier = supplier;
+        this.ratings = ratings;
+        this.products = products;
+    }
+
     public Long getId() {
         return id;
     }

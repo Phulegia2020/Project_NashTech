@@ -65,7 +65,8 @@ public class User {
     public User() {
     }
 
-    public User(String name, String username, String email, String password) {
+    public User(Long id, String name, String username, String email, String password) {
+        this.id = id;
         this.name = name;
         this.account = username;
         this.email = email;
@@ -80,6 +81,19 @@ public class User {
         this.phone = phone;
         this.account = account;
         this.password = password;
+    }
+
+    public User(Long id, String name, String gender, String address, String email, String phone, String account, String password, String active_status/*, Role role*/) {
+        this.id = id;
+        this.name = name;
+        this.gender = gender;
+        this.address = address;
+        this.email = email;
+        this.phone = phone;
+        this.account = account;
+        this.password = password;
+        this.active_status = active_status;
+        //this.role = role;
     }
 
     public Long getId() {

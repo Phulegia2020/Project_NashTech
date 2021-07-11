@@ -23,6 +23,15 @@ public class Category {
     @JsonIgnore
     private List<Product> products = new ArrayList<>();
 
+    public Category() {
+    }
+
+    public Category(Long id, String name, String description) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+    }
+
     public Long getId() {
         return id;
     }

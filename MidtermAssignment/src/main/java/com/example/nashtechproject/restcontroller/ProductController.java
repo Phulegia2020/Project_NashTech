@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -45,7 +46,7 @@ public class ProductController {
             ProductDTO p = convertToDTO(products.get(i));
             prosDTO.add(p);
         }
-        return prosDTO;
+        return prosDTO.stream().sorted(Comparator.comparingLong(ProductDTO::getId)).collect(Collectors.toList());
     }
 
     @GetMapping("/{productId}")
