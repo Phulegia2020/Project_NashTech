@@ -10,6 +10,7 @@ import com.example.nashtechproject.restcontroller.UserController;
 import com.example.nashtechproject.service.UserService;
 import com.example.nashtechproject.service.impl.UserServiceImpl;
 import com.fasterxml.jackson.core.io.JsonStringEncoder;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.Matchers;
 import org.json.JSONString;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,8 +29,12 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MockMvcBuilder;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import static org.hamcrest.Matchers.hasSize;
@@ -51,15 +56,18 @@ public class UserControllerTest {
 
 //    @MockBean
 //    private UserRepository userRepository;
+
     @InjectMocks
     private UserController userController;
 
-    @Mock
+    @MockBean
     private UserService userService;
 
     List<User> userList;
 
-    private User user;
+    private User user, userPut;
+
+    HashMap<String, String> map;
 
     @BeforeEach
     void setUp(){
@@ -72,6 +80,9 @@ public class UserControllerTest {
         Role role = new Role(3L, RoleName.ROLE_USER);
         user = new User(5L, "Test", "Male", "HCM City", "test@gmail.com", "0123645987", "Test", "123456", "Active");
         user.setRole(role);
+        userPut = new User(5L, "TestPut", "Male", "HCM City", "test@gmail.com", "0123645987", "Test", "123456", "Active");
+        map = new HashMap<>();
+        map.put("message", "Delete Succesfully!");
     }
 
     @Test
@@ -84,34 +95,33 @@ public class UserControllerTest {
         this.mockMvc.perform(get("/api/users")).andExpect(status().isOk()).andExpect(jsonPath("$.size()", is(userList.size())));
 
         mockMvc.perform(get("/api/users")).andExpect(status().isOk())
-                .andExpect(jsonPath("$[3].name", Matchers.equalTo("Champion")))
-                .andExpect(jsonPath("$[3].gender", Matchers.equalTo("Male")))
-                .andExpect(jsonPath("$[3].email", Matchers.equalTo("champion@gmail.com")))
-                .andExpect(jsonPath("$[3].phone", Matchers.equalTo("0159732468")))
-                .andExpect(jsonPath("$[3].account", Matchers.equalTo("Champion")))
-                .andExpect(jsonPath("$[3].role_id", Matchers.equalTo("1")));
+                .andExpect(jsonPath("$[0].name", Matchers.equalTo("Champion")))
+                .andExpect(jsonPath("$[0].gender", Matchers.equalTo("Male")))
+                .andExpect(jsonPath("$[0].email", Matchers.equalTo("champion@gmail.com")))
+                .andExpect(jsonPath("$[0].phone", Matchers.equalTo("0123456789")))
+                .andExpect(jsonPath("$[0].account", Matchers.equalTo("Champion")))
+                .andExpect(jsonPath("$[0].role_id", Matchers.equalTo("")));
     }
 
     @Test
     public void getUserByID() throws Exception
     {
         when(userService.getUser(user.getId())).thenReturn(user);
-        mockMvc.perform(get("/api/users/1").contentType(MediaType.APPLICATION_JSON).characterEncoding("UTF-8")
+        mockMvc.perform(get("/api/users/5").contentType(MediaType.APPLICATION_JSON).characterEncoding("UTF-8")
                 .accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
-                .andExpect(jsonPath("$.id", Matchers.equalTo(1)))
-                .andExpect(jsonPath("$.name", Matchers.equalTo("Admin")))
-                .andExpect(jsonPath("$.account", Matchers.equalTo("Admin")))
-                .andExpect(jsonPath("$.email", Matchers.equalTo("Admin@gmail.com")))
-                .andExpect(jsonPath("$.role_id", Matchers.equalTo("1")));
+                .andExpect(jsonPath("$.id", Matchers.equalTo(5)))
+                .andExpect(jsonPath("$.name", Matchers.equalTo("Test")))
+                .andExpect(jsonPath("$.account", Matchers.equalTo("Test")))
+                .andExpect(jsonPath("$.email", Matchers.equalTo("test@gmail.com")))
+                .andExpect(jsonPath("$.role_id", Matchers.equalTo("3")));
     }
 
     @Test
-    @WithMockUser(username = "admin")
     public void postUserTest() throws Exception
     {
-        when(userService.saveUser(user)).thenReturn(user);
-        mockMvc.perform(post("/api/users").contentType(MediaType.APPLICATION_JSON).characterEncoding("UTF-8")
-                .accept(MediaType.APPLICATION_JSON)).andExpect(status().is(400))
+        when(userService.saveUser(any())).thenReturn(user);
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/users").content(new ObjectMapper().writeValueAsString(user)).contentType(MediaType.APPLICATION_JSON).characterEncoding("UTF-8")
+                .accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", Matchers.equalTo(5)))
                 .andExpect(jsonPath("$.name", Matchers.equalTo("Test")))
                 .andExpect(jsonPath("$.account", Matchers.equalTo("Test")))
@@ -120,5 +130,26 @@ public class UserControllerTest {
 
 //        mockMvc.perform(post("/api/users").contentType(MediaType.APPLICATION_JSON)
 //                .content()
+        //System.out.println("KET QUA: "+ result.getResponse().getContentAsString());
+    }
+
+    @Test
+    public void putUserTest() throws Exception
+    {
+        when(userService.getUser(user.getId())).thenReturn(user);
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/users/5").content(new ObjectMapper().writeValueAsString(userPut))
+        .contentType(MediaType.APPLICATION_JSON).characterEncoding("UTF-8").accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk()).andExpect(jsonPath("$.id", Matchers.equalTo(5)))
+                .andExpect(jsonPath("$.name", Matchers.equalTo("TestPut")));
+    }
+
+    @Test
+    public void deleteUserTest() throws Exception
+    {
+        when(userService.getUser(user.getId())).thenReturn(user);
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/users/{userId}", user.getId())
+                .contentType(MediaType.APPLICATION_JSON).characterEncoding("UTF-8").accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk()).andExpect(jsonPath("$.size()", Matchers.equalTo(map.size())));
+//                .andExpect(jsonPath("$.get($.keySet())", Matchers.equalTo(map.get(map.keySet()))));
     }
 }
