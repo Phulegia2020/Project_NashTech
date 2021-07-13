@@ -7,6 +7,7 @@ import com.example.nashtechproject.service.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.print.attribute.standard.Media;
@@ -24,6 +25,12 @@ public class UserController {
 
     @Autowired
     private ModelMapper modelMapper;
+
+    final private PasswordEncoder encoder;
+
+    public UserController(PasswordEncoder encoder) {
+        this.encoder = encoder;
+    }
 
     @GetMapping()
     public List<UserDTO> getAllUsers()
@@ -81,7 +88,7 @@ public class UserController {
             user.setEmail(userDetails.getEmail());
             user.setPhone(userDetails.getPhone());
             user.setAccount(userDetails.getAccount());
-            user.setPassword(userDetails.getPassword());
+            user.setPassword(encoder.encode(userDetails.getPassword()));
             user.setActive_status(userDetails.getActive_status());
             userService.updateUser(user);
         }
@@ -96,9 +103,9 @@ public class UserController {
         {
             throw new UserException(userId);
         }
-        userService.deleteUser(userId);
+        User udel = userService.deleteUser(userId);
         HashMap<String, String> map = new HashMap<>();
-        map.put("message", "Delete Succesfully!");
+        map.put("message", "Delete " + udel.getId() + " Succesfully!");
         return map;
     }
 

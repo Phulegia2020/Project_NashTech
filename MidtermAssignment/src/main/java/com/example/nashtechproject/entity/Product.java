@@ -58,7 +58,8 @@ public class Product {
     public Product() {
     }
 
-    public Product(String name, String description, int quantity, int price, LocalDateTime createddate, LocalDateTime updateddate, String imageurl, Category category, Supplier supplier, List<Rating> ratings, Collection<BillDetails> products) {
+    public Product(Long id, String name, String description, int quantity, int price, LocalDateTime createddate, LocalDateTime updateddate, String imageurl, Category category, Supplier supplier, List<Rating> ratings, Collection<BillDetails> products) {
+        this.id = id;
         this.name = name;
         this.description = description;
         this.quantity = quantity;
