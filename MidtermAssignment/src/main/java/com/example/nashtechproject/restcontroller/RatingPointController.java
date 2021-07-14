@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -38,7 +39,7 @@ public class RatingPointController {
     public List<RatingDTO> getAllRatings() throws RatingPointException
     {
         List<Rating> ratings = ratingPointService.retrieveRatings();
-        return ratings.stream().map(this::convertToDTO).collect(Collectors.toList());
+        return ratings.stream().map(this::convertToDTO).sorted(Comparator.comparing(RatingDTO::getId).reversed()).collect(Collectors.toList());
     }
 
     @GetMapping("/{ratingId}")
@@ -63,6 +64,11 @@ public class RatingPointController {
         if (pro == null)
         {
             throw new ProductException(pro.getId());
+        }
+        Rating check = ratingPointService.getRatingByUserIdAndProductId(u.getId(), pro.getId());
+        if (check != null)
+        {
+            throw new RatingPointException(u.getId(), pro.getId());
         }
         rating.setUser(u);
         rating.setProduct(pro);

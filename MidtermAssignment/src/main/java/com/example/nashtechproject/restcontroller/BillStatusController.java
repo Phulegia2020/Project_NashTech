@@ -7,8 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/billstatuses")
@@ -20,7 +22,7 @@ public class BillStatusController {
     public List<BillStatus> getAllBillStatuses()
     {
         List<BillStatus> bs = billStatusService.retrieveBillStatuses();
-        return bs;
+        return bs.stream().sorted(Comparator.comparing(BillStatus::getId)).collect(Collectors.toList());
     }
 
     @GetMapping("/{billStatusId}")

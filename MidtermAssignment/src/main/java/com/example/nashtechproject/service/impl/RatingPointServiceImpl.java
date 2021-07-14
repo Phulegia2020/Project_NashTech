@@ -30,6 +30,12 @@ public class RatingPointServiceImpl implements RatingPointService {
         return rat;
     }
 
+    public Rating getRatingByUserIdAndProductId(Long uid, Long pid)
+    {
+        Rating rat = ratingRepository.findByUserIdAndProductId(uid, pid);
+        return rat;
+    }
+
     @Override
     public Rating saveRating(Rating rat) {
         return ratingRepository.save(rat);

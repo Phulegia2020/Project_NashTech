@@ -7,8 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/suppliers")
@@ -20,7 +22,7 @@ public class SupplierController {
     public List<Supplier> getAllSupplier()
     {
         List<Supplier> suppliers = supplierService.retrieveSuppliers();
-        return suppliers;
+        return suppliers.stream().sorted(Comparator.comparingLong(Supplier::getId)).collect(Collectors.toList());
     }
 
     @GetMapping("/{supplierId}")

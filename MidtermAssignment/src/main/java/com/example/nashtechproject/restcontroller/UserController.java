@@ -12,10 +12,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.print.attribute.standard.Media;
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/users")
@@ -41,7 +39,7 @@ public class UserController {
             UserDTO u = convertToDTO(users.get(i));
             usersDTO.add(u);
         }
-        return usersDTO;
+        return usersDTO.stream().sorted(Comparator.comparingLong(UserDTO::getId)).collect(Collectors.toList());
     }
 
     @GetMapping("/{userId}")
@@ -88,8 +86,12 @@ public class UserController {
             user.setEmail(userDetails.getEmail());
             user.setPhone(userDetails.getPhone());
             user.setAccount(userDetails.getAccount());
-            user.setPassword(encoder.encode(userDetails.getPassword()));
+            if (!userDetails.getPassword().equals(""))
+            {
+                user.setPassword(encoder.encode(userDetails.getPassword()));
+            }
             user.setActive_status(userDetails.getActive_status());
+            user.setRole(userDetails.getRole());
             userService.updateUser(user);
         }
         return convertToDTO(user);

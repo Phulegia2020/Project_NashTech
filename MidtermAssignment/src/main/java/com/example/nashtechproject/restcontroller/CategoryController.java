@@ -7,8 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/categories")
@@ -20,7 +22,7 @@ public class CategoryController {
     public List<Category> getAllCategories()
     {
         List<Category> categories = categoryService.retrieveCategories();
-        return categories;
+        return categories.stream().sorted(Comparator.comparingLong(Category::getId)).collect(Collectors.toList());
     }
 
     @GetMapping("/{categoryId}")
