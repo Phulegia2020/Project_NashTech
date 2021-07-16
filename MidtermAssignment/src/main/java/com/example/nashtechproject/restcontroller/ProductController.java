@@ -10,6 +10,7 @@ import com.example.nashtechproject.exception.SupplierException;
 import com.example.nashtechproject.service.CategoryService;
 import com.example.nashtechproject.service.ProductService;
 import com.example.nashtechproject.service.SupplierService;
+import io.swagger.annotations.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -24,6 +25,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/products")
+@Api(tags = "Products Rest Controller")
 public class ProductController {
     @Autowired
     private ProductService productService;
@@ -38,6 +40,18 @@ public class ProductController {
     private ModelMapper modelMapper;
 
     @GetMapping
+    @ApiOperation(value = "Get all products")
+    @ApiResponses(value = { @ApiResponse(code = 200, message = "Success"),
+            @ApiResponse(code = 400, message = "Bad request"),
+            @ApiResponse(code = 500, message = "Internal server error") })
+    @ApiImplicitParams(
+            value = {
+                    @ApiImplicitParam(name = "page", value = "page number start from 0", dataType = "integer",
+                            examples = @Example(@ExampleProperty("1")), paramType = "query"),
+                    @ApiImplicitParam(name = "size", value = "maximum number of item in page", dataType = "integer",
+                            examples = @Example(@ExampleProperty("40")), paramType = "query"),
+            }
+    )
     public List<ProductDTO> getAllProducts()
     {
         List<ProductDTO> prosDTO = new ArrayList<>();
@@ -47,8 +61,13 @@ public class ProductController {
             prosDTO.add(p);
         }
         return prosDTO.stream().sorted(Comparator.comparingLong(ProductDTO::getId)).collect(Collectors.toList());
+        //return prosDTO;
     }
 
+    @ApiOperation(value = "Get Product By ID")
+    @ApiResponses(value = { @ApiResponse(code = 200, message = "Success"),
+            @ApiResponse(code = 400, message = "Bad request"),
+            @ApiResponse(code = 500, message = "Internal server error") })
     @GetMapping("/{productId}")
     public ProductDTO findProduct(@PathVariable Long productId)
     {
@@ -71,31 +90,41 @@ public class ProductController {
         List<Product> products = productService.getProductsByCategory(categoryId);
         return products.stream()
                 .map(this::convertToDTO)
+                .sorted(Comparator.comparingLong(ProductDTO::getId))
                 .collect(Collectors.toList());
     }
 
+    @ApiOperation(value = "Create new Product")
+    @ApiResponses(value = { @ApiResponse(code = 200, message = "Success"),
+            @ApiResponse(code = 400, message = "Bad request"),
+            @ApiResponse(code = 500, message = "Internal server error") })
     @PostMapping()
-    public ProductDTO saveProduct(@RequestBody Product product)
+    public ProductDTO saveProduct(@RequestBody ProductDTO product)
     {
-        Category cate = categoryService.getCategory(product.getCategory().getId());
+        Category cate = categoryService.getCategory(Long.valueOf(product.getCategory_id()));
         if (cate == null)
         {
             throw new CategoryException(cate.getId());
         }
-        Supplier sup = supplierService.getSupplier(product.getSupplier().getId());
+        Supplier sup = supplierService.getSupplier(Long.valueOf(product.getSupplier_id()));
         if (sup == null)
         {
             throw new SupplierException(sup.getId());
         }
-        product.setCreateddate(LocalDateTime.now());
-        product.setUpdateddate(LocalDateTime.now());
-        product.setCategory(cate);
-        product.setSupplier(sup);
-        return convertToDTO(productService.saveProduct(product));
+        Product pro = convertToEntity(product);
+        pro.setCreateddate(LocalDateTime.now());
+        pro.setUpdateddate(LocalDateTime.now());
+//        pro.setCategory(cate);
+//        pro.setSupplier(sup);
+        return convertToDTO(productService.saveProduct(pro));
     }
 
+    @ApiOperation(value = "Update Product")
+    @ApiResponses(value = { @ApiResponse(code = 200, message = "Success"),
+            @ApiResponse(code = 400, message = "Bad request"),
+            @ApiResponse(code = 500, message = "Internal server error") })
     @PutMapping("/{productId}")
-    public ProductDTO updateProduct(@PathVariable(name = "productId") Long productId, @Valid @RequestBody Product productDetails)
+    public ProductDTO updateProduct(@PathVariable(name = "productId") Long productId, @Valid @RequestBody ProductDTO productDetails)
     {
         Product product = productService.getProduct(productId);
         if (product == null)
@@ -104,26 +133,32 @@ public class ProductController {
         }
         else
         {
-            if (categoryService.getCategory(productDetails.getCategory().getId()) == null)
+            Category cate = categoryService.getCategory(Long.valueOf(productDetails.getCategory_id()));
+            if (cate == null)
             {
-                throw new CategoryException(productDetails.getCategory().getId());
+                throw new CategoryException(cate.getId());
             }
-            if (supplierService.getSupplier(productDetails.getSupplier().getId()) == null)
+            Supplier sup = supplierService.getSupplier(Long.valueOf(productDetails.getSupplier_id()));
+            if (sup == null)
             {
-                throw new SupplierException(productDetails.getSupplier().getId());
+                throw new SupplierException(sup.getId());
             }
             product.setName(productDetails.getName());
             product.setDescription(productDetails.getDescription());
             product.setQuantity(productDetails.getQuantity());
             product.setPrice(productDetails.getPrice());
             product.setUpdateddate(LocalDateTime.now());
-            product.setCategory(productDetails.getCategory());
-            product.setSupplier(productDetails.getSupplier());
+            product.setCategory(cate);
+            product.setSupplier(sup);
             productService.updateProduct(product);
         }
         return convertToDTO(product);
     }
 
+    @ApiOperation(value = "Delete Product")
+    @ApiResponses(value = { @ApiResponse(code = 200, message = "Success"),
+            @ApiResponse(code = 400, message = "Bad request"),
+            @ApiResponse(code = 500, message = "Internal server error") })
     @DeleteMapping("/{productId}")
     public HashMap<String, String> deleteProduct(@PathVariable(name = "productId") Long productId)
     {
@@ -146,5 +181,15 @@ public class ProductController {
         String sup = String.valueOf(p.getSupplier().getId());
         prodto.setSupplier_id(sup);
         return prodto;
+    }
+
+    private Product convertToEntity(ProductDTO p)
+    {
+        Product pro = modelMapper.map(p, Product.class);
+        Category c = categoryService.getCategory(Long.valueOf(p.getCategory_id()));
+        pro.setCategory(c);
+        Supplier s = supplierService.getSupplier(Long.valueOf(p.getSupplier_id()));
+        pro.setSupplier(s);
+        return pro;
     }
 }

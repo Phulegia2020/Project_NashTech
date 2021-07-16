@@ -10,6 +10,8 @@ public class UserDTO {
 
     private String gender;
 
+    private String address;
+
     @Size(max = 50)
     @Email
     private String email;
@@ -46,6 +48,14 @@ public class UserDTO {
 
     public void setGender(String gender) {
         this.gender = gender;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public String getEmail() {

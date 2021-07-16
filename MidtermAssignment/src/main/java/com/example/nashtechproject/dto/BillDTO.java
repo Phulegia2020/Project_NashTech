@@ -16,9 +16,9 @@ public class BillDTO {
     @JsonFormat(pattern="dd/MM/yyyy")
     private LocalDateTime checkout_date;
 
-    private UserDTO user;
+    private String user_id;
 
-    private BillStatus billStatus;
+    private String billStatus_id;
 
     public Long getId() {
         return id;
@@ -52,19 +52,19 @@ public class BillDTO {
         this.checkout_date = checkout_date;
     }
 
-    public UserDTO getUser() {
-        return user;
+    public String getUser_id() {
+        return user_id;
     }
 
-    public void setUser(UserDTO user) {
-        this.user = user;
+    public void setUser_id(String user_id) {
+        this.user_id = user_id;
     }
 
-    public BillStatus getBillStatus() {
-        return billStatus;
+    public String getBillStatus_id() {
+        return billStatus_id;
     }
 
-    public void setBillStatus(BillStatus billStatus) {
-        this.billStatus = billStatus;
+    public void setBillStatus_id(String billStatus_id) {
+        this.billStatus_id = billStatus_id;
     }
 }

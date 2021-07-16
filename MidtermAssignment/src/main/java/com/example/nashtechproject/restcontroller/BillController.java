@@ -58,27 +58,28 @@ public class BillController {
     }
 
     @PostMapping()
-    public BillDTO saveBill(@RequestBody Bill bill)
+    public BillDTO saveBill(@RequestBody BillDTO bill)
     {
-        User u = userService.getUser(bill.getUser().getId());
+        User u = userService.getUser(Long.valueOf(bill.getUser_id()));
         if (u == null)
         {
             throw new UserException(u.getId());
         }
-        BillStatus bs = billStatusService.getBillStatus(bill.getBillStatus().getId());
+        BillStatus bs = billStatusService.getBillStatus(Long.valueOf(bill.getBillStatus_id()));
         if (bs == null)
         {
             throw new BillStatusException(bs.getId());
         }
-        bill.setUser(u);
-        bill.setBillStatus(bs);
-        bill.setCreateddate(LocalDateTime.now());
-        bill.setCheckout_date(LocalDateTime.now());
-        return convertToDTO(billService.saveBill(bill));
+//        bill.setUser(u);
+//        bill.setBillStatus(bs);
+        Bill b = convertToEntity(bill);
+        b.setCreateddate(LocalDateTime.now());
+        b.setCheckout_date(LocalDateTime.now());
+        return convertToDTO(billService.saveBill(b));
     }
 
     @PutMapping("/{billId}")
-    public BillDTO updateBill(@PathVariable(name = "billId") Long billId, @Valid @RequestBody Bill billDetails)
+    public BillDTO updateBill(@PathVariable(name = "billId") Long billId, @Valid @RequestBody BillDTO billDetails)
     {
         Bill bill = billService.getBill(billId);
         if (bill == null)
@@ -87,20 +88,20 @@ public class BillController {
         }
         else
         {
-            User u = userService.getUser(billDetails.getUser().getId());
+            User u = userService.getUser(Long.valueOf(billDetails.getUser_id()));
             if (u == null)
             {
                 throw new UserException(u.getId());
             }
-            BillStatus bs = billStatusService.getBillStatus(billDetails.getBillStatus().getId());
+            BillStatus bs = billStatusService.getBillStatus(Long.valueOf(billDetails.getBillStatus_id()));
             if (bs == null)
             {
                 throw new BillStatusException(bs.getId());
             }
             bill.setTotal(billDetails.getTotal());
             bill.setCheckout_date(LocalDateTime.now());
-            bill.setUser(billDetails.getUser());
-            bill.setBillStatus(billDetails.getBillStatus());
+            bill.setUser(u);
+            bill.setBillStatus(bs);
             billService.updateBill(bill);
         }
         return convertToDTO(bill);
@@ -122,7 +123,19 @@ public class BillController {
     private BillDTO convertToDTO(Bill b)
     {
         BillDTO billDTO = modelMapper.map(b, BillDTO.class);
-        billDTO.getUser().setRole_id(String.valueOf(b.getUser().getRole().getId()));
+        String uid = String.valueOf(b.getUser().getId());
+        billDTO.setUser_id(uid);
+        billDTO.setBillStatus_id(String.valueOf(b.getBillStatus().getId()));
         return billDTO;
+    }
+
+    private Bill convertToEntity(BillDTO b)
+    {
+        Bill bill = modelMapper.map(b, Bill.class);
+        User u = userService.getUser(Long.valueOf(b.getUser_id()));
+        bill.setUser(u);
+        BillStatus billStatus = billStatusService.getBillStatus(Long.valueOf(b.getBillStatus_id()));
+        bill.setBillStatus(billStatus);
+        return bill;
     }
 }

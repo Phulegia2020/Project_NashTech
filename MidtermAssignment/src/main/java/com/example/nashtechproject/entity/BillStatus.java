@@ -16,7 +16,7 @@ public class BillStatus {
     @Column(name = "description")
     private String description;
 
-    @OneToMany(mappedBy = "billStatus", cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "billStatus", fetch = FetchType.LAZY)
     @JsonIgnore
     private List<Bill> bills = new ArrayList<>();
 

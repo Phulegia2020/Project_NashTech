@@ -16,7 +16,8 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ProductServiceTest {
@@ -51,5 +52,37 @@ public class ProductServiceTest {
 
         Product p = productService.getProduct(pro.getId());
         assertEquals("PS4 Pro", p.getName());
+    }
+
+    @Test
+    public void createProductTest()
+    {
+        Product pro = new Product(1L, "PS4 Pro", "Good", 100, 1000, LocalDateTime.now(), LocalDateTime.now(), null, null, null, null, null);
+        when(productRepository.save(any())).thenReturn(pro);
+        Product p = productService.saveProduct(pro);
+
+        assertEquals(1l, p.getId());
+        assertEquals("PS4 Pro", p.getName());
+        assertEquals(1000, p.getPrice());
+    }
+
+    @Test
+    public void updateProductTest()
+    {
+        Product pro = new Product(1L, "PS4 Pro", "Good", 100, 1000, LocalDateTime.now(), LocalDateTime.now(), null, null, null, null, null);
+        when(productRepository.findById(pro.getId())).thenReturn(Optional.of(pro));
+        when(productRepository.save(pro)).thenReturn(pro);
+
+        assertEquals(1L, pro.getId());
+        assertEquals("Good", pro.getDescription());
+    }
+
+    @Test
+    public void deleteProductTest()
+    {
+        Product pro = new Product(1L, "PS4 Pro", "Good", 100, 1000, LocalDateTime.now(), LocalDateTime.now(), null, null, null, null, null);
+        when(productRepository.findById(pro.getId())).thenReturn(Optional.of(pro));
+        productService.deleteProduct(pro.getId());
+        verify(productRepository, times(1)).delete(pro);
     }
 }

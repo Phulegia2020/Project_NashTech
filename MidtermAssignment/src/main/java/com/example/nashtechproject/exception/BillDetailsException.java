@@ -5,4 +5,8 @@ public class BillDetailsException extends RuntimeException{
     {
         super("Could not find bill_detail with id = " + id);
     }
+    public BillDetailsException(Long bill_id, Long product_id)
+    {
+        super("Bill id = " + bill_id + " includes Product id = " + product_id + " is existed!");
+    }
 }

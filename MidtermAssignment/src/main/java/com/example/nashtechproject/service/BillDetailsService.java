@@ -9,6 +9,8 @@ public interface BillDetailsService {
 
     public BillDetails getBillDetails(Long billDetailsId);
 
+    public BillDetails getByBillAndProduct(Long bill_id, Long product_id);
+
     public BillDetails saveBillDetails(BillDetails billDetails);
 
     public void deleteBillDetails(Long billDetailsId);

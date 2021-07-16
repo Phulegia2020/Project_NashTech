@@ -53,14 +53,14 @@ public class RatingPointController {
     }
 
     @PostMapping
-    public RatingDTO saveCategory(@RequestBody Rating rating)
+    public RatingDTO saveRating(@RequestBody RatingDTO rating)
     {
-        User u = userService.getUser(rating.getUser().getId());
+        User u = userService.getUser(Long.valueOf(rating.getUser_id()));
         if (u == null)
         {
             throw new UserException(u.getId());
         }
-        Product pro = productService.getProduct(rating.getProduct().getId());
+        Product pro = productService.getProduct(Long.valueOf(rating.getProduct_id()));
         if (pro == null)
         {
             throw new ProductException(pro.getId());
@@ -70,31 +70,30 @@ public class RatingPointController {
         {
             throw new RatingPointException(u.getId(), pro.getId());
         }
-        rating.setUser(u);
-        rating.setProduct(pro);
-        return convertToDTO(ratingPointService.saveRating(rating));
+        Rating r = convertToEntity(rating);
+        return convertToDTO(ratingPointService.saveRating(r));
     }
 
     @PutMapping("/{ratingId}")
-    public RatingDTO updateCategory(@PathVariable(name = "ratingId") Long ratingId, @Valid @RequestBody Rating newRating)
+    public RatingDTO updateCategory(@PathVariable(name = "ratingId") Long ratingId, @Valid @RequestBody RatingDTO newRating)
     {
         Rating rating = ratingPointService.getRating(ratingId);
         if (rating == null)
         {
             throw new RatingPointException(ratingId);
         }
-        User u = userService.getUser(rating.getUser().getId());
-        if (u == null)
-        {
-            throw new UserException(u.getId());
-        }
-        Product pro = productService.getProduct(rating.getProduct().getId());
-        if (pro == null)
-        {
-            throw new ProductException(pro.getId());
-        }
-        rating.setUser(u);
-        rating.setProduct(pro);
+//        User u = userService.getUser(Long.valueOf(newRating.getUser_id()));
+//        if (u == null)
+//        {
+//            throw new UserException(u.getId());
+//        }
+//        Product pro = productService.getProduct(Long.valueOf(newRating.getProduct_id()));
+//        if (pro == null)
+//        {
+//            throw new ProductException(pro.getId());
+//        }
+//        rating.setUser(u);
+//        rating.setProduct(pro);
         rating.setRatingPoint(newRating.getRatingPoint());
         ratingPointService.updateRating(rating);
         return convertToDTO(rating);
@@ -120,5 +119,15 @@ public class RatingPointController {
         ratingDTO.setProduct_id(String.valueOf(rating.getProduct().getId()));
         ratingDTO.setUser_id(String.valueOf(rating.getUser().getId()));
         return ratingDTO;
+    }
+
+    private Rating convertToEntity(RatingDTO ratingDTO)
+    {
+        Rating rating = modelMapper.map(ratingDTO, Rating.class);
+        User u = userService.getUser(Long.valueOf(ratingDTO.getUser_id()));
+        rating.setUser(u);
+        Product p = productService.getProduct(Long.valueOf(ratingDTO.getProduct_id()));
+        rating.setProduct(p);
+        return rating;
     }
 }

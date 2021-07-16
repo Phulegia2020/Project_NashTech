@@ -26,15 +26,15 @@ public class Bill {
     @Column(name = "checkout_date")
     private LocalDateTime checkout_date;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "billstatus_id")
     private BillStatus billStatus;
 
-    @OneToMany(mappedBy = "bill", cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "bill", fetch = FetchType.LAZY)
     @JsonIgnore
     private List<BillDetails> products = new ArrayList<>();
 

@@ -39,7 +39,8 @@ public class UserController {
             UserDTO u = convertToDTO(users.get(i));
             usersDTO.add(u);
         }
-        return usersDTO.stream().sorted(Comparator.comparingLong(UserDTO::getId)).collect(Collectors.toList());
+        //return usersDTO.stream().sorted(Comparator.comparingLong(UserDTO::getId)).collect(Collectors.toList());
+        return usersDTO;
     }
 
     @GetMapping("/{userId}")
@@ -105,9 +106,9 @@ public class UserController {
         {
             throw new UserException(userId);
         }
-        User udel = userService.deleteUser(userId);
+        userService.deleteUser(userId);
         HashMap<String, String> map = new HashMap<>();
-        map.put("message", "Delete " + udel.getId() + " Succesfully!");
+        map.put("message", "Delete Succesfully!");
         return map;
     }
 

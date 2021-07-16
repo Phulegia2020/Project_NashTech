@@ -57,25 +57,29 @@ public class BillDetailsController {
     }
 
     @PostMapping()
-    public BillDetailsDTO saveBillDetails(@RequestBody BillDetails billDetails)
+    public BillDetailsDTO saveBillDetails(@RequestBody BillDetailsDTO billDetails)
     {
-        Bill b = billService.getBill(billDetails.getBill().getId());
+        Bill b = billService.getBill(Long.valueOf(billDetails.getBill_id()));
         if (b == null)
         {
             throw new BillException(b.getId());
         }
-        Product pro = productService.getProduct(billDetails.getProduct().getId());
+        Product pro = productService.getProduct(Long.valueOf(billDetails.getProduct_id()));
         if (pro == null)
         {
             throw new ProductException(pro.getId());
         }
-        billDetails.setBill(b);
-        billDetails.setProduct(pro);
-        return convertToDTO(billDetailsService.saveBillDetails(billDetails));
+        //checkBillAndProduct(b, pro);
+        if (billDetailsService.getByBillAndProduct(b.getId(), pro.getId()) != null)
+        {
+            throw new BillDetailsException(b.getId(), pro.getId());
+        }
+        BillDetails bill = convertToEntity(billDetails);
+        return convertToDTO(billDetailsService.saveBillDetails(bill));
     }
 
     @PutMapping("/{billDetailsId}")
-    public BillDetailsDTO updateBillDetails(@PathVariable(name = "billDetailsId") Long billDetailsId, @Valid @RequestBody BillDetails newBillDetails)
+    public BillDetailsDTO updateBillDetails(@PathVariable(name = "billDetailsId") Long billDetailsId, @Valid @RequestBody BillDetailsDTO newBillDetails)
     {
         BillDetails billDetails = billDetailsService.getBillDetails(billDetailsId);
         if (billDetails == null)
@@ -84,18 +88,18 @@ public class BillDetailsController {
         }
         else
         {
-            Bill b = billService.getBill(newBillDetails.getBill().getId());
-            if (b == null)
-            {
-                throw new BillException(b.getId());
-            }
-            Product pro = productService.getProduct(newBillDetails.getProduct().getId());
-            if (pro == null)
-            {
-                throw new ProductException(pro.getId());
-            }
-            billDetails.setBill(b);
-            billDetails.setProduct(pro);
+//            Bill b = billService.getBill(Long.valueOf(newBillDetails.getBill_id()));
+//            if (b == null)
+//            {
+//                throw new BillException(b.getId());
+//            }
+//            Product pro = productService.getProduct(Long.valueOf(newBillDetails.getProduct_id()));
+//            if (pro == null)
+//            {
+//                throw new ProductException(pro.getId());
+//            }
+//            billDetails.setBill(b);
+//            billDetails.setProduct(pro);
             billDetails.setQuantity(newBillDetails.getQuantity());
             billDetailsService.updateBillDetails(billDetails);
         }
@@ -122,5 +126,27 @@ public class BillDetailsController {
         billDetailsDTO.setProduct_id(String.valueOf(billDetails.getProduct().getId()));
         billDetailsDTO.setBill_id(String.valueOf(billDetails.getBill().getId()));
         return billDetailsDTO;
+    }
+
+    private BillDetails convertToEntity(BillDetailsDTO b)
+    {
+        BillDetails billDetails = modelMapper.map(b, BillDetails.class);
+        Bill bill = billService.getBill(Long.valueOf(b.getBill_id()));
+        billDetails.setBill(bill);
+        Product pro = productService.getProduct(Long.valueOf(b.getProduct_id()));
+        billDetails.setProduct(pro);
+        return billDetails;
+    }
+
+    private void checkBillAndProduct(Bill b, Product p)
+    {
+        List<BillDetails> list = billDetailsService.retrieveBillDetails();
+        for (int i = 0; i < list.size(); i++)
+        {
+            if (list.get(i).getBill().getId().equals(b.getId()) && list.get(i).getProduct().getId().equals(p.getId()))
+            {
+                throw new BillDetailsException(b.getId(), p.getId());
+            }
+        }
     }
 }

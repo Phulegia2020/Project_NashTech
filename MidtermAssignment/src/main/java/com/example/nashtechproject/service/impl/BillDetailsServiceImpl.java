@@ -30,6 +30,12 @@ public class BillDetailsServiceImpl implements BillDetailsService {
         return billDetails;
     }
 
+    public BillDetails getByBillAndProduct(Long bill_id, Long product_id)
+    {
+        BillDetails billDetails = billDetailsRepository.findByBillIdAndProductId(bill_id, product_id);
+        return billDetails;
+    }
+
     @Override
     public BillDetails saveBillDetails(BillDetails billDetails) {
         return billDetailsRepository.save(billDetails);
