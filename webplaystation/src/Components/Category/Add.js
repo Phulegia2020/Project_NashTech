@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { Row, Col } from 'reactstrap';
 
 export default class Add extends Component {
 
@@ -21,7 +22,10 @@ export default class Add extends Component {
     }
 
     changeDescription(e){
-        this.setState({description: e.target.value})
+        //this.setState({description: e.target.value})
+        this.setState({
+            [e.target.name]: e.target.value
+        });
     }
 
     handleCreate(event){
@@ -40,6 +44,7 @@ export default class Add extends Component {
             name: '',
             description: ''
         });
+        this.props.onCloseForm();
         // console.log(this.state);
     }
 
@@ -49,17 +54,28 @@ export default class Add extends Component {
                 <div className="container">
                     <div className="row">
                         <div className="col-md-4">
-                            <h1>{this.state.action}</h1>
-                            <div className="form-group">
-                                <label>Name</label>
-                                <input type="text" name="name" className="form-control" onChange={(e) => this.changeName(e)} value = {this.state.name}/>
-                            </div>
-                            <div className="form-group">
-                                <label>Description</label>
-                                <input type="text" name="description"  className="form-control" onChange={(e) => this.changeDescription(e)} value={this.state.description}/>
-                            </div>
+                            <h1>Create new category</h1>
+                            <Row form>
+                                <Col md={6}>
+                                    <div className="form-group">
+                                        <label>Name</label>
+                                        <input type="text" name="name" className="form-control" onChange={(e) => this.changeName(e)} value = {this.state.name} required/>
+                                    </div>
+                                </Col>
+                            </Row>
+                            <Row form>
+                                <Col md={6}>
+                                    <div className="form-group">
+                                        <label>Description</label>
+                                        <input type="text" name="description"  className="form-control" onChange={(e) => this.changeDescription(e)} value={this.state.description} required/>
+                                    </div>
+                                </Col>
+                            </Row>
+                            
                             <div className="form-group">      
-                            <button type="button" className="btn btn-primary"  onClick={this.handleCreate.bind(this)}>Add</button>
+                            <button type="button" className="mr-2 btn btn-primary"  onClick={this.handleCreate.bind(this)}>
+                                <span className="fa fa-plus mr-5">Add</span>
+                            </button>
                             <button type="button" className="btn btn-danger"  onClick={this.handleClear.bind(this)}>Cancel</button>
                             </div>
                         </div>

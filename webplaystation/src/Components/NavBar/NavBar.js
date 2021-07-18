@@ -14,9 +14,9 @@ export default class NavBar extends Component{
             <div>
                 <nav id='navbar'>
                     <ul>
-                    <Link to="/category"><li>Category</li></Link>
-                    <Link to="/product"><li>Product</li></Link>
-                    <Link to="/user"><li>User</li></Link>
+                        <Link to="/category"><li>Category</li></Link>
+                        <Link to="/product"><li>Product</li></Link>
+                        <Link to="/user"><li>User</li></Link>
                     </ul>
     
                     <div className="nav-details">
