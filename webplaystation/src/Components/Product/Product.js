@@ -3,37 +3,27 @@ import "./../Category/Category.css";
 import {del, get, post, put} from "./../../Utils/httpHelper";
 import { Link } from 'react-router-dom';
 import Add from "./Add"
-import { render } from 'react-dom';
 
-export default class User extends Component {
+export default class Product extends Component {
     state = {
-        users: [],
-        roles: [],
+        products: [],
         isDisplayForm: false,
     }
 
     componentDidMount(){
-        get("/users")
+        get("/products")
         .then((response) => {
             if (response.status === 200)
             {
                 console.log(response.data);
-                this.setState({users: response.data});
+                this.setState({products: response.data});
             }
         })
         .catch(error => {console.log(error)})
-
-        get("/roles")
-        .then((response) => {
-            console.log(response.data);
-            this.setState({
-                roles: response.data
-            });
-        })
     }
 
     find(id){
-        get(`/users/${id}`)
+        get(`/products/${id}`)
         .then((response) => {
             if (response.status === 200)
             {
@@ -43,25 +33,25 @@ export default class User extends Component {
         })
     }
 
-    delUser = (id) =>
+    delProduct = (id) =>
     {
-        del(`/users/${id}`)
+        del(`/products/${id}`)
         .then((response) => {
             console.log(response.data);
-            this.setState({users: this.state.users.filter(u => u.id !== id)})
+            this.setState({products: this.state.products.filter(u => u.id !== id)})
             alert(response.data.message);
         })
         .catch(error => {console.log(error)})
     }
 
-    createUser(newUser){
-        post(`/auth/signup`, {name: newUser.name, gender: newUser.gender, address: newUser.address,
-                        email: newUser.email, phone: newUser.phone, username: newUser.username,
-                        password: newUser.password, role: newUser.role})
+    createProduct(newProduct){
+        post(`/products`, {name: newProduct.name, description: newProduct.description, quantity: newProduct.quantity,
+                        price: newProduct.price, imageurl: newProduct.imageurl, category_id: newProduct.category_id,
+                        supplier_id: newProduct.supplier_id})
         .then((response) => {
             console.log(response.data);
             this.setState({
-                users: [...this.state.users, response.data],
+                products: [...this.state.products, response.data],
             });
         });
     }
@@ -80,63 +70,46 @@ export default class User extends Component {
 
     onAdd = (data) => {
         console.log(data);
-        this.createUser(data);
+        this.createProduct(data);
     }
-
-    // renderElement(id){
-    //     this.state.roles.map((r) => {
-    //         //var ro = '' + r.id;
-    //         if (r.id === id)
-    //         {
-    //             return r.name;
-    //         }
-    //     })
-    // }
 
     render() {
         return (
             <div>
                 <button type="button" className="btn btn-primary" onClick={this.onToggleForm}>
                     <span className="fa fa-plus mr-5"></span>
-                    Creat New User
+                    Creat New Product
                 </button>
                 <table id="table">
                     <thead>
                         <tr>
                             <th>Id</th>
                             <th>Name</th>
-                            <th>Gender</th>
-                            <th>Address</th>
-                            <th>Email</th>
-                            <th>Phone</th>
-                            <th>Username</th>
-                            <th>Role</th>
-                            <th>Status</th>
+                            <th>Description</th>
+                            <th>Quantity</th>
+                            <th>Price</th>
+                            <th>Image</th>
+                            <th>Category</th>
+                            <th>Supplier</th>
                             <th></th>
                             <th></th>
                         </tr>
                     </thead>
                     <tbody>
                         {
-                            this.state.users.map((u) => (
-                                <tr key={u.id}>
-                                    <td>{u.id}</td>
-                                    <td>{u.name}</td>
-                                    <td>{u.gender}</td>
-                                    <td>{u.address}</td>
-                                    <td>{u.email}</td>
-                                    <td>{u.phone}</td>
-                                    <td>{u.account}</td>
-                                    <td>{u.role_id}</td>
-                                    {/* <td>
-                                    {
-                                        this.renderElement(u.role_id)
-                                    }
-                                    </td> */}
-                                    <td>{u.active_status}</td>
-                                    <td><button onClick={() => this.delUser(u.id)}>Del</button></td>
+                            this.state.products.map((p) => (
+                                <tr key={p.id}>
+                                    <td>{p.id}</td>
+                                    <td>{p.name}</td>
+                                    <td>{p.description}</td>
+                                    <td>{p.quantity}</td>
+                                    <td>{p.price}</td>
+                                    <td>{p.imageurl}</td>
+                                    <td>{p.category_id}</td>
+                                    <td>{p.supplier_id}</td>
+                                    <td><button onClick={() => this.delProduct(p.id)}>Del</button></td>
                                     <td>
-                                        <Link to={`user/update/${u.id}`}>
+                                        <Link to={`product/update/${p.id}`}>
                                             <button className="btn btn-success">
                                                 Update
                                             </button>

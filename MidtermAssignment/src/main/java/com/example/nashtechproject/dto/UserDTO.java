@@ -26,6 +26,21 @@ public class UserDTO {
 
     private String role_id;
 
+    public UserDTO() {
+    }
+
+    public UserDTO(Long id, String name, String gender, String address, String email, String phone, String account, String active_status, String role_id) {
+        this.id = id;
+        this.name = name;
+        this.gender = gender;
+        this.address = address;
+        this.email = email;
+        this.phone = phone;
+        this.account = account;
+        this.active_status = active_status;
+        this.role_id = role_id;
+    }
+
     public Long getId() {
         return id;
     }

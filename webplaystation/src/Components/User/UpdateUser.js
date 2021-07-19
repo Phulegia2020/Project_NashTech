@@ -11,9 +11,10 @@ class UpdateUser extends React.Component {
         address: "",
         email: "",
         phone: "",
-        username: "",
-        password: "",
-        role: ""
+        account: "",
+        //password: "",
+        role_id: "",
+        roles:[]
     }
 
     componentDidMount(){
@@ -30,10 +31,20 @@ class UpdateUser extends React.Component {
                     address: response.data.address,
                     email: response.data.email,
                     phone: response.data.phone,
-                    username: response.data.account,
-                    password: "",
-                    role: response.data.role,
+                    account: response.data.account,
+                    //password: "",
+                    role_id: response.data.role_id,
                 })
+            }
+        });
+        get("/roles")
+        .then((response) => {
+            if (response.status === 200)
+            {
+                this.setState({
+                    roles: response.data
+                });
+                console.log(this.state.roles);
             }
         })
     }
@@ -53,9 +64,19 @@ class UpdateUser extends React.Component {
     }
 
     handleUpdate(event){
+        console.log(this.state.name);
+        console.log(this.state.gender);
+        console.log(this.state.address);
+        console.log(this.state.email);
+        console.log(this.state.phone);
+        console.log(this.state.username);
+        // console.log(this.state.password);
+        console.log(this.state.role);
         event.preventDefault();
         //this.props.onUpdate(this.state);
-        put(`/users/${this.state.id}`, {this: this.state})
+        // password: this.state.password,
+        put(`/users/${this.state.id}`, {name: this.state.name, gender:this.state.gender, address: this.state.address, email: this.state.email,
+                                        phone: this.state.phone, account: this.state.account, role_id: this.state.role_id})
         .then((response) => {
             if (response.status === 200)
             {
@@ -109,7 +130,7 @@ class UpdateUser extends React.Component {
                     <Col md={6}>
                         <FormGroup>
                             <Label for="username">Username</Label>
-                            <Input type="text" name="username" id="username" placeholder="Football" onChange={(e) => this.changeValue(e)} value = {this.state.username} required/>
+                            <Input type="text" name="account" id="username" placeholder="Football" onChange={(e) => this.changeValue(e)} value = {this.state.account} required/>
                         </FormGroup>
                     </Col>
                 </Row>
@@ -127,10 +148,15 @@ class UpdateUser extends React.Component {
                 </FormGroup>
                 <FormGroup className="mb-2">
                     <Label for="role">Role</Label>
-                    <Input type="select" name="role" id="role" value = {this.state.role} onChange={(e) => this.changeValue(e)}>
-                        <option value="1">ADMIN</option>
+                    <Input type="select" name="role" id="role" value = {this.state.role_id} onChange={(e) => this.changeValue(e)}>
+                        {/* <option value="1">ADMIN</option>
                         <option value="2">PM</option>
-                        <option value="3">USER</option>
+                        <option value="3">USER</option> */}
+                        {
+                            this.state.roles.map((r) => (
+                                <option key={r.id} value={r.id}>{r.name}</option>
+                            ))
+                        }
                     </Input>
                 </FormGroup>
                 <div className="mb-5">

@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Col, Row, Button, Form, FormGroup, Label, Input } from 'reactstrap';
+import { get } from '../../Utils/httpHelper';
 
 export default class Add extends Component {
     constructor(props)
@@ -7,16 +8,29 @@ export default class Add extends Component {
         super(props);
         this.state = {
             name: "",
-            gender: "",
+            gender: "Male",
             address: "",
             email: "",
             phone: "",
             username: "",
             password: "",
-            role: ""
+            role: "",
+            roles: []
         }
     }
     
+    componentDidMount(){
+        get("/roles")
+        .then((response) => {
+            if (response.status === 200)
+            {
+                console.log(response.data);
+                this.setState({
+                    roles: response.data
+                });
+            }
+        })
+    }
 
     changeValue(e){
         //this.setState({name: e.target.value})
@@ -47,6 +61,7 @@ export default class Add extends Component {
     render() {
         return (
             <div>
+                <form>
                     <FormGroup>
                         <Label for="name">Name</Label>
                         <Input type="text" name="name" id="name" placeholder="Phu Le Gia" onChange={(e) => this.changeValue(e)} value = {this.state.name} required="required"/>
@@ -101,14 +116,19 @@ export default class Add extends Component {
                             <option value="ADMIN">ADMIN</option>
                             <option value="PM">PM</option>
                             <option value="USER">USER</option>
+                            {/* {
+                                this.state.roles.map((r) => (
+                                    <option value={r.name}>ADMIN</option>
+                                ))
+                            } */}
                         </Input>
                     </FormGroup>
                     <div className="mb-5">
-                        <Button outline color="warning" onClick={this.handleCreate.bind(this)}>Add</Button>{' '}
+                        <Button type="submit" outline color="warning" onClick={this.handleCreate.bind(this)}>Add</Button>{' '}
                         <Button outline color="danger" onClick={this.handleClear.bind(this)}>Cancel</Button>
                     </div>
-                    </div>
-            
+                    </form>
+            </div>
         )
     }
 }

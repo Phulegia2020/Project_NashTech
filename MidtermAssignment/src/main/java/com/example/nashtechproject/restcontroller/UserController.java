@@ -1,8 +1,12 @@
 package com.example.nashtechproject.restcontroller;
 
 import com.example.nashtechproject.dto.UserDTO;
+import com.example.nashtechproject.entity.Role;
+import com.example.nashtechproject.entity.RoleName;
 import com.example.nashtechproject.entity.User;
 import com.example.nashtechproject.exception.UserException;
+import com.example.nashtechproject.repository.RoleRepository;
+import com.example.nashtechproject.service.RoleService;
 import com.example.nashtechproject.service.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +25,9 @@ import java.util.stream.Collectors;
 public class UserController {
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private RoleService roleService;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -73,7 +80,7 @@ public class UserController {
     }
 
     @PutMapping("/{userId}")
-    public UserDTO updateUser(@PathVariable(name = "userId") Long userId, @Valid @RequestBody User userDetails)
+    public UserDTO updateUser(@PathVariable(name = "userId") Long userId, @Valid @RequestBody UserDTO userDetails)
     {
         User user = userService.getUser(userId);
         if (user == null)
@@ -82,18 +89,7 @@ public class UserController {
         }
         else
         {
-            user.setName(userDetails.getName());
-            user.setGender(userDetails.getGender());
-            user.setAddress(userDetails.getAddress());
-            user.setEmail(userDetails.getEmail());
-            user.setPhone(userDetails.getPhone());
-            user.setAccount(userDetails.getAccount());
-            if (!userDetails.getPassword().equals(""))
-            {
-                user.setPassword(encoder.encode(userDetails.getPassword()));
-            }
-            user.setActive_status(userDetails.getActive_status());
-            user.setRole(userDetails.getRole());
+            UserUpdate(user, userDetails);
             userService.updateUser(user);
         }
         return convertToDTO(user);
@@ -126,5 +122,47 @@ public class UserController {
             udto.setRole_id("");
         }
         return udto;
+    }
+
+    private void UserUpdate(User user, UserDTO userDetails)
+    {
+        user.setName(userDetails.getName());
+        user.setGender(userDetails.getGender());
+        user.setAddress(userDetails.getAddress());
+        user.setEmail(userDetails.getEmail());
+        user.setPhone(userDetails.getPhone());
+        user.setAccount(userDetails.getAccount());
+//            if (!userDetails.getPassword().equals(""))
+//            {
+//                user.setPassword(encoder.encode(userDetails.getPassword()));
+//            }
+        user.setActive_status(userDetails.getActive_status());
+        //user.setRole(userDetails.getRole());
+
+        Role r = roleService.getRole(Long.valueOf(userDetails.getRole_id()));
+        user.setRole(r);
+//        if (userDetails.getRole_id() == null) {
+//            Role userRole = roleRepository.findByName(RoleName.ROLE_USER)
+//                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+//            user.setRole(userRole);
+//        } else {
+//            switch (userDetails.getRole_id().toLowerCase()) {
+//                case "admin":
+//                    Role adminRole = roleRepository.findByName(RoleName.ROLE_ADMIN)
+//                            .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+//                    user.setRole(adminRole);
+//
+//                    break;
+//                case "pm":
+//                    Role modRole = roleRepository.findByName(RoleName.ROLE_PM)
+//                            .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+//                    user.setRole(modRole);
+//                    break;
+//                default:
+//                    Role userRole = roleRepository.findByName(RoleName.ROLE_USER)
+//                            .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+//                    user.setRole(userRole);
+//            }
+//        }
     }
 }

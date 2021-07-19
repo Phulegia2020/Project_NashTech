@@ -43,6 +43,7 @@ export default class Category extends Component {
         .then((response) => {
             console.log(response.data);
             this.setState({categories: this.state.categories.filter(cate => cate.id !== id)})
+            alert(response.data.message);
         })
         .catch(error => {console.log(error)})
     }

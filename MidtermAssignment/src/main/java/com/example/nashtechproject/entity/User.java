@@ -46,7 +46,7 @@ public class User {
     private String account;
 
     @Column(name = "password")
-    @Size(min = 6)
+//    @Size(min = 6)
     private String password;
 
     @Column(name = "active_status")

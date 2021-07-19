@@ -8,6 +8,9 @@ import Add from './Components/Category/Add';
 import UpdateCategory from './Components/Category/UpdateCategory';
 import User from './Components/User/User';
 import UpdateUser from './Components/User/UpdateUser';
+import Product from './Components/Product/Product';
+import UpdateProduct from './Components/Product/UpdateProduct';
+import ProductByCategory from './Components/Category/ProductByCategory';
 
 class App extends React.Component{
   render()
@@ -27,6 +30,15 @@ class App extends React.Component{
                   </Route>
                   <Route exact path="/user/update/:id">
                       <UpdateUser/>
+                  </Route>
+                  <Route exact path="/product">
+                      <Product/>
+                  </Route>
+                  <Route exact path="/product/update/:id">
+                      <UpdateProduct/>
+                  </Route>
+                  <Route exact path="/category/:id">
+                      <ProductByCategory/>
                   </Route>
               </Switch>
           </Router>

@@ -65,7 +65,9 @@ public class UserControllerTest {
 
     List<User> userList;
 
-    private User user, userPut;
+    private User user;
+
+    private UserDTO userPut;
 
     HashMap<String, String> map;
 
@@ -80,7 +82,7 @@ public class UserControllerTest {
         Role role = new Role(3L, RoleName.ROLE_USER);
         user = new User(5L, "Test", "Male", "HCM City", "test@gmail.com", "0123645987", "Test", "123456", "Active");
         user.setRole(role);
-        userPut = new User(5L, "TestPut", "Male", "HCM City", "test@gmail.com", "0123645987", "Test", "123456", "Active");
+        userPut = new UserDTO(5L, "TestPut", "Male", "HCM City", "test@gmail.com", "0123645987", "Test", "Active", "1");
         map = new HashMap<>();
         map.put("message", "Delete Succesfully!");
     }
