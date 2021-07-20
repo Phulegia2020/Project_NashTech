@@ -4,6 +4,7 @@ import {del, get, post, put} from "./../../Utils/httpHelper";
 import { Link } from 'react-router-dom';
 import Add from "./Add"
 import { render } from 'react-dom';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 
 export default class User extends Component {
     state = {
@@ -83,23 +84,25 @@ export default class User extends Component {
         this.createUser(data);
     }
 
-    // renderElement(id){
-    //     this.state.roles.map((r) => {
-    //         //var ro = '' + r.id;
-    //         if (r.id === id)
-    //         {
-    //             return r.name;
-    //         }
-    //     })
-    // }
+    renderElement = (id) => {
+        this.state.roles.map((r) => {
+            //var ro = '' + r.id;
+            if (r.id === id)
+            {
+                return (r.name);
+            }
+        })
+    }
 
     render() {
         return (
             <div>
+                <div className="m-3">
                 <button type="button" className="btn btn-primary" onClick={this.onToggleForm}>
                     <span className="fa fa-plus mr-5"></span>
                     Creat New User
                 </button>
+                </div>
                 <table id="table">
                     <thead>
                         <tr>
@@ -127,12 +130,12 @@ export default class User extends Component {
                                     <td>{u.email}</td>
                                     <td>{u.phone}</td>
                                     <td>{u.account}</td>
-                                    <td>{u.role_id}</td>
-                                    {/* <td>
+                                    {/* <td>{u.role_id}</td> */}
+                                    <td>
                                     {
                                         this.renderElement(u.role_id)
                                     }
-                                    </td> */}
+                                    </td>
                                     <td>{u.active_status}</td>
                                     <td><button onClick={() => this.delUser(u.id)}>Del</button></td>
                                     <td>
@@ -148,7 +151,17 @@ export default class User extends Component {
                     </tbody>
                 </table>
                 <div className="container">
-                    {this.state.isDisplayForm ? <Add onAdd={this.onAdd} onCloseForm={this.onCloseForm}/> : ''}
+                <Modal isOpen={this.state.isDisplayForm} toggle={this.onToggleForm}>
+                    <ModalHeader toggle={this.onToggleForm}>Product Information</ModalHeader>
+                    <ModalBody>
+                        <Add onAdd={this.onAdd} onCloseForm={this.onCloseForm}/>
+                        {/* {this.state.isDisplayForm ? <Add onAdd={this.onAdd} onCloseForm={this.onCloseForm}/> : ''} */}
+                    </ModalBody>
+                    <ModalFooter>
+                        {/* <Button color="primary" onClick={this.onToggleForm}>Do Something</Button>{' '}
+                        <Button color="secondary" onClick={this.onToggleForm}>Cancel</Button> */}
+                    </ModalFooter>
+                </Modal>
                 </div>
             </div>
         )

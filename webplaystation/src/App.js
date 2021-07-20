@@ -11,6 +11,7 @@ import UpdateUser from './Components/User/UpdateUser';
 import Product from './Components/Product/Product';
 import UpdateProduct from './Components/Product/UpdateProduct';
 import ProductByCategory from './Components/Category/ProductByCategory';
+import Login from './Components/Login/Login';
 
 class App extends React.Component{
   render()
@@ -19,6 +20,9 @@ class App extends React.Component{
           <Router>
               <NavBar/>
               <Switch>
+                  <Route exact path="/">
+                      <Login/>
+                  </Route>
                   <Route exact path="/category">
                       <Category/>
                   </Route>

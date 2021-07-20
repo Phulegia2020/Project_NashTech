@@ -5,12 +5,25 @@ const accessToken = localStorage.getItem("accessToken");
 
 export function get(url)
 {
-    return axios.get(endpoint + url);
+    return axios.get(endpoint + url, {
+        headers:{
+            Authorization: `Bearer ${accessToken}`,
+        }
+    });
 }
 
 export function post(url, body)
 {
     return axios.post(endpoint + url, body);
+}
+
+export function postLogin(url, body)
+{
+    return axios.post(endpoint + url, body, {
+        headers:{
+            'Content-Type': 'application/json; charset=utf-8',
+        }
+    });
 }
 
 export function put(url, body)

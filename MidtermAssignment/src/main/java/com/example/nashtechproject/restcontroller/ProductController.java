@@ -81,6 +81,10 @@ public class ProductController {
     }
 
     @GetMapping("/search")
+    @ApiOperation(value = "Get Product By Category")
+    @ApiResponses(value = { @ApiResponse(code = 200, message = "Success"),
+            @ApiResponse(code = 400, message = "Bad request"),
+            @ApiResponse(code = 500, message = "Internal server error") })
     public List<ProductDTO> getAllProductsByCategory(@RequestParam Long categoryId)
     {
         Category cate = categoryService.getCategory(categoryId);
@@ -144,11 +148,7 @@ public class ProductController {
             {
                 throw new SupplierException(sup.getId());
             }
-            product.setName(productDetails.getName());
-            product.setDescription(productDetails.getDescription());
-            product.setQuantity(productDetails.getQuantity());
-            product.setPrice(productDetails.getPrice());
-            product.setUpdateddate(LocalDateTime.now());
+            ProductUpdate(product, productDetails);
             product.setCategory(cate);
             product.setSupplier(sup);
             productService.updateProduct(product);
@@ -192,5 +192,14 @@ public class ProductController {
         Supplier s = supplierService.getSupplier(Long.valueOf(p.getSupplier_id()));
         pro.setSupplier(s);
         return pro;
+    }
+
+    private void ProductUpdate(Product product, ProductDTO productDetails)
+    {
+        product.setName(productDetails.getName());
+        product.setDescription(productDetails.getDescription());
+        product.setQuantity(productDetails.getQuantity());
+        product.setPrice(productDetails.getPrice());
+        product.setUpdateddate(LocalDateTime.now());
     }
 }

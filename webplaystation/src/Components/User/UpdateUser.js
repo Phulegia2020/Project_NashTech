@@ -64,14 +64,14 @@ class UpdateUser extends React.Component {
     }
 
     handleUpdate(event){
-        console.log(this.state.name);
-        console.log(this.state.gender);
-        console.log(this.state.address);
-        console.log(this.state.email);
-        console.log(this.state.phone);
-        console.log(this.state.username);
+        // console.log(this.state.name);
+        // console.log(this.state.gender);
+        // console.log(this.state.address);
+        // console.log(this.state.email);
+        // console.log(this.state.phone);
+        // console.log(this.state.username);
         // console.log(this.state.password);
-        console.log(this.state.role);
+        // console.log(this.state.role);
         event.preventDefault();
         //this.props.onUpdate(this.state);
         // password: this.state.password,
@@ -111,7 +111,7 @@ class UpdateUser extends React.Component {
                 </FormGroup>
                 <FormGroup tag="fieldset" row>
                     <legend className="col-form-label col-sm-2">Gender</legend>
-                    <Col sm={10}>
+                    <Col md={4}>
                     <FormGroup check>
                         <Label check>
                         <Input type="radio" name="gender" value = "Male" onChange={(e) => this.changeValue(e)} checked={this.state.gender === "Male"}/>{' '}
@@ -127,17 +127,21 @@ class UpdateUser extends React.Component {
                     </Col>
                 </FormGroup>
                 <Row form>
-                    <Col md={6}>
+                    <Col md={4}>
                         <FormGroup>
                             <Label for="username">Username</Label>
                             <Input type="text" name="account" id="username" placeholder="Football" onChange={(e) => this.changeValue(e)} value = {this.state.account} required/>
                         </FormGroup>
                     </Col>
                 </Row>
-                <FormGroup>
-                    <Label for="email">Email</Label>
-                    <Input type="email" name="email" id="email" placeholder="abc@gmail.com" onChange={(e) => this.changeValue(e)} value = {this.state.email} required/>
-                </FormGroup>
+                <Row form>
+                    <Col md={4}>
+                        <FormGroup>
+                            <Label for="email">Email</Label>
+                            <Input type="email" name="email" id="email" placeholder="abc@gmail.com" onChange={(e) => this.changeValue(e)} value = {this.state.email} required/>
+                        </FormGroup>
+                    </Col>
+                </Row>
                 <FormGroup>
                     <Label for="address">Address</Label>
                     <Input type="text" name="address" id="address" placeholder="1234 Main St, HCM City" onChange={(e) => this.changeValue(e)} value = {this.state.address} required/>

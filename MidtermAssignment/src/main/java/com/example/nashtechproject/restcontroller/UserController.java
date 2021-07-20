@@ -5,12 +5,21 @@ import com.example.nashtechproject.entity.Role;
 import com.example.nashtechproject.entity.RoleName;
 import com.example.nashtechproject.entity.User;
 import com.example.nashtechproject.exception.UserException;
+import com.example.nashtechproject.page.UserPage;
 import com.example.nashtechproject.repository.RoleRepository;
 import com.example.nashtechproject.service.RoleService;
 import com.example.nashtechproject.service.UserService;
+import com.fasterxml.jackson.databind.util.JSONPObject;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.*;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,6 +31,7 @@ import java.util.stream.Collectors;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("api/users")
+@Api(tags = "Users Rest Controller")
 public class UserController {
     @Autowired
     private UserService userService;
@@ -39,6 +49,10 @@ public class UserController {
     }
 
     @GetMapping()
+    @ApiOperation(value = "Get all users")
+    @ApiResponses(value = { @ApiResponse(code = 200, message = "Success"),
+            @ApiResponse(code = 400, message = "Bad request"),
+            @ApiResponse(code = 500, message = "Internal server error") })
     public List<UserDTO> getAllUsers()
     {
         List<UserDTO> usersDTO = new ArrayList<>();
@@ -52,6 +66,10 @@ public class UserController {
     }
 
     @GetMapping("/{userId}")
+    @ApiOperation(value = "Get User By ID")
+    @ApiResponses(value = { @ApiResponse(code = 200, message = "Success"),
+            @ApiResponse(code = 400, message = "Bad request"),
+            @ApiResponse(code = 500, message = "Internal server error") })
     public UserDTO findUser(@PathVariable Long userId)
     {
         User us = userService.getUser(userId);
@@ -62,7 +80,27 @@ public class UserController {
         return convertToDTO(userService.getUser(userId));
     }
 
+    @GetMapping("/page")
+    @ApiOperation(value = "Get User By Pages")
+    @ApiResponses(value = { @ApiResponse(code = 200, message = "Success"),
+            @ApiResponse(code = 400, message = "Bad request"),
+            @ApiResponse(code = 500, message = "Internal server error") })
+    public ResponseEntity<List<UserDTO>> getUsersPages(UserPage userPage)
+    {
+        //Page<User> users = userService.getUsersPage(userPage);
+        //Page<UserDTO> usersDTO = users.
+//        for (int i = 0; i < users.getSize(); i++) {
+//            UserDTO u = convertToDTO(users.getContent().get(i));
+//            usersDTO.;
+//        }
+        return new ResponseEntity<>(userService.getUsersPage(userPage), HttpStatus.OK);
+    }
+
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "Create User")
+    @ApiResponses(value = { @ApiResponse(code = 200, message = "Success"),
+            @ApiResponse(code = 400, message = "Bad request"),
+            @ApiResponse(code = 500, message = "Internal server error") })
     public UserDTO saveUser(@RequestBody User user)
     {
         Optional<User> users = userService.getUserByAccount(user.getAccount());
@@ -80,6 +118,10 @@ public class UserController {
     }
 
     @PutMapping("/{userId}")
+    @ApiOperation(value = "Update User")
+    @ApiResponses(value = { @ApiResponse(code = 200, message = "Success"),
+            @ApiResponse(code = 400, message = "Bad request"),
+            @ApiResponse(code = 500, message = "Internal server error") })
     public UserDTO updateUser(@PathVariable(name = "userId") Long userId, @Valid @RequestBody UserDTO userDetails)
     {
         User user = userService.getUser(userId);
@@ -96,6 +138,10 @@ public class UserController {
     }
 
     @DeleteMapping("/{userId}")
+    @ApiOperation(value = "Delete User")
+    @ApiResponses(value = { @ApiResponse(code = 200, message = "Success"),
+            @ApiResponse(code = 400, message = "Bad request"),
+            @ApiResponse(code = 500, message = "Internal server error") })
     public HashMap<String, String> deleteUser(@PathVariable(name = "userId") Long userId)
     {
         User user = userService.getUser(userId);
@@ -141,28 +187,12 @@ public class UserController {
 
         Role r = roleService.getRole(Long.valueOf(userDetails.getRole_id()));
         user.setRole(r);
-//        if (userDetails.getRole_id() == null) {
-//            Role userRole = roleRepository.findByName(RoleName.ROLE_USER)
-//                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-//            user.setRole(userRole);
-//        } else {
-//            switch (userDetails.getRole_id().toLowerCase()) {
-//                case "admin":
-//                    Role adminRole = roleRepository.findByName(RoleName.ROLE_ADMIN)
-//                            .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-//                    user.setRole(adminRole);
-//
-//                    break;
-//                case "pm":
-//                    Role modRole = roleRepository.findByName(RoleName.ROLE_PM)
-//                            .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-//                    user.setRole(modRole);
-//                    break;
-//                default:
-//                    Role userRole = roleRepository.findByName(RoleName.ROLE_USER)
-//                            .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-//                    user.setRole(userRole);
-//            }
-//        }
     }
+
+//    public Page<UserDTO> getUsersPage(UserPage userPage)
+//    {
+//        Sort sort = Sort.by(userPage.getSortDirection(), userPage.getSortBy());
+//        Pageable pageable = PageRequest.of(userPage.getPageNumber(), userPage.getPageSize(), sort);
+//        return convertToDTO(userRepository.findAll(pageable));
+//    }
 }
