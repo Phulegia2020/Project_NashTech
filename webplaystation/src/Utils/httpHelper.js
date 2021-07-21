@@ -14,7 +14,11 @@ export function get(url)
 
 export function post(url, body)
 {
-    return axios.post(endpoint + url, body);
+    return axios.post(endpoint + url, body, {
+        headers:{
+            Authorization: `Bearer ${accessToken}`,
+        }
+    });
 }
 
 export function postLogin(url, body)
@@ -28,10 +32,18 @@ export function postLogin(url, body)
 
 export function put(url, body)
 {
-    return axios.put(endpoint + url, body);
+    return axios.put(endpoint + url, body, {
+        headers:{
+            Authorization: `Bearer ${accessToken}`,
+        }
+    });
 }
 
 export function del(url)
 {
-    return axios.delete(endpoint + url);
+    return axios.delete(endpoint + url, {
+        headers:{
+            Authorization: `Bearer ${accessToken}`,
+        }
+    });
 }

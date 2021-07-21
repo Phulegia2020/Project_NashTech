@@ -36,6 +36,12 @@ public class RatingPointServiceImpl implements RatingPointService {
         return rat;
     }
 
+    public List<Rating> getRatingByProduct(Long productId)
+    {
+        List<Rating> ratings = ratingRepository.findByProductId(productId);
+        return ratings;
+    }
+
     @Override
     public Rating saveRating(Rating rat) {
         return ratingRepository.save(rat);

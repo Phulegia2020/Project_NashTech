@@ -20,6 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("api/ratings")
 public class RatingPointController {
@@ -50,6 +51,18 @@ public class RatingPointController {
             throw new RatingPointException(ratingId);
         }
         return convertToDTO(ratingPointService.getRating(ratingId));
+    }
+
+    @GetMapping("/product/{productId}")
+    public List<RatingDTO> getRatingByProduct(@PathVariable(name = "productId") Long productId)
+    {
+        Product pro = productService.getProduct(productId);
+        if (pro == null)
+        {
+            return null;
+        }
+        List<Rating> ratings = ratingPointService.getRatingByProduct(productId);
+        return ratings.stream().map(this::convertToDTO).sorted(Comparator.comparing(RatingDTO::getId).reversed()).collect(Collectors.toList());
     }
 
     @PostMapping

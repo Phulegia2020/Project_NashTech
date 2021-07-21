@@ -87,12 +87,6 @@ public class UserController {
             @ApiResponse(code = 500, message = "Internal server error") })
     public ResponseEntity<List<UserDTO>> getUsersPages(UserPage userPage)
     {
-        //Page<User> users = userService.getUsersPage(userPage);
-        //Page<UserDTO> usersDTO = users.
-//        for (int i = 0; i < users.getSize(); i++) {
-//            UserDTO u = convertToDTO(users.getContent().get(i));
-//            usersDTO.;
-//        }
         return new ResponseEntity<>(userService.getUsersPage(userPage), HttpStatus.OK);
     }
 

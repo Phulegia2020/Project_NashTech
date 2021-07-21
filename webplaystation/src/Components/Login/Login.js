@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import {FormGroup, Label, Input, Button } from 'reactstrap';
 import { postLogin } from '../../Utils/httpHelper';
+import { useHistory   } from "react-router-dom";
 
 export default class Login extends Component {
     state = {
@@ -26,6 +27,7 @@ export default class Login extends Component {
                 {
                     //this.props.history.push("/user");
                     console.log(response.data.roles[0]);
+                    //this.useHistory().push("/user");
                 }
             }
             

@@ -11,6 +11,8 @@ public interface RatingPointService {
 
     public Rating getRatingByUserIdAndProductId(Long uid, Long pid);
 
+    public List<Rating> getRatingByProduct(Long productId);
+
     public Rating saveRating(Rating rating);
 
     public void deleteRating(Long ratingId);
