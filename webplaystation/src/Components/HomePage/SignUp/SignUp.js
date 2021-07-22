@@ -4,7 +4,7 @@ import {
 	Segment,
 	Grid,
 } from 'semantic-ui-react'
-import {post} from "./../../../Utils/httpHelper";
+import {post, postLogin} from "./../../../Utils/httpHelper";
 import { withRouter } from "react-router";
 
 class SignUp extends Component {
@@ -33,7 +33,36 @@ class SignUp extends Component {
             {
                 console.log(response.data);
                 alert('Register Successfully!')
-                this.props.history.push("/");
+                postLogin('/auth/signin', {username: this.state.username, password: this.state.password})
+                .then((response) => {
+                    if (response.status === 200)
+                    {
+                        console.log(response.data);
+                        localStorage.setItem('accessToken', response.data.accessToken);
+                        if (response.data.roles[0] === "ROLE_ADMIN")
+                        {
+                            sessionStorage.setItem('user_id', response.data.id);
+                            console.log(response.data.roles[0]);
+                            //alert('Login Successfully!');
+                            //this.useHistory().push("/user");
+                            this.props.history.push("/");
+                            // history.push('/');
+                            // history.go(-1);
+                            // history.goBack();
+                            
+                        }
+                        else if (response.data.roles[0] === "ROLE_USER")
+                        {
+                            console.log(response.data.roles[0]);
+                            //alert('Login Successfully!');
+                            this.props.history.push("/");
+                            // return (<MainMenu activeItem={this.state.activeItem} ></MainMenu>)
+                        }
+                    }
+                    
+                })
+                .catch(error => console.log(error));
+                //this.props.history.push("/");
             }
         })
         .catch(error => console.log(error));

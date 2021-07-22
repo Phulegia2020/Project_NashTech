@@ -29,6 +29,9 @@ public class Product {
     @Column(name = "price")
     private int price;
 
+    @Column(name = "totalrating")
+    private float totalrating;
+
     @Column(name = "createddate")
     private LocalDateTime createddate;
 
@@ -115,6 +118,14 @@ public class Product {
 
     public LocalDateTime getCreateddate() {
         return createddate;
+    }
+
+    public float getTotalrating() {
+        return totalrating;
+    }
+
+    public void setTotalrating(float totalrating) {
+        this.totalrating = totalrating;
     }
 
     public void setCreateddate(LocalDateTime createddate) {

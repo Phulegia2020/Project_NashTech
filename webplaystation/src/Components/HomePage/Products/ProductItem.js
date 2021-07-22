@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
 import {Button, Card, Icon, Image, Menu, Rating} from 'semantic-ui-react'
-import { get, post } from '../../../Utils/httpHelper';
+import { get, post, put } from '../../../Utils/httpHelper';
 import ButtonAddToCart from "./ButtonAddToCart";
 import { withRouter } from "react-router";
 const styles = {
@@ -10,13 +10,23 @@ const styles = {
     }
 }
 
-
 class ProductItem extends Component {
     state = {
         rate: 0,
         user_id: '',
         product_id: this.props.product.id,
-        proByRate: []
+        //product_id: '',
+        proByRate: [],
+        ratings: [],
+        name: "",
+        description: "",
+        quantity: '',
+        price: '',
+        totalrating: 0,
+        imageurl: null,
+        category_id: "",
+        supplier_id: "",
+        check: false
     }
 
     componentDidMount(){
@@ -24,27 +34,68 @@ class ProductItem extends Component {
             user_id: sessionStorage.getItem('user_id'),
         })
 
-        get(`/ratings/product/${this.state.product_id}`)
+        console.log(this.state.product_id);
+        
+        get('/ratings')
         .then((response) => {
             if (response.status === 200)
             {
                 this.setState({
-                    proByRate: response.data
-                })
+                    ratings: response.data,
+                    //length: response.data.length
+                });
+                //this.state.ratings = response.data;
+                console.log(this.state.ratings);
+                console.log(this.state.ratings.length);
+                //console.length(this.state.length);
+                
             }
         })
         .catch(error => console.log(error));
+
+        get(`/products/${this.state.product_id}`)
+        .then((response) => {
+            console.log(response.data);
+            if (response.status === 200)
+            {
+                
+                // alert(`${id} is found`);
+                this.setState({
+                    name: response.data.name,
+                    description: response.data.description,
+                    quantity: response.data.quantity,
+                    price: response.data.price,
+                    totalrating: response.data.totalrating,
+                    category_id: response.data.category_id,
+                    supplier_id: response.data.supplier_id,
+                })
+                console.log(this.state.totalrating);
+            }
+        });
     }
 
-    onCheckRated(user_id)
+    onCheckRated(user_id, product_id)
     {
-        for (var i = 0; i < this.state.proByRate.length; i++)
+        for (var i = 0; i < this.state.ratings.length; i++)
         {
-            if (this.state.proByRate[i].user_id === user_id)
+            //console.log(this.state.ratings.length);
+            if (this.state.ratings[i].user_id === user_id )
             {
-                return true;
+                if (this.state.ratings[i].product_id === product_id)
+                {
+                    //console.log('true1');
+                    return true;
+                    //this.state.check = true;
+                    //return true;
+                    //alert(`User ${user_id} rated product ${product_id}. Rating another product, please!`);
+                    
+                }
             }
         }
+        //var rates = this.state.ratings;
+        
+        //console.log(rates.ratings.length);
+        
     }
 
     formatCurrency(number) {
@@ -54,7 +105,7 @@ class ProductItem extends Component {
         return numberFormat.format(number);
     }
 
-    rating = (event, data) => {
+    onRating = (event, data) => {
         event.preventDefault();
         console.log(data);
         //console.log(this.state.rate);
@@ -69,19 +120,74 @@ class ProductItem extends Component {
                 // console.log('stop');
                 console.log(this.state.rate);
                 console.log(sessionStorage.getItem('user_id'));
+                console.log(this.state.user_id);
                 console.log(this.state.product_id);
-                if (this.onCheckRated(this.state.user_id) === true)
+                //this.onCheckRated(this.state.user_id, this.state.product_id.toString());
+                //console.log('true');
+                //.log(this.state.check);
+                if (this.onCheckRated(this.state.user_id, this.state.product_id.toString()) === true)
                 {
                     alert(`User ${this.state.user_id} rated product ${this.state.product_id}. Rating another product, please!`);
                     // this.props.history.push("/");
+                    //console.log('true');
                 }
                 else
                 {
+                    //console.log('true');
                     post("/ratings", {ratingPoint: this.state.rate, user_id: this.state.user_id, product_id: this.state.product_id})
                     .then((response) => {
                         if (response.status === 200)
                         {
                             console.log(response.data);
+                            get(`/ratings/product/${this.state.product_id}`)
+                            .then((response) => {
+                                if (response.status === 200)
+                                {
+                                    this.setState({
+                                        proByRate: response.data
+                                    })
+                                    //console.log(this.state.proByRate);
+                                    console.log(this.state.proByRate.length);
+
+                                    var sumrating = this.state.rate;
+                                    // + this.state.totalrating
+                                    console.log(sumrating);
+                                    for (var i = 0; i < this.state.proByRate.length; i++)
+                                    {
+                                        if (this.state.proByRate[i].user_id !== this.state.user_id)
+                                        {
+                                            sumrating = sumrating + this.state.proByRate[i].ratingPoint;
+                                        }
+                                    }
+                                    console.log(sumrating);
+                                    //console.log(this.state.proByRate.length);
+                                    var total = Math.round((sumrating) / (this.state.proByRate.length));
+                                    console.log(total);
+                                    this.setState({
+                                        totalrating: total,
+                                    });
+                                    console.log(this.state.totalrating);
+                                    //console.log(this.state.totalrating);
+                                    console.log(this.state.name);
+                                    console.log(this.state.description);
+                                    console.log(this.state.quantity);
+                                    console.log(this.state.price);
+                                    console.log(this.state.category_id);
+                                    console.log(this.state.supplier_id);
+                                    put(`/products/${this.state.product_id}`, {name: this.state.name, description: this.state.description, quantity: this.state.quantity, price: this.state.price,
+                                        totalrating: this.state.totalrating ,category_id: this.state.category_id, supplier_id: this.state.supplier_id})
+                                    .then((response) => {
+                                        if (response.status === 200)
+                                        {
+                                            console.log(response.data);
+                                            //this.props.history.push("/product");
+                                        }
+                                    })
+                                }
+                            })
+                            .catch(error => console.log(error));
+                            this.handleTotalRating();
+                            //this.handleUpdateRating(this.state.product_id, this.state);
                             alert(`User ${this.state.user_id} rated product ${this.state.product_id} is ${this.state.rate}`);
                         }
                     })
@@ -92,7 +198,43 @@ class ProductItem extends Component {
         }
     }
 
+    // handleUpdateRating(id, data){
+    //     put(`/products/${id}`, {name: data.name, description: data.description, quantity: data.quantity, price: data.price,
+    //                                     totalrating: data.totalrating ,category_id: data.category_id, supplier_id: data.supplier_id})
+    //     .then((response) => {
+    //         if (response.status === 200)
+    //         {
+    //             console.log(response.data);
+    //             //this.props.history.push("/product");
+    //         }
+    //     })
+    // }
+
+    // handleTotalRating = () => {
+    //     var sumrating = this.state.rate;
+    //     // + this.state.totalrating
+    //     console.log(sumrating);
+    //     //for (var i = 0; i < this.state.proByRate.length; i++)
+    //     {
+    //         // if (this.state.proByRate[i].product_id === this.state.product_id)
+    //         // {
+    //             //sumrating = sumrating + this.state.proByRate[i].ratingPoint;
+    //         // }
+    //     }
+    //     console.log(sumrating);
+    //     console.log(this.state.proByRate.length);
+    //     //var total = Math.round((sumrating) / (this.state.proByRate.length));
+    //     //console.log(total);
+    //     // this.setState({
+    //     //     totalrating: total,
+    //     // });
+    //     console.log(this.state.totalrating);
+    //     //console.log(this.state.totalrating);
+    // }
+
     render() {
+        // const number = this.state.totalrating;
+        // console.log(number);
         return (
             <Card color='blue'>
                 {/* <Image style={{width: '100%'}} src={this.props.product.image.coverImageUrl}/> */}
@@ -125,8 +267,8 @@ class ProductItem extends Component {
                     </Card.Description>
                 </Card.Content>
                 <Card.Content extra>
-                    <Rating icon='star' defaultRating={5} maxRating={5} onRate={this.rating} name="rate"/>
-                    
+                    <Rating icon='star' maxRating={5} onRate={this.onRating} name="rate" rating={this.state.totalrating}/>
+                    {/* defaultRating={0} */}
                 </Card.Content>
             </Card>
         );

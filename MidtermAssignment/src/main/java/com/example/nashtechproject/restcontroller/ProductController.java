@@ -200,6 +200,7 @@ public class ProductController {
         product.setDescription(productDetails.getDescription());
         product.setQuantity(productDetails.getQuantity());
         product.setPrice(productDetails.getPrice());
+        product.setTotalrating(productDetails.getTotalrating());
         product.setUpdateddate(LocalDateTime.now());
     }
 }

@@ -24,7 +24,7 @@ class App extends React.Component{
   {
       return (
           <Router>
-              <MainMenu/>
+              {/* <MainMenu/> */}
               {/* <NavBar/> */}
               
               <Switch>
@@ -37,21 +37,27 @@ class App extends React.Component{
                   )}>
                   </Route>
                   <Route exact path="/WebPlayStation">
+                      <MainMenu/>
                       <Products/>
                   </Route>
                   <Route exact path="/WebPlayStation/about">
+                      <MainMenu/>
                       <About/>
                   </Route>
                   <Route exact path="/WebPlayStation/login">
+                      <MainMenu/>
                       <Login/>
                   </Route>
                   <Route exact path="/WebPlayStation/signup">
+                      <MainMenu/>
                       <SignUp/>
                   </Route>
                   <Route exact path="/WebPlayStation/product/:id">
+                      <MainMenu/>
                       <ProductDetails/>
                   </Route>
                   <Route exact path="/WebPlayStation/category/:id">
+                      <MainMenu/>
                       <ProductsByCategory/>
                   </Route>
                   {/* <Route exact path="/category">

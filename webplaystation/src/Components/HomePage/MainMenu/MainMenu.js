@@ -20,7 +20,7 @@ class MainMenu extends Component {
             activeItem: this.props.activeItem,
             open: false,
             categories: [],
-            isLoggedIn: false
+            //isLoggedIn: false
         };
     }
 
@@ -35,11 +35,11 @@ class MainMenu extends Component {
         })
         .catch(error => {console.log(error)})
 
-        if(localStorage.getItem('accessToken') !== null)
-        {
-            this.setState({isLoggedIn: true})
-        }
-        console.log(this.state.isLoggedIn);
+        // if(localStorage.getItem('accessToken') !== null)
+        // {
+        //     this.setState({isLoggedIn: true})
+        // }
+        // console.log(this.state.isLoggedIn);
     }
 
     onMenuItemClick = (e, {name}) => {
@@ -69,7 +69,7 @@ class MainMenu extends Component {
 
     render() {
         const {activeItem} = this.state;
-        const logined = this.state.isLoggedIn;
+        //const logined = this.state.isLoggedIn;
         return (
             <Visibility>
                 <Segment
@@ -100,7 +100,7 @@ class MainMenu extends Component {
                             <Menu.Item as={Link} to="/WebPlayStation" name='products' active={activeItem === "WebPlayStation"} onClick={this.onMenuItemClick}>Products</Menu.Item>                        
                             <Menu.Item as={Link} to="/WebPlayStation/about" name="about" active={activeItem === "WebPlayStation/about"} onClick={this.onMenuItemClick}>About</Menu.Item>
                             <Menu.Item position='right'>
-                                {logined ? <Button as={Link} to="/WebPlayStation/login" inverted style={{marginLeft: '0.5em'}} onClick={this.onLogOut}>Log Out</Button>
+                                {localStorage.getItem('accessToken') !== '' ? <Button as={Link} to="/WebPlayStation/login" inverted style={{marginLeft: '0.5em'}} onClick={this.onLogOut}>Log Out</Button>
                                          : <Button as={Link} to="/WebPlayStation/login" active={activeItem === "WebPlayStation/login"} onClick={this.onMenuItemClick} inverted >Log in</Button>}
                                 {/* <Button as={Link} to="/WebPlayStation/login" active={activeItem === "WebPlayStation/login"} onClick={this.onMenuItemClick} inverted >Log in</Button>
                                 <Button as={Link} to="/WebPlayStation/signup" inverted style={{marginLeft: '0.5em'}} disabled={localStorage.getItem("accessToken") !== ""}>Sign Up</Button>

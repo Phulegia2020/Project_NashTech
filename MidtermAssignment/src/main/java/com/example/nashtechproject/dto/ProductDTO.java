@@ -21,6 +21,8 @@ public class ProductDTO {
 
     private int price;
 
+    private float totalrating;
+
 //    @JsonFormat(pattern="dd/MM/yyyy")
 //    private LocalDateTime createddate;
 //
@@ -71,6 +73,14 @@ public class ProductDTO {
 
     public void setPrice(int price) {
         this.price = price;
+    }
+
+    public float getTotalrating() {
+        return totalrating;
+    }
+
+    public void setTotalrating(float totalrating) {
+        this.totalrating = totalrating;
     }
 
     public String getImageurl() {

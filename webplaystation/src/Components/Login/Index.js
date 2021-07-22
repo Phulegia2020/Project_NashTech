@@ -51,6 +51,7 @@ class Login extends Component {
 				}
 				else if (response.data.roles[0] === "ROLE_USER")
 				{
+					sessionStorage.setItem('user_id', response.data.id);
 					console.log(response.data.roles[0]);
 					alert('Login Successfully!');
 					this.props.history.push("/");
@@ -59,7 +60,7 @@ class Login extends Component {
             }
             
         })
-        .catch(error => console.log(error));
+        .catch(error => alert('Username or Password is wrong!'));
 		// url (required), options (optional)
 		// fetch('http://localhost:9000/api/authenticate', {
 		// 	method: 'POST',
