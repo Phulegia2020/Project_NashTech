@@ -9,6 +9,8 @@ public interface ProductService {
 
     public Product getProduct(Long productId);
 
+    public Product getProductByName(String pro_name);
+
     public Product saveProduct(Product product);
 
     public void deleteProduct(Long productId);

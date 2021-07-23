@@ -18,6 +18,7 @@ import Footer from './Components/HomePage/Footer/Footer';
 import Products from './Components/HomePage/Products/Index';
 import ProductDetails from './Components/HomePage/Products/ProductDetails';
 import SignUp from './Components/HomePage/SignUp/SignUp';
+import ProductByCategory from './Components/Category/ProductByCategory';
 
 class App extends React.Component{
   render()
@@ -39,52 +40,66 @@ class App extends React.Component{
                   <Route exact path="/WebPlayStation">
                       <MainMenu/>
                       <Products/>
+                      <Footer/>
                   </Route>
                   <Route exact path="/WebPlayStation/about">
                       <MainMenu/>
                       <About/>
+                      <Footer/>
                   </Route>
                   <Route exact path="/WebPlayStation/login">
                       <MainMenu/>
                       <Login/>
+                      <Footer/>
                   </Route>
                   <Route exact path="/WebPlayStation/signup">
                       <MainMenu/>
                       <SignUp/>
+                      <Footer/>
                   </Route>
                   <Route exact path="/WebPlayStation/product/:id">
                       <MainMenu/>
                       <ProductDetails/>
+                      <Footer/>
                   </Route>
                   <Route exact path="/WebPlayStation/category/:id">
                       <MainMenu/>
                       <ProductsByCategory/>
+                      <Footer/>
                   </Route>
-                  {/* <Route exact path="/category">
+
+                  <Route exact path="/admin/category">
+                      <NavBar/>
                       <Category/>
                   </Route>
-                  <Route exact path="/category/update/:id">
+                  <Route exact path="/admin/category/update/:id">
+                      <NavBar/>
                       <UpdateCategory/>
                   </Route>
-                  <Route exact path="/user">
+                  <Route exact path="/admin/user">
+                      <NavBar/>
                       <User/>
                   </Route>
-                  <Route exact path="/user/update/:id">
+                  <Route exact path="/admin/user/update/:id">
+                      <NavBar/>
                       <UpdateUser/>
                   </Route>
-                  <Route exact path="/product">
+                  <Route exact path="/admin/product">
+                      <NavBar/>
                       <Product/>
                   </Route>
-                  <Route exact path="/product/update/:id">
+                  <Route exact path="/admin/product/update/:id">
+                      <NavBar/>
                       <UpdateProduct/>
                   </Route>
-                  <Route exact path="/category/:id">
+                  <Route exact path="/admin/category/:id">
+                      <NavBar/>
                       <ProductByCategory/>
-                  </Route> */}
+                  </Route>
               </Switch>
-              <div className="fixed-bottom">
+              {/* <div className="fixed-bottom">
                 <Footer/>
-              </div>
+              </div> */}
           </Router>
       );
   }

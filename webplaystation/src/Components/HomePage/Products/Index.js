@@ -57,7 +57,7 @@ class Products extends Component {
                 <Grid container stackable verticalAlign='middle'>
                     <Grid.Row>
                         <Grid.Column textAlign='center'>
-                            <Header as='h3' style={{ fontSize: '2em' }}>Products</Header>
+                            <Header as='h3' style={{ fontSize: '2em' }}>Top Products</Header>
                             <ProductList products={this.state.Products}
                             />
                         </Grid.Column>

@@ -54,7 +54,7 @@ class ShoppingCartDetails extends Component {
 
     // TOTAL
     formatCurrency(number) {
-        var options = {style: 'currency', currency: 'USD'};
+        var options = {style: 'currency', currency: 'VND'};
         var numberFormat = new Intl.NumberFormat('en-US', options);
 
         return numberFormat.format(number);
@@ -64,7 +64,7 @@ class ShoppingCartDetails extends Component {
         var total = Object.keys(this.state.ShoppingCartItems).reduce((previous, key) => {
             return previous + this.state.ShoppingCartItems[key].price * this.state.ShoppingCartItems[key].quantity;
         }, 0);
-
+        localStorage.setItem('totalCart', total);
         return this.formatCurrency(total);
     }
 

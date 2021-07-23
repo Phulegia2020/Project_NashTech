@@ -3,11 +3,13 @@ import { Button, Checkbox, Form } from 'semantic-ui-react';
 import {
 	Segment,
 	Grid,
+	Divider
 } from 'semantic-ui-react'
 import { postLogin } from '../../Utils/httpHelper';
 import { withRouter } from "react-router";
 import MainMenu from '../HomePage/MainMenu/MainMenu';
 import { render } from 'react-dom';
+import {Link} from 'react-router-dom';
 
 // import createHistory from 'history/createBrowserHistory';
 // const history = createHistory({
@@ -43,7 +45,7 @@ class Login extends Component {
 					console.log(response.data.roles[0]);
 					alert('Login Successfully!');
 					//this.useHistory().push("/user");
-					this.props.history.push("/");
+					this.props.history.push("/admin/category");
 					// history.push('/');
 					// history.go(-1);
 					// history.goBack();
@@ -99,27 +101,61 @@ class Login extends Component {
 
 	render() {
 		return (
-			<Segment style={{ padding: '8em 0em' }} vertical>
-				<Grid container stackable verticalAlign='middle'>
-					<Grid.Row>
-						<Grid.Column width={8}>
-							<Form onSubmit={this.handleSubmit}>
-								<Form.Field>
-									<label>UserName</label>
-									<Form.Input placeholder='Username' name='username' value={this.state.username} onChange={this.handleChange} />
-								</Form.Field>
-								<Form.Field>
-									<label>Password</label>
-									<Form.Input placeholder='Password' type='password' name='password' value={this.state.password} onChange={this.handleChange} />
-								</Form.Field>
-								<Form.Field>
-									<Checkbox label='Remember me' />
-								</Form.Field>
-								<Button type='submit'>Login</Button>
-							</Form>
-						</Grid.Column>
-					</Grid.Row>
+			// <Segment style={{ padding: '8em 0em' }} vertical>
+			// 	<Grid container stackable verticalAlign='middle'>
+			// 		<Grid.Row>
+			// 			<Grid.Column width={8}>
+			// 				<Form onSubmit={this.handleSubmit}>
+			// 					<Form.Field>
+			// 						<label>UserName</label>
+			// 						<Form.Input placeholder='Username' name='username' value={this.state.username} onChange={this.handleChange} />
+			// 					</Form.Field>
+			// 					<Form.Field>
+			// 						<label>Password</label>
+			// 						<Form.Input placeholder='Password' type='password' name='password' value={this.state.password} onChange={this.handleChange} />
+			// 					</Form.Field>
+			// 					<Form.Field>
+			// 						<Checkbox label='Remember me' />
+			// 					</Form.Field>
+			// 					<Button type='submit'>Login</Button>
+			// 				</Form>
+			// 			</Grid.Column>
+			// 		</Grid.Row>
+			// 	</Grid>
+			// </Segment>
+
+			<Segment style={{ padding: '8em 0em' }} placeholder>
+				<Grid columns={2} relaxed='very' stackable>
+				<Grid.Column width={8}>
+					<Form onSubmit={this.handleSubmit}>
+					<Form.Input
+						icon='user'
+						iconPosition='left'
+						label='Username'
+						placeholder='Enter Username '
+						name='username' value={this.state.username} onChange={this.handleChange}
+						required
+					/>
+					<Form.Input
+						icon='lock'
+						iconPosition='left'
+						label='Password'
+						type='password'
+						placeholder='Enter Password '
+						type='password' name='password' value={this.state.password} onChange={this.handleChange}
+						required
+					/>
+
+					<Button type='submit' content='Login' primary/>
+					</Form>
+				</Grid.Column>
+
+				<Grid.Column verticalAlign='middle'>
+					<Button as={Link} to="/WebPlayStation/signup" content='Sign up' icon='signup' size='big' />
+				</Grid.Column>
 				</Grid>
+
+				<Divider vertical>Or</Divider>
 			</Segment>
 		);
 	}

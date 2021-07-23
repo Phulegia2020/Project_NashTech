@@ -61,7 +61,7 @@ export default class NavBar extends Component{
             <div>
                 <nav id='navbar'>
                     <ul>
-                        <Link to="/category">
+                        <Link to="/admin/category">
                             <li>
                                 
                                 <Dropdown className="d-inline-block" onMouseOver={this.onMouseEnter} onMouseLeave={this.onMouseLeave} isOpen={this.state.dropdownOpen} toggle={this.toggle}>
@@ -71,7 +71,7 @@ export default class NavBar extends Component{
                                     <DropdownMenu>
                                     {
                                         this.state.categories.map((c) => (
-                                            <Link to={`/category/${c.id}`} key={c.id}>
+                                            <Link to={`/admin/category/${c.id}`} key={c.id}>
                                                 <DropdownItem >{c.name}
                                                 {/* <NavLink to={`/category/${c.id}`}>
                                                         {c.name}
@@ -85,8 +85,8 @@ export default class NavBar extends Component{
                                 </Dropdown>
                             </li>
                         </Link>
-                        <Link to="/product"><li>Product</li></Link>
-                        <Link to="/user"><li>User</li></Link>
+                        <Link to="/admin/product"><li>Product</li></Link>
+                        <Link to="/admin/user"><li>User</li></Link>
                     </ul>
     
                     <div className="nav-details">

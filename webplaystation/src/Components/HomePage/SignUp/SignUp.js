@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Button, Checkbox, Form } from 'semantic-ui-react';
+import { Button, Checkbox, Form, Radio } from 'semantic-ui-react';
 import {
 	Segment,
 	Grid,
@@ -39,19 +39,19 @@ class SignUp extends Component {
                     {
                         console.log(response.data);
                         localStorage.setItem('accessToken', response.data.accessToken);
-                        if (response.data.roles[0] === "ROLE_ADMIN")
-                        {
-                            sessionStorage.setItem('user_id', response.data.id);
-                            console.log(response.data.roles[0]);
-                            //alert('Login Successfully!');
-                            //this.useHistory().push("/user");
-                            this.props.history.push("/");
-                            // history.push('/');
-                            // history.go(-1);
-                            // history.goBack();
+                        // if (response.data.roles[0] === "ROLE_ADMIN")
+                        // {
+                        //     sessionStorage.setItem('user_id', response.data.id);
+                        //     console.log(response.data.roles[0]);
+                        //     //alert('Login Successfully!');
+                        //     //this.useHistory().push("/user");
+                        //     this.props.history.push("/");
+                        //     // history.push('/');
+                        //     // history.go(-1);
+                        //     // history.goBack();
                             
-                        }
-                        else if (response.data.roles[0] === "ROLE_USER")
+                        // }
+                        if (response.data.roles[0] === "ROLE_USER")
                         {
                             console.log(response.data.roles[0]);
                             //alert('Login Successfully!');
@@ -76,43 +76,67 @@ class SignUp extends Component {
                         <Grid.Row>
                             <Grid.Column width={8}>
                                 <Form onSubmit={this.handleSubmit}>
-                                    <Form.Field required>
+                                    <Form.Field >
                                         <label>Name</label>
-                                        <Form.Input placeholder='Full Name' name='name' value={this.state.name} onChange={this.handleChange} />
+                                        <Form.Input placeholder='Full Name' name='name' value={this.state.name} onChange={this.handleChange} required/>
                                     </Form.Field>
-                                    <Form.Group inline>
+                                    {/* <Form.Group inline>
                                         <label>Gender</label>
-                                        <Form.Radio
-                                            label='Male'
+                                        <Form.Field>
+                                        control={Radio}
+                                            <Radio label='Male'
                                             value='Male'
-                                            defaultChecked
                                             onChange={this.handleChange}
-                                        />
-                                        <Form.Radio
-                                            label='Female'
+                                            name='radioGroup'/>
+                                        </Form.Field>
+                                        <Form.Field>
+                                        control={Radio}
+                                            <Radio label='Female'
                                             value='Female'
                                             onChange={this.handleChange}
+                                            name='radioGroup'/>
+                                        </Form.Field>
+                                        <Form.Field
+                                            label='Female'
+                                            value='Female'
+                                            control={Radio}
+                                            onChange={this.handleChange}
+                                        />
+                                    </Form.Group> */}
+                                    <Form.Group inline>
+                                        <label>Gender</label>
+                                        <Form.Field
+                                            label='Male'
+                                            control='input'
+                                            type='radio'
+                                            name='gender'
+                                        />
+                                        <Form.Field
+                                            label='Female'
+                                            control='input'
+                                            type='radio'
+                                            name='gender'
                                         />
                                     </Form.Group>
                                     <Form.Field required>
                                         <label>UserName</label>
-                                        <Form.Input placeholder='Username' name='username' value={this.state.username} onChange={this.handleChange} />
+                                        <Form.Input placeholder='Username' name='username' value={this.state.username} onChange={this.handleChange} required/>
                                     </Form.Field>
                                     <Form.Field required>
                                         <label>Password</label>
-                                        <Form.Input placeholder='123456' type='password' name='password' value={this.state.password} onChange={this.handleChange} />
+                                        <Form.Input placeholder='123456' type='password' name='password' value={this.state.password} onChange={this.handleChange} required/>
                                     </Form.Field>
-                                    <Form.Field required>
+                                    <Form.Field >
                                         <label>Email</label>
-                                        <Form.Input placeholder='abc@gmail.com' name='email' value={this.state.email} onChange={this.handleChange} />
+                                        <Form.Input type="email" placeholder='abc@gmail.com' name='email' value={this.state.email} onChange={this.handleChange} required/>
                                     </Form.Field>
-                                    <Form.Field required>
+                                    <Form.Field >
                                         <label>Address</label>
-                                        <Form.Input placeholder='123 Main st, Ward, District, Ho Chi Minh City' name='address' value={this.state.address} onChange={this.handleChange} />
+                                        <Form.Input placeholder='123 Main st, Ward, District, Ho Chi Minh City' name='address' value={this.state.address} onChange={this.handleChange} required/>
                                     </Form.Field>
-                                    <Form.Field required>
+                                    <Form.Field >
                                         <label>Phone</label>
-                                        <Form.Input placeholder='0123456789' type='number' name='address' value={this.state.phone} onChange={this.handleChange} />
+                                        <Form.Input placeholder='0123456789' type="number" name='phone' value={this.state.phone} onChange={this.handleChange} required/>
                                     </Form.Field>
                                     <Form.Field>
                                         <Checkbox label='Remember me' />

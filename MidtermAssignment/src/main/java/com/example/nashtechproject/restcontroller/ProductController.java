@@ -99,6 +99,21 @@ public class ProductController {
                 .collect(Collectors.toList());
     }
 
+    @GetMapping("/name/{name}")
+    @ApiOperation(value = "Get Product By Name")
+    @ApiResponses(value = { @ApiResponse(code = 200, message = "Success"),
+            @ApiResponse(code = 400, message = "Bad request"),
+            @ApiResponse(code = 500, message = "Internal server error") })
+    public ProductDTO getProductByName(@PathVariable(name = "name") String name)
+    {
+        Product pro = productService.getProductByName(name);
+        if (pro == null)
+        {
+            return null;
+        }
+        return convertToDTO(pro);
+    }
+
     @ApiOperation(value = "Create new Product")
     @ApiResponses(value = { @ApiResponse(code = 200, message = "Success"),
             @ApiResponse(code = 400, message = "Bad request"),

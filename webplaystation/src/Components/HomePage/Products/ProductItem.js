@@ -186,7 +186,7 @@ class ProductItem extends Component {
                                 }
                             })
                             .catch(error => console.log(error));
-                            this.handleTotalRating();
+                            //this.handleTotalRating();
                             //this.handleUpdateRating(this.state.product_id, this.state);
                             alert(`User ${this.state.user_id} rated product ${this.state.product_id} is ${this.state.rate}`);
                         }

@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("api/bills")
 public class BillController {
@@ -134,7 +135,8 @@ public class BillController {
         Bill bill = modelMapper.map(b, Bill.class);
         User u = userService.getUser(Long.valueOf(b.getUser_id()));
         bill.setUser(u);
-        BillStatus billStatus = billStatusService.getBillStatus(Long.valueOf(b.getBillStatus_id()));
+//        BillStatus billStatus = billStatusService.getBillStatus(Long.valueOf(b.getBillStatus_id()));
+        BillStatus billStatus = billStatusService.getBillStatus(3L);
         bill.setBillStatus(billStatus);
         return bill;
     }
