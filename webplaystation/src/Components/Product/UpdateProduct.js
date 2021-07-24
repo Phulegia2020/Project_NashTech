@@ -10,11 +10,13 @@ class UpdateProduct extends Component {
         description: "",
         quantity: '',
         price: '',
+        totalrating: 0,
         imageurl: null,
         category_id: "",
         supplier_id: "",
         categories: [],
-        suppliers: []
+        suppliers: [],
+        base64: ""
     }
 
     componentDidMount(){
@@ -30,9 +32,12 @@ class UpdateProduct extends Component {
                     description: response.data.description,
                     quantity: response.data.quantity,
                     price: response.data.price,
+                    totalrating: response.data.totalrating,
+                    imageurl: response.data.imageurl,
                     category_id: response.data.category_id,
                     supplier_id: response.data.supplier_id,
                 })
+                //console.log(this.state.imageurl);
             }
         });
         get("/categories")
@@ -58,6 +63,32 @@ class UpdateProduct extends Component {
         })
     }
 
+    convertBase64 = (file) => {
+        return new Promise((resolve, reject) => {
+            const fileReader = new FileReader();
+            fileReader.readAsDataURL(file);
+            fileReader.onload = () => {
+            resolve(fileReader.result);
+            };
+            fileReader.onerror = (error) => {
+            reject(error);
+            };
+        });
+    };
+
+    uploadImage = async (e) => {
+        const file = e.target.files[0];
+        const base64 = await this.convertBase64(file);
+        this.setState({
+            base64: base64
+        });
+        const byteArr = this.state.base64.split(",");
+        let photo = byteArr[1];
+        this.setState({
+            imageurl: photo
+        });
+    };
+    
     changeValue(e){
         //this.setState({name: e.target.value})
         this.setState({
@@ -67,15 +98,21 @@ class UpdateProduct extends Component {
 
     handleUpdate(event){
         event.preventDefault();
+        //let photo;
+        // if (event.target.image.files.length !== 0) {
+            
+        // }
+        
         put(`/products/${this.state.id}`, {name: this.state.name, description:this.state.description, quantity: this.state.quantity, price: this.state.price,
-                                        category_id: this.state.category_id, supplier_id: this.state.supplier_id})
+                                           totalrating:this.state.totalrating ,imageurl: this.state.imageurl, category_id: this.state.category_id, supplier_id: this.state.supplier_id})
         .then((response) => {
             if (response.status === 200)
             {
                 console.log(response.data);
-                this.props.history.push("/product");
+                this.props.history.push("/admin/product");
             }
         })
+        //console.log(this.state.imageurl);
     }
 
     handleClear = () => {
@@ -87,12 +124,13 @@ class UpdateProduct extends Component {
         });
         // this.props.onCloseForm();
         // console.log(this.state);
-        this.props.history.push("/product");
+        this.props.history.push("/admin/product");
     }
 
     render() {
         return (
             <div>
+                <h3>Update Product</h3>
                 <FormGroup>
                     <Label for="name">Name</Label>
                     <Input type="text" name="name" id="name" placeholder="PlayStation 4" onChange={(e) => this.changeValue(e)} value = {this.state.name} required="required"/>
@@ -112,7 +150,9 @@ class UpdateProduct extends Component {
                 <FormGroup>
                     <Label for="image">Image</Label>
                     <br></br>
-                    <Input type="file" name="image" id="image" required="required"/>
+                    <Input type="file" name="image" id="image" accept=".jpeg, .png, .jpg" onChange={(e) => {this.uploadImage(e)}} required="required"/>
+                    <br></br>
+                    <img src={`data:image/jpeg;base64,${this.state.imageurl}`} alt=""></img>
                 </FormGroup>
                 <FormGroup className="mb-2">
                     <Label for="category">Category</Label>

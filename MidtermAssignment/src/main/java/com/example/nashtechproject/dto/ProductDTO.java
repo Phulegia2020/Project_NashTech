@@ -3,11 +3,9 @@ package com.example.nashtechproject.dto;
 import com.example.nashtechproject.entity.Category;
 import com.example.nashtechproject.entity.Supplier;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import org.hibernate.annotations.Type;
 
-import javax.persistence.Column;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 public class ProductDTO {
@@ -29,7 +27,9 @@ public class ProductDTO {
 //    @JsonFormat(pattern="dd/MM/yyyy")
 //    private LocalDateTime updateddate;
 
-    private String imageurl;
+    @Lob
+    @Type(type="org.hibernate.type.BinaryType")
+    private byte[] imageurl;
 
     private String category_id;
 
@@ -83,11 +83,11 @@ public class ProductDTO {
         this.totalrating = totalrating;
     }
 
-    public String getImageurl() {
+    public byte[] getImageurl() {
         return imageurl;
     }
 
-    public void setImageurl(String imageurl) {
+    public void setImageurl(byte[] imageurl) {
         this.imageurl = imageurl;
     }
 

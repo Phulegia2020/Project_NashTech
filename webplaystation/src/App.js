@@ -19,6 +19,7 @@ import Products from './Components/HomePage/Products/Index';
 import ProductDetails from './Components/HomePage/Products/ProductDetails';
 import SignUp from './Components/HomePage/SignUp/SignUp';
 import ProductByCategory from './Components/Category/ProductByCategory';
+import ChangePassword from './Components/HomePage/ChangePassword/ChangePassword';
 
 class App extends React.Component{
   render()
@@ -55,6 +56,11 @@ class App extends React.Component{
                   <Route exact path="/WebPlayStation/signup">
                       <MainMenu/>
                       <SignUp/>
+                      <Footer/>
+                  </Route>
+                  <Route exact path="/WebPlayStation/profile">
+                      <MainMenu/>
+                      <ChangePassword/>
                       <Footer/>
                   </Route>
                   <Route exact path="/WebPlayStation/product/:id">

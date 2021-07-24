@@ -3,6 +3,7 @@ package com.example.nashtechproject.service.impl;
 import com.example.nashtechproject.entity.Role;
 import com.example.nashtechproject.entity.RoleName;
 import com.example.nashtechproject.entity.User;
+import com.example.nashtechproject.payload.request.ChangPasswordRequest;
 import com.example.nashtechproject.payload.request.LoginRequest;
 import com.example.nashtechproject.payload.request.SignupRequest;
 import com.example.nashtechproject.payload.response.JwtResponse;
@@ -122,5 +123,26 @@ public class AuthServiceImpl implements AuthService {
         userRepository.save(user);
 
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+    }
+
+    public ResponseEntity<?> getUserChangePassword(ChangPasswordRequest changPasswordRequest)
+    {
+        if (changPasswordRequest.getNewpassword().equals(""))
+        {
+            return ResponseEntity
+                    .badRequest()
+                    .body(new MessageResponse("Enter new password!"));
+        }
+
+        if (!changPasswordRequest.getConfirmpassword().equals(changPasswordRequest.getNewpassword()))
+        {
+            return ResponseEntity.ok()
+                    .body(new MessageResponse("Confirm Password is not correct!"));
+        }
+
+        User user = userRepository.findById(changPasswordRequest.getUser_id()).get();
+        user.setPassword(encoder.encode(changPasswordRequest.getNewpassword()));
+        userRepository.save(user);
+        return ResponseEntity.ok(new MessageResponse("Change Password successfully!"));
     }
 }

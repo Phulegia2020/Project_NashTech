@@ -99,7 +99,7 @@ class UpdateUser extends React.Component {
         });
         // this.props.onCloseForm();
         // console.log(this.state);
-        this.props.history.push("/user");
+        this.props.history.push("/admin/user");
     }
 
     render() {

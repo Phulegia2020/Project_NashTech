@@ -39,9 +39,11 @@ class Login extends Component {
             {
                 console.log(response.data);
                 localStorage.setItem('accessToken', response.data.accessToken);
+				sessionStorage.setItem('user_id', response.data.id);
+				sessionStorage.setItem('username', response.data.username);
                 if (response.data.roles[0] === "ROLE_ADMIN")
                 {
-					sessionStorage.setItem('user_id', response.data.id);
+					
 					console.log(response.data.roles[0]);
 					alert('Login Successfully!');
 					//this.useHistory().push("/user");
@@ -53,7 +55,7 @@ class Login extends Component {
 				}
 				else if (response.data.roles[0] === "ROLE_USER")
 				{
-					sessionStorage.setItem('user_id', response.data.id);
+					// sessionStorage.setItem('user_id', response.data.id);
 					console.log(response.data.roles[0]);
 					alert('Login Successfully!');
 					this.props.history.push("/");

@@ -12,6 +12,7 @@ import {
 } from 'semantic-ui-react'
 import ShoppingCart from "./../ShoppingCart/ShoppingCart";
 import {get} from "./../../../Utils/httpHelper";
+import Profile from '../Profile/Profile';
 
 class MainMenu extends Component {
     constructor(props) {
@@ -50,6 +51,7 @@ class MainMenu extends Component {
     onLogOut = () => {
         localStorage.setItem('accessToken', '');
         sessionStorage.removeItem('user_id');
+        sessionStorage.removeItem('username');
         localStorage.setItem('totalCart', 0);
         localStorage.setItem('shopping-cart', []);
         this.setState({isLoggedIn: false});
@@ -102,12 +104,15 @@ class MainMenu extends Component {
                             <Menu.Item as={Link} to="/WebPlayStation" name='products' active={activeItem === "WebPlayStation"} onClick={this.onMenuItemClick}>Products</Menu.Item>                        
                             <Menu.Item as={Link} to="/WebPlayStation/about" name="about" active={activeItem === "WebPlayStation/about"} onClick={this.onMenuItemClick}>About</Menu.Item>
                             <Menu.Item position='right'>
-                                {localStorage.getItem('accessToken') !== '' ? <Button as={Link} to="/WebPlayStation" inverted style={{marginLeft: '0.5em'}} onClick={this.onLogOut}>Log Out</Button>
+                                <ShoppingCart/>
+                                
+                                {/* <Button as={Link} to="/WebPlayStation" inverted style={{marginLeft: '0.5em'}} onClick={this.onLogOut}>Log Out</Button> */}
+                                {localStorage.getItem('accessToken') !== '' ? <Profile onLogOut={this.onLogOut}/>
                                          : <Button as={Link} to="/WebPlayStation/login" active={activeItem === "WebPlayStation/login"} onClick={this.onMenuItemClick} inverted >Log in</Button>}
                                 {/* <Button as={Link} to="/WebPlayStation/login" active={activeItem === "WebPlayStation/login"} onClick={this.onMenuItemClick} inverted >Log in</Button>
                                 <Button as={Link} to="/WebPlayStation/signup" inverted style={{marginLeft: '0.5em'}} disabled={localStorage.getItem("accessToken") !== ""}>Sign Up</Button>
                                 <Button as={Link} to="/WebPlayStation/login" inverted style={{marginLeft: '0.5em'}} onClick={this.onLogOut}>Log Out</Button> */}
-                                <ShoppingCart/>
+                                
                             </Menu.Item>
                         </Menu>
                     </Container>

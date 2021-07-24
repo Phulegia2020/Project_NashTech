@@ -66,6 +66,7 @@ class ProductItem extends Component {
                     quantity: response.data.quantity,
                     price: response.data.price,
                     totalrating: response.data.totalrating,
+                    imageurl: response.data.imageurl,
                     category_id: response.data.category_id,
                     supplier_id: response.data.supplier_id,
                 })
@@ -175,7 +176,7 @@ class ProductItem extends Component {
                                     console.log(this.state.category_id);
                                     console.log(this.state.supplier_id);
                                     put(`/products/${this.state.product_id}`, {name: this.state.name, description: this.state.description, quantity: this.state.quantity, price: this.state.price,
-                                        totalrating: this.state.totalrating ,category_id: this.state.category_id, supplier_id: this.state.supplier_id})
+                                                                                totalrating: this.state.totalrating, imageurl:this.state.imageurl ,category_id: this.state.category_id, supplier_id: this.state.supplier_id})
                                     .then((response) => {
                                         if (response.status === 200)
                                         {
@@ -238,8 +239,8 @@ class ProductItem extends Component {
         return (
             <Card color='blue'>
                 {/* <Image style={{width: '100%'}} src={this.props.product.image.coverImageUrl}/> */}
-                <Image style={{width: '100%'}} src={`https://product.hstatic.net/200000255149/product/ps5_-_2_a2a2c119326c4d93b92f48d51454689e_master.jpg`}/>
-                {/* <Image style={{width: '100%'}} src={this.props.product.imageurl}/> */}
+                {/* <Image style={{width: '100%'}} src={`https://product.hstatic.net/200000255149/product/ps5_-_2_a2a2c119326c4d93b92f48d51454689e_master.jpg`}/> */}
+                <Image style={{width: '100%'}} src={`data:image/jpeg;base64,${this.props.product.imageurl}`}/>
                 <Card.Content>
                     <Card.Header>
                         {this.props.product.name}

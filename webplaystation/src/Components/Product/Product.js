@@ -45,6 +45,7 @@ export default class Product extends Component {
     }
 
     createProduct(newProduct){
+        console.log(newProduct.price);
         post(`/products`, {name: newProduct.name, description: newProduct.description, quantity: newProduct.quantity,
                         price: newProduct.price, imageurl: newProduct.imageurl, category_id: newProduct.category_id,
                         supplier_id: newProduct.supplier_id})
@@ -53,6 +54,7 @@ export default class Product extends Component {
             this.setState({
                 products: [...this.state.products, response.data],
             });
+            console.log(newProduct.price);
         });
     }
 
@@ -104,7 +106,10 @@ export default class Product extends Component {
                                     <td>{p.description}</td>
                                     <td>{p.quantity}</td>
                                     <td>{p.price}</td>
-                                    <td>{p.imageurl}</td>
+                                    {/* <td>{p.imageurl}</td> */}
+                                    <td>
+                                        <img src={`data:image/jpeg;base64,${p.imageurl}`} alt="" height="100px"></img>
+                                    </td>
                                     <td>{p.category_id}</td>
                                     <td>{p.supplier_id}</td>
                                     <td><button onClick={() => this.delProduct(p.id)}>Del</button></td>

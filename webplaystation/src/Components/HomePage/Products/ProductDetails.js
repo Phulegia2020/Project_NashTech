@@ -121,7 +121,7 @@ class ProductDetails extends Component {
 
     handleUpdateRating(id, data){
         put(`/products/${id}`, {name: data.name, description: data.description, quantity: data.quantity, price: data.price,
-                                        totalrating: this.state.totalrating ,category_id: data.category_id, supplier_id: data.supplier_id})
+                                        imageurl: data.imageurl ,totalrating: this.state.totalrating ,category_id: data.category_id, supplier_id: data.supplier_id})
         .then((response) => {
             if (response.status === 200)
             {
@@ -171,8 +171,8 @@ class ProductDetails extends Component {
                 <Grid container stackable verticalAlign='middle'>
                     <Grid.Row>
                         <Grid.Column width={4}>
-                            {/* <Image src={product.imageUrl}/> */}
-                            <Image src={'https://product.hstatic.net/200000255149/product/ps5_-_2_a2a2c119326c4d93b92f48d51454689e_master.jpg'}/>
+                            <Image src={`data:image/jpeg;base64,${product.imageurl}`}/>
+                            {/* <Image src={'https://product.hstatic.net/200000255149/product/ps5_-_2_a2a2c119326c4d93b92f48d51454689e_master.jpg'}/> */}
                         </Grid.Column>
                         <Grid.Column width={12}>
                             <Header as="h1">{product.name}</Header>

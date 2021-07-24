@@ -12,10 +12,11 @@ export default class Add extends Component {
             quantity: 0,
             price: 0,
             imageurl: null,
-            category_id: "",
-            supplier_id: "",
+            category_id: "1",
+            supplier_id: "1",
             categories: [],
-            suppliers: []
+            suppliers: [],
+            base64: ""
         }
     }
     
@@ -43,6 +44,32 @@ export default class Add extends Component {
         })
     }
 
+    convertBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+        const fileReader = new FileReader();
+        fileReader.readAsDataURL(file);
+        fileReader.onload = () => {
+        resolve(fileReader.result);
+        };
+        fileReader.onerror = (error) => {
+        reject(error);
+        };
+    });
+    };
+
+    uploadImage = async (e) => {
+        const file = e.target.files[0];
+        const base64 = await this.convertBase64(file);
+        this.setState({
+            base64: base64
+        });
+        const byteArr = this.state.base64.split(",");
+        let photo = byteArr[1];
+        this.setState({
+            imageurl: photo
+        });
+    };
+
     changeValue(e){
         //this.setState({name: e.target.value})
         this.setState({
@@ -52,7 +79,23 @@ export default class Add extends Component {
 
     handleCreate(event){
         event.preventDefault();
+        //let photo;
+        // if (event.target.image.files.length !== 0) {
+            
+        // }
+        // const byteArr = this.state.base64.split(",");
+        // photo = byteArr[1];
+        // this.setState({
+        //     imageurl: photo
+        // });
         this.props.onAdd(this.state);
+        // console.log(this.state.name);
+        // console.log(this.state.description);
+        // console.log(this.state.quantity);
+        console.log(this.state.price);
+        // console.log(this.state.imageurl);
+        // console.log(this.state.category_id);
+        console.log(this.state.supplier_id);
     }
 
     handleClear = () => {
@@ -61,7 +104,7 @@ export default class Add extends Component {
             description: "",
             quantity: 0,
             price: 0,
-            imageurl: null,
+            //imageurl: null,
             category_id: "",
             supplier_id: "",
         });
@@ -71,6 +114,7 @@ export default class Add extends Component {
     render() {
         return (
             <div>
+                <h3>Create New Product</h3>
                 <FormGroup>
                     <Label for="name">Name</Label>
                     <Input type="text" name="name" id="name" placeholder="PlayStation 4" onChange={(e) => this.changeValue(e)} value = {this.state.name} required="required"/>
@@ -90,7 +134,7 @@ export default class Add extends Component {
                 <FormGroup>
                     <Label for="image">Image</Label>
                     <br></br>
-                    <Input type="file" name="image" id="image" required="required"/>
+                    <Input type="file" name="image" id="image" accept=".jpeg, .png, .jpg" onChange={(e) => {this.uploadImage(e);}} required="required"/>
                 </FormGroup>
                 <FormGroup className="mb-2">
                     <Label for="category">Category</Label>
@@ -102,7 +146,7 @@ export default class Add extends Component {
                         }
                     </Input>
                 </FormGroup>
-                <FormGroup className="mb-2">
+                <FormGroup className="mb-5">
                     <Label for="supplier">Supplier</Label>
                     <Input type="select" name="supplier_id" id="supplier" value = {this.state.supplier_id} onChange={(e) => this.changeValue(e)}>
                         {

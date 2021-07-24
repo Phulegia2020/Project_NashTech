@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import javax.validation.Valid;
 
 import com.example.nashtechproject.entity.User;
+import com.example.nashtechproject.payload.request.ChangPasswordRequest;
 import com.example.nashtechproject.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -82,5 +83,11 @@ public class AuthController {
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
 //        user.setRoles(roles);
         return authService.getUserSignUp(signUpRequest);
+    }
+
+    @PostMapping("/profile")
+    public ResponseEntity<?> changePasswordUser(@Valid @RequestBody ChangPasswordRequest changPasswordRequest)
+    {
+        return authService.getUserChangePassword(changPasswordRequest);
     }
 }

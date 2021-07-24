@@ -2,6 +2,7 @@ package com.example.nashtechproject.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.Type;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -39,8 +40,10 @@ public class Product {
     @Column(name = "updateddate")
     private LocalDateTime updateddate;
 
+    @Lob
+    @Type(type="org.hibernate.type.BinaryType")
     @Column(name = "imageURL")
-    private String imageurl;
+    private byte[] imageurl;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
@@ -61,7 +64,7 @@ public class Product {
     public Product() {
     }
 
-    public Product(Long id, String name, String description, int quantity, int price, LocalDateTime createddate, LocalDateTime updateddate, String imageurl, Category category, Supplier supplier, List<Rating> ratings, Collection<BillDetails> products) {
+    public Product(Long id, String name, String description, int quantity, int price, LocalDateTime createddate, LocalDateTime updateddate, byte[] imageurl, Category category, Supplier supplier, List<Rating> ratings, Collection<BillDetails> products) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -140,11 +143,11 @@ public class Product {
         this.updateddate = updateddate;
     }
 
-    public String getImageurl() {
+    public byte[] getImageurl() {
         return imageurl;
     }
 
-    public void setImageurl(String imageurl) {
+    public void setImageurl(byte[] imageurl) {
         this.imageurl = imageurl;
     }
 
