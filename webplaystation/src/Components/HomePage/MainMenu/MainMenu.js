@@ -8,7 +8,8 @@ import {
     Segment,
     Visibility,
     Dropdown,
-    Icon
+    Icon,
+    Sticky
 } from 'semantic-ui-react'
 import ShoppingCart from "./../ShoppingCart/ShoppingCart";
 import {get} from "./../../../Utils/httpHelper";
@@ -21,7 +22,6 @@ class MainMenu extends Component {
             activeItem: this.props.activeItem,
             open: false,
             categories: [],
-            //isLoggedIn: false
         };
     }
 
@@ -31,16 +31,10 @@ class MainMenu extends Component {
             if (response.status === 200)
             {
                 this.setState({categories: response.data});
-                console.log(response.data);
+                //console.log(response.data);
             }
         })
         .catch(error => {console.log(error)})
-
-        // if(localStorage.getItem('accessToken') !== null)
-        // {
-        //     this.setState({isLoggedIn: true})
-        // }
-        // console.log(this.state.isLoggedIn);
     }
 
     onMenuItemClick = (e, {name}) => {
@@ -57,24 +51,10 @@ class MainMenu extends Component {
         this.setState({isLoggedIn: false});
     }
 
-    // convertToProfile(){
-    //     if (this.state.activeItem === 'logined')
-    //     {
-    //         return(<Button as={Link} to="/WebPlayStation/profile"  onClick={this.onMenuItemClick} inverted>Profile</Button>);
-    //     }
-    //     else{
-    //         return(<Menu.Item>
-    //                     <Button as={Link} to="/WebPlayStation/login"  onClick={this.onMenuItemClick} inverted>Log in</Button>
-    //                     {/* active={activeItem === "WebPlayStation/login"} */}
-    //                     <Button as={Link} to="/WebPlayStation/signup" inverted style={{marginLeft: '0.5em'}}>Sign Up</Button>
-    //                 </Menu.Item>);
-    //     }
-    // }
-
     render() {
         const {activeItem} = this.state;
-        //const logined = this.state.isLoggedIn;
         return (
+            <Sticky>
             <Visibility>
                 <Segment
                     inverted
@@ -84,7 +64,6 @@ class MainMenu extends Component {
                 >
                     <Container>
                         <Menu inverted pointing secondary size='large'>
-                            {/* <Menu.Item as={Link} to="/" name="home" active={activeItem === "home"} onClick={this.onMenuItemClick}>Home</Menu.Item> */}
                             <Dropdown text='Category' pointing className='link item'>
                                 <Dropdown.Menu>
                                     <Dropdown.Header>Categories</Dropdown.Header>
@@ -93,31 +72,20 @@ class MainMenu extends Component {
                                         <Dropdown.Item as={Link} to={`/WebPlayStation/category/${c.id}`} key={c.id}>{c.name}</Dropdown.Item>
                                         ))
                                     }
-                                    {/* <Dropdown.Item>Home Goods</Dropdown.Item>
-                                    <Dropdown.Item>Bedroom</Dropdown.Item>
-                                    <Dropdown.Divider />
-                                    <Dropdown.Header>Order</Dropdown.Header>
-                                    <Dropdown.Item>Status</Dropdown.Item>
-                                    <Dropdown.Item>Cancellations</Dropdown.Item> */}
                                 </Dropdown.Menu>
                             </Dropdown>
                             <Menu.Item as={Link} to="/WebPlayStation" name='products' active={activeItem === "WebPlayStation"} onClick={this.onMenuItemClick}>Products</Menu.Item>                        
                             <Menu.Item as={Link} to="/WebPlayStation/about" name="about" active={activeItem === "WebPlayStation/about"} onClick={this.onMenuItemClick}>About</Menu.Item>
                             <Menu.Item position='right'>
                                 <ShoppingCart/>
-                                
-                                {/* <Button as={Link} to="/WebPlayStation" inverted style={{marginLeft: '0.5em'}} onClick={this.onLogOut}>Log Out</Button> */}
                                 {localStorage.getItem('accessToken') !== '' ? <Profile onLogOut={this.onLogOut}/>
                                          : <Button as={Link} to="/WebPlayStation/login" active={activeItem === "WebPlayStation/login"} onClick={this.onMenuItemClick} inverted >Log in</Button>}
-                                {/* <Button as={Link} to="/WebPlayStation/login" active={activeItem === "WebPlayStation/login"} onClick={this.onMenuItemClick} inverted >Log in</Button>
-                                <Button as={Link} to="/WebPlayStation/signup" inverted style={{marginLeft: '0.5em'}} disabled={localStorage.getItem("accessToken") !== ""}>Sign Up</Button>
-                                <Button as={Link} to="/WebPlayStation/login" inverted style={{marginLeft: '0.5em'}} onClick={this.onLogOut}>Log Out</Button> */}
-                                
                             </Menu.Item>
                         </Menu>
                     </Container>
                 </Segment>
             </Visibility>
+            </Sticky>
         );
     }
 }

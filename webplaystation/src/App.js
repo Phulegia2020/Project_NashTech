@@ -26,14 +26,7 @@ class App extends React.Component{
   {
       return (
           <Router>
-              {/* <MainMenu/> */}
-              {/* <NavBar/> */}
-              
               <Switch>
-                  {/* <Route path="/" >
-                    <MainMenu/>
-                  </Route> */}
-                  
                   <Route exact path="/" render={() => (
                       <Redirect to="/WebPlayStation"/>
                   )}>
@@ -103,9 +96,6 @@ class App extends React.Component{
                       <ProductByCategory/>
                   </Route>
               </Switch>
-              {/* <div className="fixed-bottom">
-                <Footer/>
-              </div> */}
           </Router>
       );
   }

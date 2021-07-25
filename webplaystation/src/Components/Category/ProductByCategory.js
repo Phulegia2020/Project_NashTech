@@ -14,13 +14,13 @@ class ProductByCategory extends Component {
         .then((response) => {
             if (response.status === 200)
             {
-                console.log(response.data);
+                //console.log(response.data);
                 this.setState({
                     products: response.data
                 });
             }
         })
-        console.log(this.state.id);
+        //console.log(this.state.id);
     }
 
     render() {
@@ -35,8 +35,8 @@ class ProductByCategory extends Component {
                             <th>Quantity</th>
                             <th>Price</th>
                             <th>Image</th>
-                            <th>Category</th>
-                            <th>Supplier</th>
+                            {/* <th>Category</th>
+                            <th>Supplier</th> */}
                             <th></th>
                             <th></th>
                         </tr>
@@ -51,8 +51,8 @@ class ProductByCategory extends Component {
                                     <td>{p.quantity}</td>
                                     <td>{p.price}</td>
                                     <td>{p.imageurl}</td>
-                                    <td>{p.category_id}</td>
-                                    <td>{p.supplier_id}</td>
+                                    {/* <td>{p.category_id}</td>
+                                    <td>{p.supplier_id}</td> */}
                                     <td><button onClick={() => this.delProduct(p.id)}>Del</button></td>
                                     <td>
                                         <Link to={`product/update/${p.id}`}>

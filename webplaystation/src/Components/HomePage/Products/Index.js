@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Header, Segment, Grid, Pagination } from 'semantic-ui-react';
+import { Header, Segment, Grid, Pagination, PaginationItem, PaginationLink } from 'semantic-ui-react';
 import { get } from '../../../Utils/httpHelper';
 import MainMenu from '../MainMenu/MainMenu';
 import ProductList from './ProductList';
@@ -12,46 +12,53 @@ class Products extends Component {
             ShoppingCartItems: null,
             Products: [],
             open: false,
+            pageToTal: 0,
+            activePage: 1
             // loading: true
         };
-        
+        this.handlePaginationChange = this.handlePaginationChange.bind(this);
     }
 
     componentDidMount() {
         
         this.state.ShoppingCartItems = JSON.parse(localStorage.getItem('shopping-cart') || '[]');
 
-        // get json data from remote api
-        //fetch('https://slacklivechat.com/jsonplaceholder/products')
-        // fetch('http://localhost:8080/api/products', {
-        //     method: 'GET',
-        //     headers: new Headers({
-        //         'Content-Type': 'application/json',
-        //         'x-access-token': sessionStorage.getItem('token')
-        //     })
-        // })
-        //     .then(res => res.json())
-        //     .then((result) => {
-        //         //this.state.Products = result.data;
-        //         this.setState({
-        //             Products: result
-        //         });
-        //         console.log(result);
-        //         this.setState({ loading: false });
-        //         this.setState(this.state);
-        //     });
         get("/products")
         .then((response) => {
             if (response.status === 200)
             {
-                console.log(response.data);
-                this.setState({Products: response.data});
+                //console.log(response.data);
+                //this.setState({Products: response.data});
+                this.setState({
+                    pageToTal: Math.ceil(response.data.length / 8)
+                })
+                //console.log(this.state.pageToTal);
             }
         })
         .catch(error => {console.log(error)})
+
+        get(`/products/page?pageNumber=${this.state.activePage-1}&pageSize=8&sortBy=id`)
+        .then((response) => {
+            this.setState({
+                Products: response.data,
+            });
+        })
+        .catch(error => console.log(error));
+    }
+    
+    async handlePaginationChange(e, {activePage}){
+        await this.setState({ activePage });
+        get(`/products/page?pageNumber=${this.state.activePage-1}&pageSize=8&sortBy=id`)
+        .then((response) => {
+            this.setState({
+                Products: response.data,
+            });
+        })
+        .catch(error => console.log(error))
     }
 
     render() {
+        const activePage = this.state.activePage;
         return (
             <Segment style={{ padding: '2em 0em' }} vertical>
                 <Grid container stackable verticalAlign='middle'>
@@ -64,17 +71,15 @@ class Products extends Component {
                     </Grid.Row>
                 </Grid>
                 <Grid container stackable verticalAlign='middle'>
-                    <Pagination defaultActivePage={1} totalPages={5} />
+                    <Pagination 
+                        activePage={activePage}
+                        onPageChange={this.handlePaginationChange}
+                        totalPages={this.state.pageToTal}
+                        ellipsisItem={null}
+                    />
                 </Grid>
             </Segment>
         );
-        // if (this.state.loading === false) {
-            
-        // } else {
-        //     return (
-        //         <Loading />
-        //     );
-        // }
     }
 }
 

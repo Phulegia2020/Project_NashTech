@@ -11,15 +11,10 @@ import MainMenu from '../HomePage/MainMenu/MainMenu';
 import { render } from 'react-dom';
 import {Link} from 'react-router-dom';
 
-// import createHistory from 'history/createBrowserHistory';
-// const history = createHistory({
-// 	forceRefresh: false
-// });	
-
 class Login extends Component {
 	constructor(props) {
 		super(props);
-		this.state = { username: '', password: '', activeItem:'logined' };
+		this.state = { username: '', password: ''};
 	}
 
 	handleChange = (e, { name, value }) => {
@@ -27,74 +22,32 @@ class Login extends Component {
 	}
 
 	handleSubmit = () => {
-		// const { username, password } = this.state;
-		// console.log({ username, password });
-		//this.setState({ submittedName: username, submittedEmail: password })
-
-		// var data = JSON.stringify(this.state);
-		// console.log(data);
 		postLogin('/auth/signin', {username: this.state.username, password: this.state.password})
         .then((response) => {
             if (response.status === 200)
             {
-                console.log(response.data);
+                //console.log(response.data);
                 localStorage.setItem('accessToken', response.data.accessToken);
 				sessionStorage.setItem('user_id', response.data.id);
 				sessionStorage.setItem('username', response.data.username);
                 if (response.data.roles[0] === "ROLE_ADMIN")
                 {
 					
-					console.log(response.data.roles[0]);
+					//console.log(response.data.roles[0]);
 					alert('Login Successfully!');
-					//this.useHistory().push("/user");
 					this.props.history.push("/admin/category");
-					// history.push('/');
-					// history.go(-1);
-					// history.goBack();
 					
 				}
 				else if (response.data.roles[0] === "ROLE_USER")
 				{
-					// sessionStorage.setItem('user_id', response.data.id);
-					console.log(response.data.roles[0]);
+					//console.log(response.data.roles[0]);
 					alert('Login Successfully!');
 					this.props.history.push("/");
-					// return (<MainMenu activeItem={this.state.activeItem} ></MainMenu>)
 				}
             }
             
         })
         .catch(error => alert('Username or Password is wrong!'));
-		// url (required), options (optional)
-		// fetch('http://localhost:9000/api/authenticate', {
-		// 	method: 'POST',
-		// 	body: data,
-		// 	headers: new Headers({
-		// 		'Content-Type': 'application/json'
-		// 	})
-		// }).then(function (response) {
-		// 	return response.json()
-		// }).then(function (result) {
-		// 	console.log(result);
-		// 	if (result.success === true) {
-		// 		//save token to sessionStorage        
-		// 		// sessionStorage.setItem("token", result.token);
-
-		// 		// Use push, replace, and go to navigate around.
-		// 		// https://github.com/ReactTraining/history
-		// 		// history.push('/');
-		// 		// history.go(-1);
-		// 		// history.goBack();
-
-		// 	} else {
-		// 		// sessionStorage.removeItem("token");
-		// 		//his.setState({ isLoggedin: false });
-		// 	}
-
-		// }).catch(function (err) {
-		// 	// Error :(
-		// 	console.log(err);
-		// });
 	}
 
 	componentWillUnmount(){

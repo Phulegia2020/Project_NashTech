@@ -24,7 +24,7 @@ export default class Add extends Component {
         .then((response) => {
             if (response.status === 200)
             {
-                console.log(response.data);
+                //console.log(response.data);
                 this.setState({
                     roles: response.data
                 });

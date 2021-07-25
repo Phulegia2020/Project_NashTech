@@ -25,7 +25,7 @@ export default class Add extends Component {
         .then((response) => {
             if (response.status === 200)
             {
-                console.log(response.data);
+                //console.log(response.data);
                 this.setState({
                     categories: response.data
                 });
@@ -36,7 +36,7 @@ export default class Add extends Component {
         .then((response) => {
             if (response.status === 200)
             {
-                console.log(response.data);
+                //console.log(response.data);
                 this.setState({
                     suppliers: response.data
                 });
@@ -71,7 +71,6 @@ export default class Add extends Component {
     };
 
     changeValue(e){
-        //this.setState({name: e.target.value})
         this.setState({
             [e.target.name]: e.target.value
         });
@@ -79,23 +78,14 @@ export default class Add extends Component {
 
     handleCreate(event){
         event.preventDefault();
-        //let photo;
-        // if (event.target.image.files.length !== 0) {
-            
-        // }
-        // const byteArr = this.state.base64.split(",");
-        // photo = byteArr[1];
-        // this.setState({
-        //     imageurl: photo
-        // });
         this.props.onAdd(this.state);
         // console.log(this.state.name);
         // console.log(this.state.description);
         // console.log(this.state.quantity);
-        console.log(this.state.price);
+        //console.log(this.state.price);
         // console.log(this.state.imageurl);
         // console.log(this.state.category_id);
-        console.log(this.state.supplier_id);
+        //console.log(this.state.supplier_id);
     }
 
     handleClear = () => {

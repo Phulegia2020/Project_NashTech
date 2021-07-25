@@ -22,7 +22,7 @@ class UpdateProduct extends Component {
     componentDidMount(){
         get(`/products/${this.state.id}`)
         .then((response) => {
-            console.log(response.data);
+            //console.log(response.data);
             if (response.status === 200)
             {
                 
@@ -44,7 +44,7 @@ class UpdateProduct extends Component {
         .then((response) => {
             if (response.status === 200)
             {
-                console.log(response.data);
+                //console.log(response.data);
                 this.setState({
                     categories: response.data
                 });
@@ -55,7 +55,7 @@ class UpdateProduct extends Component {
         .then((response) => {
             if (response.status === 200)
             {
-                console.log(response.data);
+                //console.log(response.data);
                 this.setState({
                     suppliers: response.data
                 });
@@ -108,7 +108,7 @@ class UpdateProduct extends Component {
         .then((response) => {
             if (response.status === 200)
             {
-                console.log(response.data);
+                //console.log(response.data);
                 this.props.history.push("/admin/product");
             }
         })

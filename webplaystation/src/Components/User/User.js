@@ -27,12 +27,12 @@ export default class User extends Component {
         .then((response) => {
             if (response.status === 200)
             {
-                console.log(response.data);
+                //console.log(response.data);
                 //this.setState({users: response.data});
                 this.setState({
                     pageToTal: Math.ceil(response.data.length / 3)
                 });
-                console.log(this.state.pageToTal);
+                //console.log(this.state.pageToTal);
             }
         })
         .catch(error => {console.log(error)})
@@ -47,7 +47,7 @@ export default class User extends Component {
 
         get("/roles")
         .then((response) => {
-            console.log(response.data);
+            //console.log(response.data);
             this.setState({
                 roles: response.data
             });
@@ -59,7 +59,7 @@ export default class User extends Component {
         .then((response) => {
             if (response.status === 200)
             {
-                console.log(response.data);
+                //console.log(response.data);
                 // alert(`${id} is found`);
             }
         })
@@ -69,7 +69,7 @@ export default class User extends Component {
     {
         del(`/users/${id}`)
         .then((response) => {
-            console.log(response.data);
+            //console.log(response.data);
             this.setState({users: this.state.users.filter(u => u.id !== id)})
             alert(response.data.message);
         })
@@ -81,7 +81,7 @@ export default class User extends Component {
                         email: newUser.email, phone: newUser.phone, username: newUser.username,
                         password: newUser.password, role: newUser.role})
         .then((response) => {
-            console.log(response.data);
+            //console.log(response.data);
             this.setState({
                 users: [...this.state.users, response.data],
             });
@@ -101,7 +101,7 @@ export default class User extends Component {
     }
 
     onAdd = (data) => {
-        console.log(data);
+        //console.log(data);
         this.createUser(data);
     }
 
@@ -226,11 +226,8 @@ export default class User extends Component {
                         <ModalHeader toggle={this.onToggleForm}>Product Information</ModalHeader>
                         <ModalBody>
                             <Add onAdd={this.onAdd} onCloseForm={this.onCloseForm}/>
-                            {/* {this.state.isDisplayForm ? <Add onAdd={this.onAdd} onCloseForm={this.onCloseForm}/> : ''} */}
                         </ModalBody>
                         <ModalFooter>
-                            {/* <Button color="primary" onClick={this.onToggleForm}>Do Something</Button>{' '}
-                            <Button color="secondary" onClick={this.onToggleForm}>Cancel</Button> */}
                         </ModalFooter>
                     </Modal>
                 </div>

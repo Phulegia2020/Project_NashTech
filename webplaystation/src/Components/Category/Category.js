@@ -9,8 +9,6 @@ export default class Category extends Component {
     state = {
         categories: [],
         isDisplayForm: false,
-        // isDisplayFormUpdate: false,
-        // updatedCate: null
     }
 
     
@@ -31,7 +29,7 @@ export default class Category extends Component {
         .then((response) => {
             if (response.status === 200)
             {
-                console.log(response.data);
+                //console.log(response.data);
                 // alert(`${id} is found`);
             }
         })
@@ -41,7 +39,7 @@ export default class Category extends Component {
     {
         del(`/categories/${id}`)
         .then((response) => {
-            console.log(response.data);
+            //console.log(response.data);
             this.setState({categories: this.state.categories.filter(cate => cate.id !== id)})
             alert(response.data.message);
         })
@@ -51,33 +49,12 @@ export default class Category extends Component {
     createCategory(newCategory){
         post(`/categories`, {name: newCategory.name, description: newCategory.description})
         .then((response) => {
-            console.log(response.data);
+            //console.log(response.data);
             this.setState({
                 categories: [...this.state.categories, response.data],
             });
         });
     }
-
-    // updateCategory(data)
-    // {
-    //     put(`/categories/${data.id}`, {name: data.name, description: data.description})
-    //     .then((response) => {
-    //         if (response.status === 200)
-    //         {
-    //             console.log(response.data);
-    //             this.state.categories.forEach((cate, index) => {
-    //                 if (cate.id === data.id)
-    //                 {
-    //                     var {cates} = this.state.categories;
-    //                     cates[index] = data;
-    //                     this.setState({
-    //                         categories: cates
-    //                     })
-    //                 }
-    //             })
-    //         }
-    //     })
-    // }
 
     onAdd = (data) => {
         console.log(data);
@@ -90,31 +67,11 @@ export default class Category extends Component {
         });
     }
 
-    // onToggleFormUpdate = (id) => {
-    //     this.state.categories.forEach((cate) => {
-    //         if (cate.id === id)
-    //         {
-    //             this.setState({
-    //                 updateCategory: cate
-    //             })
-    //         }
-    //     })
-    //     this.setState({
-    //         isDisplayFormUpdate: !this.state.isDisplayFormUpdate,
-    //     });
-    // }
-
     onCloseForm = () => {
         this.setState({
             isDisplayForm: false,
-            // isDisplayFormUpdate: false
         });
     }
-
-    // onUpdate = (data) => {
-    //     console.log(data);
-    //     this.updateCategory(data);
-    // }
 
     render() {
         return (
@@ -142,18 +99,6 @@ export default class Category extends Component {
                                     <td>{cate.description}</td>
                                     <td><button onClick={() => this.delCategory(cate.id)}>Del</button></td>
                                     <td>
-                                        {/* <Link to={`category/update/${cate.id}`}>
-                                            <button className="btn btn-success" >
-                                                <Update element={cate} onUpdate={this.onUpdate} 
-                                                        onCloseForm={this.onCloseForm}/>
-                                                Update
-                                            </button>
-                                        </Link> */}
-                                        
-                                        {/* <button className="btn btn-success" onClick={this.onToggleFormUpdate(cate.id)} >
-                                            Update
-                                        </button> */}
-
                                         <Link to={`category/update/${cate.id}`}>
                                             <button className="btn btn-success">
                                                 Update
@@ -168,12 +113,6 @@ export default class Category extends Component {
                 <div className="container">
                     {this.state.isDisplayForm ? <Add onAdd={this.onAdd} onCloseForm={this.onCloseForm}/> : ''}
                 </div>
-                
-                {/* <div className="container">
-                    {this.state.isDisplayFormUpdate ? <Update element={this.state.updatedCate} onUpdate={this.onUpdate} 
-                                            onCloseForm={this.onCloseForm}/> : ''}
-                </div> */}
-                
             </div>
         )
     }

@@ -35,7 +35,7 @@ export default class NavBar extends Component{
             if (response.status === 200)
             {
                 this.setState({categories: response.data});
-                console.log(response.data);
+                //console.log(response.data);
             }
         })
         .catch(error => {console.log(error)})
@@ -73,10 +73,6 @@ export default class NavBar extends Component{
                                         this.state.categories.map((c) => (
                                             <Link to={`/admin/category/${c.id}`} key={c.id}>
                                                 <DropdownItem >{c.name}
-                                                {/* <NavLink to={`/category/${c.id}`}>
-                                                        {c.name}
-                                                    </NavLink> */}
-                                                {/* <NavItem componentclass={Link} href={`/category/${c.id}`} to={`/category/${c.id}`}>{c.name}</NavItem> */}
                                                 </DropdownItem>
                                             </Link>
                                         ))

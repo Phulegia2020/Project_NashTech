@@ -23,15 +23,6 @@ class ProductDetails extends Component {
     componentDidMount() {
 
         this.state.ShoppingCartItems = JSON.parse(localStorage.getItem('shopping-cart') || '[]');
-
-        // fetch('http://localhost:8080/api/products/' + this.props.id)
-        //     .then(res => res.json())
-        //     .then((data) => {
-        //         let product = data;
-        //         this.state.Product = product;
-        //         this.setState({loading: false});
-        //         this.setState(this.state);
-        //     });
         get(`/products/${this.props.match.params.id}`)
         .then((response) => {
             if (response.status === 200)
@@ -39,7 +30,7 @@ class ProductDetails extends Component {
                 this.setState({
                     Product: response.data
                 });
-                console.log(this.state.Product);
+                //console.log(this.state.Product);
             }
         })
 
@@ -89,7 +80,6 @@ class ProductDetails extends Component {
             
             if (this.state.rate !== 0)
             {
-                // console.log('stop');
                 console.log(this.state.rate);
                 console.log(sessionStorage.getItem('user_id'));
                 console.log(this.state.product_id);
@@ -125,7 +115,7 @@ class ProductDetails extends Component {
         .then((response) => {
             if (response.status === 200)
             {
-                console.log(response.data);
+                //console.log(response.data);
                 //this.props.history.push("/product");
             }
         })
@@ -133,7 +123,6 @@ class ProductDetails extends Component {
 
     handleTotalRating = () => {
         var sumrating = this.state.rate;
-        // + this.state.totalrating
         console.log(sumrating);
         for (var i = 0; i < this.state.proByRate.length; i++)
         {
@@ -142,26 +131,14 @@ class ProductDetails extends Component {
                 sumrating = sumrating + this.state.proByRate[i].ratingPoint;
             }
         }
-        console.log(sumrating);
+        //console.log(sumrating);
         //console.log(this.state.proByRate.length);
         var total = Math.round((sumrating) / (this.state.proByRate.length+1));
         console.log(total);
         this.setState({
             totalrating: total,
         });
-        console.log(this.state.totalrating);
-        // var sumrating = this.state.rate + this.state.totalrating;
-        // for (var i = 0; i < this.state.proByRate.length; i++)
-        // {
-        //     if (this.state.proByRate[i].product_id === this.state.product_id)
-        //     {
-        //         sumrating = sumrating + this.state.proByRate[i].ratingPoint;
-        //     }
-        // }
-        // var total = Math.round((sumrating) / this.state.proByRate.length);
-        // this.setState({
-        //     totalrating: total,
-        // });
+        //console.log(this.state.totalrating);
     }
 
     render() {
@@ -178,9 +155,7 @@ class ProductDetails extends Component {
                             <Header as="h1">{product.name}</Header>
                             <p style={{ fontSize: '1.33em' }}><b>Desciption: </b>{product.description}</p>
                             <p style={{ fontSize: '1.33em' }}><b>Price: </b>{this.formatCurrency(product.price)}</p>
-                            {/* <Header as="h4">Discount: {product.discount}</Header> */}
                             <Rating icon='star'  maxRating={5} onRate={this.onRating} name="rate" rating={product.totalrating}/>
-                            {/* defaultRating={0} */}
                             <Header as="h4">
                                 <ButtonAddToCart product={product}/>
                             </Header>
@@ -190,13 +165,6 @@ class ProductDetails extends Component {
 
             </Segment>
         );
-        // if (this.state.loading === false) {
-            
-        // } else {
-        //     return (
-        //         <Loading/>
-        //     );
-        // }
     }
 }
 

@@ -44,7 +44,7 @@ class UpdateUser extends React.Component {
                 this.setState({
                     roles: response.data
                 });
-                console.log(this.state.roles);
+                //console.log(this.state.roles);
             }
         })
     }
@@ -80,7 +80,7 @@ class UpdateUser extends React.Component {
         .then((response) => {
             if (response.status === 200)
             {
-                console.log(response.data);
+                //console.log(response.data);
                 this.props.history.push("/user");
             }
         })

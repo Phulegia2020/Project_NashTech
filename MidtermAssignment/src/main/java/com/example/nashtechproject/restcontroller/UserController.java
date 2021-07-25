@@ -81,7 +81,7 @@ public class UserController {
     }
 
     @GetMapping("/page")
-    @ApiOperation(value = "Get User By Pages")
+    @ApiOperation(value = "Get Users By Pages")
     @ApiResponses(value = { @ApiResponse(code = 200, message = "Success"),
             @ApiResponse(code = 400, message = "Bad request"),
             @ApiResponse(code = 500, message = "Internal server error") })

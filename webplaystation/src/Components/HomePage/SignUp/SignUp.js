@@ -16,8 +16,7 @@ class SignUp extends Component {
         phone: "",
         username: "",
         password: "",
-        role: "",
-        activeItem:'logined' };
+        role: "",};
     }
     
     handleChange = (e, { name, value }) => {
@@ -31,7 +30,7 @@ class SignUp extends Component {
         .then((response) => {
             if (response.status === 200)
             {
-                console.log(response.data);
+                //console.log(response.data);
                 alert('Register Successfully!')
                 postLogin('/auth/signin', {username: this.state.username, password: this.state.password})
                 .then((response) => {
@@ -39,24 +38,10 @@ class SignUp extends Component {
                     {
                         console.log(response.data);
                         localStorage.setItem('accessToken', response.data.accessToken);
-                        // if (response.data.roles[0] === "ROLE_ADMIN")
-                        // {
-                        //     sessionStorage.setItem('user_id', response.data.id);
-                        //     console.log(response.data.roles[0]);
-                        //     //alert('Login Successfully!');
-                        //     //this.useHistory().push("/user");
-                        //     this.props.history.push("/");
-                        //     // history.push('/');
-                        //     // history.go(-1);
-                        //     // history.goBack();
-                            
-                        // }
                         if (response.data.roles[0] === "ROLE_USER")
                         {
-                            console.log(response.data.roles[0]);
-                            //alert('Login Successfully!');
+                            //console.log(response.data.roles[0]);
                             this.props.history.push("/");
-                            // return (<MainMenu activeItem={this.state.activeItem} ></MainMenu>)
                         }
                     }
                     
@@ -80,29 +65,6 @@ class SignUp extends Component {
                                         <label>Name</label>
                                         <Form.Input placeholder='Full Name' name='name' value={this.state.name} onChange={this.handleChange} required/>
                                     </Form.Field>
-                                    {/* <Form.Group inline>
-                                        <label>Gender</label>
-                                        <Form.Field>
-                                        control={Radio}
-                                            <Radio label='Male'
-                                            value='Male'
-                                            onChange={this.handleChange}
-                                            name='radioGroup'/>
-                                        </Form.Field>
-                                        <Form.Field>
-                                        control={Radio}
-                                            <Radio label='Female'
-                                            value='Female'
-                                            onChange={this.handleChange}
-                                            name='radioGroup'/>
-                                        </Form.Field>
-                                        <Form.Field
-                                            label='Female'
-                                            value='Female'
-                                            control={Radio}
-                                            onChange={this.handleChange}
-                                        />
-                                    </Form.Group> */}
                                     <Form.Group inline>
                                         <label>Gender</label>
                                         <Form.Field

@@ -39,7 +39,6 @@ class Footer extends Component {
                                     <List.Item as='a'><Icon name="home" size="large"></Icon> Ho Chi Minh City</List.Item>
                                     <List.Item as='a'><Icon name="phone volume" size="large"></Icon>(028) 38.295.258</List.Item>
                                     <List.Item as='a'><Icon name="mail" size="large"></Icon> ps4gamemachine@gmail.com</List.Item>
-                                    <List.Item as='a'><i class="fab fa-facebook fa-2x fa-fw"></i></List.Item>
                                 </List>
                             </Grid.Column>
                             <Grid.Column width={5}>

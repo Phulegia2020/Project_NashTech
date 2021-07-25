@@ -16,7 +16,7 @@ class UpdateCategory extends React.Component {
         .then((response) => {
             if (response.status === 200)
             {
-                console.log(response.data);
+                //console.log(response.data);
                 // alert(`${id} is found`);
                 this.setState({
                     name: response.data.name,
@@ -40,7 +40,7 @@ class UpdateCategory extends React.Component {
         .then((response) => {
             if (response.status === 200)
             {
-                console.log(response.data);
+                //console.log(response.data);
                 this.props.history.push("/category");
             }
         })

@@ -1,18 +1,23 @@
 package com.example.nashtechproject.restcontroller;
 
 import com.example.nashtechproject.dto.ProductDTO;
+import com.example.nashtechproject.dto.UserDTO;
 import com.example.nashtechproject.entity.Category;
 import com.example.nashtechproject.entity.Product;
 import com.example.nashtechproject.entity.Supplier;
 import com.example.nashtechproject.exception.CategoryException;
 import com.example.nashtechproject.exception.ProductException;
 import com.example.nashtechproject.exception.SupplierException;
+import com.example.nashtechproject.page.ProductPage;
+import com.example.nashtechproject.page.UserPage;
 import com.example.nashtechproject.service.CategoryService;
 import com.example.nashtechproject.service.ProductService;
 import com.example.nashtechproject.service.SupplierService;
 import io.swagger.annotations.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -99,6 +104,22 @@ public class ProductController {
                 .collect(Collectors.toList());
     }
 
+    @GetMapping("/searchPage")
+    @ApiOperation(value = "Get Product By Category Pages")
+    @ApiResponses(value = { @ApiResponse(code = 200, message = "Success"),
+            @ApiResponse(code = 400, message = "Bad request"),
+            @ApiResponse(code = 500, message = "Internal server error") })
+    public ResponseEntity<List<ProductDTO>> getAllProductsByCategory(@RequestParam Long categoryId, ProductPage productPage)
+    {
+        Category cate = categoryService.getCategory(categoryId);
+        if (cate == null)
+        {
+            throw new CategoryException(cate.getId());
+        }
+        //List<ProductDTO> products = productService.getProductsByCategory(categoryId, productPage);
+        return new ResponseEntity<>(productService.getProductsByCategoryPages(categoryId, productPage), HttpStatus.OK);
+    }
+
     @GetMapping("/name/{name}")
     @ApiOperation(value = "Get Product By Name")
     @ApiResponses(value = { @ApiResponse(code = 200, message = "Success"),
@@ -112,6 +133,16 @@ public class ProductController {
             return null;
         }
         return convertToDTO(pro);
+    }
+
+    @GetMapping("/page")
+    @ApiOperation(value = "Get Products By Pages")
+    @ApiResponses(value = { @ApiResponse(code = 200, message = "Success"),
+            @ApiResponse(code = 400, message = "Bad request"),
+            @ApiResponse(code = 500, message = "Internal server error") })
+    public ResponseEntity<List<ProductDTO>> getProductsPages(ProductPage productPage)
+    {
+        return new ResponseEntity<>(productService.getProductsPage(productPage), HttpStatus.OK);
     }
 
     @ApiOperation(value = "Create new Product")

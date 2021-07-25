@@ -15,25 +15,18 @@ export default class Add extends Component {
 
 
     changeName(e){
-        //this.setState({name: e.target.value})
         this.setState({
             [e.target.name]: e.target.value
         });
     }
 
     changeDescription(e){
-        //this.setState({description: e.target.value})
         this.setState({
             [e.target.name]: e.target.value
         });
     }
 
     handleCreate(event){
-        // const newCategory = {
-        //     name: this.state.name,
-        //     description: this.state.description
-        // };
-        // this.props.onAdd(newCategory);
         event.preventDefault();
         if (this.state.name === "")
         {

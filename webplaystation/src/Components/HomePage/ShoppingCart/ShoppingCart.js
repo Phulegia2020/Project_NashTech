@@ -15,12 +15,12 @@ class ShoppingCart extends Component {
     }
 
     onCheckOut(){
-        console.log(sessionStorage.getItem('user_id'));
+        //console.log(sessionStorage.getItem('user_id'));
         const shoppingCartItems = JSON.parse(localStorage.getItem('shopping-cart') || '[]');
-        for (let i = 0; i < shoppingCartItems.length; i++) {
-            console.log(shoppingCartItems[i].id);
-            console.log(shoppingCartItems[i].quantity);
-        }
+        // for (let i = 0; i < shoppingCartItems.length; i++) {
+        //     console.log(shoppingCartItems[i].id);
+        //     console.log(shoppingCartItems[i].quantity);
+        // }
         post('/bills', {total: localStorage.getItem('totalCart'), user_id: sessionStorage.getItem('user_id'), billStatus_id: '3'})
         .then((response) => {
             if (response.status === 200)
@@ -33,7 +33,7 @@ class ShoppingCart extends Component {
                     .then((res) => {
                         if (res.status === 200)
                         {
-                            console.log(res.data);
+                            //console.log(res.data);
                         }
                     })
                     .catch(error => console.log(error));
@@ -48,7 +48,6 @@ class ShoppingCart extends Component {
     render() {
         return (
             <span>
-                {/* <Button as='a' inverted style={{marginLeft: '0.5em'}}>Cart</Button> */}
                 <Modal trigger={<Button animated='vertical' inverted style={{marginLeft: '0.5em'}}>
                                     <Button.Content visible>Cart</Button.Content>
                                     <Button.Content hidden>
