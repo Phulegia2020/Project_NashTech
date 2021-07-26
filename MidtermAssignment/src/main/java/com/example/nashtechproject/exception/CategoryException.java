@@ -5,4 +5,9 @@ public class CategoryException extends RuntimeException{
     {
         super("Could not find category with id = " + id);
     }
+
+    public CategoryException(String name)
+    {
+        super(name + " is existed!");
+    }
 }

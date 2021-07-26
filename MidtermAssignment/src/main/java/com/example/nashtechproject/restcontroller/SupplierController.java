@@ -47,6 +47,14 @@ public class SupplierController {
 //                throw new SupplierException(Supplier.getName());
 //            }
 //        }
+        if (supplierService.existName(supplier.getName()))
+        {
+            throw new SupplierException(supplier.getName());
+        }
+        if (supplierService.existPhone(supplier.getPhone()))
+        {
+            throw new SupplierException(supplier.getPhone());
+        }
         return supplierService.saveSupplier(supplier);
     }
 

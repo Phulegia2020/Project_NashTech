@@ -80,6 +80,12 @@ public class AuthServiceImpl implements AuthService {
                     .body(new MessageResponse("Error: Email is already in use!"));
         }
 
+        if (userRepository.existsByPhone(signUpRequest.getPhone())) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(new MessageResponse("Error: Phone number is already in use!"));
+        }
+
         // Create new user's account
         User user = new User(signUpRequest.getName(), signUpRequest.getGender(), signUpRequest.getAddress(),
                 signUpRequest.getEmail(), signUpRequest.getPhone(), signUpRequest.getUsername(),

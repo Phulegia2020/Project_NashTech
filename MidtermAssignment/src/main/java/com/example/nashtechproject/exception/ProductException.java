@@ -5,4 +5,9 @@ public class ProductException extends RuntimeException{
     {
         super("Could not find product with id = " + id);
     }
+
+    public ProductException(String name)
+    {
+        super(name + " is existed!");
+    }
 }

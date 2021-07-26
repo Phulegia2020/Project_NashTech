@@ -30,6 +30,23 @@ public class SupplierServiceImpl implements SupplierService {
         return sup;
     }
 
+    public boolean existPhone(String phone)
+    {
+        if (supplierRepository.existsByPhone(phone))
+        {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean existName(String name)
+    {
+        if (supplierRepository.existsByPhone(name))
+        {
+            return true;
+        }
+        return false;
+    }
     @Override
     public Supplier saveSupplier(Supplier sup) {
         return supplierRepository.save(sup);

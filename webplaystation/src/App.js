@@ -20,8 +20,20 @@ import ProductDetails from './Components/HomePage/Products/ProductDetails';
 import SignUp from './Components/HomePage/SignUp/SignUp';
 import ProductByCategory from './Components/Category/ProductByCategory';
 import ChangePassword from './Components/HomePage/ChangePassword/ChangePassword';
+import SideBar from './Components/SideBar/SideBar';
+import Content from './Components/SideBar/Content';
 
 class App extends React.Component{
+    state = {
+        sidebarIsOpen: true
+    }
+
+    toggleSidebar = () => {
+        this.setState({
+            sidebarIsOpen: !this.state.sidebarIsOpen
+        })
+    };
+
   render()
   {
       return (
@@ -67,7 +79,14 @@ class App extends React.Component{
                       <Footer/>
                   </Route>
 
-                  <Route exact path="/admin/category">
+                  <Router path="/admin">
+                    <div className="AppSideBar wrapper">
+                        <SideBar toggle={this.toggleSidebar} isOpen={this.state.sidebarIsOpen} />
+                        <Content toggleSidebar={this.toggleSidebar} sidebarIsOpen={this.state.sidebarIsOpen} />
+                    </div>
+                  </Router>
+
+                  {/* <Route exact path="/admin/category">
                       <NavBar/>
                       <Category/>
                   </Route>
@@ -94,7 +113,7 @@ class App extends React.Component{
                   <Route exact path="/admin/category/:id">
                       <NavBar/>
                       <ProductByCategory/>
-                  </Route>
+                  </Route> */}
               </Switch>
           </Router>
       );

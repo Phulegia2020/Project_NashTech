@@ -68,6 +68,32 @@ public class UserServiceImpl implements UserService {
         return usersDTO;
     }
 
+    public boolean existUsername(String username)
+    {
+        if (userRepository.existsByAccount(username))
+        {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean existEmail(String email)
+    {
+        if (userRepository.existsByEmail(email))
+        {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean existPhone(String phone)
+    {
+        if (userRepository.existsByPhone(phone))
+        {
+            return true;
+        }
+        return false;
+    }
     @Override
     public User saveUser(User us) {
         return userRepository.save(us);

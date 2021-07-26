@@ -32,6 +32,7 @@ class UpdateUser extends React.Component {
                     email: response.data.email,
                     phone: response.data.phone,
                     account: response.data.account,
+                    active_status: response.data.active_status,
                     //password: "",
                     role_id: response.data.role_id,
                 })
@@ -76,12 +77,12 @@ class UpdateUser extends React.Component {
         //this.props.onUpdate(this.state);
         // password: this.state.password,
         put(`/users/${this.state.id}`, {name: this.state.name, gender:this.state.gender, address: this.state.address, email: this.state.email,
-                                        phone: this.state.phone, account: this.state.account, role_id: this.state.role_id})
+                                        phone: this.state.phone, account: this.state.account, active_status: this.state.active_status, role_id: this.state.role_id})
         .then((response) => {
             if (response.status === 200)
             {
                 //console.log(response.data);
-                this.props.history.push("/user");
+                this.props.history.push("/admin/user");
             }
         })
     }
@@ -105,6 +106,7 @@ class UpdateUser extends React.Component {
     render() {
         return (
             <div>
+                <h3>Update User</h3>
                 <FormGroup>
                     <Label for="name">Name</Label>
                     <Input type="text" name="name" id="name" placeholder="Phu Le Gia" onChange={(e) => this.changeValue(e)} value = {this.state.name} required/>
@@ -148,11 +150,11 @@ class UpdateUser extends React.Component {
                 </FormGroup>
                 <FormGroup>
                     <Label for="phone">Phone</Label>
-                    <Input type="text" name="phone" id="phone" placeholder="0987654321" onChange={(e) => this.changeValue(e)} value = {this.state.phone} required/>
+                    <Input type="number" minLength={10} maxLength={10} name="phone" id="phone" placeholder="0987654321" onChange={(e) => this.changeValue(e)} value = {this.state.phone} required/>
                 </FormGroup>
                 <FormGroup className="mb-2">
                     <Label for="role">Role</Label>
-                    <Input type="select" name="role" id="role" value = {this.state.role_id} onChange={(e) => this.changeValue(e)}>
+                    <Input type="select" name="role_id" id="role" value = {this.state.role_id} onChange={(e) => this.changeValue(e)}>
                         {/* <option value="1">ADMIN</option>
                         <option value="2">PM</option>
                         <option value="3">USER</option> */}

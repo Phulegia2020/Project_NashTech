@@ -14,4 +14,8 @@ public interface SupplierService {
     public void deleteSupplier(Long supplierId);
 
     public void updateSupplier(Supplier supplier);
+
+    public boolean existPhone(String phone);
+
+    public boolean existName(String phone);
 }

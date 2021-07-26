@@ -162,6 +162,10 @@ public class ProductController {
         {
             throw new SupplierException(sup.getId());
         }
+        if (productService.getProductByName(product.getName()) != null)
+        {
+            throw new ProductException(product.getName());
+        }
         Product pro = convertToEntity(product);
         pro.setCreateddate(LocalDateTime.now());
         pro.setUpdateddate(LocalDateTime.now());
@@ -194,6 +198,10 @@ public class ProductController {
             {
                 throw new SupplierException(sup.getId());
             }
+//            if (productService.getProductByName(productDetails.getName()) != null)
+//            {
+//                throw new ProductException(productDetails.getName());
+//            }
             ProductUpdate(product, productDetails);
             product.setCategory(cate);
             product.setSupplier(sup);

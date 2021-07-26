@@ -24,4 +24,10 @@ public interface UserService {
     public void deleteUser(Long userId);
 
     public void updateUser(User user);
+
+    public boolean existUsername(String username);
+
+    public boolean existEmail(String email);
+
+    public boolean existPhone(String phone);
 }

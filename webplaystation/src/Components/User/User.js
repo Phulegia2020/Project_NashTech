@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import Add from "./Add"
 import { render } from 'react-dom';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Pagination, PaginationItem, PaginationLink } from 'reactstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export default class User extends Component {
     constructor (props){
@@ -82,6 +83,7 @@ export default class User extends Component {
                         password: newUser.password, role: newUser.role})
         .then((response) => {
             //console.log(response.data);
+            window.location.reload();
             this.setState({
                 users: [...this.state.users, response.data],
             });
@@ -147,7 +149,8 @@ export default class User extends Component {
             <div>
                 <div className="m-3">
                 <button type="button" className="btn btn-primary" onClick={this.onToggleForm}>
-                    <span className="fa fa-plus mr-5"></span>
+                    {/* <span className="fa fa-plus mr-5"></span> */}
+                    {/* <FontAwesomeIcon icon={'user-plus'} className="mr-2"/> */}
                     Creat New User
                 </button>
                 </div>
@@ -187,7 +190,7 @@ export default class User extends Component {
                                     <td>{u.active_status}</td>
                                     <td><button onClick={() => this.delUser(u.id)}>Del</button></td>
                                     <td>
-                                        <Link to={`user/update/${u.id}`}>
+                                        <Link to={`/admin/user/update/${u.id}`}>
                                             <button className="btn btn-success">
                                                 Update
                                             </button>

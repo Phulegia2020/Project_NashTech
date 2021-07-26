@@ -2,10 +2,11 @@ import React, { Component } from 'react'
 import "./../Category/Category.css";
 import {del, get, post, put} from "./../../Utils/httpHelper";
 import { Link } from 'react-router-dom';
+import { withRouter } from "react-router";
 import Add from "./Add"
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Pagination, PaginationItem, PaginationLink } from 'reactstrap';
 
-export default class Product extends Component {
+class Product extends Component {
     state = {
         products: [],
         isDisplayForm: false,
@@ -21,13 +22,13 @@ export default class Product extends Component {
                 //console.log(response.data);
                 //this.setState({products: response.data});
                 this.setState({
-                    pageToTal: Math.ceil(response.data.length / 8)
+                    pageToTal: Math.ceil(response.data.length / 3)
                 })
             }
         })
         .catch(error => {console.log(error)})
 
-        get(`/products/page?pageNumber=0&pageSize=8&sortBy=id`)
+        get(`/products/page?pageNumber=0&pageSize=3&sortBy=id`)
         .then((response) => {
             this.setState({
                 products: response.data,
@@ -73,6 +74,7 @@ export default class Product extends Component {
                         supplier_id: newProduct.supplier_id})
         .then((response) => {
             //console.log(response.data);
+            window.location.reload();
             this.setState({
                 products: [...this.state.products, response.data],
             });
@@ -115,7 +117,7 @@ export default class Product extends Component {
             }, () => console.log(this.state.pageNumber));
         }
         
-        get(`/products/page?pageNumber=${pageNumber}&pageSize=8&sortBy=id`)
+        get(`/products/page?pageNumber=${pageNumber}&pageSize=3&sortBy=id`)
         .then((response) => {
             this.setState({
                 products: response.data,
@@ -162,7 +164,7 @@ export default class Product extends Component {
                                     <td>{p.supplier_id}</td> */}
                                     <td><button onClick={() => this.delProduct(p.id)}>Del</button></td>
                                     <td>
-                                        <Link to={`product/update/${p.id}`}>
+                                        <Link to={`/admin/product/update/${p.id}`}>
                                             <button className="btn btn-success">
                                                 Update
                                             </button>
@@ -203,3 +205,5 @@ export default class Product extends Component {
         )
     }
 }
+
+export default withRouter(Product);

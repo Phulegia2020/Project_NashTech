@@ -5,4 +5,9 @@ public class SupplierException extends RuntimeException{
     {
         super("Could not find supplier with id = " + id);
     }
+
+    public SupplierException(String exist)
+    {
+        super(exist + " is existed!");
+    }
 }

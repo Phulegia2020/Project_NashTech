@@ -235,7 +235,7 @@ class ProductItem extends Component {
                     </Card.Description>
                 </Card.Content>
                 <Card.Content extra>
-                    <Rating icon='star' maxRating={5} onRate={this.onRating} name="rate" rating={this.state.totalrating}/>
+                    <Rating icon='star' maxRating={5} onRate={this.onRating} name="rate" rating={this.state.totalrating} disabled/>
                 </Card.Content>
             </Card>
         );

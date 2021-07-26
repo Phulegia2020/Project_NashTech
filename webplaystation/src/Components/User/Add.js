@@ -108,7 +108,7 @@ export default class Add extends Component {
                     </FormGroup>
                     <FormGroup>
                         <Label for="phone">Phone</Label>
-                        <Input type="text" name="phone" id="phone" placeholder="0987654321" onChange={(e) => this.changeValue(e)} value = {this.state.phone} required/>
+                        <Input type="number" minLength={10} maxLength={10} name="phone" id="phone" placeholder="0987654321" onChange={(e) => this.changeValue(e)} value = {this.state.phone} required/>
                     </FormGroup>
                     <FormGroup className="mb-2">
                         <Label for="role">Role</Label>

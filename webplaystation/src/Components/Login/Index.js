@@ -35,7 +35,7 @@ class Login extends Component {
 					
 					//console.log(response.data.roles[0]);
 					alert('Login Successfully!');
-					this.props.history.push("/admin/category");
+					this.props.history.push("/admin");
 					
 				}
 				else if (response.data.roles[0] === "ROLE_USER")

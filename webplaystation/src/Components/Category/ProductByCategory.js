@@ -23,6 +23,12 @@ class ProductByCategory extends Component {
         //console.log(this.state.id);
     }
 
+    componentWillUnmount(){
+        this.setState({
+            products: []
+        })
+    }
+
     render() {
         return (
             <div>
@@ -50,12 +56,15 @@ class ProductByCategory extends Component {
                                     <td>{p.description}</td>
                                     <td>{p.quantity}</td>
                                     <td>{p.price}</td>
-                                    <td>{p.imageurl}</td>
+                                    <td>
+                                        <img src={`data:image/jpeg;base64,${p.imageurl}`} alt="" height="100px"></img>
+                                    </td>
+                                    {/* <td>{p.imageurl}</td> */}
                                     {/* <td>{p.category_id}</td>
                                     <td>{p.supplier_id}</td> */}
                                     <td><button onClick={() => this.delProduct(p.id)}>Del</button></td>
                                     <td>
-                                        <Link to={`product/update/${p.id}`}>
+                                        <Link to={`/admin/product/update/${p.id}`}>
                                             <button className="btn btn-success">
                                                 Update
                                             </button>

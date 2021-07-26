@@ -155,7 +155,8 @@ class ProductDetails extends Component {
                             <Header as="h1">{product.name}</Header>
                             <p style={{ fontSize: '1.33em' }}><b>Desciption: </b>{product.description}</p>
                             <p style={{ fontSize: '1.33em' }}><b>Price: </b>{this.formatCurrency(product.price)}</p>
-                            <Rating icon='star'  maxRating={5} onRate={this.onRating} name="rate" rating={product.totalrating}/>
+                            <p style={{ fontSize: '1.33em' }}><b>Rating: </b><Rating icon='star'  maxRating={5} onRate={this.onRating} name="rate" rating={product.totalrating}/></p>
+                            
                             <Header as="h4">
                                 <ButtonAddToCart product={product}/>
                             </Header>

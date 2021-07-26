@@ -41,7 +41,7 @@ class UpdateCategory extends React.Component {
             if (response.status === 200)
             {
                 //console.log(response.data);
-                this.props.history.push("/category");
+                this.props.history.push("/admin/category");
             }
         })
     }
@@ -53,7 +53,7 @@ class UpdateCategory extends React.Component {
         });
         // this.props.onCloseForm();
         // console.log(this.state);
-        this.props.history.push("/category");
+        this.props.history.push("/admin/category");
     }
 
     render() {
@@ -62,7 +62,7 @@ class UpdateCategory extends React.Component {
                 <div className="container">
                     <div className="row">
                         <div className="col-md-4">
-                            <h1>Update new category</h1>
+                            <h1>Update Category</h1>
                             <Row form>
                                 <Col md={6}>
                                     <div className="form-group">
@@ -80,8 +80,8 @@ class UpdateCategory extends React.Component {
                                 </Col>
                             </Row>
                             
-                            <div className="form-group">      
-                            <button type="button" className="mr-2 btn btn-primary"  onClick={this.handleUpdate.bind(this)}>Update</button>
+                            <div className="mt-3">      
+                            <button type="button" className="mr-2 btn btn-primary"  onClick={this.handleUpdate.bind(this)}>Update</button>{' '}
                             <button type="button" className="btn btn-danger"  onClick={this.handleClear.bind(this)}>Cancel</button>
                             </div>
                         </div>

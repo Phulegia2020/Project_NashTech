@@ -106,6 +106,14 @@ public class UserController {
         {
             throw new UserException(user.getAccount());
         }
+        if (userService.existEmail(user.getEmail()))
+        {
+            throw new UserException(user.getEmail());
+        }
+        if (userService.existPhone(user.getPhone()))
+        {
+            throw new UserException(user.getPhone());
+        }
         user.setActive_status("Active");
         UserDTO userDTO = convertToDTO(userService.saveUser(user));
         return userDTO;
@@ -125,6 +133,18 @@ public class UserController {
         }
         else
         {
+//            if (userService.existUsername(userDetails.getAccount()))
+//            {
+//                throw new UserException(userDetails.getAccount());
+//            }
+//            if (userService.existEmail(userDetails.getEmail()))
+//            {
+//                throw new UserException(userDetails.getEmail());
+//            }
+//            if (userService.existPhone(userDetails.getPhone()))
+//            {
+//                throw new UserException(userDetails.getPhone());
+//            }
             UserUpdate(user, userDetails);
             userService.updateUser(user);
         }
@@ -182,11 +202,4 @@ public class UserController {
         Role r = roleService.getRole(Long.valueOf(userDetails.getRole_id()));
         user.setRole(r);
     }
-
-//    public Page<UserDTO> getUsersPage(UserPage userPage)
-//    {
-//        Sort sort = Sort.by(userPage.getSortDirection(), userPage.getSortBy());
-//        Pageable pageable = PageRequest.of(userPage.getPageNumber(), userPage.getPageSize(), sort);
-//        return convertToDTO(userRepository.findAll(pageable));
-//    }
 }

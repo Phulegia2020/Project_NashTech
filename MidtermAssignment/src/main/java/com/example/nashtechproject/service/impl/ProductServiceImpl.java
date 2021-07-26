@@ -95,7 +95,7 @@ public class ProductServiceImpl implements ProductService {
         Sort sort = Sort.by(productPage.getSortDirection(), productPage.getSortBy());
         Pageable pageable = PageRequest.of(productPage.getPageNumber(), productPage.getPageSize(), sort);
         List<Product> products = productRepository.findByCategoryId(categoryId);
-        Page<Product> page = new PageImpl<>(products, pageable, pageable.getPageSize());
+        Page<Product> page = new PageImpl<>(products, pageable, Long.valueOf(pageable.getPageSize()));
         List<ProductDTO> productDTOS = new ArrayList<>();
         page.getContent().forEach(p -> {
             ProductDTO productDTO = modelMapper.map(p, ProductDTO.class);

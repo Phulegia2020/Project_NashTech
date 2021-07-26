@@ -30,6 +30,15 @@ public class CategoryServiceImpl implements CategoryService {
         return cate;
     }
 
+    public boolean existByName(String name)
+    {
+        if (categoryRepository.existsByName(name))
+        {
+            return true;
+        }
+        return false;
+    }
+
     @Override
     public Category saveCategory(Category cate) {
         return categoryRepository.save(cate);

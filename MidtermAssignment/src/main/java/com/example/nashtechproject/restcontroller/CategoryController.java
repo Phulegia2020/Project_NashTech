@@ -64,6 +64,10 @@ public class CategoryController {
 //                throw new CategoryException(category.getName());
 //            }
 //        }
+        if (categoryService.existByName(category.getName()))
+        {
+            throw new CategoryException(category.getName());
+        }
         return categoryService.saveCategory(category);
     }
 
@@ -81,6 +85,10 @@ public class CategoryController {
         }
         else
         {
+//            if (categoryService.existByName(categoryDetails.getName()))
+//            {
+//                throw new CategoryException(categoryDetails.getName());
+//            }
             category.setName(categoryDetails.getName());
             category.setDescription(categoryDetails.getDescription());
             category.setProducts(categoryDetails.getProducts());

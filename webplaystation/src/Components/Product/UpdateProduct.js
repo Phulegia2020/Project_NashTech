@@ -152,7 +152,7 @@ class UpdateProduct extends Component {
                     <br></br>
                     <Input type="file" name="image" id="image" accept=".jpeg, .png, .jpg" onChange={(e) => {this.uploadImage(e)}} required="required"/>
                     <br></br>
-                    <img src={`data:image/jpeg;base64,${this.state.imageurl}`} alt=""></img>
+                    <img src={`data:image/jpeg;base64,${this.state.imageurl}`} alt="" height="150px"></img>
                 </FormGroup>
                 <FormGroup className="mb-2">
                     <Label for="category">Category</Label>

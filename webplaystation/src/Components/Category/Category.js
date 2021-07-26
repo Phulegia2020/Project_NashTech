@@ -50,6 +50,7 @@ export default class Category extends Component {
         post(`/categories`, {name: newCategory.name, description: newCategory.description})
         .then((response) => {
             //console.log(response.data);
+            window.location.reload();
             this.setState({
                 categories: [...this.state.categories, response.data],
             });
@@ -97,9 +98,9 @@ export default class Category extends Component {
                                     <td>{cate.id}</td>
                                     <td>{cate.name}</td>
                                     <td>{cate.description}</td>
-                                    <td><button onClick={() => this.delCategory(cate.id)}>Del</button></td>
+                                    <td><button className="btn btn-danger" onClick={() => this.delCategory(cate.id)}>Del</button></td>
                                     <td>
-                                        <Link to={`category/update/${cate.id}`}>
+                                        <Link to={`/admin/category/update/${cate.id}`}>
                                             <button className="btn btn-success">
                                                 Update
                                             </button>
