@@ -7,7 +7,7 @@ export default class Add extends Component {
     {
         super(props);
         this.state = {
-            name: "",
+            fullname: "",
             gender: "Male",
             address: "",
             email: "",
@@ -15,11 +15,24 @@ export default class Add extends Component {
             username: "",
             password: "",
             role: "",
-            roles: []
+            roles: [],
+            blankError: "",
+            key: "",
+            users: [],
         }
     }
     
     componentDidMount(){
+        get("/users")
+        .then((response) => {
+            if (response.status === 200)
+            {
+                //console.log(response.data);
+                this.setState({users: response.data});
+            }
+        })
+        .catch(error => {console.log(error)})
+
         get("/roles")
         .then((response) => {
             if (response.status === 200)
@@ -34,13 +47,67 @@ export default class Add extends Component {
 
     changeValue(e){
         //this.setState({name: e.target.value})
-        this.setState({
-            [e.target.name]: e.target.value
-        });
+        if (e.target.name === 'username' || e.target.name === 'phone' || e.target.name === 'email')
+        {
+            this.setState({
+                [e.target.name]: e.target.value.trim()
+            });
+        }
+        else{
+            this.setState({
+                [e.target.name]: e.target.value
+            });
+        }
     }
 
-    handleCreate(event){
+    async handleCreate(event){
         event.preventDefault();
+        console.log(event.target.username.value.trim());
+        for (let i = 0; i < this.state.users.length; i++)
+        {
+            if (this.state.users[i].account === event.target.username.value.trim())
+            {
+                this.setState({
+                    key: 'username'
+                })
+                this.setState({
+                    blankError: "This username is existed!"
+                });
+                return;
+            }
+            if (this.state.users[i].email === event.target.email.value.trim())
+            {
+                this.setState({
+                    key: 'email'
+                })
+                this.setState({
+                    blankError: "This email is existed!"
+                });
+                return;
+            }
+            if (this.state.users[i].phone === event.target.phone.value.trim())
+            {
+                this.setState({
+                    key: 'phone'
+                })
+                this.setState({
+                    blankError: "This phone number is existed!"
+                });
+                return;
+            }
+        }
+        // if (event.target.fullname.value.trim() == "")
+        // {
+        //     this.setState({
+        //         key: 'fullname'
+        //     })
+        //     this.setState({
+        //         blankError: "Please fill in this field!"
+        //     });
+        //     return;
+        // }
+        // console.log('success');
+
         this.props.onAdd(this.state);
     }
 
@@ -61,10 +128,12 @@ export default class Add extends Component {
     render() {
         return (
             <div>
-                <form>
+                <Form onSubmit={(event) => this.handleCreate(event)}>
                     <FormGroup>
                         <Label for="name">Name</Label>
-                        <Input type="text" name="name" id="name" placeholder="Phu Le Gia" onChange={(e) => this.changeValue(e)} value = {this.state.name} required="required"/>
+                        <Input type="text" name="fullname" id="name" placeholder="Phu Le Gia" onChange={(e) => this.changeValue(e)} value = {this.state.fullname} required/>
+                        {/* <span style={{ color: "red", fontStyle:"italic"}}>{this.state.blankError}</span> */}
+                        {/* {this.state.key === 'fullname' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.blankError}</span> : '' } */}
                     </FormGroup>
                     <FormGroup tag="fieldset" row>
                         <legend className="col-form-label col-sm-2">Gender</legend>
@@ -89,18 +158,22 @@ export default class Add extends Component {
                             <FormGroup>
                                 <Label for="username">Username</Label>
                                 <Input type="text" name="username" id="username" placeholder="Football" onChange={(e) => this.changeValue(e)} value = {this.state.username} required/>
+                                {/* <span style={{ color: "red", fontStyle:"italic"}}>{this.state.blankError}</span> */}
+                                {this.state.key === 'username' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.blankError}</span> : '' }
                             </FormGroup>
                         </Col>
                         <Col md={6}>
                             <FormGroup>
                                 <Label for="password">Password</Label>
-                                <Input type="password" name="password" id="password" placeholder="123456" onChange={(e) => this.changeValue(e)} value = {this.state.password} required/>
+                                <Input type="password" minLength="6" name="password" id="password" placeholder="123456" onChange={(e) => this.changeValue(e)} value = {this.state.password} required/>
+                                {/* <span style={{ color: "red", fontStyle:"italic"}}>{this.state.blankError}</span> */}
                             </FormGroup>
                         </Col>
                     </Row>
                     <FormGroup>
                         <Label for="email">Email</Label>
                         <Input type="email" name="email" id="email" placeholder="abc@gmail.com" onChange={(e) => this.changeValue(e)} value = {this.state.email} required/>
+                        {this.state.key === 'email' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.blankError}</span> : '' }
                     </FormGroup>
                     <FormGroup>
                         <Label for="address">Address</Label>
@@ -108,7 +181,8 @@ export default class Add extends Component {
                     </FormGroup>
                     <FormGroup>
                         <Label for="phone">Phone</Label>
-                        <Input type="number" minLength={10} maxLength={10} name="phone" id="phone" placeholder="0987654321" onChange={(e) => this.changeValue(e)} value = {this.state.phone} required/>
+                        <Input type="text" minLength="10" maxLength="10" name="phone" id="phone" placeholder="0987654321" onChange={(e) => this.changeValue(e)} value = {this.state.phone} required/>
+                        {this.state.key === 'phone' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.blankError}</span> : '' }
                     </FormGroup>
                     <FormGroup className="mb-2">
                         <Label for="role">Role</Label>
@@ -124,10 +198,10 @@ export default class Add extends Component {
                         </Input>
                     </FormGroup>
                     <div className="mb-5">
-                        <Button type="submit" outline color="warning" onClick={this.handleCreate.bind(this)}>Add</Button>{' '}
+                        <Button type="submit" outline color="warning" >Add</Button>{' '}
                         <Button outline color="danger" onClick={this.handleClear.bind(this)}>Cancel</Button>
                     </div>
-                    </form>
+                    </Form>
             </div>
         )
     }

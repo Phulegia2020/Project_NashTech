@@ -6,6 +6,7 @@ import Add from "./Add"
 import { render } from 'react-dom';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Pagination, PaginationItem, PaginationLink } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEdit, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 export default class User extends Component {
     constructor (props){
@@ -78,8 +79,8 @@ export default class User extends Component {
     }
 
     createUser(newUser){
-        post(`/auth/signup`, {name: newUser.name, gender: newUser.gender, address: newUser.address,
-                        email: newUser.email, phone: newUser.phone, username: newUser.username,
+        post(`/auth/signup`, {name: newUser.fullname, gender: newUser.gender, address: newUser.address,
+                        email: newUser.email.trim(), phone: newUser.phone.trim(), username: newUser.username,
                         password: newUser.password, role: newUser.role})
         .then((response) => {
             //console.log(response.data);
@@ -150,21 +151,21 @@ export default class User extends Component {
                 <div className="m-3">
                 <button type="button" className="btn btn-primary" onClick={this.onToggleForm}>
                     {/* <span className="fa fa-plus mr-5"></span> */}
-                    {/* <FontAwesomeIcon icon={'user-plus'} className="mr-2"/> */}
+                    <FontAwesomeIcon icon={faPlus} className="mr-2"/>{' '}
                     Creat New User
                 </button>
                 </div>
                 <table id="table">
                     <thead>
                         <tr>
-                            <th>Id</th>
+                            <th>ID</th>
                             <th>Name</th>
                             <th>Gender</th>
                             <th>Address</th>
                             <th>Email</th>
                             <th>Phone</th>
                             <th>Username</th>
-                            <th>Role</th>
+                            {/* <th>Role</th> */}
                             <th>Status</th>
                             <th></th>
                             <th></th>
@@ -181,17 +182,22 @@ export default class User extends Component {
                                     <td>{u.email}</td>
                                     <td>{u.phone}</td>
                                     <td>{u.account}</td>
-                                    <td>{u.role_id}</td>
+                                    {/* <td>{u.role_id}</td> */}
                                     {/* <td>
                                     {
                                         this.renderElement(u.role_id)
                                     }
                                     </td> */}
                                     <td>{u.active_status}</td>
-                                    <td><button onClick={() => this.delUser(u.id)}>Del</button></td>
+                                    <td><button className="btn btn-danger" onClick={() => this.delUser(u.id)}>
+                                        <FontAwesomeIcon icon={faTrash} className="mr-2"/>{' '}
+                                        Del
+                                        </button>
+                                    </td>
                                     <td>
                                         <Link to={`/admin/user/update/${u.id}`}>
                                             <button className="btn btn-success">
+                                                <FontAwesomeIcon icon={faEdit} className="mr-2"/>{' '}
                                                 Update
                                             </button>
                                         </Link>
@@ -226,7 +232,7 @@ export default class User extends Component {
 
                 <div className="container">
                     <Modal isOpen={this.state.isDisplayForm} toggle={this.onToggleForm}>
-                        <ModalHeader toggle={this.onToggleForm}>Product Information</ModalHeader>
+                        <ModalHeader toggle={this.onToggleForm}>Create New User</ModalHeader>
                         <ModalBody>
                             <Add onAdd={this.onAdd} onCloseForm={this.onCloseForm}/>
                         </ModalBody>

@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 import "./../Category/Category.css";
 import {del, get, post, put} from "./../../Utils/httpHelper";
 import { Link } from 'react-router-dom';
@@ -8,39 +8,50 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Pagination, Paginat
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 
-class Product extends Component {
+class Bill extends Component {
     state = {
-        products: [],
+        bills: [],
         isDisplayForm: false,
         pageNumber: 0,
-        pageToTal: 0
+        pageToTal: 0,
+        users: [],
     }
 
     componentDidMount(){
-        get("/products")
+        get("/bills")
         .then((response) => {
             if (response.status === 200)
             {
-                //console.log(response.data);
+                console.log(response.data.length);
                 //this.setState({products: response.data});
                 this.setState({
-                    pageToTal: Math.ceil(response.data.length / 3)
+                    pageToTal: Math.ceil(response.data.length / 10)
                 })
             }
         })
         .catch(error => {console.log(error)})
 
-        get(`/products/page?pageNumber=0&pageSize=3&sortBy=id`)
+        get(`/bills/page?pageNumber=0&pageSize=10&sortBy=id`)
         .then((response) => {
             this.setState({
-                products: response.data,
+                bills: response.data,
             });
         })
         .catch(error => console.log(error));
+
+        get("/users")
+        .then((response) => {
+            if (response.status === 200)
+            {
+                //console.log(response.data);
+                this.setState({users: response.data});
+            }
+        })
+        .catch(error => {console.log(error)})
     }
 
     find(id){
-        get(`/products/${id}`)
+        get(`/bills/${id}`)
         .then((response) => {
             if (response.status === 200)
             {
@@ -50,27 +61,25 @@ class Product extends Component {
         })
     }
 
-    delProduct = (id) =>
+    delBill = (id) =>
     {
-        del(`/products/${id}`)
+        del(`/bills/${id}`)
         .then((response) => {
             //console.log(response.data);
-            this.setState({products: this.state.products.filter(p => p.id !== id)})
+            this.setState({bills: this.state.products.filter(b => b.id !== id)})
             alert(response.data.message);
         })
         .catch(error => {console.log(error)})
     }
 
-    createProduct(newProduct){
+    createBill(newBill){
         //console.log(newProduct.price);
-        post(`/products`, {name: newProduct.name, description: newProduct.description, quantity: newProduct.quantity,
-                        price: newProduct.price, totalrating: 0,imageurl: newProduct.imageurl, category_id: newProduct.category_id,
-                        supplier_id: newProduct.supplier_id})
+        post(`/bills`, {total: newBill.total, user_id: newBill.user_id, billStatus_id: newBill.billStatus_id})
         .then((response) => {
             //console.log(response.data);
             window.location.reload();
             this.setState({
-                products: [...this.state.products, response.data],
+                bills: [...this.state.bills, response.data],
             });
             //console.log(newProduct.price);
         });
@@ -90,7 +99,7 @@ class Product extends Component {
 
     onAdd = (data) => {
         //console.log(data);
-        this.createProduct(data);
+        this.createBill(data);
     }
 
     onPage(event, pageNumber){
@@ -111,10 +120,10 @@ class Product extends Component {
             }, () => console.log(this.state.pageNumber));
         }
         
-        get(`/products/page?pageNumber=${pageNumber}&pageSize=3&sortBy=id`)
+        get(`/bills/page?pageNumber=${pageNumber}&pageSize=10&sortBy=id`)
         .then((response) => {
             this.setState({
-                products: response.data,
+                bills: response.data,
             });
         })
         .catch(error => console.log(error));
@@ -127,23 +136,30 @@ class Product extends Component {
         return numberFormat.format(number);
     }
 
+    // handleUserID = (buid) => {
+    //     const uid = this.state.users.find((u) => {
+    //         {u.id === buid}
+    //     })
+    //     return <td>{uid.name}</td>
+    // }
+
     render() {
         return (
             <div>
                 <button type="button" className="btn btn-primary" onClick={this.onToggleForm}>
                     {/* <span className="fa fa-plus mr-5"></span> */}
                     <FontAwesomeIcon icon={faPlus} className="mr-2"/>{' '}
-                    Creat New Product
+                    Creat New Bill
                 </button>
                 <table id="table">
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>Name</th>
-                            <th>Description</th>
-                            <th>Quantity</th>
-                            <th>Price</th>
-                            <th>Image</th>
+                            <th>Total</th>
+                            <th>Created Date</th>
+                            <th>CheckOut Date</th>
+                            <th>User_ID</th>
+                            <th>Status</th>
                             {/* <th>Category</th>
                             <th>Supplier</th> */}
                             <th></th>
@@ -152,25 +168,24 @@ class Product extends Component {
                     </thead>
                     <tbody>
                         {
-                            this.state.products.map((p) => (
-                                <tr key={p.id}>
-                                    <td>{p.id}</td>
-                                    <td>{p.name}</td>
-                                    <td>{p.description}</td>
-                                    <td>{p.quantity}</td>
-                                    <td>{this.formatCurrency(p.price)}</td>
-                                    <td>
-                                        <img src={`data:image/jpeg;base64,${p.imageurl}`} alt="" height="100px"></img>
-                                    </td>
+                            this.state.bills.map((b) => (
+                                <tr key={b.id}>
+                                    <td>{b.id}</td>
+                                    <td>{this.formatCurrency(b.total)}</td>
+                                    <td>{b.createddate}</td>
+                                    <td>{b.checkout_date}</td>
+                                    {/* {this.handleUserID(b.user_id)} */}
+                                    <td>{b.user_id}</td>
+                                    <td>{b.billStatus_id}</td>
                                     {/* <td>{p.category_id}</td>
                                     <td>{p.supplier_id}</td> */}
-                                    <td><button onClick={() => this.delProduct(p.id)} className="btn btn-danger">
+                                    <td><button onClick={() => this.delBill(b.id)} className="btn btn-danger">
                                         <FontAwesomeIcon icon={faTrash} className="mr-2"/>{' '}
                                         Del
                                         </button>
                                     </td>
                                     <td>
-                                        <Link to={`/admin/product/update/${p.id}`}>
+                                        <Link to={`/admin/bill/update/${b.id}`}>
                                             <button className="btn btn-success">
                                             <FontAwesomeIcon icon={faEdit} className="mr-2"/>{' '}
                                                 Update
@@ -208,7 +223,7 @@ class Product extends Component {
                 <div className="container">
                     {/* {this.state.isDisplayForm ? <Add onAdd={this.onAdd} onCloseForm={this.onCloseForm}/> : ''} */}
                     <Modal isOpen={this.state.isDisplayForm} toggle={this.onToggleForm}>
-                        <ModalHeader toggle={this.onToggleForm}>Create New Product</ModalHeader>
+                        <ModalHeader toggle={this.onToggleForm}>Create New Bill</ModalHeader>
                         <ModalBody>
                             <Add onAdd={this.onAdd} onCloseForm={this.onCloseForm}/>
                         </ModalBody>
@@ -221,4 +236,4 @@ class Product extends Component {
     }
 }
 
-export default withRouter(Product);
+export default Bill;

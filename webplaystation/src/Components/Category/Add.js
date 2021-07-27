@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
-import { Row, Col } from 'reactstrap';
+import { Col, Row, Button, Form, FormGroup, Label, Input } from 'reactstrap';
+import { get } from '../../Utils/httpHelper';
 
 export default class Add extends Component {
 
@@ -8,11 +9,23 @@ export default class Add extends Component {
         super(props);
         this.state = {
             name: "",
-            description: ""
+            description: "",
+            Error: "",
+            key: "",
+            categories: [],
         }
     }
     
-
+    componentDidMount(){
+        get("/categories")
+        .then((response) => {
+            if (response.status === 200)
+            {
+                this.setState({categories: response.data});
+            }
+        })
+        .catch(error => {console.log(error)})
+    }
 
     changeName(e){
         this.setState({
@@ -28,18 +41,35 @@ export default class Add extends Component {
 
     handleCreate(event){
         event.preventDefault();
-        if (this.state.name === "")
+
+        for (let i = 0; i < this.state.categories.length; i++)
         {
-            alert("Empty");
+            if (this.state.categories[i].name === event.target.name.value.trim())
+            {
+                this.setState({
+                    key: 'name'
+                })
+                this.setState({
+                    Error: "This name is existed!"
+                });
+                return;
+            }
         }
-        else if (this.state.description === "")
-        {
-            alert("Empty");
-        }
-        else
-        {
-            this.props.onAdd(this.state);
-        }
+
+        this.props.onAdd(this.state);
+
+        // if (this.state.name === "")
+        // {
+        //     alert("Empty Name");
+        // }
+        // else if (this.state.description === "")
+        // {
+        //     alert("Empty Description");
+        // }
+        // else
+        // {
+        //     this.props.onAdd(this.state);
+        // }
         //console.log(this.state);
     }
 
@@ -55,13 +85,30 @@ export default class Add extends Component {
     render() {
         return (
             <div>
-                <form>
+                <Form onSubmit={(event) => this.handleCreate(event)}>
+                {/* <h3>Create New Product</h3> */}
+                    <FormGroup>
+                        <Label for="name">Name</Label>
+                        <Input type="text" name="name" id="name" placeholder="PS5" onChange={(e) => this.changeName(e)} value = {this.state.name} required="required"/>
+                        {this.state.key === 'name' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
+                    </FormGroup>
+                    <FormGroup>
+                        <Label for="description">Description</Label>
+                        <Input type="text" name="description" id="description" placeholder="PlayStation 5 Pro" onChange={(e) => this.changeDescription(e)} value = {this.state.description} required="required"/>
+                    </FormGroup>
+                    
+                    <div className="mt-3">
+                        <Button type="submit" outline color="warning" >Add</Button>{' '}
+                        <Button outline color="danger" onClick={this.handleClear.bind(this)}>Cancel</Button>
+                    </div>
+                </Form>
+                {/* <form>
                 <div className="container">
                     <div className="row">
-                        <div className="col-md-4">
-                            <h1>Create new category</h1>
+                    <h3>Create new category</h3>
+                        <div className="col-md-12">
                             <Row form>
-                                <Col md={6}>
+                                <Col>
                                     <div className="form-group">
                                         <label>Name</label>
                                         <input type="text" name="name" className="form-control" onChange={(e) => this.changeName(e)} value = {this.state.name} required="required"/>
@@ -69,7 +116,7 @@ export default class Add extends Component {
                                 </Col>
                             </Row>
                             <Row form>
-                                <Col md={6}>
+                                <Col>
                                     <div className="form-group">
                                         <label>Description</label>
                                         <input type="text" name="description"  className="form-control" onChange={(e) => this.changeDescription(e)} value={this.state.description} required="required"/>
@@ -77,16 +124,16 @@ export default class Add extends Component {
                                 </Col>
                             </Row>
                             
-                            <div className="form-group">      
+                            <div className="mt-3">      
                             <button type="button" className="mr-2 btn btn-primary"  onClick={this.handleCreate.bind(this)}>
-                                <span className="fa fa-plus mr-5">Add</span>
-                            </button>
+                                Add
+                            </button>{' '}
                             <button type="submit" className="btn btn-danger"  onClick={this.handleClear.bind(this)}>Cancel</button>
                             </div>
                         </div>
                     </div>
                 </div>
-                </form>
+                </form> */}
             </div>
         )
     }

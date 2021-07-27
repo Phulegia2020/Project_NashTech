@@ -22,6 +22,7 @@ import ProductByCategory from './Components/Category/ProductByCategory';
 import ChangePassword from './Components/HomePage/ChangePassword/ChangePassword';
 import SideBar from './Components/SideBar/SideBar';
 import Content from './Components/SideBar/Content';
+import { withRouter } from "react-router";
 
 class App extends React.Component{
     state = {
@@ -33,6 +34,10 @@ class App extends React.Component{
             sidebarIsOpen: !this.state.sidebarIsOpen
         })
     };
+
+    onAdminOut(){
+        // return <Redirect to="/"/>
+    }
 
   render()
   {
@@ -81,7 +86,7 @@ class App extends React.Component{
 
                   <Router path="/admin">
                     <div className="AppSideBar wrapper">
-                        <SideBar toggle={this.toggleSidebar} isOpen={this.state.sidebarIsOpen} />
+                        <SideBar toggle={this.toggleSidebar} isOpen={this.state.sidebarIsOpen} onAdminOut={this.onAdminOut}/>
                         <Content toggleSidebar={this.toggleSidebar} sidebarIsOpen={this.state.sidebarIsOpen} />
                     </div>
                   </Router>

@@ -16,10 +16,23 @@ class UpdateProduct extends Component {
         supplier_id: "",
         categories: [],
         suppliers: [],
-        base64: ""
+        base64: "",
+        products: [],
+        Error: "",
+        key: "",
     }
 
     componentDidMount(){
+        get("/products")
+        .then((response) => {
+            if (response.status === 200)
+            {
+                //console.log(response.data);
+                this.setState({products: response.data});
+            }
+        })
+        .catch(error => {console.log(error)})
+
         get(`/products/${this.state.id}`)
         .then((response) => {
             //console.log(response.data);
@@ -98,6 +111,23 @@ class UpdateProduct extends Component {
 
     handleUpdate(event){
         event.preventDefault();
+
+        for (let i = 0; i < this.state.products.length; i++)
+        {
+            if (this.state.products[i].id != this.state.id)
+            {
+                if (this.state.products[i].name === event.target.name.value.trim())
+                {
+                    this.setState({
+                        key: 'name'
+                    })
+                    this.setState({
+                        Error: "This name is existed!"
+                    });
+                    return;
+                }
+            }
+        }
         //let photo;
         // if (event.target.image.files.length !== 0) {
             
@@ -131,9 +161,11 @@ class UpdateProduct extends Component {
         return (
             <div>
                 <h3>Update Product</h3>
+                <Form onSubmit={(event) => this.handleUpdate(event)}>
                 <FormGroup>
                     <Label for="name">Name</Label>
                     <Input type="text" name="name" id="name" placeholder="PlayStation 4" onChange={(e) => this.changeValue(e)} value = {this.state.name} required="required"/>
+                    {this.state.key === 'name' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
                 </FormGroup>
                 <FormGroup>
                     <Label for="description">Description</Label>
@@ -150,7 +182,7 @@ class UpdateProduct extends Component {
                 <FormGroup>
                     <Label for="image">Image</Label>
                     <br></br>
-                    <Input type="file" name="image" id="image" accept=".jpeg, .png, .jpg" onChange={(e) => {this.uploadImage(e)}} required="required"/>
+                    <Input type="file" name="image" id="image" accept=".jpeg, .png, .jpg" onChange={(e) => {this.uploadImage(e)}}/>
                     <br></br>
                     <img src={`data:image/jpeg;base64,${this.state.imageurl}`} alt="" height="150px"></img>
                 </FormGroup>
@@ -175,9 +207,10 @@ class UpdateProduct extends Component {
                     </Input>
                 </FormGroup>
                 <div className="mb-5">
-                    <Button type="submit" outline color="warning" onClick={this.handleUpdate.bind(this)}>Update</Button>{' '}
+                    <Button type="submit" outline color="warning" >Update</Button>{' '}
                     <Button outline color="danger" onClick={this.handleClear.bind(this)}>Cancel</Button>
                 </div>
+                </Form>
             </div>
         )
     }

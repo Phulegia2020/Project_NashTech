@@ -3,15 +3,23 @@ package com.example.nashtechproject.restcontroller;
 import com.example.nashtechproject.dto.BillDTO;
 import com.example.nashtechproject.entity.Bill;
 import com.example.nashtechproject.entity.BillStatus;
+import com.example.nashtechproject.entity.Category;
 import com.example.nashtechproject.entity.User;
 import com.example.nashtechproject.exception.BillException;
 import com.example.nashtechproject.exception.BillStatusException;
 import com.example.nashtechproject.exception.UserException;
+import com.example.nashtechproject.page.ProductPage;
 import com.example.nashtechproject.service.BillService;
 import com.example.nashtechproject.service.BillStatusService;
 import com.example.nashtechproject.service.UserService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -24,6 +32,7 @@ import java.util.stream.Collectors;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("api/bills")
+@Api(tags = "Bill Rest Controller")
 public class BillController {
     @Autowired
     private BillService billService;
@@ -38,16 +47,38 @@ public class BillController {
     private ModelMapper modelMapper;
 
     @GetMapping
+    @ApiOperation(value = "Get all bill")
+    @ApiResponses(value = { @ApiResponse(code = 200, message = "Success"),
+            @ApiResponse(code = 400, message = "Bad request"),
+            @ApiResponse(code = 500, message = "Internal server error") })
     public List<BillDTO> getAllBills()
     {
         List<Bill> bills = billService.retrieveBills();
+//        return bills.stream()
+//                .sorted(Comparator.comparing(Bill::getId).reversed())
+//                .collect(Collectors.toList());
         return bills.stream()
                 .map(this::convertToDTO)
                 .sorted(Comparator.comparing(BillDTO::getId).reversed())
                 .collect(Collectors.toList());
     }
 
+    @GetMapping("/page")
+    @ApiOperation(value = "Get all Bill By Page")
+    @ApiResponses(value = { @ApiResponse(code = 200, message = "Success"),
+            @ApiResponse(code = 400, message = "Bad request"),
+            @ApiResponse(code = 500, message = "Internal server error") })
+    public ResponseEntity<List<BillDTO>> getBillsPages(ProductPage productPage)
+    {
+//        List<BillDTO> list = billService.getBillsPage(productPage).stream().sorted(Comparator.comparing(BillDTO::getId).reversed()).collect(Collectors.toList());
+        return new ResponseEntity<>(billService.getBillsPage(productPage), HttpStatus.OK);
+    }
+
     @GetMapping("/{billId}")
+    @ApiOperation(value = "Get all bill")
+    @ApiResponses(value = { @ApiResponse(code = 200, message = "Success"),
+            @ApiResponse(code = 400, message = "Bad request"),
+            @ApiResponse(code = 500, message = "Internal server error") })
     public BillDTO findBill(@PathVariable Long billId)
     {
         Bill bill = billService.getBill(billId);
@@ -59,6 +90,10 @@ public class BillController {
     }
 
     @PostMapping()
+    @ApiOperation(value = "Get all bill")
+    @ApiResponses(value = { @ApiResponse(code = 200, message = "Success"),
+            @ApiResponse(code = 400, message = "Bad request"),
+            @ApiResponse(code = 500, message = "Internal server error") })
     public BillDTO saveBill(@RequestBody BillDTO bill)
     {
         User u = userService.getUser(Long.valueOf(bill.getUser_id()));
@@ -75,11 +110,15 @@ public class BillController {
 //        bill.setBillStatus(bs);
         Bill b = convertToEntity(bill);
         b.setCreateddate(LocalDateTime.now());
-        b.setCheckout_date(LocalDateTime.now());
+        //b.setCheckout_date(LocalDateTime.now());
         return convertToDTO(billService.saveBill(b));
     }
 
     @PutMapping("/{billId}")
+    @ApiOperation(value = "Get all bill")
+    @ApiResponses(value = { @ApiResponse(code = 200, message = "Success"),
+            @ApiResponse(code = 400, message = "Bad request"),
+            @ApiResponse(code = 500, message = "Internal server error") })
     public BillDTO updateBill(@PathVariable(name = "billId") Long billId, @Valid @RequestBody BillDTO billDetails)
     {
         Bill bill = billService.getBill(billId);
@@ -109,6 +148,10 @@ public class BillController {
     }
 
     @DeleteMapping("/{billId}")
+    @ApiOperation(value = "Get all bill")
+    @ApiResponses(value = { @ApiResponse(code = 200, message = "Success"),
+            @ApiResponse(code = 400, message = "Bad request"),
+            @ApiResponse(code = 500, message = "Internal server error") })
     public HashMap<String, String> deleteBill(@PathVariable(name = "billId") Long billId)
     {
         Bill bill = billService.getBill(billId);

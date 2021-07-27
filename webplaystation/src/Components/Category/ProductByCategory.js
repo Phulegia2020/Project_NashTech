@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import { get } from '../../Utils/httpHelper'
 import { withRouter } from "react-router";
 import { Link } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEdit, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 class ProductByCategory extends Component {
     state = {
@@ -35,7 +37,7 @@ class ProductByCategory extends Component {
                 <table id="table">
                     <thead>
                         <tr>
-                            <th>Id</th>
+                            <th>ID</th>
                             <th>Name</th>
                             <th>Description</th>
                             <th>Quantity</th>
@@ -62,10 +64,15 @@ class ProductByCategory extends Component {
                                     {/* <td>{p.imageurl}</td> */}
                                     {/* <td>{p.category_id}</td>
                                     <td>{p.supplier_id}</td> */}
-                                    <td><button onClick={() => this.delProduct(p.id)}>Del</button></td>
+                                    <td><button className="btn btn-danger" onClick={() => this.delProduct(p.id)}>
+                                        <FontAwesomeIcon icon={faTrash} className="mr-2"/>{' '}
+                                        Del
+                                        </button>
+                                    </td>
                                     <td>
                                         <Link to={`/admin/product/update/${p.id}`}>
                                             <button className="btn btn-success">
+                                                <FontAwesomeIcon icon={faEdit} className="mr-2"/>{' '}
                                                 Update
                                             </button>
                                         </Link>

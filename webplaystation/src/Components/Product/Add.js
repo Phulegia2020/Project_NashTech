@@ -16,11 +16,24 @@ export default class Add extends Component {
             supplier_id: "1",
             categories: [],
             suppliers: [],
-            base64: ""
+            base64: "",
+            products: [],
+            Error: "",
+            key: "",
         }
     }
     
     componentDidMount(){
+        get("/products")
+        .then((response) => {
+            if (response.status === 200)
+            {
+                //console.log(response.data);
+                this.setState({products: response.data});
+            }
+        })
+        .catch(error => {console.log(error)})
+
         get("/categories")
         .then((response) => {
             if (response.status === 200)
@@ -78,6 +91,21 @@ export default class Add extends Component {
 
     handleCreate(event){
         event.preventDefault();
+
+        for (let i = 0; i < this.state.products.length; i++)
+        {
+            if (this.state.products[i].name === event.target.name.value.trim())
+            {
+                this.setState({
+                    key: 'name'
+                })
+                this.setState({
+                    Error: "This name is existed!"
+                });
+                return;
+            }
+        }
+
         this.props.onAdd(this.state);
         // console.log(this.state.name);
         // console.log(this.state.description);
@@ -104,10 +132,12 @@ export default class Add extends Component {
     render() {
         return (
             <div>
-                <h3>Create New Product</h3>
+                <Form onSubmit={(event) => this.handleCreate(event)}>
+                {/* <h3>Create New Product</h3> */}
                 <FormGroup>
                     <Label for="name">Name</Label>
                     <Input type="text" name="name" id="name" placeholder="PlayStation 4" onChange={(e) => this.changeValue(e)} value = {this.state.name} required="required"/>
+                    {this.state.key === 'name' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
                 </FormGroup>
                 <FormGroup>
                     <Label for="description">Description</Label>
@@ -147,9 +177,10 @@ export default class Add extends Component {
                     </Input>
                 </FormGroup>
                 <div className="mb-5">
-                    <Button type="submit" outline color="warning" onClick={this.handleCreate.bind(this)}>Add</Button>{' '}
+                    <Button type="submit" outline color="warning" >Add</Button>{' '}
                     <Button outline color="danger" onClick={this.handleClear.bind(this)}>Cancel</Button>
                 </div>
+                </Form>
             </div>
         )
     }

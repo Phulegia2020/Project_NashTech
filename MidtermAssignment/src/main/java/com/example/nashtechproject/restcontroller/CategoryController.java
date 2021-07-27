@@ -2,12 +2,15 @@ package com.example.nashtechproject.restcontroller;
 
 import com.example.nashtechproject.entity.Category;
 import com.example.nashtechproject.exception.CategoryException;
+import com.example.nashtechproject.page.ProductPage;
 import com.example.nashtechproject.service.CategoryService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -33,6 +36,16 @@ public class CategoryController {
     {
         List<Category> categories = categoryService.retrieveCategories();
         return categories.stream().sorted(Comparator.comparingLong(Category::getId)).collect(Collectors.toList());
+    }
+
+    @GetMapping("/page")
+    @ApiOperation(value = "Get all category By Page")
+    @ApiResponses(value = { @ApiResponse(code = 200, message = "Success"),
+            @ApiResponse(code = 400, message = "Bad request"),
+            @ApiResponse(code = 500, message = "Internal server error") })
+    public ResponseEntity<List<Category>> getCategoriesPages(ProductPage productPage)
+    {
+        return new ResponseEntity<>(categoryService.getCategoriesPage(productPage), HttpStatus.OK);
     }
 
     @GetMapping("/{categoryId}")

@@ -133,17 +133,24 @@ public class UserController {
         }
         else
         {
-//            if (userService.existUsername(userDetails.getAccount()))
+//            List<User> userList = userService.retrieveUsers();
+//            for (int i = 0; i < userList.size(); i++)
 //            {
-//                throw new UserException(userDetails.getAccount());
-//            }
-//            if (userService.existEmail(userDetails.getEmail()))
-//            {
-//                throw new UserException(userDetails.getEmail());
-//            }
-//            if (userService.existPhone(userDetails.getPhone()))
-//            {
-//                throw new UserException(userDetails.getPhone());
+//                if (!userList.get(i).getId().equals(userId))
+//                {
+//                    if (userService.existUsername(userDetails.getAccount()))
+//                    {
+//                        throw new UserException(userDetails.getAccount());
+//                    }
+//                    if (userService.existEmail(userDetails.getEmail()))
+//                    {
+//                        throw new UserException(userDetails.getEmail());
+//                    }
+//                    if (userService.existPhone(userDetails.getPhone()))
+//                    {
+//                        throw new UserException(userDetails.getPhone());
+//                    }
+//                }
 //            }
             UserUpdate(user, userDetails);
             userService.updateUser(user);
@@ -186,10 +193,10 @@ public class UserController {
 
     private void UserUpdate(User user, UserDTO userDetails)
     {
-        user.setName(userDetails.getName());
+        user.setName(userDetails.getName().trim());
         user.setGender(userDetails.getGender());
-        user.setAddress(userDetails.getAddress());
-        user.setEmail(userDetails.getEmail());
+        user.setAddress(userDetails.getAddress().trim());
+        user.setEmail(userDetails.getEmail().trim());
         user.setPhone(userDetails.getPhone());
         user.setAccount(userDetails.getAccount());
 //            if (!userDetails.getPassword().equals(""))
@@ -201,5 +208,10 @@ public class UserController {
 
         Role r = roleService.getRole(Long.valueOf(userDetails.getRole_id()));
         user.setRole(r);
+    }
+
+    private void checkUser(User user)
+    {
+
     }
 }

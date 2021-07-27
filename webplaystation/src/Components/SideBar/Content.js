@@ -2,9 +2,7 @@
 import classNames from "classnames";
 import { Container } from "reactstrap";
 import { Switch, Route, Redirect } from "react-router-dom";
-
 import Topbar from "./TopBar";
-
 import React, { Component } from 'react'
 import Category from "../Category/Category";
 import Product from '../Product/Product';
@@ -13,6 +11,9 @@ import ProductByCategory from '../Category/ProductByCategory';
 import UpdateCategory from '../Category/UpdateCategory';
 import UpdateProduct from '../Product/UpdateProduct';
 import UpdateUser from '../User/UpdateUser';
+import { withRouter } from "react-router";
+import Bill from "../Bill/Bill";
+import UpdateBill from "../Bill/UpdateBill";
 
 class Content extends Component {
     render() {
@@ -47,10 +48,18 @@ class Content extends Component {
                     <Route exact path="/admin/user/update/:id">
                         <UpdateUser/>
                     </Route>
-                    <Route exact path="/admin/logout" render={() => (
+                    <Route exact path="/admin/bill">
+                        <Bill/>
+                    </Route>
+                    <Route exact path="/admin/bill/update/:id">
+                        <UpdateBill/>
+                    </Route>
+                    {/* <Route exact path="/admin/logout" render={() => (
                       <Redirect to="/WebPlayStation"/>
                     )}>
-                    </Route>
+                    </Route> */}
+                    {/* <Route exact path="/admin/logout" component={PageRoute}>
+                    </Route> */}
                     {/* <Route exact path="/Home-1" component={() => "Home-1"} />
                     <Route exact path="/Home-2" component={() => "Home-2"} />
                     <Route exact path="/Home-3" component={() => "Home-3"} />
@@ -64,6 +73,10 @@ class Content extends Component {
             </Container>
         )
     }
+}
+
+const PageRoute = () => {
+    this.props.history.push("/");
 }
 
 // const Content = ({ sidebarIsOpen, toggleSidebar }) => (
@@ -91,4 +104,4 @@ class Content extends Component {
 //   </Container>
 // );
 
-export default Content;
+export default withRouter(Content);

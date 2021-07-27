@@ -1,9 +1,13 @@
 package com.example.nashtechproject.service.impl;
 
 import com.example.nashtechproject.entity.Category;
+import com.example.nashtechproject.page.ProductPage;
 import com.example.nashtechproject.repository.CategoryRepository;
 import com.example.nashtechproject.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,6 +25,14 @@ public class CategoryServiceImpl implements CategoryService {
     public List<Category> retrieveCategories()
     {
         List<Category> categories = categoryRepository.findAll();
+        return categories;
+    }
+
+    public List<Category> getCategoriesPage(ProductPage productPage)
+    {
+        Sort sort = Sort.by(productPage.getSortDirection(), productPage.getSortBy());
+        Pageable pageable = PageRequest.of(productPage.getPageNumber(), productPage.getPageSize(), sort);
+        List<Category> categories = categoryRepository.findAll(pageable).getContent();
         return categories;
     }
 

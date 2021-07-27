@@ -9,6 +9,7 @@ import {
   faCopy,
   faUser,
   faSignOutAlt,
+  faMoneyBill,
 } from "@fortawesome/free-solid-svg-icons";
 import { NavItem, NavLink, Nav } from "reactstrap";
 import classNames from "classnames";
@@ -40,7 +41,9 @@ class SideBar extends Component {
         localStorage.setItem('accessToken', '');
         sessionStorage.removeItem('user_id');
         sessionStorage.removeItem('username');
+        //this.props.onAdminOut();
         this.props.history.push("/");
+        window.location.reload();
     }
 
     render() {
@@ -74,7 +77,12 @@ class SideBar extends Component {
                             User
                         </NavLink>
                         </NavItem>
-
+                        <NavItem>
+                        <NavLink tag={Link} to={"/admin/bill"} className="letter">
+                            <FontAwesomeIcon icon={faMoneyBill} className="mr-2" />
+                            Bill
+                        </NavLink>
+                        </NavItem>
                         <NavItem>
                         {/* tag={Link} to={"/admin/logout"} */}
                             <NavLink tag={Link} className="letter" onClick={this.onLogOut}>
