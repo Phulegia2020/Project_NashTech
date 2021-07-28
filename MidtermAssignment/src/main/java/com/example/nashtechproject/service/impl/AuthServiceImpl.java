@@ -99,31 +99,25 @@ public class AuthServiceImpl implements AuthService {
         if (strRoles == null) {
             Role userRole = roleRepository.findByName(RoleName.ROLE_USER)
                     .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-//            roles.add(userRole);
             user.setRole(userRole);
         } else {
-//            strRoles.forEach(role -> {
             switch (strRoles.toLowerCase()) {
                 case "admin":
                     Role adminRole = roleRepository.findByName(RoleName.ROLE_ADMIN)
                             .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-//                        roles.add(adminRole);
                     user.setRole(adminRole);
 
                     break;
                 case "pm":
                     Role modRole = roleRepository.findByName(RoleName.ROLE_PM)
                             .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-//                        roles.add(modRole);
                     user.setRole(modRole);
                     break;
                 default:
                     Role userRole = roleRepository.findByName(RoleName.ROLE_USER)
                             .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-//                        roles.add(userRole);
                     user.setRole(userRole);
             }
-//            });
         }
         user.setActive_status("Active");
         userRepository.save(user);

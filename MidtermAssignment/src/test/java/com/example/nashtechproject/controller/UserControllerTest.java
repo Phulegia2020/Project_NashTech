@@ -48,14 +48,10 @@ import static org.hamcrest.CoreMatchers.is;
 
 @SpringBootTest
 @AutoConfigureMockMvc(addFilters = false)
-//@RunWith(MockitoJUnitRunner.class)
 public class UserControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
-
-//    @MockBean
-//    private UserRepository userRepository;
 
     @InjectMocks
     private UserController userController;
@@ -92,7 +88,6 @@ public class UserControllerTest {
     public void getAllUsersTest() throws Exception
     {
         Mockito.when(userService.retrieveUsers()).thenReturn(this.userList);
-        //when(userRepository.findAll()).thenReturn(this.userList);
 
         this.mockMvc.perform(get("/api/users")).andExpect(status().isOk()).andExpect(jsonPath("$.size()", is(userList.size())));
 
@@ -129,10 +124,6 @@ public class UserControllerTest {
                 .andExpect(jsonPath("$.account", Matchers.equalTo("Test")))
                 .andExpect(jsonPath("$.email", Matchers.equalTo("test@gmail.com")))
                 .andExpect(jsonPath("$.role_id", Matchers.equalTo("3")));
-
-//        mockMvc.perform(post("/api/users").contentType(MediaType.APPLICATION_JSON)
-//                .content()
-        //System.out.println("KET QUA: "+ result.getResponse().getContentAsString());
     }
 
     @Test
@@ -152,6 +143,5 @@ public class UserControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.delete("/api/users/{userId}", user.getId())
                 .contentType(MediaType.APPLICATION_JSON).characterEncoding("UTF-8").accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk()).andExpect(jsonPath("$.size()", Matchers.equalTo(map.size())));
-//                .andExpect(jsonPath("$.get($.keySet())", Matchers.equalTo(map.get(map.keySet()))));
     }
 }

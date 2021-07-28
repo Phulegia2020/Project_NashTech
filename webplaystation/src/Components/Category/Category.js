@@ -4,7 +4,7 @@ import {del, get, post, put} from "./../../Utils/httpHelper";
 import { Link } from 'react-router-dom';
 import Add from "./Add"
 import Update from './UpdateCategory';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Pagination, PaginationItem, PaginationLink } from 'reactstrap';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Pagination, PaginationItem, PaginationLink, Toast } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 
@@ -13,7 +13,8 @@ export default class Category extends Component {
         categories: [],
         isDisplayForm: false,
         pageNumber: 0,
-        pageToTal: 0
+        pageToTal: 0,
+        msgDel: false
     }
 
     componentDidMount(){
@@ -21,7 +22,6 @@ export default class Category extends Component {
         .then((response) => {
             if (response.status === 200)
             {
-                //this.setState({categories: response.data});
                 this.setState({
                     pageToTal: Math.ceil(response.data.length / 4)
                 })
@@ -36,14 +36,6 @@ export default class Category extends Component {
             });
         })
         .catch(error => console.log(error));
-
-        // get("/roles")
-        // .then((response) => {
-        //     //console.log(response.data);
-        //     this.setState({
-        //         roles: response.data
-        //     });
-        // })
     }
 
     find(id){
@@ -52,7 +44,6 @@ export default class Category extends Component {
             if (response.status === 200)
             {
                 //console.log(response.data);
-                // alert(`${id} is found`);
             }
         })
     }
@@ -61,15 +52,24 @@ export default class Category extends Component {
     {
         del(`/categories/${id}`)
         .then((response) => {
+            if (response.status === 200)
+            {
+                this.setState({categories: this.state.categories.filter(cate => cate.id !== id)})
+                alert(response.data.message);
+            }
+            else{
+                this.setState({
+                    msgDel: true
+                })
+            }
             //console.log(response.data);
-            this.setState({categories: this.state.categories.filter(cate => cate.id !== id)})
-            alert(response.data.message);
+            
         })
-        .catch(error => {console.log(error)})
+        .catch(error => {alert('This category had products. Can not delete!')})
     }
 
     createCategory(newCategory){
-        post(`/categories`, {name: newCategory.name, description: newCategory.description})
+        post(`/categories`, {name: newCategory.name.trim(), description: newCategory.description.trim()})
         .then((response) => {
             //console.log(response.data);
             window.location.reload();
@@ -123,11 +123,34 @@ export default class Category extends Component {
         .catch(error => console.log(error));
     }
 
+    // toastNotify = () => {
+    //     return (<Toast>
+    //         <Toast.Header>
+    //           <strong className="me-auto">Error</strong>
+    //           <small>Now</small>
+    //         </Toast.Header>
+    //         <Toast.Body>This category had products. Can not delete!</Toast.Body>
+    //       </Toast>)
+    // }
+
+    componentWillUnmount() {
+        // fix Warning: Can't perform a React state update on an unmounted component
+        this.setState = (state,callback)=>{
+            return;
+        };
+    }
+
     render() {
         return (
             <div>
+                {/* <Toast isOpen={this.state.msgDel}>
+                    <Toast.Header>
+                    <strong className="me-auto">Error</strong>
+                    <small>Now</small>
+                    </Toast.Header>
+                    <Toast.Body>This category had products. Can not delete!</Toast.Body>
+                </Toast>  */}
                 <button type="button" className="btn btn-primary" onClick={this.onToggleForm}>
-                    {/* <span className="fa fa-plus mr-5"></span> */}
                     <FontAwesomeIcon icon={faPlus} className="mr-2"/>{' '}
                     Creat New Category
                 </button>
@@ -190,7 +213,6 @@ export default class Category extends Component {
                 </Pagination>
 
                 <div className="container">
-                    {/* {this.state.isDisplayForm ? <Add onAdd={this.onAdd} onCloseForm={this.onCloseForm}/> : ''} */}
                     <Modal isOpen={this.state.isDisplayForm} toggle={this.onToggleForm}>
                         <ModalHeader toggle={this.onToggleForm}>Create New Category</ModalHeader>
                         <ModalBody>

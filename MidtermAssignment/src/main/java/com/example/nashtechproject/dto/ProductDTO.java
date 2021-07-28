@@ -1,12 +1,8 @@
 package com.example.nashtechproject.dto;
 
-import com.example.nashtechproject.entity.Category;
-import com.example.nashtechproject.entity.Supplier;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 public class ProductDTO {
     private Long id;
@@ -20,12 +16,6 @@ public class ProductDTO {
     private int price;
 
     private float totalrating;
-
-//    @JsonFormat(pattern="dd/MM/yyyy")
-//    private LocalDateTime createddate;
-//
-//    @JsonFormat(pattern="dd/MM/yyyy")
-//    private LocalDateTime updateddate;
 
     @Lob
     @Type(type="org.hibernate.type.BinaryType")

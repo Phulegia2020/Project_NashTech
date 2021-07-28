@@ -14,6 +14,8 @@ import UpdateUser from '../User/UpdateUser';
 import { withRouter } from "react-router";
 import Bill from "../Bill/Bill";
 import UpdateBill from "../Bill/UpdateBill";
+import BillDetailsByBill from "../Bill/BillDetailsByBill";
+import UpdateBillDetails from "../BillDetails/UpdateBillDetails";
 
 class Content extends Component {
     render() {
@@ -53,6 +55,12 @@ class Content extends Component {
                     </Route>
                     <Route exact path="/admin/bill/update/:id">
                         <UpdateBill/>
+                    </Route>
+                    <Route exact path="/admin/bill/:id">
+                        <BillDetailsByBill/>
+                    </Route>
+                    <Route exact path="/admin/billDetails/update/:id">
+                        <UpdateBillDetails/>
                     </Route>
                     {/* <Route exact path="/admin/logout" render={() => (
                       <Redirect to="/WebPlayStation"/>

@@ -128,12 +128,8 @@ class UpdateProduct extends Component {
                 }
             }
         }
-        //let photo;
-        // if (event.target.image.files.length !== 0) {
-            
-        // }
         
-        put(`/products/${this.state.id}`, {name: this.state.name, description:this.state.description, quantity: this.state.quantity, price: this.state.price,
+        put(`/products/${this.state.id}`, {name: this.state.name.trim(), description:this.state.description.trim(), quantity: this.state.quantity, price: this.state.price,
                                            totalrating:this.state.totalrating ,imageurl: this.state.imageurl, category_id: this.state.category_id, supplier_id: this.state.supplier_id})
         .then((response) => {
             if (response.status === 200)
@@ -142,7 +138,6 @@ class UpdateProduct extends Component {
                 this.props.history.push("/admin/product");
             }
         })
-        //console.log(this.state.imageurl);
     }
 
     handleClear = () => {
@@ -152,9 +147,14 @@ class UpdateProduct extends Component {
             quantity: "",
             price: "",
         });
-        // this.props.onCloseForm();
-        // console.log(this.state);
         this.props.history.push("/admin/product");
+    }
+
+    componentWillUnmount() {
+        // fix Warning: Can't perform a React state update on an unmounted component
+        this.setState = (state,callback)=>{
+            return;
+        };
     }
 
     render() {

@@ -34,7 +34,8 @@ public class RoleController {
         }
         return roleService.getRole(roleId);
     }
-
+    // Dạ chỗ này em dự định là không thêm xóa sửa vì trong Role có sử dụng RoleName là Enum nên tạm thời
+    // chưa thực hiện được
 //    @PostMapping
 //    public Role saveRole(@RequestBody Role role)
 //    {

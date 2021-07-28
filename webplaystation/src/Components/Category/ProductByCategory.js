@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { get } from '../../Utils/httpHelper'
+import { get, del } from '../../Utils/httpHelper'
 import { withRouter } from "react-router";
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -22,13 +22,27 @@ class ProductByCategory extends Component {
                 });
             }
         })
-        //console.log(this.state.id);
     }
 
-    componentWillUnmount(){
+    delProduct = (id) =>
+    {
+        del(`/products/${id}`)
+        .then((response) => {
+            //console.log(response.data);
+            this.setState({products: this.state.products.filter(p => p.id !== id)})
+            alert(response.data.message);
+        })
+        .catch(error => {console.log(error)})
+    }
+
+    componentWillUnmount() {
         this.setState({
             products: []
         })
+        // fix Warning: Can't perform a React state update on an unmounted component
+        this.setState = (state,callback)=>{
+            return;
+        };
     }
 
     render() {

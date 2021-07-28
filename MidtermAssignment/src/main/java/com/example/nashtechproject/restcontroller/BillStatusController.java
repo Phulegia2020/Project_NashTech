@@ -40,13 +40,6 @@ public class BillStatusController {
     @PostMapping
     public BillStatus saveBillStatus(@RequestBody BillStatus billStatus)
     {
-//        List<BillStatus> categories = BillStatusService.retrieveCategories();
-//        for (BillStatus emp:categories) {
-//            if (BillStatus.getName().equals(emp.getName()))
-//            {
-//                throw new BillStatusException(BillStatus.getName());
-//            }
-//        }
         return billStatusService.saveBillStatus(billStatus);
     }
 

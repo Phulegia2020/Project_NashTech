@@ -57,6 +57,16 @@ public class BillDetailsController {
         return convertToDTO(billDetailsService.getBillDetails(billDetailsId));
     }
 
+    @GetMapping("/bill/{billId}")
+    public List<BillDetailsDTO> getBillDetailsByBill(@PathVariable(name = "billId") Long billId)
+    {
+        List<BillDetails> billDetails = billDetailsService.getBillDetailsByBill(billId);
+        return billDetails.stream()
+                .map(this::convertToDTO)
+                .sorted(Comparator.comparing(BillDetailsDTO::getId))
+                .collect(Collectors.toList());
+    }
+
     @PostMapping()
     public BillDetailsDTO saveBillDetails(@RequestBody BillDetailsDTO billDetails)
     {
@@ -89,16 +99,6 @@ public class BillDetailsController {
         }
         else
         {
-//            Bill b = billService.getBill(Long.valueOf(newBillDetails.getBill_id()));
-//            if (b == null)
-//            {
-//                throw new BillException(b.getId());
-//            }
-//            Product pro = productService.getProduct(Long.valueOf(newBillDetails.getProduct_id()));
-//            if (pro == null)
-//            {
-//                throw new ProductException(pro.getId());
-//            }
 //            billDetails.setBill(b);
 //            billDetails.setProduct(pro);
             billDetails.setQuantity(newBillDetails.getQuantity());

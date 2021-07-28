@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import {Card, Icon, Image, Segment, Grid, Header, Rating} from 'semantic-ui-react'
 import ButtonAddToCart from "./ButtonAddToCart";
-// import Loading from "../../Components/Loading";
 import { get, post, put } from '../../../Utils/httpHelper';
 import { withRouter } from "react-router";
 
@@ -11,13 +10,13 @@ class ProductDetails extends Component {
 
         this.state = {
             Product: {},
-            // loading: true
             rate: 0,
             user_id: '',
             product_id: this.props.match.params.id,
             proByRate: [],
             totalrating: 0
         };
+        this.onRating = this.onRating.bind(this);
     }
 
     componentDidMount() {
@@ -68,25 +67,18 @@ class ProductDetails extends Component {
         }
     }
 
-    onRating = (event, data) => {
+    async onRating(event, data){
         event.preventDefault();
-        console.log(data);
-        //console.log(this.state.rate);
         if (data.rating !== 0)
         {
-            this.setState({
+            await this.setState({
                 rate: data.rating,
             });
-            
             if (this.state.rate !== 0)
             {
-                console.log(this.state.rate);
-                console.log(sessionStorage.getItem('user_id'));
-                console.log(this.state.product_id);
                 if (this.onCheckRated(this.state.user_id) === true)
                 {
                     alert(`User ${this.state.user_id} rated product ${this.state.product_id}. Rating another product, please!`);
-                    // this.props.history.push("/");
                 }
                 else
                 {
@@ -94,11 +86,11 @@ class ProductDetails extends Component {
                     .then((response) => {
                         if (response.status === 200)
                         {
-                            console.log(response.data);
+                            //console.log(response.data);
                             this.handleTotalRating();
                             this.handleUpdateRating(this.state.product_id, this.state.Product);
-                            alert(`User ${this.state.user_id} rated product ${this.state.product_id} is ${this.state.rate}`);
-                            window.location.reload();
+                            //alert(`User ${this.state.user_id} rated product ${this.state.product_id} is ${this.state.rate}`);
+                            //window.location.reload();
                             //this.props.history.push(`/WebPlayStation/product/${this.state.product_id}`);
                         }
                     })
@@ -116,14 +108,13 @@ class ProductDetails extends Component {
             if (response.status === 200)
             {
                 //console.log(response.data);
-                //this.props.history.push("/product");
             }
         })
     }
 
     handleTotalRating = () => {
         var sumrating = this.state.rate;
-        console.log(sumrating);
+        //console.log(sumrating);
         for (var i = 0; i < this.state.proByRate.length; i++)
         {
             if (this.state.proByRate[i].user_id !== this.state.user_id)
@@ -131,14 +122,18 @@ class ProductDetails extends Component {
                 sumrating = sumrating + this.state.proByRate[i].ratingPoint;
             }
         }
-        //console.log(sumrating);
-        //console.log(this.state.proByRate.length);
         var total = Math.round((sumrating) / (this.state.proByRate.length+1));
-        console.log(total);
+        //console.log(total);
         this.setState({
             totalrating: total,
         });
-        //console.log(this.state.totalrating);
+    }
+
+    componentWillUnmount() {
+        // fix Warning: Can't perform a React state update on an unmounted component
+        this.setState = (state,callback)=>{
+            return;
+        };
     }
 
     render() {
@@ -149,7 +144,6 @@ class ProductDetails extends Component {
                     <Grid.Row>
                         <Grid.Column width={4}>
                             <Image src={`data:image/jpeg;base64,${product.imageurl}`}/>
-                            {/* <Image src={'https://product.hstatic.net/200000255149/product/ps5_-_2_a2a2c119326c4d93b92f48d51454689e_master.jpg'}/> */}
                         </Grid.Column>
                         <Grid.Column width={12}>
                             <Header as="h1">{product.name}</Header>

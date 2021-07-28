@@ -3,7 +3,6 @@ package com.example.nashtechproject.restcontroller;
 import com.example.nashtechproject.dto.BillDTO;
 import com.example.nashtechproject.entity.Bill;
 import com.example.nashtechproject.entity.BillStatus;
-import com.example.nashtechproject.entity.Category;
 import com.example.nashtechproject.entity.User;
 import com.example.nashtechproject.exception.BillException;
 import com.example.nashtechproject.exception.BillStatusException;
@@ -54,9 +53,6 @@ public class BillController {
     public List<BillDTO> getAllBills()
     {
         List<Bill> bills = billService.retrieveBills();
-//        return bills.stream()
-//                .sorted(Comparator.comparing(Bill::getId).reversed())
-//                .collect(Collectors.toList());
         return bills.stream()
                 .map(this::convertToDTO)
                 .sorted(Comparator.comparing(BillDTO::getId).reversed())
@@ -70,7 +66,6 @@ public class BillController {
             @ApiResponse(code = 500, message = "Internal server error") })
     public ResponseEntity<List<BillDTO>> getBillsPages(ProductPage productPage)
     {
-//        List<BillDTO> list = billService.getBillsPage(productPage).stream().sorted(Comparator.comparing(BillDTO::getId).reversed()).collect(Collectors.toList());
         return new ResponseEntity<>(billService.getBillsPage(productPage), HttpStatus.OK);
     }
 
@@ -110,7 +105,6 @@ public class BillController {
 //        bill.setBillStatus(bs);
         Bill b = convertToEntity(bill);
         b.setCreateddate(LocalDateTime.now());
-        //b.setCheckout_date(LocalDateTime.now());
         return convertToDTO(billService.saveBill(b));
     }
 
@@ -164,6 +158,7 @@ public class BillController {
         map.put("message", "Delete Succesfully!");
         return map;
     }
+
     private BillDTO convertToDTO(Bill b)
     {
         BillDTO billDTO = modelMapper.map(b, BillDTO.class);

@@ -70,13 +70,6 @@ public class CategoryController {
             @ApiResponse(code = 500, message = "Internal server error") })
     public Category saveCategory(@RequestBody Category category)
     {
-//        List<Category> categories = categoryService.retrieveCategories();
-//        for (Category emp:categories) {
-//            if (category.getName().equals(emp.getName()))
-//            {
-//                throw new CategoryException(category.getName());
-//            }
-//        }
         if (categoryService.existByName(category.getName()))
         {
             throw new CategoryException(category.getName());
@@ -98,13 +91,9 @@ public class CategoryController {
         }
         else
         {
-//            if (categoryService.existByName(categoryDetails.getName()))
-//            {
-//                throw new CategoryException(categoryDetails.getName());
-//            }
-            category.setName(categoryDetails.getName());
-            category.setDescription(categoryDetails.getDescription());
-            category.setProducts(categoryDetails.getProducts());
+            category.setName(categoryDetails.getName().trim());
+            category.setDescription(categoryDetails.getDescription().trim());
+            //category.setProducts(categoryDetails.getProducts());
             categoryService.updateCategory(category);
         }
         return category;

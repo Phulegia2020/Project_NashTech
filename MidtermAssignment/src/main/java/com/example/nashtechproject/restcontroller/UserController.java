@@ -61,7 +61,6 @@ public class UserController {
             UserDTO u = convertToDTO(users.get(i));
             usersDTO.add(u);
         }
-        //return usersDTO.stream().sorted(Comparator.comparingLong(UserDTO::getId)).collect(Collectors.toList());
         return usersDTO;
     }
 
@@ -98,10 +97,6 @@ public class UserController {
     public UserDTO saveUser(@RequestBody User user)
     {
         Optional<User> users = userService.getUserByAccount(user.getAccount());
-//        if (userService.getUserByAccount(user.getAccount()) == true)
-//        {
-//            throw new UserException(user.getAccount());
-//        }
         if (users.isPresent())
         {
             throw new UserException(user.getAccount());
@@ -133,25 +128,25 @@ public class UserController {
         }
         else
         {
-//            List<User> userList = userService.retrieveUsers();
-//            for (int i = 0; i < userList.size(); i++)
-//            {
-//                if (!userList.get(i).getId().equals(userId))
-//                {
-//                    if (userService.existUsername(userDetails.getAccount()))
-//                    {
-//                        throw new UserException(userDetails.getAccount());
-//                    }
-//                    if (userService.existEmail(userDetails.getEmail()))
-//                    {
-//                        throw new UserException(userDetails.getEmail());
-//                    }
-//                    if (userService.existPhone(userDetails.getPhone()))
-//                    {
-//                        throw new UserException(userDetails.getPhone());
-//                    }
-//                }
-//            }
+            List<User> userList = userService.retrieveUsers();
+            for (int i = 0; i < userList.size(); i++)
+            {
+                if (userList.get(i).getId() != userId)
+                {
+                    if (userService.existUsername(userDetails.getAccount()))
+                    {
+                        throw new UserException(userDetails.getAccount());
+                    }
+                    if (userService.existEmail(userDetails.getEmail()))
+                    {
+                        throw new UserException(userDetails.getEmail());
+                    }
+                    if (userService.existPhone(userDetails.getPhone()))
+                    {
+                        throw new UserException(userDetails.getPhone());
+                    }
+                }
+            }
             UserUpdate(user, userDetails);
             userService.updateUser(user);
         }
@@ -204,14 +199,7 @@ public class UserController {
 //                user.setPassword(encoder.encode(userDetails.getPassword()));
 //            }
         user.setActive_status(userDetails.getActive_status());
-        //user.setRole(userDetails.getRole());
-
         Role r = roleService.getRole(Long.valueOf(userDetails.getRole_id()));
         user.setRole(r);
-    }
-
-    private void checkUser(User user)
-    {
-
     }
 }

@@ -12,7 +12,7 @@ import java.util.Optional;
 public interface UserService {
     public List<User> retrieveUsers();
 
-//    public boolean getUserByAccount(String account);
+    //public boolean getUserByAccount(String account);
     public Optional<User> getUserByAccount(String account);
 
     public User getUser(Long userId);

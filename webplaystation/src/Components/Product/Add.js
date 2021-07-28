@@ -107,13 +107,6 @@ export default class Add extends Component {
         }
 
         this.props.onAdd(this.state);
-        // console.log(this.state.name);
-        // console.log(this.state.description);
-        // console.log(this.state.quantity);
-        //console.log(this.state.price);
-        // console.log(this.state.imageurl);
-        // console.log(this.state.category_id);
-        //console.log(this.state.supplier_id);
     }
 
     handleClear = () => {
@@ -129,11 +122,17 @@ export default class Add extends Component {
         this.props.onCloseForm();
     }
 
+    componentWillUnmount() {
+        // fix Warning: Can't perform a React state update on an unmounted component
+        this.setState = (state,callback)=>{
+            return;
+        };
+    }
+
     render() {
         return (
             <div>
                 <Form onSubmit={(event) => this.handleCreate(event)}>
-                {/* <h3>Create New Product</h3> */}
                 <FormGroup>
                     <Label for="name">Name</Label>
                     <Input type="text" name="name" id="name" placeholder="PlayStation 4" onChange={(e) => this.changeValue(e)} value = {this.state.name} required="required"/>

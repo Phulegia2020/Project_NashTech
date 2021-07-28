@@ -47,6 +47,7 @@ export default class Add extends Component {
 
     changeValue(e){
         //this.setState({name: e.target.value})
+        console.log(e.target.name);
         if (e.target.name === 'username' || e.target.name === 'phone' || e.target.name === 'email')
         {
             this.setState({
@@ -96,18 +97,6 @@ export default class Add extends Component {
                 return;
             }
         }
-        // if (event.target.fullname.value.trim() == "")
-        // {
-        //     this.setState({
-        //         key: 'fullname'
-        //     })
-        //     this.setState({
-        //         blankError: "Please fill in this field!"
-        //     });
-        //     return;
-        // }
-        // console.log('success');
-
         this.props.onAdd(this.state);
     }
 
@@ -125,6 +114,13 @@ export default class Add extends Component {
         this.props.onCloseForm();
     }
 
+    componentWillUnmount() {
+        // fix Warning: Can't perform a React state update on an unmounted component
+        this.setState = (state,callback)=>{
+            return;
+        };
+    }
+
     render() {
         return (
             <div>
@@ -132,7 +128,6 @@ export default class Add extends Component {
                     <FormGroup>
                         <Label for="name">Name</Label>
                         <Input type="text" name="fullname" id="name" placeholder="Phu Le Gia" onChange={(e) => this.changeValue(e)} value = {this.state.fullname} required/>
-                        {/* <span style={{ color: "red", fontStyle:"italic"}}>{this.state.blankError}</span> */}
                         {/* {this.state.key === 'fullname' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.blankError}</span> : '' } */}
                     </FormGroup>
                     <FormGroup tag="fieldset" row>
@@ -158,7 +153,6 @@ export default class Add extends Component {
                             <FormGroup>
                                 <Label for="username">Username</Label>
                                 <Input type="text" name="username" id="username" placeholder="Football" onChange={(e) => this.changeValue(e)} value = {this.state.username} required/>
-                                {/* <span style={{ color: "red", fontStyle:"italic"}}>{this.state.blankError}</span> */}
                                 {this.state.key === 'username' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.blankError}</span> : '' }
                             </FormGroup>
                         </Col>
@@ -190,11 +184,6 @@ export default class Add extends Component {
                             <option value="ADMIN">ADMIN</option>
                             <option value="PM">PM</option>
                             <option value="USER">USER</option>
-                            {/* {
-                                this.state.roles.map((r) => (
-                                    <option value={r.name}>ADMIN</option>
-                                ))
-                            } */}
                         </Input>
                     </FormGroup>
                     <div className="mb-5">

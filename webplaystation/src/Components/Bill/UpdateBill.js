@@ -35,14 +35,11 @@ class UpdateBill extends Component {
             //console.log(response.data);
             if (response.status === 200)
             {
-                
-                // alert(`${id} is found`);
                 this.setState({
                     total: response.data.total,
                     user_id: response.data.user_id,
                     billStatus_id: response.data.billStatus_id
                 })
-                //console.log(this.state.imageurl);
             }
         });
 
@@ -67,20 +64,6 @@ class UpdateBill extends Component {
     handleUpdate(event){
         event.preventDefault();
 
-        // for (let i = 0; i < this.state.products.length; i++)
-        // {
-        //     if (this.state.products[i].name === event.target.name.value.trim())
-        //     {
-        //         this.setState({
-        //             key: 'name'
-        //         })
-        //         this.setState({
-        //             Error: "This name is existed!"
-        //         });
-        //         return;
-        //     }
-        // }
-
         put(`/bills/${this.state.id}`, {total: this.state.total, user_id: this.state.user_id, billStatus_id: this.state.billStatus_id})
         .then((response) => {
             if (response.status === 200)
@@ -100,11 +83,18 @@ class UpdateBill extends Component {
         this.props.history.push("/admin/bill");
     }
 
+    componentWillUnmount() {
+        // fix Warning: Can't perform a React state update on an unmounted component
+        this.setState = (state,callback)=>{
+            return;
+        };
+    }
+
     render() {
         return (
             <div>
+                <h3>Update Bill</h3>
                 <Form onSubmit={(event) => this.handleUpdate(event)}>
-                {/* <h3>Create New Product</h3> */}
                 <FormGroup>
                     <Label for="total">Total</Label>
                     <Input type="number" name="total" id="total" placeholder="VND" onChange={(e) => this.changeValue(e)} value = {this.state.total} required="required"/>

@@ -11,6 +11,8 @@ public interface BillDetailsService {
 
     public BillDetails getByBillAndProduct(Long bill_id, Long product_id);
 
+    public List<BillDetails> getBillDetailsByBill(Long billId);
+
     public BillDetails saveBillDetails(BillDetails billDetails);
 
     public void deleteBillDetails(Long billDetailsId);

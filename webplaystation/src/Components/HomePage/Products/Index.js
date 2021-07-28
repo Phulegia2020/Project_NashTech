@@ -3,7 +3,6 @@ import { Header, Segment, Grid, Pagination, PaginationItem, PaginationLink } fro
 import { get } from '../../../Utils/httpHelper';
 import MainMenu from '../MainMenu/MainMenu';
 import ProductList from './ProductList';
-// import Loading from "../../Components/Loading";
 
 class Products extends Component {
     constructor(props) {
@@ -14,7 +13,6 @@ class Products extends Component {
             open: false,
             pageToTal: 0,
             activePage: 1
-            // loading: true
         };
         this.handlePaginationChange = this.handlePaginationChange.bind(this);
     }
@@ -27,12 +25,9 @@ class Products extends Component {
         .then((response) => {
             if (response.status === 200)
             {
-                //console.log(response.data);
-                //this.setState({Products: response.data});
                 this.setState({
                     pageToTal: Math.ceil(response.data.length / 8)
                 })
-                //console.log(this.state.pageToTal);
             }
         })
         .catch(error => {console.log(error)})
@@ -55,6 +50,13 @@ class Products extends Component {
             });
         })
         .catch(error => console.log(error))
+    }
+
+    componentWillUnmount() {
+        // fix Warning: Can't perform a React state update on an unmounted component
+        this.setState = (state,callback)=>{
+            return;
+        };
     }
 
     render() {

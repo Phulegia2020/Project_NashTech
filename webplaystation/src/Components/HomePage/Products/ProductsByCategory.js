@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Header, Segment, Grid, Pagination } from 'semantic-ui-react';
 import { get } from '../../../Utils/httpHelper';
 import ProductList from './ProductList';
-// import Loading from "../../Components/Loading";
 import { withRouter } from "react-router";
 
 class ProductsByCategry extends Component {
@@ -49,6 +48,13 @@ class ProductsByCategry extends Component {
             });
         })
         .catch(error => console.log(error))
+    }
+
+    componentWillUnmount() {
+        // fix Warning: Can't perform a React state update on an unmounted component
+        this.setState = (state,callback)=>{
+            return;
+        };
     }
 
     render() {

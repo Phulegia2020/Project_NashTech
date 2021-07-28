@@ -36,11 +36,6 @@ public class UserServiceImpl implements UserService {
 
     public Optional<User> getUserByAccount(String account)
     {
-//        if (userRepository.existsByAccount(account))
-//        {
-//            return true;
-//        }
-//        return false;
         Optional<User> users = userRepository.findByAccount(account);
         return users;
     }
@@ -55,7 +50,6 @@ public class UserServiceImpl implements UserService {
     {
         Sort sort = Sort.by(userPage.getSortDirection(), userPage.getSortBy());
         Pageable pageable = PageRequest.of(userPage.getPageNumber(), userPage.getPageSize(), sort);
-        //Page<User> users = userRepository.findAll(pageable);
         List<User> list = userRepository.findAll(pageable).getContent();
         List<UserDTO> usersDTO = new ArrayList<>();
         list.forEach(u -> {
@@ -64,7 +58,6 @@ public class UserServiceImpl implements UserService {
             udto.setRole_id(role_id);
             usersDTO.add(udto);
         });
-        //return userRepository.findAll(pageable);
         return usersDTO;
     }
 

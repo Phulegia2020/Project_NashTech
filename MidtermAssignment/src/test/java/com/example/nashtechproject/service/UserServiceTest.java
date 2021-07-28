@@ -18,7 +18,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
-//@SpringBootTest
 public class UserServiceTest {
     @Mock
     private UserRepository userRepository;
@@ -30,8 +29,6 @@ public class UserServiceTest {
     public void loadUserByAccount()
     {
         User u = new User("Champion", "Male", "HCM City", "champion@gmail.com", "0123456789", "Champion", "123456");
-//        u.setActive_status("Active");
-//        u.setRole(null);
         Optional<User> utest = Optional.of(u);
         when(userRepository.findByAccount("Champion")).thenReturn(utest);
 

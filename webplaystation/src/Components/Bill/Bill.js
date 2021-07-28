@@ -6,7 +6,7 @@ import { withRouter } from "react-router";
 import Add from "./Add"
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Pagination, PaginationItem, PaginationLink } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faCheck, faEdit, faInfo, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 class Bill extends Component {
     state = {
@@ -56,7 +56,6 @@ class Bill extends Component {
             if (response.status === 200)
             {
                 //console.log(response.data);
-                // alert(`${id} is found`);
             }
         })
     }
@@ -66,14 +65,13 @@ class Bill extends Component {
         del(`/bills/${id}`)
         .then((response) => {
             //console.log(response.data);
-            this.setState({bills: this.state.products.filter(b => b.id !== id)})
+            this.setState({bills: this.state.bills.filter(b => b.id !== id)})
             alert(response.data.message);
         })
         .catch(error => {console.log(error)})
     }
 
     createBill(newBill){
-        //console.log(newProduct.price);
         post(`/bills`, {total: newBill.total, user_id: newBill.user_id, billStatus_id: newBill.billStatus_id})
         .then((response) => {
             //console.log(response.data);
@@ -81,7 +79,6 @@ class Bill extends Component {
             this.setState({
                 bills: [...this.state.bills, response.data],
             });
-            //console.log(newProduct.price);
         });
     }
 
@@ -143,11 +140,17 @@ class Bill extends Component {
     //     return <td>{uid.name}</td>
     // }
 
+    componentWillUnmount() {
+        // fix Warning: Can't perform a React state update on an unmounted component
+        this.setState = (state,callback)=>{
+            return;
+        };
+    }
+
     render() {
         return (
             <div>
                 <button type="button" className="btn btn-primary" onClick={this.onToggleForm}>
-                    {/* <span className="fa fa-plus mr-5"></span> */}
                     <FontAwesomeIcon icon={faPlus} className="mr-2"/>{' '}
                     Creat New Bill
                 </button>
@@ -162,6 +165,8 @@ class Bill extends Component {
                             <th>Status</th>
                             {/* <th>Category</th>
                             <th>Supplier</th> */}
+                            <th></th>
+                            <th></th>
                             <th></th>
                             <th></th>
                         </tr>
@@ -189,6 +194,22 @@ class Bill extends Component {
                                             <button className="btn btn-success">
                                             <FontAwesomeIcon icon={faEdit} className="mr-2"/>{' '}
                                                 Update
+                                            </button>
+                                        </Link>
+                                    </td>
+                                    <td>
+                                        <Link to={`/admin/bill/${b.id}`}>
+                                            <button className="btn btn-warning">
+                                            <FontAwesomeIcon icon={faCheck} className="mr-2"/>{' '}
+                                                CheckOut
+                                            </button>
+                                        </Link>
+                                    </td>
+                                    <td>
+                                        <Link to={`/admin/bill/${b.id}`}>
+                                            <button className="btn btn-info">
+                                            <FontAwesomeIcon icon={faInfo} className="mr-2"/>{' '}
+                                                Details
                                             </button>
                                         </Link>
                                     </td>
@@ -221,7 +242,6 @@ class Bill extends Component {
                 </Pagination>
 
                 <div className="container">
-                    {/* {this.state.isDisplayForm ? <Add onAdd={this.onAdd} onCloseForm={this.onCloseForm}/> : ''} */}
                     <Modal isOpen={this.state.isDisplayForm} toggle={this.onToggleForm}>
                         <ModalHeader toggle={this.onToggleForm}>Create New Bill</ModalHeader>
                         <ModalBody>

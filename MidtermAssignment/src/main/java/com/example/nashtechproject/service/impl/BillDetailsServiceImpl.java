@@ -36,6 +36,12 @@ public class BillDetailsServiceImpl implements BillDetailsService {
         return billDetails;
     }
 
+    public List<BillDetails> getBillDetailsByBill(Long billId)
+    {
+        List<BillDetails> billDetails = billDetailsRepository.findByBillId(billId);
+        return billDetails;
+    }
+
     @Override
     public BillDetails saveBillDetails(BillDetails billDetails) {
         return billDetailsRepository.save(billDetails);

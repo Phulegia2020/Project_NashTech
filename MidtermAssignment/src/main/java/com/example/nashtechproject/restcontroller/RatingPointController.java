@@ -95,16 +95,6 @@ public class RatingPointController {
         {
             throw new RatingPointException(ratingId);
         }
-//        User u = userService.getUser(Long.valueOf(newRating.getUser_id()));
-//        if (u == null)
-//        {
-//            throw new UserException(u.getId());
-//        }
-//        Product pro = productService.getProduct(Long.valueOf(newRating.getProduct_id()));
-//        if (pro == null)
-//        {
-//            throw new ProductException(pro.getId());
-//        }
 //        rating.setUser(u);
 //        rating.setProduct(pro);
         rating.setRatingPoint(newRating.getRatingPoint());

@@ -40,13 +40,6 @@ public class SupplierController {
     @PostMapping
     public Supplier saveSupplier(@RequestBody Supplier supplier)
     {
-//        List<Supplier> categories = SupplierService.retrieveCategories();
-//        for (Supplier emp:categories) {
-//            if (Supplier.getName().equals(emp.getName()))
-//            {
-//                throw new SupplierException(Supplier.getName());
-//            }
-//        }
         if (supplierService.existName(supplier.getName()))
         {
             throw new SupplierException(supplier.getName());

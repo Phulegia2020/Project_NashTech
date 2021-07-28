@@ -69,7 +69,6 @@ public class ProductServiceImpl implements ProductService {
             productDTO.setSupplier_id(sup_id);
             productDTOS.add(productDTO);
         });
-        //return userRepository.findAll(pageable);
         return productDTOS;
     }
 

@@ -18,7 +18,16 @@ class Login extends Component {
 	}
 
 	handleChange = (e, { name, value }) => {
-		this.setState({ [name]: value });
+		if (e.target.name === 'username')
+        {
+            this.setState({
+                [name]: value.trim()
+            });
+        }
+		else
+		{
+			this.setState({ [name]: value });
+		}
 	}
 
 	handleSubmit = () => {
@@ -32,15 +41,12 @@ class Login extends Component {
 				sessionStorage.setItem('username', response.data.username);
                 if (response.data.roles[0] === "ROLE_ADMIN")
                 {
-					
-					//console.log(response.data.roles[0]);
 					alert('Login Successfully!');
 					this.props.history.push("/admin");
 					
 				}
 				else if (response.data.roles[0] === "ROLE_USER")
 				{
-					//console.log(response.data.roles[0]);
 					alert('Login Successfully!');
 					this.props.history.push("/");
 				}
@@ -50,39 +56,12 @@ class Login extends Component {
         .catch(error => alert('Username or Password is wrong!'));
 	}
 
-	componentWillUnmount(){
-		//window.location.reload();
-	}
-
 	render() {
 		return (
-			// <Segment style={{ padding: '8em 0em' }} vertical>
-			// 	<Grid container stackable verticalAlign='middle'>
-			// 		<Grid.Row>
-			// 			<Grid.Column width={8}>
-			// 				<Form onSubmit={this.handleSubmit}>
-			// 					<Form.Field>
-			// 						<label>UserName</label>
-			// 						<Form.Input placeholder='Username' name='username' value={this.state.username} onChange={this.handleChange} />
-			// 					</Form.Field>
-			// 					<Form.Field>
-			// 						<label>Password</label>
-			// 						<Form.Input placeholder='Password' type='password' name='password' value={this.state.password} onChange={this.handleChange} />
-			// 					</Form.Field>
-			// 					<Form.Field>
-			// 						<Checkbox label='Remember me' />
-			// 					</Form.Field>
-			// 					<Button type='submit'>Login</Button>
-			// 				</Form>
-			// 			</Grid.Column>
-			// 		</Grid.Row>
-			// 	</Grid>
-			// </Segment>
-
 			<Segment style={{ padding: '8em 0em' }} placeholder>
 				<Grid columns={2} relaxed='very' stackable>
 				<Grid.Column width={8}>
-					<Form onSubmit={this.handleSubmit}>
+					<Form onSubmit={(event) => this.handleSubmit(event)}>
 					<Form.Input
 						icon='user'
 						iconPosition='left'

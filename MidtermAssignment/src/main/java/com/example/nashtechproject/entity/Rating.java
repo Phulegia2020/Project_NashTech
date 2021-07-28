@@ -36,15 +36,6 @@ public class Rating {
         this.ratingPoint = ratingPoint;
     }
 
-//    public User getCustomer() {
-//        return customer;
-//    }
-//
-//    public void setCustomer(User customer) {
-//        this.customer = customer;
-//    }
-
-
     public User getUser() {
         return user;
     }

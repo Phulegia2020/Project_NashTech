@@ -67,7 +67,6 @@ public class ProductController {
             prosDTO.add(p);
         }
         return prosDTO.stream().sorted(Comparator.comparingLong(ProductDTO::getId)).collect(Collectors.toList());
-        //return prosDTO;
     }
 
     @ApiOperation(value = "Get Product By ID")
@@ -198,10 +197,6 @@ public class ProductController {
             {
                 throw new SupplierException(sup.getId());
             }
-//            if (productService.getProductByName(productDetails.getName()) != null)
-//            {
-//                throw new ProductException(productDetails.getName());
-//            }
             ProductUpdate(product, productDetails);
             product.setCategory(cate);
             product.setSupplier(sup);

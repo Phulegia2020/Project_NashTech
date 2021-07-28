@@ -7,37 +7,28 @@ export default class Add extends Component {
     {
         super(props);
         this.state = {
-            total: 0,
-            user_id: "",
-            billStatus_id: "",
-            users: [],
-            billStatus: [],
+            quantity: 0,
+            bill_id: this.props.bill,
+            product_id: "",
+            products: [],
+            billdetails: this.props.billDet,
             Error: "",
             key: "",
         }
     }
     
     componentDidMount(){
-        get("/users")
-        .then((response) => {
-            if (response.status === 200)
-            {
-                //console.log(response.data);
-                this.setState({users: response.data});
-            }
-        })
-        .catch(error => {console.log(error)})
-
-        get("/billstatuses")
+        get("/products")
         .then((response) => {
             if (response.status === 200)
             {
                 //console.log(response.data);
                 this.setState({
-                    billStatus: response.data
-                });
+                    products: response.data
+                })
             }
         })
+        .catch(error => {console.log(error)})
     }
 
     changeValue(e){
@@ -48,15 +39,25 @@ export default class Add extends Component {
 
     handleCreate(event){
         event.preventDefault();
-
+        for (let i = 0; i < this.state.billdetails.length; i++)
+        {
+            if (event.target.product_id.value === this.state.billdetails[i].product_id)
+            {
+                this.setState({
+                    key: 'product'
+                })
+                this.setState({
+                    Error: "This product is existed in this Bill. Update instead of Creating!"
+                });
+                return;
+            }
+        }
         this.props.onAdd(this.state);
     }
 
     handleClear = () => {
         this.setState({
-            total: 0,
-            user_id: "",
-            billStatus_id: "",
+            quantity: 0,
         });
         this.props.onCloseForm();
     }
@@ -73,29 +74,20 @@ export default class Add extends Component {
             <div>
                 <Form onSubmit={(event) => this.handleCreate(event)}>
                 <FormGroup>
-                    <Label for="total">Total</Label>
-                    <Input type="number" name="total" id="total" placeholder="VND" onChange={(e) => this.changeValue(e)} value = {this.state.total} required="required"/>
+                    <Label for="quantity">Quantity</Label>
+                    <Input type="number" name="quantity" id="quantity" placeholder="100" onChange={(e) => this.changeValue(e)} value = {this.state.quantity} required="required"/>
                 </FormGroup>
                 
                 <FormGroup className="mb-2">
-                    <Label for="user">User</Label>
-                    <Input type="select" name="user_id" id="user" value = {this.state.user_id} onChange={(e) => this.changeValue(e)}>
+                    <Label for="product">Product</Label>
+                    <Input type="select" name="product_id" id="product" value = {this.state.product_id} onChange={(e) => this.changeValue(e)} required>
                         {
-                            this.state.users.map((u) => (
-                                <option key={u.id} value={u.id}>{u.name}</option>
+                            this.state.products.map((p) => (
+                                <option key={p.id} value={p.id}>{p.name}</option>
                             ))
                         }
                     </Input>
-                </FormGroup>
-                <FormGroup className="mb-5">
-                    <Label for="status">Status</Label>
-                    <Input type="select" name="billStatus_id" id="status" value = {this.state.billStatus_id} onChange={(e) => this.changeValue(e)}>
-                        {
-                            this.state.billStatus.map((bs) => (
-                                <option key={bs.id} value={bs.id}>{bs.description}</option>
-                            ))
-                        }
-                    </Input>
+                    {this.state.key === 'product' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
                 </FormGroup>
                 <div className="mb-5">
                     <Button type="submit" outline color="warning" >Add</Button>{' '}

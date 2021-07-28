@@ -3,7 +3,6 @@ import "./../Category/Category.css";
 import {del, get, post, put} from "./../../Utils/httpHelper";
 import { Link } from 'react-router-dom';
 import Add from "./Add"
-import { render } from 'react-dom';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Pagination, PaginationItem, PaginationLink } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
@@ -30,7 +29,6 @@ export default class User extends Component {
             if (response.status === 200)
             {
                 //console.log(response.data);
-                //this.setState({users: response.data});
                 this.setState({
                     pageToTal: Math.ceil(response.data.length / 3)
                 });
@@ -62,7 +60,6 @@ export default class User extends Component {
             if (response.status === 200)
             {
                 //console.log(response.data);
-                // alert(`${id} is found`);
             }
         })
     }
@@ -79,7 +76,7 @@ export default class User extends Component {
     }
 
     createUser(newUser){
-        post(`/auth/signup`, {name: newUser.fullname, gender: newUser.gender, address: newUser.address,
+        post(`/auth/signup`, {name: newUser.fullname.trim(), gender: newUser.gender, address: newUser.address.trim(),
                         email: newUser.email.trim(), phone: newUser.phone.trim(), username: newUser.username,
                         password: newUser.password, role: newUser.role})
         .then((response) => {
@@ -106,16 +103,6 @@ export default class User extends Component {
     onAdd = (data) => {
         //console.log(data);
         this.createUser(data);
-    }
-
-    renderElement = (id) => {
-        this.state.roles.map((r) => {
-            //var ro = '' + r.id;
-            if (r.id === id)
-            {
-                return (r.name);
-            }
-        })
     }
 
     onPage(event, pageNumber){
@@ -145,12 +132,18 @@ export default class User extends Component {
         .catch(error => console.log(error));
     }
 
+    componentWillUnmount() {
+        // fix Warning: Can't perform a React state update on an unmounted component
+        this.setState = (state,callback)=>{
+            return;
+        };
+    }
+
     render() {
         return (
             <div>
                 <div className="m-3">
                 <button type="button" className="btn btn-primary" onClick={this.onToggleForm}>
-                    {/* <span className="fa fa-plus mr-5"></span> */}
                     <FontAwesomeIcon icon={faPlus} className="mr-2"/>{' '}
                     Creat New User
                 </button>
@@ -183,11 +176,6 @@ export default class User extends Component {
                                     <td>{u.phone}</td>
                                     <td>{u.account}</td>
                                     {/* <td>{u.role_id}</td> */}
-                                    {/* <td>
-                                    {
-                                        this.renderElement(u.role_id)
-                                    }
-                                    </td> */}
                                     <td>{u.active_status}</td>
                                     <td><button className="btn btn-danger" onClick={() => this.delUser(u.id)}>
                                         <FontAwesomeIcon icon={faTrash} className="mr-2"/>{' '}

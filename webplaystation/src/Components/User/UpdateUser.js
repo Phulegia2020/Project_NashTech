@@ -11,7 +11,7 @@ class UpdateUser extends React.Component {
         address: "",
         email: "",
         phone: "",
-        account: "",
+        username: "",
         //password: "",
         role_id: "",
         roles:[],
@@ -36,15 +36,13 @@ class UpdateUser extends React.Component {
             console.log(response.data);
             if (response.status === 200)
             {
-                
-                // alert(`${id} is found`);
                 this.setState({
                     name: response.data.name,
                     gender: response.data.gender,
                     address: response.data.address,
                     email: response.data.email,
                     phone: response.data.phone,
-                    account: response.data.account,
+                    username: response.data.account,
                     active_status: response.data.active_status,
                     //password: "",
                     role_id: response.data.role_id,
@@ -87,14 +85,6 @@ class UpdateUser extends React.Component {
     }
 
     handleUpdate(event){
-        // console.log(this.state.name);
-        // console.log(this.state.gender);
-        // console.log(this.state.address);
-        // console.log(this.state.email);
-        // console.log(this.state.phone);
-        // console.log(this.state.username);
-        // console.log(this.state.password);
-        // console.log(this.state.role);
         event.preventDefault();
         for (let i = 0; i < this.state.users.length; i++)
         {
@@ -133,11 +123,8 @@ class UpdateUser extends React.Component {
                 }
             }
         }
-        //console.log('update');
-        // this.props.onUpdate(this.state);
-        // password: this.state.password,
-        put(`/users/${this.state.id}`, {name: this.state.name, gender:this.state.gender, address: this.state.address, email: this.state.email,
-                                        phone: this.state.phone, account: this.state.account, active_status: this.state.active_status, role_id: this.state.role_id})
+        put(`/users/${this.state.id}`, {name: this.state.name.trim(), gender:this.state.gender, address: this.state.address.trim(), email: this.state.email.trim(),
+                                        phone: this.state.phone, account: this.state.username, active_status: this.state.active_status, role_id: this.state.role_id})
         .then((response) => {
             if (response.status === 200)
             {
@@ -158,7 +145,6 @@ class UpdateUser extends React.Component {
             password: "",
             role: ""
         });
-        // this.props.onCloseForm();
         // console.log(this.state);
         this.props.history.push("/admin/user");
     }
@@ -193,7 +179,7 @@ class UpdateUser extends React.Component {
                     <Col md={4}>
                         <FormGroup>
                             <Label for="username">Username</Label>
-                            <Input type="text" name="account" id="username" placeholder="Football" onChange={(e) => this.changeValue(e)} value = {this.state.account} required/>
+                            <Input type="text" name="username" id="username" placeholder="Football" onChange={(e) => this.changeValue(e)} value = {this.state.username} disabled/>
                             {this.state.key === 'username' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
                         </FormGroup>
                     </Col>
@@ -219,9 +205,6 @@ class UpdateUser extends React.Component {
                 <FormGroup className="mb-2">
                     <Label for="role">Role</Label>
                     <Input type="select" name="role_id" id="role" value = {this.state.role_id} onChange={(e) => this.changeValue(e)}>
-                        {/* <option value="1">ADMIN</option>
-                        <option value="2">PM</option>
-                        <option value="3">USER</option> */}
                         {
                             this.state.roles.map((r) => (
                                 <option key={r.id} value={r.id}>{r.name}</option>

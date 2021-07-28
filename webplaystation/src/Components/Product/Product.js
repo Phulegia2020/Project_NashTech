@@ -22,7 +22,6 @@ class Product extends Component {
             if (response.status === 200)
             {
                 //console.log(response.data);
-                //this.setState({products: response.data});
                 this.setState({
                     pageToTal: Math.ceil(response.data.length / 3)
                 })
@@ -45,7 +44,6 @@ class Product extends Component {
             if (response.status === 200)
             {
                 //console.log(response.data);
-                // alert(`${id} is found`);
             }
         })
     }
@@ -62,8 +60,7 @@ class Product extends Component {
     }
 
     createProduct(newProduct){
-        //console.log(newProduct.price);
-        post(`/products`, {name: newProduct.name, description: newProduct.description, quantity: newProduct.quantity,
+        post(`/products`, {name: newProduct.name.trim(), description: newProduct.description.trim(), quantity: newProduct.quantity,
                         price: newProduct.price, totalrating: 0,imageurl: newProduct.imageurl, category_id: newProduct.category_id,
                         supplier_id: newProduct.supplier_id})
         .then((response) => {
@@ -72,7 +69,6 @@ class Product extends Component {
             this.setState({
                 products: [...this.state.products, response.data],
             });
-            //console.log(newProduct.price);
         });
     }
 
@@ -127,11 +123,17 @@ class Product extends Component {
         return numberFormat.format(number);
     }
 
+    componentWillUnmount() {
+        // fix Warning: Can't perform a React state update on an unmounted component
+        this.setState = (state,callback)=>{
+            return;
+        };
+    }
+
     render() {
         return (
             <div>
                 <button type="button" className="btn btn-primary" onClick={this.onToggleForm}>
-                    {/* <span className="fa fa-plus mr-5"></span> */}
                     <FontAwesomeIcon icon={faPlus} className="mr-2"/>{' '}
                     Creat New Product
                 </button>
@@ -206,7 +208,6 @@ class Product extends Component {
                 </Pagination>
 
                 <div className="container">
-                    {/* {this.state.isDisplayForm ? <Add onAdd={this.onAdd} onCloseForm={this.onCloseForm}/> : ''} */}
                     <Modal isOpen={this.state.isDisplayForm} toggle={this.onToggleForm}>
                         <ModalHeader toggle={this.onToggleForm}>Create New Product</ModalHeader>
                         <ModalBody>

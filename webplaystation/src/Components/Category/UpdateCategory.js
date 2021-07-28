@@ -29,7 +29,6 @@ class UpdateCategory extends React.Component {
             if (response.status === 200)
             {
                 //console.log(response.data);
-                // alert(`${id} is found`);
                 this.setState({
                     name: response.data.name,
                     description: response.data.description
@@ -64,13 +63,13 @@ class UpdateCategory extends React.Component {
                 }
             }
         }
-        //this.props.onUpdate(this.state);
-        put(`/categories/${this.state.id}`, {name: this.state.name, description: this.state.description})
+        put(`/categories/${this.state.id}`, {name: this.state.name.trim(), description: this.state.description.trim()})
         .then((response) => {
             if (response.status === 200)
             {
                 //console.log(response.data);
                 this.props.history.push("/admin/category");
+                window.location.reload();
             }
         })
     }
@@ -80,16 +79,20 @@ class UpdateCategory extends React.Component {
             name: '',
             description: ''
         });
-        // this.props.onCloseForm();
-        // console.log(this.state);
         this.props.history.push("/admin/category");
+    }
+
+    componentWillUnmount() {
+        // fix Warning: Can't perform a React state update on an unmounted component
+        this.setState = (state,callback)=>{
+            return;
+        };
     }
 
     render() {
         return (
             <div>
                 <Form onSubmit={(event) => this.handleUpdate(event)}>
-                {/* <h3>Create New Product</h3> */}
                     <FormGroup>
                         <Label for="name">Name</Label>
                         <Input type="text" name="name" id="name" placeholder="PS5" onChange={(e) => this.changeValue(e)} value = {this.state.name} required="required"/>
@@ -105,34 +108,6 @@ class UpdateCategory extends React.Component {
                         <Button outline color="danger" onClick={this.handleClear.bind(this)}>Cancel</Button>
                     </div>
                 </Form>
-                {/* <div className="container">
-                    <div className="row">
-                        <div className="col-md-12">
-                            <h1>Update Category</h1>
-                            <Row form>
-                                <Col md={6}>
-                                    <div className="form-group">
-                                        <label>Name</label>
-                                        <input type="text" name="name" className="form-control" onChange={(e) => this.changeValue(e)} value = {this.state.name} required/>
-                                    </div>
-                                </Col>
-                            </Row>
-                            <Row form>
-                                <Col md={6}>
-                                    <div className="form-group">
-                                        <label>Description</label>
-                                        <input type="text" name="description"  className="form-control" onChange={(e) => this.changeValue(e)} value={this.state.description} required/>
-                                    </div>
-                                </Col>
-                            </Row>
-                            
-                            <div className="mt-3">      
-                            <button type="button" className="mr-2 btn btn-primary"  onClick={this.handleUpdate.bind(this)}>Update</button>{' '}
-                            <button type="button" className="btn btn-danger"  onClick={this.handleClear.bind(this)}>Cancel</button>
-                            </div>
-                        </div>
-                    </div>
-                </div> */}
             </div>
         )
     }

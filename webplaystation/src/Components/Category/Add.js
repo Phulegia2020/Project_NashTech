@@ -57,20 +57,6 @@ export default class Add extends Component {
         }
 
         this.props.onAdd(this.state);
-
-        // if (this.state.name === "")
-        // {
-        //     alert("Empty Name");
-        // }
-        // else if (this.state.description === "")
-        // {
-        //     alert("Empty Description");
-        // }
-        // else
-        // {
-        //     this.props.onAdd(this.state);
-        // }
-        //console.log(this.state);
     }
 
     handleClear = () => {
@@ -79,14 +65,19 @@ export default class Add extends Component {
             description: ''
         });
         this.props.onCloseForm();
-        // console.log(this.state);
+    }
+
+    componentWillUnmount() {
+        // fix Warning: Can't perform a React state update on an unmounted component
+        this.setState = (state,callback)=>{
+            return;
+        };
     }
 
     render() {
         return (
             <div>
                 <Form onSubmit={(event) => this.handleCreate(event)}>
-                {/* <h3>Create New Product</h3> */}
                     <FormGroup>
                         <Label for="name">Name</Label>
                         <Input type="text" name="name" id="name" placeholder="PS5" onChange={(e) => this.changeName(e)} value = {this.state.name} required="required"/>
@@ -102,38 +93,6 @@ export default class Add extends Component {
                         <Button outline color="danger" onClick={this.handleClear.bind(this)}>Cancel</Button>
                     </div>
                 </Form>
-                {/* <form>
-                <div className="container">
-                    <div className="row">
-                    <h3>Create new category</h3>
-                        <div className="col-md-12">
-                            <Row form>
-                                <Col>
-                                    <div className="form-group">
-                                        <label>Name</label>
-                                        <input type="text" name="name" className="form-control" onChange={(e) => this.changeName(e)} value = {this.state.name} required="required"/>
-                                    </div>
-                                </Col>
-                            </Row>
-                            <Row form>
-                                <Col>
-                                    <div className="form-group">
-                                        <label>Description</label>
-                                        <input type="text" name="description"  className="form-control" onChange={(e) => this.changeDescription(e)} value={this.state.description} required="required"/>
-                                    </div>
-                                </Col>
-                            </Row>
-                            
-                            <div className="mt-3">      
-                            <button type="button" className="mr-2 btn btn-primary"  onClick={this.handleCreate.bind(this)}>
-                                Add
-                            </button>{' '}
-                            <button type="submit" className="btn btn-danger"  onClick={this.handleClear.bind(this)}>Cancel</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                </form> */}
             </div>
         )
     }

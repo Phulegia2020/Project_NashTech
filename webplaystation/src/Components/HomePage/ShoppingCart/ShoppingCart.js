@@ -17,10 +17,6 @@ class ShoppingCart extends Component {
     onCheckOut(){
         //console.log(sessionStorage.getItem('user_id'));
         const shoppingCartItems = JSON.parse(localStorage.getItem('shopping-cart') || '[]');
-        // for (let i = 0; i < shoppingCartItems.length; i++) {
-        //     console.log(shoppingCartItems[i].id);
-        //     console.log(shoppingCartItems[i].quantity);
-        // }
         post('/bills', {total: localStorage.getItem('totalCart'), user_id: sessionStorage.getItem('user_id'), billStatus_id: '3'})
         .then((response) => {
             if (response.status === 200)
@@ -47,7 +43,6 @@ class ShoppingCart extends Component {
 
     render() {
         return (
-            // <span>
                 <Modal trigger={<Button animated='vertical' inverted style={{marginRight: '0.5em'}}>
                                     {/* <Label circular color="red" empty size="mini" pointing="right" hidden/> */}
                                     <Button.Content visible>Cart</Button.Content>
@@ -71,7 +66,6 @@ class ShoppingCart extends Component {
                         <Button positive icon='checkmark' labelPosition='right' content="Checkout" onClick={this.onCheckOut}/>
                     </Modal.Actions>
                 </Modal>
-            // </span>
         );
     }
 }

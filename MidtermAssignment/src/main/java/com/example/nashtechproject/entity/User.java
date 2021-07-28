@@ -1,11 +1,11 @@
 package com.example.nashtechproject.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.annotations.ApiModelProperty;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.*;
 
@@ -24,12 +24,15 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank
     @Column(name = "name")
     private String name;
 
+    @NotBlank
     @Column(name = "gender")
     private String gender;
 
+    @NotBlank
     @Column(name = "address")
     private String address;
 
@@ -47,7 +50,7 @@ public class User {
     private String account;
 
     @Column(name = "password")
-//    @Size(min = 6)
+    @Size(min = 6)
     private String password;
 
     @Column(name = "active_status")
@@ -186,15 +189,6 @@ public class User {
     public void setBills(List<Bill> bills) {
         this.bills = bills;
     }
-
-//    public List<Rating> getRatings() {
-//        return ratings;
-//    }
-//
-//    public void setRatings(List<Rating> ratings) {
-//        this.ratings = ratings;
-//    }
-
 
     public Set<Rating> getRatings() {
         return ratings;
