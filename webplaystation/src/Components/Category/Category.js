@@ -123,16 +123,6 @@ export default class Category extends Component {
         .catch(error => console.log(error));
     }
 
-    // toastNotify = () => {
-    //     return (<Toast>
-    //         <Toast.Header>
-    //           <strong className="me-auto">Error</strong>
-    //           <small>Now</small>
-    //         </Toast.Header>
-    //         <Toast.Body>This category had products. Can not delete!</Toast.Body>
-    //       </Toast>)
-    // }
-
     componentWillUnmount() {
         // fix Warning: Can't perform a React state update on an unmounted component
         this.setState = (state,callback)=>{
@@ -143,13 +133,6 @@ export default class Category extends Component {
     render() {
         return (
             <div>
-                {/* <Toast isOpen={this.state.msgDel}>
-                    <Toast.Header>
-                    <strong className="me-auto">Error</strong>
-                    <small>Now</small>
-                    </Toast.Header>
-                    <Toast.Body>This category had products. Can not delete!</Toast.Body>
-                </Toast>  */}
                 <button type="button" className="btn btn-primary" onClick={this.onToggleForm}>
                     <FontAwesomeIcon icon={faPlus} className="mr-2"/>{' '}
                     Creat New Category
