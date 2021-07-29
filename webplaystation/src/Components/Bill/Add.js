@@ -48,6 +48,16 @@ export default class Add extends Component {
 
     handleCreate(event){
         event.preventDefault();
+        if (event.target.total.value.trim() <= 0)
+        {
+            this.setState({
+                key: 'total'
+            })
+            this.setState({
+                Error: "Total price is not less than 1!"
+            });
+            return;
+        }
 
         this.props.onAdd(this.state);
     }
@@ -75,6 +85,7 @@ export default class Add extends Component {
                 <FormGroup>
                     <Label for="total">Total</Label>
                     <Input type="number" name="total" id="total" placeholder="VND" onChange={(e) => this.changeValue(e)} value = {this.state.total} required="required"/>
+                    {this.state.key === 'total' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
                 </FormGroup>
                 
                 <FormGroup className="mb-2">
