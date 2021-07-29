@@ -40,6 +40,16 @@ class UpdateBillDetails extends Component {
 
     handleUpdate(event){
         event.preventDefault();
+        if (event.target.quantity.value.trim() <= 0)
+        {
+            this.setState({
+                key: 'quantity'
+            })
+            this.setState({
+                Error: "Quantity is not less than 1!"
+            });
+            return;
+        }
 
         put(`/billDetails/${this.state.id}`, {quantity: this.state.quantity, bill_id: this.state.bill_id, product_id: this.state.product_id})
         .then((response) => {
@@ -73,6 +83,7 @@ class UpdateBillDetails extends Component {
                 <FormGroup>
                     <Label for="quantity">Quantity</Label>
                     <Input type="number" name="quantity" id="quantity" placeholder="100" onChange={(e) => this.changeValue(e)} value = {this.state.quantity} required="required"/>
+                    {this.state.key === 'quantity' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
                 </FormGroup>
                 
                 <FormGroup className="mb-2">

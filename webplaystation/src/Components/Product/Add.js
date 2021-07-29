@@ -92,6 +92,26 @@ export default class Add extends Component {
     handleCreate(event){
         event.preventDefault();
 
+        if (event.target.quantity.value.trim() <= 0)
+        {
+            this.setState({
+                key: 'quantity'
+            })
+            this.setState({
+                Error: "Quantity is not less than 1!"
+            });
+            return;
+        }
+        if (event.target.price.value.trim() <= 0)
+        {
+            this.setState({
+                key: 'price'
+            })
+            this.setState({
+                Error: "Price is not less than 1!"
+            });
+            return;
+        }
         for (let i = 0; i < this.state.products.length; i++)
         {
             if (this.state.products[i].name === event.target.name.value.trim())
@@ -145,10 +165,12 @@ export default class Add extends Component {
                 <FormGroup>
                     <Label for="quantity">Quantity</Label>
                     <Input type="number" name="quantity" id="quantity" placeholder="1000" onChange={(e) => this.changeValue(e)} value = {this.state.quantity} required="required"/>
+                    {this.state.key === 'quantity' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
                 </FormGroup>
                 <FormGroup>
                     <Label for="price">Price</Label>
                     <Input type="number" name="price" id="price" placeholder="1.000.000 VNĐ" onChange={(e) => this.changeValue(e)} value = {this.state.price} required="required"/>
+                    {this.state.key === 'price' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
                 </FormGroup>
                 <FormGroup>
                     <Label for="image">Image</Label>

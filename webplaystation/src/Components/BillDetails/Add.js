@@ -39,6 +39,16 @@ export default class Add extends Component {
 
     handleCreate(event){
         event.preventDefault();
+        if (event.target.quantity.value.trim() <= 0)
+        {
+            this.setState({
+                key: 'quantity'
+            })
+            this.setState({
+                Error: "Quantity is not less than 1!"
+            });
+            return;
+        }
         for (let i = 0; i < this.state.billdetails.length; i++)
         {
             if (event.target.product_id.value === this.state.billdetails[i].product_id)
@@ -76,6 +86,7 @@ export default class Add extends Component {
                 <FormGroup>
                     <Label for="quantity">Quantity</Label>
                     <Input type="number" name="quantity" id="quantity" placeholder="100" onChange={(e) => this.changeValue(e)} value = {this.state.quantity} required="required"/>
+                    {this.state.key === 'quantity' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
                 </FormGroup>
                 
                 <FormGroup className="mb-2">

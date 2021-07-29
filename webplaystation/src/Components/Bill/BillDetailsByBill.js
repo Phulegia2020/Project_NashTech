@@ -78,7 +78,7 @@ class BillDetailsByBill extends Component {
             <div>
                 <button type="button" className="btn btn-primary" onClick={this.onToggleForm}>
                     <FontAwesomeIcon icon={faPlus} className="mr-2"/>{' '}
-                    Creat New Bill
+                    Creat New Bill Detail
                 </button>
                 <table id="table">
                     <thead>

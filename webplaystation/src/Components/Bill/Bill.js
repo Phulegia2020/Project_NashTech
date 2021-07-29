@@ -15,6 +15,7 @@ class Bill extends Component {
         pageNumber: 0,
         pageToTal: 0,
         users: [],
+        billCheckOut: {}
     }
 
     componentDidMount(){
@@ -22,7 +23,7 @@ class Bill extends Component {
         .then((response) => {
             if (response.status === 200)
             {
-                console.log(response.data.length);
+                //console.log(response.data.length);
                 //this.setState({products: response.data});
                 this.setState({
                     pageToTal: Math.ceil(response.data.length / 10)
@@ -68,7 +69,7 @@ class Bill extends Component {
             this.setState({bills: this.state.bills.filter(b => b.id !== id)})
             alert(response.data.message);
         })
-        .catch(error => {console.log(error)})
+        .catch(error => {alert('This Bill had Details. Can not Delete!')})
     }
 
     createBill(newBill){
@@ -140,6 +141,33 @@ class Bill extends Component {
     //     return <td>{uid.name}</td>
     // }
 
+    async handleCheckOut(event, id){
+        event.preventDefault();
+        console.log(id.toString());
+        var bid = id.toString();
+        await get(`/bills/${bid}`)
+        .then((response) => {
+            if (response.status === 200)
+            {
+                //console.log(response.data);
+                this.setState({
+                    billCheckOut: response.data
+                }, () => console.log(response.data));
+            }
+        })
+
+        //console.log('update');
+        put(`/bills/${id}`, {total: this.state.billCheckOut.total, user_id: this.state.billCheckOut.user_id, billStatus_id: '1'})
+        .then((response) => {
+            if (response.status === 200)
+            {
+            //console.log(response.data);
+                this.props.history.push("/admin/bill");
+                window.location.reload();
+            }
+        })
+    }
+
     componentWillUnmount() {
         // fix Warning: Can't perform a React state update on an unmounted component
         this.setState = (state,callback)=>{
@@ -181,7 +209,7 @@ class Bill extends Component {
                                     <td>{b.checkout_date}</td>
                                     {/* {this.handleUserID(b.user_id)} */}
                                     <td>{b.user_id}</td>
-                                    <td>{b.billStatus_id}</td>
+                                    <td>{b.billStatus_id === '1' ? 'Done' : 'Waiting CheckOut'}</td>
                                     {/* <td>{p.category_id}</td>
                                     <td>{p.supplier_id}</td> */}
                                     <td><button onClick={() => this.delBill(b.id)} className="btn btn-danger">
@@ -198,8 +226,8 @@ class Bill extends Component {
                                         </Link>
                                     </td>
                                     <td>
-                                        <Link to={`/admin/bill/${b.id}`}>
-                                            <button className="btn btn-warning">
+                                        <Link to={`/admin/bill`}>
+                                            <button className="btn btn-warning" onClick={(event) => this.handleCheckOut(event, b.id)}>
                                             <FontAwesomeIcon icon={faCheck} className="mr-2"/>{' '}
                                                 CheckOut
                                             </button>
@@ -256,4 +284,4 @@ class Bill extends Component {
     }
 }
 
-export default Bill;
+export default withRouter(Bill);

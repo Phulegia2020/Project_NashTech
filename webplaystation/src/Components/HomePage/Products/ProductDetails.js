@@ -90,7 +90,7 @@ class ProductDetails extends Component {
                             this.handleTotalRating();
                             this.handleUpdateRating(this.state.product_id, this.state.Product);
                             //alert(`User ${this.state.user_id} rated product ${this.state.product_id} is ${this.state.rate}`);
-                            //window.location.reload();
+                            window.location.reload();
                             //this.props.history.push(`/WebPlayStation/product/${this.state.product_id}`);
                         }
                     })
