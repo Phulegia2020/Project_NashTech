@@ -17,6 +17,11 @@ class ShoppingCart extends Component {
     onCheckOut(){
         //console.log(sessionStorage.getItem('user_id'));
         const shoppingCartItems = JSON.parse(localStorage.getItem('shopping-cart') || '[]');
+        if (shoppingCartItems.length == 0)
+        {
+            alert('Cart is empty. Can not check out!');
+            return;
+        }
         post('/bills', {total: localStorage.getItem('totalCart'), user_id: sessionStorage.getItem('user_id'), billStatus_id: '3'})
         .then((response) => {
             if (response.status === 200)

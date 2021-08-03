@@ -128,25 +128,25 @@ public class UserController {
         }
         else
         {
-            List<User> userList = userService.retrieveUsers();
-            for (int i = 0; i < userList.size(); i++)
-            {
-                if (userList.get(i).getId() != userId)
-                {
-                    if (userService.existUsername(userDetails.getAccount()))
-                    {
-                        throw new UserException(userDetails.getAccount());
-                    }
-                    if (userService.existEmail(userDetails.getEmail()))
-                    {
-                        throw new UserException(userDetails.getEmail());
-                    }
-                    if (userService.existPhone(userDetails.getPhone()))
-                    {
-                        throw new UserException(userDetails.getPhone());
-                    }
-                }
-            }
+//            List<User> userList = userService.retrieveUsers();
+//            for (int i = 0; i < userList.size(); i++)
+//            {
+//                if (userList.get(i).getId() != userId)
+//                {
+//                    if (userService.existUsername(userDetails.getAccount()))
+//                    {
+//                        throw new UserException(userDetails.getAccount());
+//                    }
+//                    if (userService.existEmail(userDetails.getEmail()))
+//                    {
+//                        throw new UserException(userDetails.getEmail());
+//                    }
+//                    if (userService.existPhone(userDetails.getPhone()))
+//                    {
+//                        throw new UserException(userDetails.getPhone());
+//                    }
+//                }
+//            }
             UserUpdate(user, userDetails);
             userService.updateUser(user);
         }

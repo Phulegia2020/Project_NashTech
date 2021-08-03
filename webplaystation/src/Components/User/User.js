@@ -72,7 +72,7 @@ export default class User extends Component {
             this.setState({users: this.state.users.filter(u => u.id !== id)})
             alert(response.data.message);
         })
-        .catch(error => {console.log(error)})
+        .catch(error => {alert('The user had bill. Can not delete!')})
     }
 
     createUser(newUser){

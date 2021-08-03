@@ -48,6 +48,16 @@ class SignUp extends Component {
     }
 
     handleSubmit = (event) => {
+        if (event.target.password.value.length < 6)
+		{
+			this.setState({
+				key: 'password'
+			})
+			this.setState({
+				Error: "Password is at least 6 characters!"
+			});
+			return;
+		}
         for (let i = 0; i < this.state.users.length; i++)
         {
             if (this.state.users[i].account === event.target.username.value.trim())
@@ -153,6 +163,7 @@ class SignUp extends Component {
                                     <Form.Field required>
                                         <label>Password</label>
                                         <Form.Input placeholder='123456' minLength="6" type='password' name='password' value={this.state.password} onChange={this.handleChange} required/>
+                                        {this.state.key === 'password' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
                                     </Form.Field>
                                     <Form.Field inline>
                                         <label>Email</label>

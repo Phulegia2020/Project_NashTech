@@ -3,7 +3,7 @@ package com.example.nashtechproject.payload.request;
 import javax.validation.constraints.NotBlank;
 
 public class ChangPasswordRequest {
-    @NotBlank
+
     private Long user_id;
 
     @NotBlank

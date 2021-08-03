@@ -56,7 +56,7 @@ class Product extends Component {
             this.setState({products: this.state.products.filter(p => p.id !== id)})
             alert(response.data.message);
         })
-        .catch(error => {console.log(error)})
+        .catch(error => {alert('The product was ordered. Can not delete!')})
     }
 
     createProduct(newProduct){

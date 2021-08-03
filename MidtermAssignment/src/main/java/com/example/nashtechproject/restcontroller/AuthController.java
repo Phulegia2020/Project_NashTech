@@ -3,10 +3,13 @@ package com.example.nashtechproject.restcontroller;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import com.example.nashtechproject.entity.User;
 import com.example.nashtechproject.payload.request.ChangPasswordRequest;
+import com.example.nashtechproject.security.jwt.JwtAuthTokenFilter;
 import com.example.nashtechproject.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,11 +18,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.example.nashtechproject.entity.Role;
 import com.example.nashtechproject.entity.RoleName;
@@ -82,5 +81,16 @@ public class AuthController {
     public ResponseEntity<?> changePasswordUser(@Valid @RequestBody ChangPasswordRequest changPasswordRequest)
     {
         return authService.getUserChangePassword(changPasswordRequest);
+    }
+
+    @GetMapping("/logout")
+    public ResponseEntity<?> logoutUser(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        String jwt = JwtAuthTokenFilter.parseJwt(request);
+        if (jwt != null && jwtUtils.addToBlackList(jwt)){
+            return ResponseEntity.ok(new MessageResponse("User logged out successfully!"));
+        }
+        return ResponseEntity
+                .badRequest()
+                .body(new MessageResponse("Error: Cannot add jwt token to blacklist!"));
     }
 }

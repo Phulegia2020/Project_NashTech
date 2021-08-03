@@ -18,7 +18,7 @@ class Login extends Component {
 	}
 
 	handleChange = (e, { name, value }) => {
-		if (e.target.name === 'username')
+		if (name === 'username')
         {
             this.setState({
                 [name]: value.trim()
@@ -39,7 +39,7 @@ class Login extends Component {
                 localStorage.setItem('accessToken', response.data.accessToken);
 				sessionStorage.setItem('user_id', response.data.id);
 				sessionStorage.setItem('username', response.data.username);
-                if (response.data.roles[0] === "ROLE_ADMIN")
+                if (response.data.roles[0] === "ROLE_ADMIN" || response.data.roles[0] === "ROLE_PM")
                 {
 					alert('Login Successfully!');
 					this.props.history.push("/admin");

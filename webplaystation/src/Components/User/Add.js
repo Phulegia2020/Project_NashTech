@@ -47,7 +47,7 @@ export default class Add extends Component {
 
     changeValue(e){
         //this.setState({name: e.target.value})
-        console.log(e.target.name);
+        //console.log(e.target.name);
         if (e.target.name === 'username' || e.target.name === 'phone' || e.target.name === 'email')
         {
             this.setState({
@@ -97,6 +97,16 @@ export default class Add extends Component {
                 return;
             }
         }
+        if (event.target.password.value.length < 6)
+		{
+			this.setState({
+				key: 'password'
+			})
+			this.setState({
+				Error: "Password is at least 6 characters!"
+			});
+			return;
+		}
         this.props.onAdd(this.state);
     }
 
@@ -160,7 +170,7 @@ export default class Add extends Component {
                             <FormGroup>
                                 <Label for="password">Password</Label>
                                 <Input type="password" minLength="6" name="password" id="password" placeholder="123456" onChange={(e) => this.changeValue(e)} value = {this.state.password} required/>
-                                {/* <span style={{ color: "red", fontStyle:"italic"}}>{this.state.blankError}</span> */}
+                                {this.state.key === 'password' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.blankError}</span> : '' }
                             </FormGroup>
                         </Col>
                     </Row>

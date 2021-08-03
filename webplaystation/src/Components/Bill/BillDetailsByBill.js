@@ -30,7 +30,7 @@ class BillDetailsByBill extends Component {
         del(`/billDetails/${id}`)
         .then((response) => {
             //console.log(response.data);
-            this.setState({bills: this.state.billdetails.filter(b => b.id !== id)})
+            this.setState({billdetails: this.state.billdetails.filter(b => b.id !== id)})
             alert(response.data.message);
         })
         .catch(error => {console.log(error)})

@@ -188,7 +188,7 @@ class Bill extends Component {
                             <th>ID</th>
                             <th>Total</th>
                             <th>Created Date</th>
-                            <th>CheckOut Date</th>
+                            <th>Update Date</th>
                             <th>User_ID</th>
                             <th>Status</th>
                             {/* <th>Category</th>
