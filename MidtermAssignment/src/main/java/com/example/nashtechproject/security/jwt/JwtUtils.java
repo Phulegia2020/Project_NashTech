@@ -71,7 +71,8 @@ public class JwtUtils {
 
     public boolean isInBlacklist(String jwtSecret) throws Exception {
         if (jwtBlackList.contains(jwtSecret)){
-            throw new Exception("JWT Token is in blacklist");
+            //throw new Exception("JWT Token is in blacklist");
+            return true;
         }
         return false;
     }
