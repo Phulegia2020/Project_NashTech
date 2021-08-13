@@ -7,6 +7,7 @@ import com.example.nashtechproject.entity.Product;
 import com.example.nashtechproject.exception.BillDetailsException;
 import com.example.nashtechproject.exception.BillException;
 import com.example.nashtechproject.exception.ProductException;
+import com.example.nashtechproject.payload.response.MessageResponse;
 import com.example.nashtechproject.service.BillDetailsService;
 import com.example.nashtechproject.service.BillService;
 import com.example.nashtechproject.service.ProductService;
@@ -37,13 +38,15 @@ public class BillDetailsController {
     private ModelMapper modelMapper;
 
     @GetMapping
-    public List<BillDetailsDTO> getAllBillDetails()
+    public List<BillDetails> getAllBillDetails()
     {
         List<BillDetails> billDetails = billDetailsService.retrieveBillDetails();
-        return billDetails.stream()
-                .map(this::convertToDTO)
-                .sorted(Comparator.comparing(BillDetailsDTO::getId).reversed())
+        return billDetails.stream().sorted(Comparator.comparing(BillDetails::getId).reversed())
                 .collect(Collectors.toList());
+//        return billDetails.stream()
+//                .map(this::convertToDTO)
+//                .sorted(Comparator.comparing(BillDetailsDTO::getId).reversed())
+//                .collect(Collectors.toList());
     }
 
     @GetMapping("/{billDetailsId}")
@@ -58,12 +61,11 @@ public class BillDetailsController {
     }
 
     @GetMapping("/bill/{billId}")
-    public List<BillDetailsDTO> getBillDetailsByBill(@PathVariable(name = "billId") Long billId)
+    public List<BillDetails> getBillDetailsByBill(@PathVariable(name = "billId") Long billId)
     {
         List<BillDetails> billDetails = billDetailsService.getBillDetailsByBill(billId);
         return billDetails.stream()
-                .map(this::convertToDTO)
-                .sorted(Comparator.comparing(BillDetailsDTO::getId))
+                .sorted(Comparator.comparing(BillDetails::getId))
                 .collect(Collectors.toList());
     }
 
@@ -86,6 +88,17 @@ public class BillDetailsController {
             throw new BillDetailsException(b.getId(), pro.getId());
         }
         BillDetails bill = convertToEntity(billDetails);
+        float total = b.getTotal() + bill.getQuantity()*bill.getProduct().getPrice();
+        b.setTotal(total);
+        billService.updateBill(b);
+        if (pro.getQuantity() == 0 || pro.getQuantity() < bill.getQuantity())
+        {
+            throw new BillDetailsException(pro.getQuantity());
+        }
+
+        int quatity = pro.getQuantity() - bill.getQuantity();
+        pro.setQuantity(quatity);
+        productService.updateProduct(pro);
         return convertToDTO(billDetailsService.saveBillDetails(bill));
     }
 
@@ -101,8 +114,42 @@ public class BillDetailsController {
         {
 //            billDetails.setBill(b);
 //            billDetails.setProduct(pro);
+            int oldNumber = billDetails.getQuantity();
             billDetails.setQuantity(newBillDetails.getQuantity());
             billDetailsService.updateBillDetails(billDetails);
+            Product pro = productService.getProduct(billDetails.getProduct().getId());
+            if (pro.getQuantity() == 0 || pro.getQuantity() < newBillDetails.getQuantity())
+            {
+                throw new BillDetailsException(pro.getQuantity());
+            }
+            int change = newBillDetails.getQuantity() - oldNumber;
+            if (change > 0)
+            {
+                if (pro.getQuantity() < change)
+                {
+                    throw new BillDetailsException(change);
+                }
+                int nq = pro.getQuantity() - change;
+                System.out.println(nq);
+                pro.setQuantity(nq);
+                productService.updateProduct(pro);
+            }
+            else if (change < 0)
+            {
+                int nq = pro.getQuantity() + Math.abs(change);
+                System.out.println(nq);
+                pro.setQuantity(nq);
+                productService.updateProduct(pro);
+            }
+            List<BillDetails> list = billDetailsService.getBillDetailsByBill(billDetails.getBill().getId());
+            float total = 0;
+            for (int i = 0; i < list.size(); i++)
+            {
+                total = total + list.get(i).getQuantity()*list.get(i).getProduct().getPrice();
+            }
+            Bill b = billService.getBill(billDetails.getBill().getId());
+            b.setTotal(total);
+            billService.updateBill(b);
         }
         return convertToDTO(billDetails);
     }

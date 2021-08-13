@@ -23,7 +23,7 @@ public class Supplier {
     @Column(name = "phone")
     private String phone;
 
-    @OneToMany(mappedBy = "supplier", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "supplier", fetch = FetchType.EAGER)
     @JsonIgnore
     private List<Product> products = new ArrayList<>();
 

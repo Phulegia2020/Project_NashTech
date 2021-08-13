@@ -18,6 +18,7 @@ class BillDetailsByBill extends Component {
         .then((response) => {
             if (response.status === 200)
             {
+                //console.log(response.data);
                 this.setState({
                     billdetails: response.data
                 })
@@ -66,6 +67,13 @@ class BillDetailsByBill extends Component {
         this.createBillDetail(data);
     }
 
+    formatCurrency(number) {
+        var options = {style: 'currency', currency: 'VND'};
+        var numberFormat = new Intl.NumberFormat('en-US', options);
+
+        return numberFormat.format(number);
+    }
+
     componentWillUnmount() {
         // fix Warning: Can't perform a React state update on an unmounted component
         this.setState = (state,callback)=>{
@@ -84,8 +92,11 @@ class BillDetailsByBill extends Component {
                     <thead>
                         <tr>
                             <th>ID</th>
+                            <th>Image</th>
+                            <th>Product Name</th>
                             <th>Quantity</th>
-                            <th>Product_ID</th>
+                            <th>Price</th>
+                            {/* <th>Product_ID</th> */}
                             <th></th>
                             <th></th>
                         </tr>
@@ -95,8 +106,11 @@ class BillDetailsByBill extends Component {
                             this.state.billdetails.map((b) => (
                                 <tr key={b.id}>
                                     <td>{b.id}</td>
+                                    <td><img src={`data:image/jpeg;base64,${b.product.imageurl}`} alt="" height="75px"></img></td>
+                                    <td>{b.product.name}</td>
                                     <td>{b.quantity}</td>
-                                    <td>{b.product_id}</td>
+                                    <td>{this.formatCurrency(b.product.price)}</td>
+                                    {/* <td>{b.product_id}</td> */}
                                     <td><button onClick={() => this.delBillDetail(b.id)} className="btn btn-danger">
                                         <FontAwesomeIcon icon={faTrash} className="mr-2"/>{' '}
                                         Del

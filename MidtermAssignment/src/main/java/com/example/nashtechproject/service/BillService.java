@@ -9,7 +9,7 @@ import java.util.List;
 public interface BillService {
     public List<Bill> retrieveBills();
 
-    public List<BillDTO> getBillsPage(ProductPage productPage);
+    public List<Bill> getBillsPage(ProductPage productPage);
 
     public Bill getBill(Long billId);
 

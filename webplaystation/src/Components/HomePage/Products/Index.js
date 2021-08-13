@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Header, Segment, Grid, Pagination, PaginationItem, PaginationLink } from 'semantic-ui-react';
+import { Header, Segment, Grid, Pagination, PaginationItem, PaginationLink, Advertisement, Image } from 'semantic-ui-react';
 import { get } from '../../../Utils/httpHelper';
 import MainMenu from '../MainMenu/MainMenu';
 import ProductList from './ProductList';
@@ -63,7 +63,11 @@ class Products extends Component {
         const activePage = this.state.activePage;
         return (
             <Segment style={{ padding: '2em 0em' }} vertical>
+                
                 <Grid container stackable verticalAlign='middle'>
+                <Advertisement unit='billboard' style={{marginLeft:'5em'}}>
+                    <Image src="https://game.haloshop.vn/image/cache/catalog/banners/game/categories/ps5-tang-mo-hinh-categories-1280x280.jpg" wrapped/>
+                </Advertisement>
                     <Grid.Row>
                         <Grid.Column textAlign='center'>
                             <Header as='h3' style={{ fontSize: '2em' }}>Top Products</Header>

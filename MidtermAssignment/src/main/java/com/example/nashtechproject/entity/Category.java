@@ -22,7 +22,7 @@ public class Category {
     private String description;
 
     //@OneToMany(mappedBy = "category", cascade = CascadeType.ALL,fetch = FetchType.EAGER)
-    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "category", fetch = FetchType.EAGER)
     @JsonIgnore
     private List<Product> products = new ArrayList<>();
 

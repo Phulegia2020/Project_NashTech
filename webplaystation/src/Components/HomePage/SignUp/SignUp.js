@@ -132,9 +132,12 @@ class SignUp extends Component {
         return (
             <div>
                 <Segment style={{ padding: '8em 0em' }} vertical>
+                    
                     <Grid container stackable verticalAlign='middle'>
+                        
                         <Grid.Row>
                             <Grid.Column width={8}>
+                                <h2>Register</h2>
                                 <Form onSubmit={(event) => this.handleSubmit(event)}>
                                     <Form.Field >
                                         <label>Name</label>

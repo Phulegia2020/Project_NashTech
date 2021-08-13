@@ -10,4 +10,9 @@ public class BillDetailsException extends RuntimeException{
     {
         super("Bill id = " + bill_id + " includes Product id = " + product_id + " is existed!");
     }
+
+    public BillDetailsException(int quantity)
+    {
+        super("This product has not enough " + quantity + " one");
+    }
 }

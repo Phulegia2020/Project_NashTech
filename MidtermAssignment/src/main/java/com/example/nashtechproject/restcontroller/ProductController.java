@@ -4,6 +4,7 @@ import com.example.nashtechproject.dto.ProductDTO;
 import com.example.nashtechproject.dto.UserDTO;
 import com.example.nashtechproject.entity.Category;
 import com.example.nashtechproject.entity.Product;
+import com.example.nashtechproject.entity.Rating;
 import com.example.nashtechproject.entity.Supplier;
 import com.example.nashtechproject.exception.CategoryException;
 import com.example.nashtechproject.exception.ProductException;
@@ -12,6 +13,7 @@ import com.example.nashtechproject.page.ProductPage;
 import com.example.nashtechproject.page.UserPage;
 import com.example.nashtechproject.service.CategoryService;
 import com.example.nashtechproject.service.ProductService;
+import com.example.nashtechproject.service.RatingPointService;
 import com.example.nashtechproject.service.SupplierService;
 import io.swagger.annotations.*;
 import org.modelmapper.ModelMapper;
@@ -43,6 +45,9 @@ public class ProductController {
     private SupplierService supplierService;
 
     @Autowired
+    private RatingPointService ratingPointService;
+
+    @Autowired
     private ModelMapper modelMapper;
 
     @GetMapping
@@ -62,6 +67,7 @@ public class ProductController {
     {
         List<ProductDTO> prosDTO = new ArrayList<>();
         List<Product> products = productService.retrieveProducts();
+        ratingNow(products);
         for (int i = 0; i < products.size(); i++) {
             ProductDTO p = convertToDTO(products.get(i));
             prosDTO.add(p);
@@ -74,14 +80,15 @@ public class ProductController {
             @ApiResponse(code = 400, message = "Bad request"),
             @ApiResponse(code = 500, message = "Internal server error") })
     @GetMapping("/{productId}")
-    public ProductDTO findProduct(@PathVariable Long productId)
+    public Product findProduct(@PathVariable Long productId)
     {
         Product pro = productService.getProduct(productId);
         if (pro == null)
         {
             throw new ProductException(productId);
         }
-        return convertToDTO(productService.getProduct(productId));
+        //return convertToDTO(productService.getProduct(productId));
+        return pro;
     }
 
     @GetMapping("/search")
@@ -252,5 +259,20 @@ public class ProductController {
         product.setImageurl(productDetails.getImageurl());
         product.setTotalrating(productDetails.getTotalrating());
         product.setUpdateddate(LocalDateTime.now());
+    }
+
+    private void ratingNow(List<Product> products)
+    {
+        for (int i = 0; i < products.size(); i++) {
+            Product pro = productService.getProduct(products.get(i).getId());
+            List<Rating> ratings = ratingPointService.getRatingByProduct(pro.getId());
+            float total = 0;
+            for (int j = 0; j < ratings.size(); j++) {
+                total = total + ratings.get(j).getRatingPoint();
+            }
+            total = Math.round(total / ratings.size());
+            pro.setTotalrating(total);
+            productService.updateProduct(pro);
+        }
     }
 }

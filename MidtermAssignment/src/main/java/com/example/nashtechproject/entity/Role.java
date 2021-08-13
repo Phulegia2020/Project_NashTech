@@ -22,7 +22,7 @@ public class Role {
     @Column(name = "description", length = 60)
     private RoleName name;
 
-	@OneToMany(mappedBy = "role", fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "role", fetch = FetchType.EAGER)
 	@JsonIgnore
 	private List<User> users = new ArrayList<>();
 

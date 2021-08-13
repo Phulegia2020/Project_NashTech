@@ -41,21 +41,21 @@ public class BillServiceImpl implements BillService {
         return bills;
     }
 
-    public List<BillDTO> getBillsPage(ProductPage productPage)
+    public List<Bill> getBillsPage(ProductPage productPage)
     {
         Sort sort = Sort.by(Sort.Direction.DESC, productPage.getSortBy());
         Pageable pageable = PageRequest.of(productPage.getPageNumber(), productPage.getPageSize(), sort);
         List<Bill> bills = billRepository.findAll(pageable).getContent();
-        List<BillDTO> billDTOS = new ArrayList<>();
-        bills.forEach(b -> {
-            BillDTO billDTO = modelMapper.map(b, BillDTO.class);
-            String user_id = String.valueOf(b.getUser().getId());
-            String billstatus_id = String.valueOf(b.getBillStatus().getId());
-            billDTO.setUser_id(user_id);
-            billDTO.setBillStatus_id(billstatus_id);
-            billDTOS.add(billDTO);
-        });
-        return billDTOS;
+//        List<BillDTO> billDTOS = new ArrayList<>();
+//        bills.forEach(b -> {
+//            BillDTO billDTO = modelMapper.map(b, BillDTO.class);
+//            String user_id = String.valueOf(b.getUser().getId());
+//            String billstatus_id = String.valueOf(b.getBillStatus().getId());
+//            billDTO.setUser_id(user_id);
+//            billDTO.setBillStatus_id(billstatus_id);
+//            billDTOS.add(billDTO);
+//        });
+        return bills;
     }
 
     public Bill getBill(Long billId)

@@ -10,7 +10,7 @@ import javax.validation.constraints.Size;
 import java.util.*;
 
 @Entity
-@Table(name = "user", schema = "public", uniqueConstraints = {
+@Table(name = "employee", schema = "public", uniqueConstraints = {
         @UniqueConstraint(columnNames = {
                 "account"
         }),
@@ -56,15 +56,15 @@ public class User {
     @Column(name = "active_status")
     private String active_status;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id")
     private Role role;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     @JsonIgnore
     private List<Bill> bills = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonIgnore
     private Set<Rating> ratings;
 

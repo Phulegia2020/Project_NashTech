@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Table, Button, Header} from 'semantic-ui-react';
+import {Table, Button, Header, Image} from 'semantic-ui-react';
 
 class ShoppingCartDetails extends Component {
     constructor(props) {
@@ -75,6 +75,7 @@ class ShoppingCartDetails extends Component {
                     <Table.Header>
                         <Table.Row>
                             <Table.HeaderCell>ID</Table.HeaderCell>
+                            <Table.HeaderCell>Product</Table.HeaderCell>
                             <Table.HeaderCell>Name</Table.HeaderCell>
                             <Table.HeaderCell>Price</Table.HeaderCell>
                             <Table.HeaderCell>Quantity</Table.HeaderCell>
@@ -89,6 +90,7 @@ class ShoppingCartDetails extends Component {
                             this.state.ShoppingCartItems.map((item, index) =>
                                 <Table.Row key={item.id}>
                                     <Table.Cell textAlign="right">{index + 1}</Table.Cell>
+                                    <Table.Cell textAlign="right"><Image style={{height: '75px'}} src={`data:image/jpeg;base64,${item.url}`}/></Table.Cell>
                                     <Table.Cell textAlign="left">{item.name}</Table.Cell>
                                     <Table.Cell textAlign="right">{this.formatCurrency(item.price)}</Table.Cell>
                                     <Table.Cell textAlign="right">

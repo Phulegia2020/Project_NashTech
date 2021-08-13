@@ -84,12 +84,13 @@ class Login extends Component {
 					</Form>
 				</Grid.Column>
 
+				
 				<Grid.Column verticalAlign='middle'>
 					<Button as={Link} to="/WebPlayStation/signup" content='Sign up' icon='signup' size='big' />
 				</Grid.Column>
 				</Grid>
 
-				<Divider vertical>Or</Divider>
+				<Divider vertical>If you do not have an acount. Register?</Divider>
 			</Segment>
 		);
 	}

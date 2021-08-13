@@ -9,7 +9,8 @@ class ButtonAddToCart extends Component {
             id: product.id,
             name: product.name,
             price: product.price,
-            quantity: 1
+            quantity: 1,
+            url: product.imageurl
         };
 
         let isExist = false;

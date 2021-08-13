@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Card, Icon, Image, Segment, Grid, Header, Rating} from 'semantic-ui-react'
+import {Card, Icon, Image, Segment, Grid, Header, Rating, Divider, Table, Message} from 'semantic-ui-react'
 import ButtonAddToCart from "./ButtonAddToCart";
 import { get, post, put } from '../../../Utils/httpHelper';
 import { withRouter } from "react-router";
@@ -17,6 +17,7 @@ class ProductDetails extends Component {
             totalrating: 0
         };
         this.onRating = this.onRating.bind(this);
+        this.formatDate = this.formatDate.bind(this);
     }
 
     componentDidMount() {
@@ -29,7 +30,7 @@ class ProductDetails extends Component {
                 this.setState({
                     Product: response.data
                 });
-                //console.log(this.state.Product);
+                console.log(response.data);
             }
         })
 
@@ -54,6 +55,13 @@ class ProductDetails extends Component {
         var numberFormat = new Intl.NumberFormat('en-US', options);
 
         return numberFormat.format(number);
+    }
+
+    formatDate = (date) => {
+        let d = new Date(date);
+        let res = d.getDate() + "-"+ parseInt(d.getMonth()+1) +"-"+d.getFullYear();
+
+        return res;
     }
 
     onCheckRated(user_id)
@@ -139,6 +147,7 @@ class ProductDetails extends Component {
     render() {
         const product = this.state.Product;
         return (
+            <div>
             <Segment style={{padding: '2em 0em', minHeight: 500}} vertical>
                 <Grid container stackable verticalAlign='middle'>
                     <Grid.Row>
@@ -149,16 +158,75 @@ class ProductDetails extends Component {
                             <Header as="h1">{product.name}</Header>
                             <p style={{ fontSize: '1.33em' }}><b>Desciption: </b>{product.description}</p>
                             <p style={{ fontSize: '1.33em' }}><b>Price: </b>{this.formatCurrency(product.price)}</p>
-                            <p style={{ fontSize: '1.33em' }}><b>Rating: </b><Rating icon='star'  maxRating={5} onRate={this.onRating} name="rate" rating={product.totalrating}/></p>
-                            
+                            <p style={{ fontSize: '1.33em' }}><b>Rating: </b><Rating icon='star'  maxRating={5} onRate={this.onRating} name="rate" rating={product.totalrating} disabled/></p>
+                            <Message info>
+                                <Message.Header>Contact to Buy Pruduct: (028) 38.295.258</Message.Header>
+                                <p>Please check the number of product before going to store!</p>
+                            </Message>
                             <Header as="h4">
                                 <ButtonAddToCart product={product}/>
                             </Header>
                         </Grid.Column>
                     </Grid.Row>
-                </Grid>
+                    <Grid.Row>
+                        <Divider horizontal >
+                            <Header as='h4'>
+                                <Icon name='tag' />
+                                Techonology Specifications
+                            </Header>
+                        </Divider>
 
+                        {/* <p>
+                        Doggie treats are good for all times of the year. Proven to be eaten by
+                        99.9% of all dogs worldwide.
+                        </p>
+
+                        <Divider horizontal>
+                        <Header as='h4'>
+                            <Icon name='bar chart' />
+                            Specifications
+                        </Header>
+                        </Divider> */}
+
+                        <Table definition >
+                            <Table.Body>
+                                <Table.Row>
+                                    <Table.Cell width={3}>Manufacturer</Table.Cell>
+                                    <Table.Cell>{this.state.Product.supplier?.name}</Table.Cell>
+                                </Table.Row>
+                                <Table.Row>
+                                    <Table.Cell>Type</Table.Cell>
+                                    <Table.Cell>{product.category?.description}</Table.Cell>
+                                </Table.Row>
+                                <Table.Row>
+                                    <Table.Cell>Time Manufacturing</Table.Cell>
+                                    <Table.Cell>{this.formatDate(product.createddate)}</Table.Cell>
+                                </Table.Row>
+                                <Table.Row>
+                                    <Table.Cell>The remaining amount</Table.Cell>
+                                    <Table.Cell>{product.quantity}</Table.Cell>
+                                </Table.Row>
+                            </Table.Body>
+                        </Table>
+                    </Grid.Row>
+
+                    <Grid.Row>
+                        <Divider horizontal >
+                                <Header as='h4'>
+                                    <Icon name='star' />
+                                    YOUR REVIEW
+                                </Header>
+                        </Divider>
+                        <Grid.Column width={12} style={{marginLeft: '36em'}}>
+                            <Rating icon='star'  maxRating={5} onRate={this.onRating} name="rate" rating={product.totalrating} size="huge"/>
+                        </Grid.Column>
+                    </Grid.Row>
+                </Grid>
+                
+                
             </Segment>
+            
+            </div>
         );
     }
 }

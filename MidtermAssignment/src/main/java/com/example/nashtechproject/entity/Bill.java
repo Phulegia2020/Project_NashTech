@@ -18,6 +18,9 @@ public class Bill {
     @Column(name = "total")
     private float total;
 
+    @Column(name = "customer_id")
+    private Long cus_id;
+
     @JsonFormat(pattern="dd/MM/yyyy")
     @Column(name = "createddate")
     private LocalDateTime createddate;
@@ -26,15 +29,15 @@ public class Bill {
     @Column(name = "checkout_date")
     private LocalDateTime checkout_date;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "employee_id")
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "billstatus_id")
     private BillStatus billStatus;
 
-    @OneToMany(mappedBy = "bill", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "bill", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JsonIgnore
     private List<BillDetails> products = new ArrayList<>();
 
@@ -84,5 +87,13 @@ public class Bill {
 
     public void setBillStatus(BillStatus billStatus) {
         this.billStatus = billStatus;
+    }
+
+    public Long getCus_id() {
+        return cus_id;
+    }
+
+    public void setCus_id(Long cus_id) {
+        this.cus_id = cus_id;
     }
 }

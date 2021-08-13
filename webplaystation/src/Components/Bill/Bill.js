@@ -73,7 +73,8 @@ class Bill extends Component {
     }
 
     createBill(newBill){
-        post(`/bills`, {total: newBill.total, user_id: newBill.user_id, billStatus_id: newBill.billStatus_id})
+        // newBill.total
+        post(`/bills`, {total: 0, user_id: newBill.user_id, billStatus_id: newBill.billStatus_id})
         .then((response) => {
             //console.log(response.data);
             window.location.reload();

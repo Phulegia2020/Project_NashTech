@@ -46,7 +46,9 @@ class App extends React.Component{
                   <Route exact path="/WebPlayStation/login">
                       <MainMenu/>
                       <Login/>
-                      <Footer/>
+                      <div className="fixed-bottom">
+                        <Footer/>
+                      </div>
                   </Route>
                   <Route exact path="/WebPlayStation/signup">
                       <MainMenu/>

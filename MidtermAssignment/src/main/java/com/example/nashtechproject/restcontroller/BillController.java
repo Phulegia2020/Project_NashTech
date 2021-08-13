@@ -50,13 +50,16 @@ public class BillController {
     @ApiResponses(value = { @ApiResponse(code = 200, message = "Success"),
             @ApiResponse(code = 400, message = "Bad request"),
             @ApiResponse(code = 500, message = "Internal server error") })
-    public List<BillDTO> getAllBills()
+    public List<Bill> getAllBills()
     {
         List<Bill> bills = billService.retrieveBills();
         return bills.stream()
-                .map(this::convertToDTO)
-                .sorted(Comparator.comparing(BillDTO::getId).reversed())
+                .sorted(Comparator.comparing(Bill::getId).reversed())
                 .collect(Collectors.toList());
+//        return bills.stream()
+//                .map(this::convertToDTO)
+//                .sorted(Comparator.comparing(BillDTO::getId).reversed())
+//                .collect(Collectors.toList());
     }
 
     @GetMapping("/page")
@@ -64,7 +67,7 @@ public class BillController {
     @ApiResponses(value = { @ApiResponse(code = 200, message = "Success"),
             @ApiResponse(code = 400, message = "Bad request"),
             @ApiResponse(code = 500, message = "Internal server error") })
-    public ResponseEntity<List<BillDTO>> getBillsPages(ProductPage productPage)
+    public ResponseEntity<List<Bill>> getBillsPages(ProductPage productPage)
     {
         return new ResponseEntity<>(billService.getBillsPage(productPage), HttpStatus.OK);
     }
@@ -173,8 +176,8 @@ public class BillController {
         Bill bill = modelMapper.map(b, Bill.class);
         User u = userService.getUser(Long.valueOf(b.getUser_id()));
         bill.setUser(u);
-//        BillStatus billStatus = billStatusService.getBillStatus(Long.valueOf(b.getBillStatus_id()));
-        BillStatus billStatus = billStatusService.getBillStatus(3L);
+        BillStatus billStatus = billStatusService.getBillStatus(Long.valueOf(b.getBillStatus_id()));
+        //BillStatus billStatus = billStatusService.getBillStatus(3L);
         bill.setBillStatus(billStatus);
         return bill;
     }
