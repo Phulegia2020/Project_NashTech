@@ -40,11 +40,6 @@ class App extends React.Component{
                       <Products/>
                       <Footer/>
                   </Route>
-                  {/* <Route exact path="/WebPlayStation/search/:search">
-                      <MainMenu/>
-                      <Products/>
-                      <Footer/>
-                  </Route> */}
                   <Route exact path="/WebPlayStation/about">
                       <MainMenu/>
                       <About/>
@@ -89,9 +84,6 @@ class App extends React.Component{
                   <Route exact path="/WebPlayStation/order">
                       <MainMenu/>
                       <Order/>
-                      {/* <div className="fixed-bottom">
-                        <Footer/>
-                      </div> */}
                   </Route>
                   <Router path="/admin">
                     <div className="AppSideBar wrapper">
