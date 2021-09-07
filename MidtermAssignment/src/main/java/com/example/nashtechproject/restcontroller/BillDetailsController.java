@@ -13,6 +13,7 @@ import com.example.nashtechproject.service.BillService;
 import com.example.nashtechproject.service.ProductService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -43,10 +44,6 @@ public class BillDetailsController {
         List<BillDetails> billDetails = billDetailsService.retrieveBillDetails();
         return billDetails.stream().sorted(Comparator.comparing(BillDetails::getId).reversed())
                 .collect(Collectors.toList());
-//        return billDetails.stream()
-//                .map(this::convertToDTO)
-//                .sorted(Comparator.comparing(BillDetailsDTO::getId).reversed())
-//                .collect(Collectors.toList());
     }
 
     @GetMapping("/{billDetailsId}")
@@ -70,7 +67,7 @@ public class BillDetailsController {
     }
 
     @PostMapping()
-    public BillDetailsDTO saveBillDetails(@RequestBody BillDetailsDTO billDetails)
+    public BillDetails saveBillDetails(@RequestBody BillDetailsDTO billDetails)
     {
         Bill b = billService.getBill(Long.valueOf(billDetails.getBill_id()));
         if (b == null)
@@ -82,7 +79,6 @@ public class BillDetailsController {
         {
             throw new ProductException(pro.getId());
         }
-        //checkBillAndProduct(b, pro);
         if (billDetailsService.getByBillAndProduct(b.getId(), pro.getId()) != null)
         {
             throw new BillDetailsException(b.getId(), pro.getId());
@@ -96,14 +92,14 @@ public class BillDetailsController {
             throw new BillDetailsException(pro.getQuantity());
         }
 
-        int quatity = pro.getQuantity() - bill.getQuantity();
-        pro.setQuantity(quatity);
+        int quantity = pro.getQuantity() - bill.getQuantity();
+        pro.setQuantity(quantity);
         productService.updateProduct(pro);
-        return convertToDTO(billDetailsService.saveBillDetails(bill));
+        return billDetailsService.saveBillDetails(bill);
     }
 
     @PutMapping("/{billDetailsId}")
-    public BillDetailsDTO updateBillDetails(@PathVariable(name = "billDetailsId") Long billDetailsId, @Valid @RequestBody BillDetailsDTO newBillDetails)
+    public BillDetails updateBillDetails(@PathVariable(name = "billDetailsId") Long billDetailsId, @Valid @RequestBody BillDetailsDTO newBillDetails)
     {
         BillDetails billDetails = billDetailsService.getBillDetails(billDetailsId);
         if (billDetails == null)
@@ -112,35 +108,49 @@ public class BillDetailsController {
         }
         else
         {
-//            billDetails.setBill(b);
-//            billDetails.setProduct(pro);
-            int oldNumber = billDetails.getQuantity();
+            if (billDetails.getProduct().getId() != Long.valueOf(newBillDetails.getProduct_id()))
+            {
+                Product pro = productService.getProduct(billDetails.getProduct().getId());
+                pro.setQuantity(pro.getQuantity() + billDetails.getQuantity());
+                productService.updateProduct(pro);
+                Product pro1 = productService.getProduct(Long.valueOf(newBillDetails.getProduct_id()));
+                if (pro1.getQuantity() == 0 || pro1.getQuantity() < newBillDetails.getQuantity())
+                {
+                    throw new BillDetailsException(pro1.getQuantity());
+                }
+                pro1.setQuantity(pro1.getQuantity() - newBillDetails.getQuantity());
+                productService.updateProduct(pro1);
+                billDetails.setProduct(pro1);
+            }
+            else
+            {
+                int oldNumber = billDetails.getQuantity();
+
+                Product pro = productService.getProduct(billDetails.getProduct().getId());
+                if (pro.getQuantity() == 0 || pro.getQuantity() < newBillDetails.getQuantity())
+                {
+                    throw new BillDetailsException(pro.getQuantity());
+                }
+                int change = newBillDetails.getQuantity() - oldNumber;
+                if (change > 0)
+                {
+                    if (pro.getQuantity() < change)
+                    {
+                        throw new BillDetailsException(change);
+                    }
+                    int nq = pro.getQuantity() - change;
+                    pro.setQuantity(nq);
+                    productService.updateProduct(pro);
+                }
+                else if (change < 0)
+                {
+                    int nq = pro.getQuantity() + Math.abs(change);
+                    pro.setQuantity(nq);
+                    productService.updateProduct(pro);
+                }
+            }
             billDetails.setQuantity(newBillDetails.getQuantity());
             billDetailsService.updateBillDetails(billDetails);
-            Product pro = productService.getProduct(billDetails.getProduct().getId());
-            if (pro.getQuantity() == 0 || pro.getQuantity() < newBillDetails.getQuantity())
-            {
-                throw new BillDetailsException(pro.getQuantity());
-            }
-            int change = newBillDetails.getQuantity() - oldNumber;
-            if (change > 0)
-            {
-                if (pro.getQuantity() < change)
-                {
-                    throw new BillDetailsException(change);
-                }
-                int nq = pro.getQuantity() - change;
-                System.out.println(nq);
-                pro.setQuantity(nq);
-                productService.updateProduct(pro);
-            }
-            else if (change < 0)
-            {
-                int nq = pro.getQuantity() + Math.abs(change);
-                System.out.println(nq);
-                pro.setQuantity(nq);
-                productService.updateProduct(pro);
-            }
             List<BillDetails> list = billDetailsService.getBillDetailsByBill(billDetails.getBill().getId());
             float total = 0;
             for (int i = 0; i < list.size(); i++)
@@ -151,21 +161,27 @@ public class BillDetailsController {
             b.setTotal(total);
             billService.updateBill(b);
         }
-        return convertToDTO(billDetails);
+        return billDetails;
     }
 
     @DeleteMapping("/{billDetailsId}")
-    public HashMap<String, String> deleteBillDetails(@PathVariable(name = "billDetailsId") Long billDetailsId)
+    public ResponseEntity<?> deleteBillDetails(@PathVariable(name = "billDetailsId") Long billDetailsId)
     {
         BillDetails billDetails = billDetailsService.getBillDetails(billDetailsId);
         if (billDetails == null)
         {
             throw new BillDetailsException(billDetailsId);
         }
+        Bill b = billService.getBill(billDetails.getBill().getId());
+        Product p = productService.getProduct(billDetails.getProduct().getId());
+        float total = b.getTotal() - billDetails.getQuantity()*p.getPrice();
+        int quantity = p.getQuantity() + billDetails.getQuantity();
+        p.setQuantity(quantity);
+        productService.updateProduct(p);
+        b.setTotal(total);
+        billService.updateBill(b);
         billDetailsService.deleteBillDetails(billDetailsId);
-        HashMap<String, String> map = new HashMap<>();
-        map.put("message", "Delete Succesfully!");
-        return map;
+        return ResponseEntity.ok(new MessageResponse("Delete Successfully"));
     }
 
     private BillDetailsDTO convertToDTO(BillDetails billDetails)

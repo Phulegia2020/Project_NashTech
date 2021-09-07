@@ -12,6 +12,8 @@ export default class Category extends Component {
     state = {
         categories: [],
         isDisplayForm: false,
+        isDisplayFormDel: false,
+        iddel: '',
         pageNumber: 0,
         pageToTal: 0,
         msgDel: false
@@ -23,13 +25,13 @@ export default class Category extends Component {
             if (response.status === 200)
             {
                 this.setState({
-                    pageToTal: Math.ceil(response.data.length / 4)
+                    pageToTal: Math.ceil(response.data.length / 5)
                 })
             }
         })
         .catch(error => {console.log(error)})
 
-        get(`/categories/page?pageNumber=0&pageSize=4&sortBy=id`)
+        get(`/categories/page?pageNumber=0&pageSize=5&sortBy=id`)
         .then((response) => {
             this.setState({
                 categories: response.data
@@ -43,27 +45,24 @@ export default class Category extends Component {
         .then((response) => {
             if (response.status === 200)
             {
-                //console.log(response.data);
             }
         })
     }
 
-    delCategory(id)
+    delCategory(e, id)
     {
+        e.preventDefault();
         del(`/categories/${id}`)
         .then((response) => {
             if (response.status === 200)
             {
-                this.setState({categories: this.state.categories.filter(cate => cate.id !== id)})
-                alert(response.data.message);
+                this.setState({categories: this.state.categories.filter(cate => cate.id !== id), isDisplayFormDel: false})
             }
             else{
                 this.setState({
                     msgDel: true
                 })
             }
-            //console.log(response.data);
-            
         })
         .catch(error => {alert('This category had products. Can not delete!')})
     }
@@ -71,7 +70,6 @@ export default class Category extends Component {
     createCategory(newCategory){
         post(`/categories`, {name: newCategory.name.trim(), description: newCategory.description.trim()})
         .then((response) => {
-            //console.log(response.data);
             window.location.reload();
             this.setState({
                 categories: [...this.state.categories, response.data],
@@ -96,6 +94,21 @@ export default class Category extends Component {
         });
     }
 
+    onToggleFormDel = (e, id) => {
+        e.preventDefault()
+        this.setState({
+            isDisplayFormDel: !this.state.isDisplayFormDel,
+            iddel: id
+        });
+    }
+
+    onCloseFormDel = (e) => {
+        e.preventDefault()
+        this.setState({
+            isDisplayFormDel: false,
+        });
+    }
+
     onPage(event, pageNumber){
         event.preventDefault();
         this.setState({
@@ -114,13 +127,20 @@ export default class Category extends Component {
             }, () => console.log(this.state.pageNumber));
         }
         
-        get(`/categories/page?pageNumber=${pageNumber}&pageSize=4&sortBy=id`)
+        get(`/categories/page?pageNumber=${pageNumber}&pageSize=5&sortBy=id`)
         .then((response) => {
             this.setState({
                 categories: response.data,
             });
         })
         .catch(error => console.log(error));
+    }
+
+    handleDelete(id){
+        this.setState({
+            isDisplayFormDel: !this.state.isDisplayFormDel,
+            iddel: id
+        })
     }
 
     componentWillUnmount() {
@@ -133,6 +153,25 @@ export default class Category extends Component {
     render() {
         return (
             <div>
+                <Modal
+                    isOpen={this.state.isDisplayFormDel}
+                    aria-labelledby="contained-modal-title-vcenter"
+                    centered
+                    toggle={this.onToggleFormDel}
+                    >
+                    <ModalHeader>
+                        Delete
+                    </ModalHeader>
+                    <ModalBody>
+                        <p>
+                        Are you sure?
+                        </p>
+                    </ModalBody>
+                    <ModalFooter>
+                        <Button onClick={(e) => this.delCategory(e, this.state.iddel)} className="btn-danger">Delete</Button>
+                        <Button onClick={(e) => this.onCloseFormDel(e)}>Close</Button>
+                    </ModalFooter>
+                </Modal>
                 <button type="button" className="btn btn-primary" onClick={this.onToggleForm}>
                     <FontAwesomeIcon icon={faPlus} className="mr-2"/>{' '}
                     Creat New Category
@@ -140,11 +179,11 @@ export default class Category extends Component {
                 <table id="table">
                     <thead>
                         <tr>
-                            <th>ID</th>
-                            <th>Name</th>
-                            <th>Description</th>
-                            <th></th>
-                            <th></th>
+                            <th><b>ID</b></th>
+                            <th><b>Name</b></th>
+                            <th><b>Description</b></th>
+                            <th>Update</th>
+                            <th>Delete</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -154,18 +193,18 @@ export default class Category extends Component {
                                     <td>{cate.id}</td>
                                     <td>{cate.name}</td>
                                     <td>{cate.description}</td>
-                                    <td><button className="btn btn-danger" onClick={() => this.delCategory(cate.id)}>
-                                        <FontAwesomeIcon icon={faTrash} className="mr-2"/>{' '}
-                                        Del
-                                        </button>
-                                    </td>
                                     <td>
                                         <Link to={`/admin/category/update/${cate.id}`}>
                                             <button className="btn btn-success">
                                             <FontAwesomeIcon icon={faEdit} className="mr-2"/>{' '}
-                                                Update
+                                                
                                             </button>
                                         </Link>
+                                    </td>
+                                    <td><button className="btn btn-danger" onClick={(e) => this.onToggleFormDel(e, cate.id)}>
+                                        <FontAwesomeIcon icon={faTrash} className="mr-2"/>{' '}
+                                        
+                                        </button>
                                     </td>
                                 </tr>
                             ))

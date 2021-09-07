@@ -1,7 +1,7 @@
 package com.example.nashtechproject.service.impl;
 
-import com.example.nashtechproject.dto.UserDTO;
 import com.example.nashtechproject.entity.User;
+import com.example.nashtechproject.dto.UserDTO;
 import com.example.nashtechproject.page.UserPage;
 import com.example.nashtechproject.repository.UserRepository;
 import com.example.nashtechproject.service.UserService;
@@ -20,9 +20,6 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private ModelMapper modelMapper;
-
     public void setUserRepository(UserRepository userRepository)
     {
         this.userRepository = userRepository;
@@ -31,6 +28,24 @@ public class UserServiceImpl implements UserService {
     public List<User> retrieveUsers()
     {
         List<User> users = userRepository.findAllByOrderByIdAsc();
+        return users;
+    }
+
+    public List<User> getUsersActive()
+    {
+        List<User> users = userRepository.findByActivestatus("Active");
+        return users;
+    }
+
+    public List<User> getUsers()
+    {
+        List<User> users = userRepository.findAllByRoleIdAndActivestatus(3L, "Active");
+        return users;
+    }
+
+    public List<User> getEmployee()
+    {
+        List<User> users = userRepository.findAllByRoleIdNotAndActivestatus(3L, "Active");
         return users;
     }
 
@@ -46,19 +61,13 @@ public class UserServiceImpl implements UserService {
         return us;
     }
 
-    public List<UserDTO> getUsersPage(UserPage userPage)
+    public List<User> getUsersPage(UserPage userPage)
     {
         Sort sort = Sort.by(userPage.getSortDirection(), userPage.getSortBy());
         Pageable pageable = PageRequest.of(userPage.getPageNumber(), userPage.getPageSize(), sort);
-        List<User> list = userRepository.findAll(pageable).getContent();
-        List<UserDTO> usersDTO = new ArrayList<>();
-        list.forEach(u -> {
-            UserDTO udto = modelMapper.map(u, UserDTO.class);
-            String role_id = String.valueOf(u.getRole().getId());
-            udto.setRole_id(role_id);
-            usersDTO.add(udto);
-        });
-        return usersDTO;
+        Page<User> page = userRepository.findByActivestatus("Active", pageable);
+        List<User> list = page.getContent();
+        return list;
     }
 
     public boolean existUsername(String username)
@@ -97,8 +106,6 @@ public class UserServiceImpl implements UserService {
         User us = userRepository.findById(userId).get();
 
         userRepository.delete(us);
-
-        //return us;
     }
 
     @Override

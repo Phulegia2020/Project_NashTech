@@ -1,13 +1,18 @@
 package com.example.nashtechproject.restcontroller;
 
 import com.example.nashtechproject.dto.BillDTO;
+import com.example.nashtechproject.dto.MailRequestDTO;
 import com.example.nashtechproject.entity.Bill;
+import com.example.nashtechproject.entity.BillDetails;
 import com.example.nashtechproject.entity.BillStatus;
 import com.example.nashtechproject.entity.User;
 import com.example.nashtechproject.exception.BillException;
 import com.example.nashtechproject.exception.BillStatusException;
+import com.example.nashtechproject.exception.InvalidDataException;
 import com.example.nashtechproject.exception.UserException;
 import com.example.nashtechproject.page.ProductPage;
+import com.example.nashtechproject.payload.response.MessageResponse;
+import com.example.nashtechproject.service.BillDetailsService;
 import com.example.nashtechproject.service.BillService;
 import com.example.nashtechproject.service.BillStatusService;
 import com.example.nashtechproject.service.UserService;
@@ -22,6 +27,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -35,6 +41,9 @@ import java.util.stream.Collectors;
 public class BillController {
     @Autowired
     private BillService billService;
+
+    @Autowired
+    private BillDetailsService billDetailsService;
 
     @Autowired
     private UserService userService;
@@ -56,10 +65,6 @@ public class BillController {
         return bills.stream()
                 .sorted(Comparator.comparing(Bill::getId).reversed())
                 .collect(Collectors.toList());
-//        return bills.stream()
-//                .map(this::convertToDTO)
-//                .sorted(Comparator.comparing(BillDTO::getId).reversed())
-//                .collect(Collectors.toList());
     }
 
     @GetMapping("/page")
@@ -87,8 +92,38 @@ public class BillController {
         return convertToDTO(billService.getBill(billId));
     }
 
+    @GetMapping("/income")
+    @ApiOperation(value = "Get all bill income")
+    @ApiResponses(value = { @ApiResponse(code = 200, message = "Success"),
+            @ApiResponse(code = 400, message = "Bad request"),
+            @ApiResponse(code = 500, message = "Internal server error") })
+    public float getAllBillsIncome()
+    {
+        float income = 0;
+        List<Bill> bills = billService.getBillsDone();
+        for (int i = 0; i < bills.size(); i++)
+        {
+            income = income + bills.get(i).getTotal();
+        }
+        return income;
+    }
+
+    @GetMapping("/done")
+    @ApiOperation(value = "Get all bill done")
+    @ApiResponses(value = { @ApiResponse(code = 200, message = "Success"),
+            @ApiResponse(code = 400, message = "Bad request"),
+            @ApiResponse(code = 500, message = "Internal server error") })
+    public List<BillDTO> getAllBillsDone()
+    {
+        List<Bill> bills = billService.getBillsDone();
+        return bills.stream()
+                .map(this::convertToDTO)
+                .sorted(Comparator.comparing(BillDTO::getId).reversed())
+                .collect(Collectors.toList());
+    }
+
     @PostMapping()
-    @ApiOperation(value = "Get all bill")
+    @ApiOperation(value = "Create New bill")
     @ApiResponses(value = { @ApiResponse(code = 200, message = "Success"),
             @ApiResponse(code = 400, message = "Bad request"),
             @ApiResponse(code = 500, message = "Internal server error") })
@@ -104,15 +139,13 @@ public class BillController {
         {
             throw new BillStatusException(bs.getId());
         }
-//        bill.setUser(u);
-//        bill.setBillStatus(bs);
         Bill b = convertToEntity(bill);
         b.setCreateddate(LocalDateTime.now());
         return convertToDTO(billService.saveBill(b));
     }
 
     @PutMapping("/{billId}")
-    @ApiOperation(value = "Get all bill")
+    @ApiOperation(value = "Update bill")
     @ApiResponses(value = { @ApiResponse(code = 200, message = "Success"),
             @ApiResponse(code = 400, message = "Bad request"),
             @ApiResponse(code = 500, message = "Internal server error") })
@@ -136,7 +169,6 @@ public class BillController {
                 throw new BillStatusException(bs.getId());
             }
             bill.setTotal(billDetails.getTotal());
-            bill.setCheckout_date(LocalDateTime.now());
             bill.setUser(u);
             bill.setBillStatus(bs);
             billService.updateBill(bill);
@@ -144,22 +176,68 @@ public class BillController {
         return convertToDTO(bill);
     }
 
-    @DeleteMapping("/{billId}")
-    @ApiOperation(value = "Get all bill")
+    @PutMapping("/confirm/{billId}")
+    @ApiOperation(value = "Update bill")
     @ApiResponses(value = { @ApiResponse(code = 200, message = "Success"),
             @ApiResponse(code = 400, message = "Bad request"),
             @ApiResponse(code = 500, message = "Internal server error") })
-    public HashMap<String, String> deleteBill(@PathVariable(name = "billId") Long billId)
+    public BillDTO confirmBill(@PathVariable(name = "billId") Long billId, @RequestBody BillDTO billDetails)
     {
         Bill bill = billService.getBill(billId);
         if (bill == null)
         {
             throw new BillException(billId);
         }
+        else
+        {
+            User u = userService.getUser(Long.valueOf(billDetails.getUser_id()));
+            if (u == null)
+            {
+                throw new UserException(u.getId());
+            }
+            BillStatus bs = billStatusService.getBillStatus(Long.valueOf(billDetails.getBillStatus_id()));
+            if (bs == null)
+            {
+                throw new BillStatusException(bs.getId());
+            }
+            bill.setCheckout_date(LocalDateTime.now());
+            bill.setBillStatus(bs);
+            billService.updateBill(bill);
+        }
+        return convertToDTO(bill);
+    }
+
+    @DeleteMapping("/{billId}")
+    @ApiOperation(value = "Delete bill")
+    @ApiResponses(value = { @ApiResponse(code = 200, message = "Success"),
+            @ApiResponse(code = 400, message = "Bad request"),
+            @ApiResponse(code = 500, message = "Internal server error") })
+    public ResponseEntity<?> deleteBill(@PathVariable(name = "billId") Long billId)
+    {
+        Bill bill = billService.getBill(billId);
+        if (bill == null)
+        {
+            throw new BillException(billId);
+        }
+        if (bill.getBillStatus().getId() == 1)
+        {
+            throw new InvalidDataException("The bill is checked out. Can not delete!");
+        }
         billService.deleteBill(billId);
-        HashMap<String, String> map = new HashMap<>();
-        map.put("message", "Delete Succesfully!");
-        return map;
+        return ResponseEntity.ok(new MessageResponse("Delete Successfully"));
+    }
+
+    @PostMapping("/sendmail/{bill}")
+    public ResponseEntity<String> sendMail(@PathVariable(name = "bill") Long bill, @RequestBody MailRequestDTO mailRequest) {
+        String content = mailRequest.getContent();
+        List<BillDetails> list = billDetailsService.getBillDetailsByBill(bill);
+        for (int i = 0; i < list.size(); i++)
+        {
+            content = content + "<br><br><b>Product:</b> " + list.get(i).getProduct().getName() + " <br><b>Quantity:</b> " + String.format("%,d", list.get(i).getQuantity()) + " <br><b>Price:</b> " + String.format("%,d", list.get(i).getProduct().getPrice())  + " VND";
+        }
+        mailRequest.setContent(content);
+        billService.sendEmail(mailRequest);
+        return new ResponseEntity<>("Email has been sent to: " + mailRequest.getTo(),HttpStatus.OK);
     }
 
     private BillDTO convertToDTO(Bill b)
@@ -177,7 +255,6 @@ public class BillController {
         User u = userService.getUser(Long.valueOf(b.getUser_id()));
         bill.setUser(u);
         BillStatus billStatus = billStatusService.getBillStatus(Long.valueOf(b.getBillStatus_id()));
-        //BillStatus billStatus = billStatusService.getBillStatus(3L);
         bill.setBillStatus(billStatus);
         return bill;
     }

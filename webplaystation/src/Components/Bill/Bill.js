@@ -1,21 +1,29 @@
 import React, { Component } from 'react';
 import "./../Category/Category.css";
 import {del, get, post, put} from "./../../Utils/httpHelper";
+import {formatCurrency, formatQuantity} from "./../../Utils/Utils";
 import { Link } from 'react-router-dom';
 import { withRouter } from "react-router";
 import Add from "./Add"
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Pagination, PaginationItem, PaginationLink } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheck, faEdit, faInfo, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faCheck, faClosedCaptioning, faDoorClosed, faEdit, faInfo, faPlus, faRemoveFormat, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { Label, Loader } from 'semantic-ui-react';
 
 class Bill extends Component {
     state = {
         bills: [],
         isDisplayForm: false,
+        isDisplayFormDel: false,
         pageNumber: 0,
         pageToTal: 0,
         users: [],
-        billCheckOut: {}
+        billCheckOut: {},
+        billdetails: [],
+        user:"",
+        usermail: '',
+        username: "",
+        id: ""
     }
 
     componentDidMount(){
@@ -23,8 +31,6 @@ class Bill extends Component {
         .then((response) => {
             if (response.status === 200)
             {
-                //console.log(response.data.length);
-                //this.setState({products: response.data});
                 this.setState({
                     pageToTal: Math.ceil(response.data.length / 10)
                 })
@@ -44,7 +50,6 @@ class Bill extends Component {
         .then((response) => {
             if (response.status === 200)
             {
-                //console.log(response.data);
                 this.setState({users: response.data});
             }
         })
@@ -56,27 +61,27 @@ class Bill extends Component {
         .then((response) => {
             if (response.status === 200)
             {
-                //console.log(response.data);
             }
         })
     }
 
-    delBill = (id) =>
+    delBill = (e, id) =>
     {
+        e.preventDefault();
         del(`/bills/${id}`)
         .then((response) => {
-            //console.log(response.data);
-            this.setState({bills: this.state.bills.filter(b => b.id !== id)})
-            alert(response.data.message);
+            if (response.status === 200)
+            {
+                this.setState({bills: this.state.bills.filter(b => b.id !== id),
+                               isDisplayFormDel: false})
+            }
         })
         .catch(error => {alert('This Bill had Details. Can not Delete!')})
     }
 
     createBill(newBill){
-        // newBill.total
         post(`/bills`, {total: 0, user_id: newBill.user_id, billStatus_id: newBill.billStatus_id})
         .then((response) => {
-            //console.log(response.data);
             window.location.reload();
             this.setState({
                 bills: [...this.state.bills, response.data],
@@ -96,8 +101,22 @@ class Bill extends Component {
         });
     }
 
+    onToggleFormDel = (e, id) => {
+        e.preventDefault()
+        this.setState({
+            isDisplayFormDel: !this.state.isDisplayFormDel,
+            id: id
+        });
+    }
+
+    onCloseFormDel = (e) => {
+        e.preventDefault()
+        this.setState({
+            isDisplayFormDel: false,
+        });
+    }
+
     onAdd = (data) => {
-        //console.log(data);
         this.createBill(data);
     }
 
@@ -128,21 +147,7 @@ class Bill extends Component {
         .catch(error => console.log(error));
     }
 
-    formatCurrency(number) {
-        var options = {style: 'currency', currency: 'VND'};
-        var numberFormat = new Intl.NumberFormat('en-US', options);
-
-        return numberFormat.format(number);
-    }
-
-    // handleUserID = (buid) => {
-    //     const uid = this.state.users.find((u) => {
-    //         {u.id === buid}
-    //     })
-    //     return <td>{uid.name}</td>
-    // }
-
-    async handleCheckOut(event, id){
+    async handleCheckOut(event, id, key){
         event.preventDefault();
         console.log(id.toString());
         var bid = id.toString();
@@ -150,19 +155,40 @@ class Bill extends Component {
         .then((response) => {
             if (response.status === 200)
             {
-                //console.log(response.data);
                 this.setState({
-                    billCheckOut: response.data
+                    billCheckOut: response.data,
                 }, () => console.log(response.data));
             }
         })
-
-        //console.log('update');
-        put(`/bills/${id}`, {total: this.state.billCheckOut.total, user_id: this.state.billCheckOut.user_id, billStatus_id: '1'})
+        await get(`/billDetails/bill/${id}`)
         .then((response) => {
             if (response.status === 200)
             {
-            //console.log(response.data);
+                this.setState({
+                    billdetails: response.data
+                })
+            }
+        })
+        .catch((error) => {})
+        console.log(this.state.billdetails.length);
+        if (this.state.billdetails.length === 0)
+        {
+            alert('The Bill does not details. Can not Check Out');
+            return;
+        }
+        var status;
+        if (key == 'notcheck')
+        {
+            status = '1';
+        }
+        else
+        {
+            status = '3';
+        }
+        put(`/bills/confirm/${id}`, {total: this.state.billCheckOut.total, user_id: this.state.billCheckOut.user_id, billStatus_id: status})
+        .then((response) => {
+            if (response.status === 200)
+            {
                 this.props.history.push("/admin/bill");
                 window.location.reload();
             }
@@ -179,6 +205,25 @@ class Bill extends Component {
     render() {
         return (
             <div>
+                <Modal
+                    isOpen={this.state.isDisplayFormDel}
+                    aria-labelledby="contained-modal-title-vcenter"
+                    centered
+                    toggle={this.onToggleFormDel}
+                    >
+                    <ModalHeader>
+                        Delete
+                    </ModalHeader>
+                    <ModalBody>
+                        <p>
+                        Are you sure?
+                        </p>
+                    </ModalBody>
+                    <ModalFooter>
+                        <Button onClick={(e) => this.delBill(e, this.state.id)} className="btn-danger">Delete</Button>
+                        <Button onClick={(e) => this.onCloseFormDel(e)}>Close</Button>
+                    </ModalFooter>
+                </Modal>
                 <button type="button" className="btn btn-primary" onClick={this.onToggleForm}>
                     <FontAwesomeIcon icon={faPlus} className="mr-2"/>{' '}
                     Creat New Bill
@@ -186,18 +231,16 @@ class Bill extends Component {
                 <table id="table">
                     <thead>
                         <tr>
-                            <th>ID</th>
-                            <th>Total</th>
-                            <th>Created Date</th>
-                            <th>Update Date</th>
-                            <th>User_ID</th>
-                            <th>Status</th>
-                            {/* <th>Category</th>
-                            <th>Supplier</th> */}
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
+                            <th><b>ID</b></th>
+                            <th><b>Total</b></th>
+                            <th><b>Created Date</b></th>
+                            <th><b>CheckedOut Date</b></th>
+                            <th><b>Customer</b></th>
+                            <th><b>Status</b></th>
+                            <th>Update</th>
+                            <th>Delete</th>
+                            <th>Details</th>
+                            <th>Check Out</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -205,40 +248,40 @@ class Bill extends Component {
                             this.state.bills.map((b) => (
                                 <tr key={b.id}>
                                     <td>{b.id}</td>
-                                    <td>{this.formatCurrency(b.total)}</td>
+                                    <td>{formatCurrency(b.total)}</td>
                                     <td>{b.createddate}</td>
                                     <td>{b.checkout_date}</td>
-                                    {/* {this.handleUserID(b.user_id)} */}
-                                    <td>{b.user_id}</td>
-                                    <td>{b.billStatus_id === '1' ? 'Done' : 'Waiting CheckOut'}</td>
-                                    {/* <td>{p.category_id}</td>
-                                    <td>{p.supplier_id}</td> */}
-                                    <td><button onClick={() => this.delBill(b.id)} className="btn btn-danger">
-                                        <FontAwesomeIcon icon={faTrash} className="mr-2"/>{' '}
-                                        Del
-                                        </button>
-                                    </td>
+                                    <td>{b.user.name}</td>
+                                    <td>{b.billStatus.id === 1 ? <Label color="teal">Done</Label> : <Label color="grey">Waiting CheckOut</Label>}</td>
                                     <td>
+                                        {b.billStatus.id != 1 ? 
                                         <Link to={`/admin/bill/update/${b.id}`}>
-                                            <button className="btn btn-success">
+                                            <button className="btn btn-success" disabled={b.billStatus.id == 1}>
                                             <FontAwesomeIcon icon={faEdit} className="mr-2"/>{' '}
-                                                Update
                                             </button>
-                                        </Link>
+                                        </Link> : 
+                                        <button className="btn btn-success" disabled={b.billStatus.id == 1}>
+                                        <FontAwesomeIcon icon={faEdit} className="mr-2"/>{' '}
+                                        </button>
+                                        }
                                     </td>
                                     <td>
-                                        <Link to={`/admin/bill`}>
-                                            <button className="btn btn-warning" onClick={(event) => this.handleCheckOut(event, b.id)}>
-                                            <FontAwesomeIcon icon={faCheck} className="mr-2"/>{' '}
-                                                CheckOut
-                                            </button>
-                                        </Link>
+                                        <button onClick={(e) => this.onToggleFormDel(e, b.id)} className="btn btn-danger" disabled={b.billStatus.id == 1}>
+                                        <FontAwesomeIcon icon={faTrash} className="mr-2" />{' '}
+                                        </button>
                                     </td>
                                     <td>
                                         <Link to={`/admin/bill/${b.id}`}>
                                             <button className="btn btn-info">
                                             <FontAwesomeIcon icon={faInfo} className="mr-2"/>{' '}
-                                                Details
+                                            </button>
+                                        </Link>
+                                    </td>
+                                    <td>
+                                        <Link to={`/admin/bill`} onClick={b.billStatus.id == 1 ? (e) => e.preventDefault() : (event) => this.handleCheckOut(event, b.id, 'notcheck')} className={b.billStatus.id == 1 ? "disable-link" : ""}>
+                                            <button className="btn btn-warning" disabled={b.billStatus.id == 1}>
+                                            <FontAwesomeIcon icon={faCheck} className="mr-2"/>{' '}
+                                                
                                             </button>
                                         </Link>
                                     </td>

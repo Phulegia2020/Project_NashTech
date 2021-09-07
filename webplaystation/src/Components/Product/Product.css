@@ -1,0 +1,9 @@
+.scroll-table {
+    overflow-y: scroll;
+    height: 50px;
+    width: 100%;
+  }
+
+.txtdeco{
+  text-decoration: none;
+}

@@ -2,8 +2,10 @@ package com.example.nashtechproject.restcontroller;
 
 import com.example.nashtechproject.entity.BillStatus;
 import com.example.nashtechproject.exception.BillStatusException;
+import com.example.nashtechproject.payload.response.MessageResponse;
 import com.example.nashtechproject.service.BillStatusService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -60,7 +62,7 @@ public class BillStatusController {
     }
 
     @DeleteMapping("/{billStatusId}")
-    public HashMap<String, String> deleteBillStatus(@PathVariable(name = "billStatusId") Long billStatusId)
+    public ResponseEntity<?> deleteBillStatus(@PathVariable(name = "billStatusId") Long billStatusId)
     {
         BillStatus billStatus = billStatusService.getBillStatus(billStatusId);
         if (billStatus == null)
@@ -68,8 +70,6 @@ public class BillStatusController {
             throw new BillStatusException(billStatusId);
         }
         billStatusService.deleteBillStatus(billStatusId);
-        HashMap<String, String> map = new HashMap<>();
-        map.put("message", "Delete Succesfully!");
-        return map;
+        return ResponseEntity.ok(new MessageResponse("Delete Successfully"));
     }
 }

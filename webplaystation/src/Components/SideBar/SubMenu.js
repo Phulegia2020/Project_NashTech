@@ -24,8 +24,8 @@ class SubMenu extends Component {
                     onClick={this.toggle}
                     className={{ "menu-open": !this.state.collapsed }}
                 >
-                    <NavLink className="dropdown-toggle letter" tag={Link} to={"/admin/category"}>
-                    <FontAwesomeIcon icon={this.props.icon} className="mr-2" />
+                    <NavLink className="dropdown-toggle letter m-2" tag={Link} to={`/admin/${this.props.url}`}>
+                    <FontAwesomeIcon icon={this.props.icon}/>{' '}
                     {this.props.title}
                     </NavLink>
                 </NavItem>
@@ -36,7 +36,7 @@ class SubMenu extends Component {
                 >
                     {this.props.items.map((item, index) => (
                     <NavItem key={index} className="pl-4">
-                        <NavLink tag={Link} to={`/admin/category/${item.id}`} className="letter">
+                        <NavLink tag={Link} to={`/admin/${this.props.url}/${item.id}`} className="letter">
                         {item.name}
                         </NavLink>
                     </NavItem>

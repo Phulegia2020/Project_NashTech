@@ -91,37 +91,33 @@ public class AuthServiceImpl implements AuthService {
                 signUpRequest.getEmail().trim(), signUpRequest.getPhone(), signUpRequest.getUsername(),
                 encoder.encode(signUpRequest.getPassword()));
 
-//        Set<String> strRoles = signUpRequest.getRole();
-//        Set<Role> roles = new HashSet<>();
-
         String strRoles = signUpRequest.getRole();
 
         if (strRoles == null) {
-            Role userRole = roleRepository.findByName(RoleName.ROLE_USER)
+            Role userRole = roleRepository.findByName(RoleName.USER)
                     .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
             user.setRole(userRole);
         } else {
             switch (strRoles.toLowerCase()) {
                 case "admin":
-                    Role adminRole = roleRepository.findByName(RoleName.ROLE_ADMIN)
+                    Role adminRole = roleRepository.findByName(RoleName.ADMIN)
                             .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
                     user.setRole(adminRole);
 
                     break;
                 case "pm":
-                    Role modRole = roleRepository.findByName(RoleName.ROLE_PM)
+                    Role modRole = roleRepository.findByName(RoleName.STAFF)
                             .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
                     user.setRole(modRole);
                     break;
                 default:
-                    Role userRole = roleRepository.findByName(RoleName.ROLE_USER)
+                    Role userRole = roleRepository.findByName(RoleName.USER)
                             .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
                     user.setRole(userRole);
             }
+            user.setActive_status("Active");
+            userRepository.save(user);
         }
-        user.setActive_status("Active");
-        userRepository.save(user);
-
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
     }
 
@@ -139,8 +135,8 @@ public class AuthServiceImpl implements AuthService {
             return ResponseEntity.ok()
                     .body(new MessageResponse("Confirm Password is not correct!"));
         }
-
         User user = userRepository.findById(changPasswordRequest.getUser_id()).get();
+
         user.setPassword(encoder.encode(changPasswordRequest.getNewpassword()));
         userRepository.save(user);
         return ResponseEntity.ok(new MessageResponse("Change Password successfully!"));

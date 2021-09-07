@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Link} from 'react-router-dom';
+import {Link, Redirect} from 'react-router-dom';
 import { DropdownItem } from 'reactstrap';
 import {
     Button,
@@ -9,11 +9,13 @@ import {
     Visibility,
     Dropdown,
     Icon,
-    Sticky
+    Sticky,
+    Input
 } from 'semantic-ui-react'
 import ShoppingCart from "./../ShoppingCart/ShoppingCart";
 import {get} from "./../../../Utils/httpHelper";
 import Profile from '../Profile/Profile';
+import { withRouter } from "react-router";
 
 class MainMenu extends Component {
     constructor(props) {
@@ -22,6 +24,7 @@ class MainMenu extends Component {
             activeItem: this.props.activeItem,
             open: false,
             categories: [],
+            search: ""
         };
     }
 
@@ -31,7 +34,6 @@ class MainMenu extends Component {
             if (response.status === 200)
             {
                 this.setState({categories: response.data});
-                //console.log(response.data);
             }
         })
         .catch(error => {console.log(error)})
@@ -39,16 +41,23 @@ class MainMenu extends Component {
 
     onMenuItemClick = (e, {name}) => {
         this.setState({activeItem: name})
-        // console.log(name);
     };
 
     onLogOut = () => {
-        localStorage.setItem('accessToken', '');
-        sessionStorage.removeItem('user_id');
-        sessionStorage.removeItem('username');
-        localStorage.setItem('totalCart', 0);
-        localStorage.setItem('shopping-cart', []);
-        this.setState({isLoggedIn: false});
+        
+        get("/auth/logout")
+        .then((response) => {
+            if (response.status === 200)
+            {
+                localStorage.removeItem('accessToken');
+                localStorage.removeItem('role');
+                localStorage.removeItem('user_id');
+                localStorage.removeItem('username');
+                localStorage.setItem('shopping-cart', []);
+                this.setState({isLoggedIn: false});
+            }
+        })
+        .catch((error) => {})
     }
 
     componentWillUnmount() {
@@ -85,7 +94,7 @@ class MainMenu extends Component {
                             <Menu.Item as={Link} to="/WebPlayStation/about" name="about" active={activeItem === "WebPlayStation/about"} onClick={this.onMenuItemClick}>About</Menu.Item>
                             <Menu.Item position='right'>
                                 <ShoppingCart/>
-                                {localStorage.getItem('accessToken') !== '' ? <Profile onLogOut={this.onLogOut}/>
+                                {localStorage.getItem('accessToken') !== null ? <Profile onLogOut={this.onLogOut}/>
                                          : <Button as={Link} to="/WebPlayStation/login" active={activeItem === "WebPlayStation/login"} onClick={this.onMenuItemClick} inverted >Log in</Button>}
                             </Menu.Item>
                         </Menu>
@@ -97,4 +106,4 @@ class MainMenu extends Component {
     }
 }
 
-export default MainMenu;
+export default withRouter(MainMenu);

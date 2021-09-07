@@ -1,20 +1,17 @@
 package com.example.nashtechproject.restcontroller;
 
+import com.example.nashtechproject.dto.BillDTO;
 import com.example.nashtechproject.dto.ProductDTO;
+import com.example.nashtechproject.dto.StatisticalDTO;
 import com.example.nashtechproject.dto.UserDTO;
-import com.example.nashtechproject.entity.Category;
-import com.example.nashtechproject.entity.Product;
-import com.example.nashtechproject.entity.Rating;
-import com.example.nashtechproject.entity.Supplier;
+import com.example.nashtechproject.entity.*;
 import com.example.nashtechproject.exception.CategoryException;
 import com.example.nashtechproject.exception.ProductException;
 import com.example.nashtechproject.exception.SupplierException;
 import com.example.nashtechproject.page.ProductPage;
 import com.example.nashtechproject.page.UserPage;
-import com.example.nashtechproject.service.CategoryService;
-import com.example.nashtechproject.service.ProductService;
-import com.example.nashtechproject.service.RatingPointService;
-import com.example.nashtechproject.service.SupplierService;
+import com.example.nashtechproject.payload.response.MessageResponse;
+import com.example.nashtechproject.service.*;
 import io.swagger.annotations.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +43,12 @@ public class ProductController {
 
     @Autowired
     private RatingPointService ratingPointService;
+
+    @Autowired
+    private BillService billService;
+
+    @Autowired
+    private BillDetailsService billDetailsService;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -87,7 +90,6 @@ public class ProductController {
         {
             throw new ProductException(productId);
         }
-        //return convertToDTO(productService.getProduct(productId));
         return pro;
     }
 
@@ -122,23 +124,32 @@ public class ProductController {
         {
             throw new CategoryException(cate.getId());
         }
-        //List<ProductDTO> products = productService.getProductsByCategory(categoryId, productPage);
         return new ResponseEntity<>(productService.getProductsByCategoryPages(categoryId, productPage), HttpStatus.OK);
     }
 
-    @GetMapping("/name/{name}")
+    @GetMapping("/name")
     @ApiOperation(value = "Get Product By Name")
     @ApiResponses(value = { @ApiResponse(code = 200, message = "Success"),
             @ApiResponse(code = 400, message = "Bad request"),
             @ApiResponse(code = 500, message = "Internal server error") })
-    public ProductDTO getProductByName(@PathVariable(name = "name") String name)
+    public List<ProductDTO> getProductByName(@RequestParam String name)
     {
-        Product pro = productService.getProductByName(name);
-        if (pro == null)
-        {
-            return null;
-        }
-        return convertToDTO(pro);
+        List<Product> pro = productService.getProductByName(name);
+        ratingNow(pro);
+        return pro.stream()
+                .map(this::convertToDTO)
+                .sorted(Comparator.comparing(ProductDTO::getId))
+                .collect(Collectors.toList());
+    }
+
+    @GetMapping("/namePage")
+    @ApiOperation(value = "Get Product By Name")
+    @ApiResponses(value = { @ApiResponse(code = 200, message = "Success"),
+            @ApiResponse(code = 400, message = "Bad request"),
+            @ApiResponse(code = 500, message = "Internal server error") })
+    public ResponseEntity<List<ProductDTO>> getProductByNamePage(@RequestParam String name, ProductPage productPage)
+    {
+        return new ResponseEntity<>(productService.getProductsPageByName(productPage, name), HttpStatus.OK);
     }
 
     @GetMapping("/page")
@@ -149,6 +160,81 @@ public class ProductController {
     public ResponseEntity<List<ProductDTO>> getProductsPages(ProductPage productPage)
     {
         return new ResponseEntity<>(productService.getProductsPage(productPage), HttpStatus.OK);
+    }
+
+    @GetMapping("/onSale")
+    public List<ProductDTO> getAllProductsByStatus()
+    {
+        List<ProductDTO> prosDTO = new ArrayList<>();
+        List<Product> products = productService.getProductsByStatus();
+        ratingNow(products);
+        for (int i = 0; i < products.size(); i++) {
+            ProductDTO p = convertToDTO(products.get(i));
+            prosDTO.add(p);
+        }
+        return prosDTO.stream().sorted(Comparator.comparingLong(ProductDTO::getId)).collect(Collectors.toList());
+    }
+
+    @GetMapping("/pageOnSale")
+    @ApiOperation(value = "Get Products On Sale By Pages")
+    @ApiResponses(value = { @ApiResponse(code = 200, message = "Success"),
+            @ApiResponse(code = 400, message = "Bad request"),
+            @ApiResponse(code = 500, message = "Internal server error") })
+    public ResponseEntity<List<ProductDTO>> getProductsOnSalePages(ProductPage productPage)
+    {
+        return new ResponseEntity<>(productService.getProductsOnSalePage(productPage), HttpStatus.OK);
+    }
+
+    @GetMapping("/totalrating")
+    public List<ProductDTO> getProductsByTotalRating()
+    {
+        List<ProductDTO> prosDTO = new ArrayList<>();
+        List<Product> products = productService.getProductsByTotalRating();
+        for (int i = 0; i < 5; i++) {
+            ProductDTO p = convertToDTO(products.get(i));
+            prosDTO.add(p);
+        }
+        return prosDTO;
+    }
+
+    @GetMapping("/topSale")
+    public List<StatisticalDTO> getTopSale(@RequestParam String month)
+    {
+        int thang = Integer.valueOf(month);
+        List<StatisticalDTO> topSale = new ArrayList<>();
+        List<Bill> billList = billService.retrieveBills();
+        List<Bill> bills = new ArrayList<>();
+        for (int i = 0; i < billList.size(); i++)
+        {
+            if (billList.get(i).getBillStatus().getId() == 1)
+            {
+                if (billList.get(i).getCheckout_date().getMonth().getValue() == thang)
+                {
+                    bills.add(billList.get(i));
+                }
+            }
+        }
+        List<Product> products = productService.retrieveProducts();
+        for (int i = 0; i < products.size(); i++)
+        {
+            int ts = 0;
+            for (int j = 0; j < bills.size(); j++)
+            {
+                List<BillDetails> billDetails = billDetailsService.getBillDetailsByBill(bills.get(j).getId());
+                for (int k = 0; k < billDetails.size(); k++)
+                {
+                    if (products.get(i).getId() == billDetails.get(k).getProduct().getId())
+                    {
+                        ts = ts + billDetails.get(k).getQuantity();
+                    }
+                }
+            }
+            StatisticalDTO statisticalDTO = new StatisticalDTO();
+            statisticalDTO.setProduct(products.get(i).getName());
+            statisticalDTO.setTopSale(ts);
+            topSale.add(statisticalDTO);
+        }
+        return topSale.stream().sorted(Comparator.comparingLong(StatisticalDTO::getTopSale).reversed()).collect(Collectors.toList());
     }
 
     @ApiOperation(value = "Create new Product")
@@ -168,15 +254,14 @@ public class ProductController {
         {
             throw new SupplierException(sup.getId());
         }
-        if (productService.getProductByName(product.getName()) != null)
+        if (productService.existName(product.getName()))
         {
             throw new ProductException(product.getName());
         }
         Product pro = convertToEntity(product);
         pro.setCreateddate(LocalDateTime.now());
         pro.setUpdateddate(LocalDateTime.now());
-//        pro.setCategory(cate);
-//        pro.setSupplier(sup);
+        pro.setStatus("On Sale");
         return convertToDTO(productService.saveProduct(pro));
     }
 
@@ -217,17 +302,16 @@ public class ProductController {
             @ApiResponse(code = 400, message = "Bad request"),
             @ApiResponse(code = 500, message = "Internal server error") })
     @DeleteMapping("/{productId}")
-    public HashMap<String, String> deleteProduct(@PathVariable(name = "productId") Long productId)
+    public ResponseEntity<?> deleteProduct(@PathVariable(name = "productId") Long productId)
     {
         Product product = productService.getProduct(productId);
         if (product == null)
         {
             throw new ProductException(productId);
         }
-        productService.deleteProduct(productId);
-        HashMap<String, String> map = new HashMap<>();
-        map.put("message", "Delete Succesfully!");
-        return map;
+        product.setStatus("Stop");
+        productService.updateProduct(product);
+        return ResponseEntity.ok(new MessageResponse("Delete Successfully"));
     }
 
     private ProductDTO convertToDTO(Product p)
@@ -259,6 +343,7 @@ public class ProductController {
         product.setImageurl(productDetails.getImageurl());
         product.setTotalrating(productDetails.getTotalrating());
         product.setUpdateddate(LocalDateTime.now());
+        product.setStatus(productDetails.getStatus());
     }
 
     private void ratingNow(List<Product> products)

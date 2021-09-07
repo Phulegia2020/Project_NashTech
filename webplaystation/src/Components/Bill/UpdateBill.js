@@ -20,11 +20,10 @@ class UpdateBill extends Component {
     }
     
     componentDidMount(){
-        get("/users")
+        get("/users/customer")
         .then((response) => {
             if (response.status === 200)
             {
-                //console.log(response.data);
                 this.setState({users: response.data});
             }
         })
@@ -32,7 +31,6 @@ class UpdateBill extends Component {
 
         get(`/bills/${this.state.id}`)
         .then((response) => {
-            //console.log(response.data);
             if (response.status === 200)
             {
                 this.setState({
@@ -47,7 +45,6 @@ class UpdateBill extends Component {
         .then((response) => {
             if (response.status === 200)
             {
-                //console.log(response.data);
                 this.setState({
                     billStatus: response.data
                 });
@@ -77,7 +74,6 @@ class UpdateBill extends Component {
         .then((response) => {
             if (response.status === 200)
             {
-            //console.log(response.data);
                 this.props.history.push("/admin/bill");
             }
         })
@@ -103,38 +99,42 @@ class UpdateBill extends Component {
         return (
             <div>
                 <h3>Update Bill</h3>
-                <Form onSubmit={(event) => this.handleUpdate(event)}>
-                <FormGroup>
-                    <Label for="total">Total</Label>
-                    <Input type="number" name="total" id="total" placeholder="VND" onChange={(e) => this.changeValue(e)} value = {this.state.total} required="required"/>
-                    {this.state.key === 'total' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
-                </FormGroup>
-                
-                <FormGroup className="mb-2">
-                    <Label for="user">User</Label>
-                    <Input type="select" name="user_id" id="user" value = {this.state.user_id} onChange={(e) => this.changeValue(e)}>
-                        {
-                            this.state.users.map((u) => (
-                                <option key={u.id} value={u.id}>{u.name}</option>
-                            ))
-                        }
-                    </Input>
-                </FormGroup>
-                <FormGroup className="mb-5">
-                    <Label for="status">Status</Label>
-                    <Input type="select" name="billStatus_id" id="status" value = {this.state.billStatus_id} onChange={(e) => this.changeValue(e)}>
-                        {
-                            this.state.billStatus.map((bs) => (
-                                <option key={bs.id} value={bs.id}>{bs.description}</option>
-                            ))
-                        }
-                    </Input>
-                </FormGroup>
-                <div className="mb-5">
-                    <Button type="submit" outline color="warning" >Update</Button>{' '}
-                    <Button outline color="danger" onClick={this.handleClear.bind(this)}>Cancel</Button>
-                </div>
-                </Form>
+                <Row form>
+                    <Col md={4}>
+                        <Form onSubmit={(event) => this.handleUpdate(event)}>
+                        <FormGroup>
+                            <Label for="total">Total</Label>
+                            <Input type="number" name="total" id="total" placeholder="VND" onChange={(e) => this.changeValue(e)} value = {this.state.total} required="required" disabled/>
+                            {this.state.key === 'total' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
+                        </FormGroup>
+                        
+                        <FormGroup className="mb-2">
+                            <Label for="user">Customer</Label>
+                            <Input type="select" name="user_id" id="user" value = {this.state.user_id} onChange={(e) => this.changeValue(e)}>
+                                {
+                                    this.state.users.map((u) => (
+                                        <option key={u.id} value={u.id}>{u.name}</option>
+                                    ))
+                                }
+                            </Input>
+                        </FormGroup>
+                        <FormGroup className="mb-5">
+                            <Label for="status">Status</Label>
+                            <Input type="select" name="billStatus_id" id="status" value = {this.state.billStatus_id} onChange={(e) => this.changeValue(e)} disabled>
+                                {
+                                    this.state.billStatus.map((bs) => (
+                                        <option key={bs.id} value={bs.id}>{bs.description}</option>
+                                    ))
+                                }
+                            </Input>
+                        </FormGroup>
+                        <div className="mb-5">
+                            <Button type="submit" outline color="warning" >Update</Button>{' '}
+                            <Button outline color="danger" onClick={this.handleClear.bind(this)}>Cancel</Button>
+                        </div>
+                        </Form>
+                    </Col>
+                </Row>
             </div>
         )
     }

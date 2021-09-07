@@ -18,11 +18,10 @@ export default class Add extends Component {
     }
     
     componentDidMount(){
-        get("/products")
+        get("/products/onSale")
         .then((response) => {
             if (response.status === 200)
             {
-                //console.log(response.data);
                 this.setState({
                     products: response.data
                 })
@@ -37,8 +36,19 @@ export default class Add extends Component {
         });
     }
 
-    handleCreate(event){
+    async handleCreate(event){
         event.preventDefault();
+        var number = 0;
+        await this.setState({
+            product_id: event.target.product_id.value
+        })
+        await get(`/products/${this.state.product_id}`)
+        .then((response) => {
+            if (response.status === 200)
+            {
+                number = response.data.quantity;
+            }
+        })
         if (event.target.quantity.value.trim() <= 0)
         {
             this.setState({
@@ -46,6 +56,16 @@ export default class Add extends Component {
             })
             this.setState({
                 Error: "Quantity is not less than 1!"
+            });
+            return;
+        }
+        if (event.target.quantity.value.trim() > number)
+        {
+            this.setState({
+                key: 'quantity'
+            })
+            this.setState({
+                Error: "This product just has " + number + " ones"
             });
             return;
         }
@@ -62,6 +82,10 @@ export default class Add extends Component {
                 return;
             }
         }
+        this.setState({
+            key: '',
+            Error: ''
+        })
         this.props.onAdd(this.state);
     }
 
@@ -91,7 +115,7 @@ export default class Add extends Component {
                 
                 <FormGroup className="mb-2">
                     <Label for="product">Product</Label>
-                    <Input type="select" name="product_id" id="product" value = {this.state.product_id} onChange={(e) => this.changeValue(e)} required>
+                    <Input type="select" name="product_id" id="product" onChange={(e) => this.changeValue(e)} required>
                         {
                             this.state.products.map((p) => (
                                 <option key={p.id} value={p.id}>{p.name}</option>

@@ -32,11 +32,33 @@ class ProductsByCategry extends Component {
         .then((response) => {
             if (response.status === 200)
             {
-                //console.log(response.data);
                 this.setState({Products: response.data});
             }
         })
         .catch(error => {console.log(error)})
+    }
+
+    componentDidUpdate(prevProps, prevState)
+    {
+        if (prevState.id !== this.state.id)
+        {
+            get(`/products/search?categoryId=${this.state.id}`)
+            .then((response) => {
+                this.setState({
+                    pageToTal: Math.ceil(response.data.length / 4)
+                }, () => console.log(this.state.pageToTal));
+            })
+            .catch(error => console.log(error));
+
+            get(`/products/searchPage?categoryId=${this.state.id}&pageNumber=${this.state.activePage-1}&pageSize=4&sortBy=id`)
+            .then((response) => {
+                if (response.status === 200)
+                {
+                    this.setState({Products: response.data});
+                }
+            })
+            .catch(error => {console.log(error)})
+        }
     }
 
     async handlePaginationChange(e, {activePage}){

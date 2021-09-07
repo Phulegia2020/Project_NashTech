@@ -1,0 +1,26 @@
+.txtexplain{
+    text-align: center;
+}
+
+.explain-note{
+    display: inline-block;
+    font-size: 1.75rem;
+    margin-left: 5rem;
+}
+
+.explain-color{
+    display: inline-block;
+    width: 60px;
+    height: 20px;
+    margin-right: 10px;
+}
+
+.rp{
+    display: inline-block;
+}
+
+#outcome{
+    text-align: left;
+    margin-left: 50rem;
+    padding-right: 10rem;
+}

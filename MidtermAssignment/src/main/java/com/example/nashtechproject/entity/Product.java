@@ -63,6 +63,9 @@ public class Product {
     @JsonIgnore
     private Collection<BillDetails> products;
 
+    @JoinColumn(name = "status")
+    private String status;
+
     public Product() {
     }
 
@@ -175,5 +178,13 @@ public class Product {
 
     public void setRatings(List<Rating> ratings) {
         this.ratings = ratings;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

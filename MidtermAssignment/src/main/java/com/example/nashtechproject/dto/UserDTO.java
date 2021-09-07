@@ -22,7 +22,7 @@ public class UserDTO {
     @Size(min = 3, max = 20)
     private String account;
 
-    private String active_status;
+    private String activestatus;
 
     private String role_id;
 
@@ -37,7 +37,7 @@ public class UserDTO {
         this.email = email;
         this.phone = phone;
         this.account = account;
-        this.active_status = active_status;
+        this.activestatus = active_status;
         this.role_id = role_id;
     }
 
@@ -98,11 +98,11 @@ public class UserDTO {
     }
 
     public String getActive_status() {
-        return active_status;
+        return activestatus;
     }
 
     public void setActive_status(String active_status) {
-        this.active_status = active_status;
+        this.activestatus = active_status;
     }
 
     public String getRole_id() {

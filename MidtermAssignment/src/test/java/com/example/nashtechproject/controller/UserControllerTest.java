@@ -74,8 +74,7 @@ public class UserControllerTest {
         this.userList.add(new User("Program", "Male", "HCM City", "program@gmail.com", "0123456987", "Program", "123456"));
         this.userList.add(new User("Test", "Male", "HCM City", "test@gmail.com", "0123645987", "Test", "123456"));
         this.userList.add(new User("Test1", "Male", "HCM City", "test1@gmail.com", "0321645987", "Test1", "123456"));
-        //user = new User(1L, "Champion", "ChampionWin", "champion@gmail.com", "123456");
-        Role role = new Role(3L, RoleName.ROLE_USER);
+        Role role = new Role(3L, RoleName.USER);
         user = new User(5L, "Test", "Male", "HCM City", "test@gmail.com", "0123645987", "Test", "123456", "Active");
         user.setRole(role);
         userPut = new UserDTO(5L, "TestPut", "Male", "HCM City", "test@gmail.com", "0123645987", "Test", "Active", "1");

@@ -16,6 +16,19 @@ import Bill from "../Bill/Bill";
 import UpdateBill from "../Bill/UpdateBill";
 import BillDetailsByBill from "../Bill/BillDetailsByBill";
 import UpdateBillDetails from "../BillDetails/UpdateBillDetails";
+import Supplier from "../Supplier/Supplier";
+import UpdateSupplier from "../Supplier/UpdateSupplier";
+import PlaceOrder from "../PlaceOrder/PlaceOrder";
+import UpdatePlaceOrder from "../PlaceOrder/UpdatePlaceOrder";
+import PlaceOrderDetailsByPlaceOrder from "../PlaceOrder/PlaceOrderDetailsByPlaceOrder";
+import UpdatePlaceOrderDetails from "../PlaceOrderDetails/UpdatePlaceOrderDetails";
+import Import from "../ImportCard/Import";
+import UpdateImport from "../ImportCard/UpdateImport";
+import ImportDetailsByImport from "../ImportCard/ImportDetailsByImport";
+import UpdateImportDetails from "../ImportDetails/UpdateImportDetails";
+import Statistical from "../Statistical/Statistical";
+import Footer from "./Footer";
+import Chart from "../Statistical/Chart";
 
 class Content extends Component {
     render() {
@@ -28,6 +41,7 @@ class Content extends Component {
                 <Switch>
                     <Route exact path="/admin">
                         <Category/>
+                        
                     </Route>
                     <Route exact path="/admin/category">
                         <Category/>
@@ -62,14 +76,47 @@ class Content extends Component {
                     <Route exact path="/admin/billDetails/update/:id">
                         <UpdateBillDetails/>
                     </Route>
+                    <Route exact path="/admin/supplier">
+                        <Supplier/>
+                    </Route>
+                    <Route exact path="/admin/supplier/update/:id">
+                        <UpdateSupplier/>
+                    </Route>
+                    <Route exact path="/admin/placeorder">
+                        <PlaceOrder/>
+                    </Route>
+                    <Route exact path="/admin/placeorder/update/:id">
+                        <UpdatePlaceOrder/>
+                    </Route>
+                    <Route exact path="/admin/placeorder/:id">
+                        <PlaceOrderDetailsByPlaceOrder/>
+                    </Route>
+                    <Route exact path="/admin/placeorderDetails/update/:id">
+                        <UpdatePlaceOrderDetails/>
+                    </Route>
+                    <Route exact path="/admin/import">
+                        <Import/>
+                    </Route>
+                    <Route exact path="/admin/import/update/:id">
+                        <UpdateImport/>
+                    </Route>
+                    <Route exact path="/admin/import/:id">
+                        <ImportDetailsByImport/>
+                    </Route>
+                    <Route exact path="/admin/importDetails/update/:id">
+                        <UpdateImportDetails/>
+                    </Route>
+                    <Route exact path="/admin/statistical">
+                        <Statistical/>
+                    </Route>
+                    <Route exact path="/admin/statistical/chart">
+                        <Chart/>
+                    </Route>
                 </Switch>
+                <Footer/>
             </Container>
         )
     }
-}
-
-const PageRoute = () => {
-    this.props.history.push("/");
 }
 
 export default withRouter(Content);

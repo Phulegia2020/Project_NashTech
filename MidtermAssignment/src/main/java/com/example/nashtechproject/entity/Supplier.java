@@ -4,8 +4,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "supplier")
@@ -21,11 +23,12 @@ public class Supplier {
     private String address;
 
     @Column(name = "phone")
+    @Size(max = 10)
     private String phone;
 
     @OneToMany(mappedBy = "supplier", fetch = FetchType.EAGER)
     @JsonIgnore
-    private List<Product> products = new ArrayList<>();
+    private Set<Product> products;
 
     public Long getId() {
         return id;
@@ -57,13 +60,5 @@ public class Supplier {
 
     public void setPhone(String phone) {
         this.phone = phone;
-    }
-
-    public List<Product> getProducts() {
-        return products;
-    }
-
-    public void setProducts(List<Product> products) {
-        this.products = products;
     }
 }

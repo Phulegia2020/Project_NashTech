@@ -2,8 +2,10 @@ package com.example.nashtechproject.restcontroller;
 
 import com.example.nashtechproject.entity.Role;
 import com.example.nashtechproject.exception.RoleException;
+import com.example.nashtechproject.payload.response.MessageResponse;
 import com.example.nashtechproject.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,41 +36,38 @@ public class RoleController {
         }
         return roleService.getRole(roleId);
     }
-    // Dạ chỗ này em dự định là không thêm xóa sửa vì trong Role có sử dụng RoleName là Enum nên tạm thời
-    // chưa thực hiện được
-//    @PostMapping
-//    public Role saveRole(@RequestBody Role role)
-//    {
-//        return roleService.saveRole(role);
-//    }
-//
-//    @PutMapping("/{roleId}")
-//    public Role updateRole(@PathVariable(name = "roleId") Long roleId, @Validated @RequestBody Role roleDetails)
-//    {
-//        Role role = roleService.getRole(roleId);
-//        if (role == null)
-//        {
-//            throw new RoleException(roleId);
-//        }
-//        else
-//        {
-//            role.setName(roleDetails.getName());
-//            roleService.updateRole(role);
-//        }
-//        return role;
-//    }
-//
-//    @DeleteMapping("/{roleId}")
-//    public HashMap<String, String> deleteRole(@PathVariable(name = "roleId") Long roleId)
-//    {
-//        Role role = roleService.getRole(roleId);
-//        if (role == null)
-//        {
-//            throw new RoleException(roleId);
-//        }
-//        roleService.deleteRole(roleId);
-//        HashMap<String, String> map = new HashMap<>();
-//        map.put("message", "Delete Succesfully!");
-//        return map;
-//    }
+
+    @PostMapping
+    public Role saveRole(@RequestBody Role role)
+    {
+        return roleService.saveRole(role);
+    }
+
+    @PutMapping("/{roleId}")
+    public Role updateRole(@PathVariable(name = "roleId") Long roleId, @Validated @RequestBody Role roleDetails)
+    {
+        Role role = roleService.getRole(roleId);
+        if (role == null)
+        {
+            throw new RoleException(roleId);
+        }
+        else
+        {
+            role.setName(roleDetails.getName());
+            roleService.updateRole(role);
+        }
+        return role;
+    }
+
+    @DeleteMapping("/{roleId}")
+    public ResponseEntity<?> deleteRole(@PathVariable(name = "roleId") Long roleId)
+    {
+        Role role = roleService.getRole(roleId);
+        if (role == null)
+        {
+            throw new RoleException(roleId);
+        }
+        roleService.deleteRole(roleId);
+        return ResponseEntity.ok(new MessageResponse("Delete Successfully"));
+    }
 }

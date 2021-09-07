@@ -55,7 +55,10 @@ export default class Add extends Component {
                 return;
             }
         }
-
+        this.setState({
+            key: '',
+            Error: ''
+        })
         this.props.onAdd(this.state);
     }
 

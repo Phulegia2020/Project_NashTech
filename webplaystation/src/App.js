@@ -12,6 +12,8 @@ import SignUp from './Components/HomePage/SignUp/SignUp';
 import ChangePassword from './Components/HomePage/ChangePassword/ChangePassword';
 import SideBar from './Components/SideBar/SideBar';
 import Content from './Components/SideBar/Content';
+import Info from './Components/HomePage/Profile/Info';
+import Order from './Components/HomePage/ShoppingCart/Order';
 
 class App extends React.Component{
     state = {
@@ -38,6 +40,11 @@ class App extends React.Component{
                       <Products/>
                       <Footer/>
                   </Route>
+                  {/* <Route exact path="/WebPlayStation/search/:search">
+                      <MainMenu/>
+                      <Products/>
+                      <Footer/>
+                  </Route> */}
                   <Route exact path="/WebPlayStation/about">
                       <MainMenu/>
                       <About/>
@@ -57,8 +64,15 @@ class App extends React.Component{
                   </Route>
                   <Route exact path="/WebPlayStation/profile">
                       <MainMenu/>
-                      <ChangePassword/>
+                      <Info/>
                       <Footer/>
+                  </Route>
+                  <Route exact path="/WebPlayStation/changpassword">
+                      <MainMenu/>
+                      <ChangePassword/>
+                      <div className="fixed-bottom">
+                        <Footer/>
+                      </div>
                   </Route>
                   <Route exact path="/WebPlayStation/product/:id">
                       <MainMenu/>
@@ -68,9 +82,17 @@ class App extends React.Component{
                   <Route exact path="/WebPlayStation/category/:id">
                       <MainMenu/>
                       <ProductsByCategory/>
-                      <Footer/>
+                      <div className="fixed-bottom">
+                        <Footer/>
+                      </div>
                   </Route>
-
+                  <Route exact path="/WebPlayStation/order">
+                      <MainMenu/>
+                      <Order/>
+                      {/* <div className="fixed-bottom">
+                        <Footer/>
+                      </div> */}
+                  </Route>
                   <Router path="/admin">
                     <div className="AppSideBar wrapper">
                         <SideBar toggle={this.toggleSidebar} isOpen={this.state.sidebarIsOpen}/>
@@ -82,11 +104,5 @@ class App extends React.Component{
       );
   }
 }
-
-const PageRoute = ({match}) => (
-    <div>
-        <MainMenu activeItem={match.params.page != null ? match.params.page : "WebPlayStation"}/>
-    </div>
-)
 
 export default App;

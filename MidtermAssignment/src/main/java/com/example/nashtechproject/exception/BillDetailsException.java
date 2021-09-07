@@ -13,6 +13,6 @@ public class BillDetailsException extends RuntimeException{
 
     public BillDetailsException(int quantity)
     {
-        super("This product has not enough " + quantity + " one");
+        super("This product has not enough " + quantity + " ones");
     }
 }

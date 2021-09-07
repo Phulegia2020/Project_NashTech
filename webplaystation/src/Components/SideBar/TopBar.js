@@ -4,11 +4,10 @@ import {
   Navbar,
   Button,
   NavbarToggler,
-  Collapse,
-  Nav,
-  NavItem,
-  NavLink,
 } from "reactstrap";
+import {
+    Icon
+} from 'semantic-ui-react'
 
 import React, { Component } from 'react'
 
@@ -35,6 +34,8 @@ class TopBar extends Component {
                     <Button color="info" onClick={this.props.toggleSidebar}>
                         <FontAwesomeIcon icon={faAlignLeft} />
                     </Button>
+                    <h3 className="m-3">Management</h3>
+                    <h3 style={{marginLeft: '1200px'}}><Icon name='user'/>{localStorage.getItem('username')}</h3>
                     <NavbarToggler onClick={this.toggleTopbar} />
                 </Navbar>
             </div>

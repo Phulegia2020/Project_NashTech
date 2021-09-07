@@ -30,15 +30,15 @@ public class BillDetailsServiceImpl implements BillDetailsService {
         return billDetails;
     }
 
-    public BillDetails getByBillAndProduct(Long bill_id, Long product_id)
+    public BillDetails getByBillAndProduct(Long billdetails_id, Long product_id)
     {
-        BillDetails billDetails = billDetailsRepository.findByBillIdAndProductId(bill_id, product_id);
+        BillDetails billDetails = billDetailsRepository.findByBillIdAndProductId(billdetails_id, product_id);
         return billDetails;
     }
 
-    public List<BillDetails> getBillDetailsByBill(Long billId)
+    public List<BillDetails> getBillDetailsByBill(Long billdetailsId)
     {
-        List<BillDetails> billDetails = billDetailsRepository.findByBillId(billId);
+        List<BillDetails> billDetails = billDetailsRepository.findByBillId(billdetailsId);
         return billDetails;
     }
 

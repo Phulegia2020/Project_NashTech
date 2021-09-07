@@ -10,7 +10,7 @@ import javax.validation.constraints.Size;
 import java.util.*;
 
 @Entity
-@Table(name = "employee", schema = "public", uniqueConstraints = {
+@Table(name = "user", schema = "public", uniqueConstraints = {
         @UniqueConstraint(columnNames = {
                 "account"
         }),
@@ -54,7 +54,7 @@ public class User {
     private String password;
 
     @Column(name = "active_status")
-    private String active_status;
+    private String activestatus;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id")
@@ -62,7 +62,7 @@ public class User {
 
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     @JsonIgnore
-    private List<Bill> bills = new ArrayList<>();
+    private Set<Bill> bills;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonIgnore
@@ -89,7 +89,7 @@ public class User {
         this.password = password;
     }
 
-    public User(Long id, String name, String gender, String address, String email, String phone, String account, String password, String active_status/*, Role role*/) {
+    public User(Long id, String name, String gender, String address, String email, String phone, String account, String password, String active_status) {
         this.id = id;
         this.name = name;
         this.gender = gender;
@@ -98,8 +98,7 @@ public class User {
         this.phone = phone;
         this.account = account;
         this.password = password;
-        this.active_status = active_status;
-        //this.role = role;
+        this.activestatus = active_status;
     }
 
     public Long getId() {
@@ -167,11 +166,11 @@ public class User {
     }
 
     public String getActive_status() {
-        return active_status;
+        return activestatus;
     }
 
     public void setActive_status(String active_status) {
-        this.active_status = active_status;
+        this.activestatus = active_status;
     }
 
     public Role getRole() {
@@ -180,22 +179,6 @@ public class User {
 
     public void setRole(Role role) {
         this.role = role;
-    }
-
-    public List<Bill> getBills() {
-        return bills;
-    }
-
-    public void setBills(List<Bill> bills) {
-        this.bills = bills;
-    }
-
-    public Set<Rating> getRatings() {
-        return ratings;
-    }
-
-    public void setRatings(Set<Rating> ratings) {
-        this.ratings = ratings;
     }
 
     @Override

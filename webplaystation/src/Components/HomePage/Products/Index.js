@@ -3,6 +3,7 @@ import { Header, Segment, Grid, Pagination, PaginationItem, PaginationLink, Adve
 import { get } from '../../../Utils/httpHelper';
 import MainMenu from '../MainMenu/MainMenu';
 import ProductList from './ProductList';
+import { withRouter } from 'react-router-dom';
 
 class Products extends Component {
     constructor(props) {
@@ -12,38 +13,39 @@ class Products extends Component {
             Products: [],
             open: false,
             pageToTal: 0,
-            activePage: 1
+            activePage: 1,
+            search: this.props.match.params.search
         };
         this.handlePaginationChange = this.handlePaginationChange.bind(this);
     }
 
     componentDidMount() {
-        
         this.state.ShoppingCartItems = JSON.parse(localStorage.getItem('shopping-cart') || '[]');
 
-        get("/products")
+        get("/products/onSale")
         .then((response) => {
             if (response.status === 200)
             {
                 this.setState({
                     pageToTal: Math.ceil(response.data.length / 8)
                 })
+                console.log(response.data)
             }
         })
         .catch(error => {console.log(error)})
-
-        get(`/products/page?pageNumber=${this.state.activePage-1}&pageSize=8&sortBy=id`)
+        get(`/products/pageOnSale?pageNumber=${this.state.activePage-1}&pageSize=8&sortBy=id`)
         .then((response) => {
             this.setState({
                 Products: response.data,
             });
+            console.log(response.data)
         })
         .catch(error => console.log(error));
     }
     
     async handlePaginationChange(e, {activePage}){
         await this.setState({ activePage });
-        get(`/products/page?pageNumber=${this.state.activePage-1}&pageSize=8&sortBy=id`)
+        get(`/products/pageOnSale?pageNumber=${this.state.activePage-1}&pageSize=8&sortBy=id`)
         .then((response) => {
             this.setState({
                 Products: response.data,
@@ -89,4 +91,4 @@ class Products extends Component {
     }
 }
 
-export default Products;
+export default withRouter(Products);

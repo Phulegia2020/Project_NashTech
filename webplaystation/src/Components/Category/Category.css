@@ -49,3 +49,11 @@
   tbody tr:last-child td:last-child {
     border-bottom-right-radius: 10px;
   }
+
+  .disable-link{
+    pointer-events: none;
+  }
+
+  .descriptionTable{
+    width: 500px;
+  }

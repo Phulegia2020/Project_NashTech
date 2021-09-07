@@ -2,7 +2,9 @@ import React, {Component} from 'react';
 import {Card, Icon, Image, Segment, Grid, Header, Rating, Divider, Table, Message} from 'semantic-ui-react'
 import ButtonAddToCart from "./ButtonAddToCart";
 import { get, post, put } from '../../../Utils/httpHelper';
+import { formatCurrency, formatQuantity } from '../../../Utils/Utils';
 import { withRouter } from "react-router";
+import { Link } from 'react-router-dom';
 
 class ProductDetails extends Component {
     constructor(props) {
@@ -17,7 +19,6 @@ class ProductDetails extends Component {
             totalrating: 0
         };
         this.onRating = this.onRating.bind(this);
-        this.formatDate = this.formatDate.bind(this);
     }
 
     componentDidMount() {
@@ -30,12 +31,11 @@ class ProductDetails extends Component {
                 this.setState({
                     Product: response.data
                 });
-                console.log(response.data);
             }
         })
 
         this.setState({
-            user_id: sessionStorage.getItem('user_id'),
+            user_id: localStorage.getItem('user_id'),
         })
 
         get(`/ratings/product/${this.state.product_id}`)
@@ -48,20 +48,21 @@ class ProductDetails extends Component {
             }
         })
         .catch(error => console.log(error));
-    }
 
-    formatCurrency(number) {
-        var options = {style: 'currency', currency: 'VND'};
-        var numberFormat = new Intl.NumberFormat('en-US', options);
-
-        return numberFormat.format(number);
-    }
-
-    formatDate = (date) => {
-        let d = new Date(date);
-        let res = d.getDate() + "-"+ parseInt(d.getMonth()+1) +"-"+d.getFullYear();
-
-        return res;
+        if (localStorage.getItem('user_id') != null)
+        {
+            get(`/ratings/search?userId=${localStorage.getItem('user_id')}&productId=${this.state.product_id}`)
+            .then((response) => {
+                if (response.status === 200)
+                {
+                    this.setState({
+                        rate: response.data
+                    })
+                }
+            })
+            .catch((error) => {console.log(error)});
+        }
+        
     }
 
     onCheckRated(user_id)
@@ -77,6 +78,11 @@ class ProductDetails extends Component {
 
     async onRating(event, data){
         event.preventDefault();
+        if (localStorage.getItem('user_id') === null)
+        {
+            alert('Login to rate this product');
+            return;
+        }
         if (data.rating !== 0)
         {
             await this.setState({
@@ -86,7 +92,7 @@ class ProductDetails extends Component {
             {
                 if (this.onCheckRated(this.state.user_id) === true)
                 {
-                    alert(`User ${this.state.user_id} rated product ${this.state.product_id}. Rating another product, please!`);
+                    alert(`You rated this product. Rating another product, thanks!`);
                 }
                 else
                 {
@@ -94,35 +100,30 @@ class ProductDetails extends Component {
                     .then((response) => {
                         if (response.status === 200)
                         {
-                            //console.log(response.data);
                             this.handleTotalRating();
                             this.handleUpdateRating(this.state.product_id, this.state.Product);
-                            //alert(`User ${this.state.user_id} rated product ${this.state.product_id} is ${this.state.rate}`);
+                            alert('Thanks for review');
                             window.location.reload();
-                            //this.props.history.push(`/WebPlayStation/product/${this.state.product_id}`);
                         }
                     })
-                    .catch(error => alert('Login, please!'));
                 }
             }
-            
         }
     }
 
     handleUpdateRating(id, data){
         put(`/products/${id}`, {name: data.name, description: data.description, quantity: data.quantity, price: data.price,
-                                        imageurl: data.imageurl ,totalrating: this.state.totalrating ,category_id: data.category_id, supplier_id: data.supplier_id})
+                                imageurl: data.imageurl ,totalrating: this.state.totalrating ,category_id: data.category.id, supplier_id: data.supplier.id,
+                                status: data.status})
         .then((response) => {
             if (response.status === 200)
             {
-                //console.log(response.data);
             }
         })
     }
 
     handleTotalRating = () => {
         var sumrating = this.state.rate;
-        //console.log(sumrating);
         for (var i = 0; i < this.state.proByRate.length; i++)
         {
             if (this.state.proByRate[i].user_id !== this.state.user_id)
@@ -131,7 +132,6 @@ class ProductDetails extends Component {
             }
         }
         var total = Math.round((sumrating) / (this.state.proByRate.length+1));
-        //console.log(total);
         this.setState({
             totalrating: total,
         });
@@ -152,12 +152,12 @@ class ProductDetails extends Component {
                 <Grid container stackable verticalAlign='middle'>
                     <Grid.Row>
                         <Grid.Column width={4}>
-                            <Image src={`data:image/jpeg;base64,${product.imageurl}`}/>
+                            <img src={`data:image/jpeg;base64,${product.imageurl}`}/>
                         </Grid.Column>
                         <Grid.Column width={12}>
                             <Header as="h1">{product.name}</Header>
                             <p style={{ fontSize: '1.33em' }}><b>Desciption: </b>{product.description}</p>
-                            <p style={{ fontSize: '1.33em' }}><b>Price: </b>{this.formatCurrency(product.price)}</p>
+                            <p style={{ fontSize: '1.33em' }}><b>Price: </b>{formatCurrency(product.price)}</p>
                             <p style={{ fontSize: '1.33em' }}><b>Rating: </b><Rating icon='star'  maxRating={5} onRate={this.onRating} name="rate" rating={product.totalrating} disabled/></p>
                             <Message info>
                                 <Message.Header>Contact to Buy Pruduct: (028) 38.295.258</Message.Header>
@@ -176,18 +176,6 @@ class ProductDetails extends Component {
                             </Header>
                         </Divider>
 
-                        {/* <p>
-                        Doggie treats are good for all times of the year. Proven to be eaten by
-                        99.9% of all dogs worldwide.
-                        </p>
-
-                        <Divider horizontal>
-                        <Header as='h4'>
-                            <Icon name='bar chart' />
-                            Specifications
-                        </Header>
-                        </Divider> */}
-
                         <Table definition >
                             <Table.Body>
                                 <Table.Row>
@@ -199,12 +187,12 @@ class ProductDetails extends Component {
                                     <Table.Cell>{product.category?.description}</Table.Cell>
                                 </Table.Row>
                                 <Table.Row>
-                                    <Table.Cell>Time Manufacturing</Table.Cell>
-                                    <Table.Cell>{this.formatDate(product.createddate)}</Table.Cell>
+                                    <Table.Cell>Warranty Period</Table.Cell>
+                                    <Table.Cell>3 Years</Table.Cell>
                                 </Table.Row>
                                 <Table.Row>
                                     <Table.Cell>The remaining amount</Table.Cell>
-                                    <Table.Cell>{product.quantity}</Table.Cell>
+                                    <Table.Cell>{product.quantity === 0 ? 'Sold Out' : formatQuantity(product.quantity)}</Table.Cell>
                                 </Table.Row>
                             </Table.Body>
                         </Table>
@@ -218,7 +206,9 @@ class ProductDetails extends Component {
                                 </Header>
                         </Divider>
                         <Grid.Column width={12} style={{marginLeft: '36em'}}>
-                            <Rating icon='star'  maxRating={5} onRate={this.onRating} name="rate" rating={product.totalrating} size="huge"/>
+                            
+                            <Rating icon='star' maxRating={5} name="rate" size="huge" rating={this.state.rate} onRate={this.onRating}/>
+                            
                         </Grid.Column>
                     </Grid.Row>
                 </Grid>

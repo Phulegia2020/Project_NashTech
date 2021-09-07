@@ -1,0 +1,17 @@
+.copyrights {
+    padding: 1em 1em;
+    text-align: center;
+    box-shadow: 0px 0px 2px 1px rgba(0,0,0,0.15);
+    margin-left: 250px;
+    height: 3.5rem;
+}
+.copyrights p {
+    font-size: 1em;
+    color: #000;
+}
+.copyrights p a{
+    color: #000;
+}
+.copyrights p a:hover{
+    color:#68AE00;
+}

@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import { Col, Row, Button, Form, FormGroup, Label, Input } from 'reactstrap';
 import { get } from '../../Utils/httpHelper';
+import { checkPhoneNumber } from '../../Utils/Utils';
+import { Checkbox} from 'semantic-ui-react';
 
 export default class Add extends Component {
     constructor(props)
@@ -19,6 +21,7 @@ export default class Add extends Component {
             blankError: "",
             key: "",
             users: [],
+            show: false
         }
     }
     
@@ -27,7 +30,6 @@ export default class Add extends Component {
         .then((response) => {
             if (response.status === 200)
             {
-                //console.log(response.data);
                 this.setState({users: response.data});
             }
         })
@@ -37,7 +39,6 @@ export default class Add extends Component {
         .then((response) => {
             if (response.status === 200)
             {
-                //console.log(response.data);
                 this.setState({
                     roles: response.data
                 });
@@ -46,8 +47,6 @@ export default class Add extends Component {
     }
 
     changeValue(e){
-        //this.setState({name: e.target.value})
-        //console.log(e.target.name);
         if (e.target.name === 'username' || e.target.name === 'phone' || e.target.name === 'email')
         {
             this.setState({
@@ -63,7 +62,9 @@ export default class Add extends Component {
 
     async handleCreate(event){
         event.preventDefault();
-        console.log(event.target.username.value.trim());
+        await this.setState({
+            role: event.target.role.value
+        })
         for (let i = 0; i < this.state.users.length; i++)
         {
             if (this.state.users[i].account === event.target.username.value.trim())
@@ -103,10 +104,34 @@ export default class Add extends Component {
 				key: 'password'
 			})
 			this.setState({
-				Error: "Password is at least 6 characters!"
+				blankError: "Password is at least 6 characters!"
 			});
 			return;
-		}
+        }
+        if (event.target.phone.value.trim().length !== 10)
+		{
+			this.setState({
+				key: 'phone'
+			})
+			this.setState({
+				blankError: "Phone must have 10 numbers!"
+			});
+			return;
+        }
+        if (event.target.phone.value[0] != 0)
+		{
+			this.setState({
+				key: 'phone'
+			})
+			this.setState({
+				blankError: "Phone must start with number 0!"
+			});
+			return;
+        }
+        this.setState({
+            key: '',
+            blankError: ''
+        })
         this.props.onAdd(this.state);
     }
 
@@ -124,6 +149,14 @@ export default class Add extends Component {
         this.props.onCloseForm();
     }
 
+    handleShowPassword(e)
+	{
+		e.preventDefault();
+		this.setState({
+			show: !this.state.show
+		})
+	}
+
     componentWillUnmount() {
         // fix Warning: Can't perform a React state update on an unmounted component
         this.setState = (state,callback)=>{
@@ -138,7 +171,6 @@ export default class Add extends Component {
                     <FormGroup>
                         <Label for="name">Name</Label>
                         <Input type="text" name="fullname" id="name" placeholder="Phu Le Gia" onChange={(e) => this.changeValue(e)} value = {this.state.fullname} required/>
-                        {/* {this.state.key === 'fullname' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.blankError}</span> : '' } */}
                     </FormGroup>
                     <FormGroup tag="fieldset" row>
                         <legend className="col-form-label col-sm-2">Gender</legend>
@@ -169,8 +201,9 @@ export default class Add extends Component {
                         <Col md={6}>
                             <FormGroup>
                                 <Label for="password">Password</Label>
-                                <Input type="password" minLength="6" name="password" id="password" placeholder="123456" onChange={(e) => this.changeValue(e)} value = {this.state.password} required/>
+                                <Input type={this.state.show === false? 'password' : 'text'} minLength="6" name="password" id="password" placeholder="******" onChange={(e) => this.changeValue(e)} value = {this.state.password} required/>
                                 {this.state.key === 'password' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.blankError}</span> : '' }
+                                <Checkbox label='Show password' onChange={(e) => this.handleShowPassword(e)}/>
                             </FormGroup>
                         </Col>
                     </Row>
@@ -185,14 +218,14 @@ export default class Add extends Component {
                     </FormGroup>
                     <FormGroup>
                         <Label for="phone">Phone</Label>
-                        <Input type="text" minLength="10" maxLength="10" name="phone" id="phone" placeholder="0987654321" onChange={(e) => this.changeValue(e)} value = {this.state.phone} required/>
+                        <Input type="number" minLength="10" maxLength="10" name="phone" id="phone" placeholder="0987654321" onChange={(e) => this.changeValue(e)} value = {this.state.phone} required/>
                         {this.state.key === 'phone' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.blankError}</span> : '' }
                     </FormGroup>
                     <FormGroup className="mb-2">
                         <Label for="role">Role</Label>
-                        <Input type="select" name="role" id="role" value = {this.state.role} onChange={(e) => this.changeValue(e)}>
-                            <option value="ADMIN">ADMIN</option>
-                            <option value="PM">PM</option>
+                        <Input type="select" name="role" id="role" onChange={(e) => this.changeValue(e)} required>
+                            <option defaultValue="ADMIN">ADMIN</option>
+                            <option value="STAFF">STAFF</option>
                             <option value="USER">USER</option>
                         </Input>
                     </FormGroup>

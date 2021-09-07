@@ -14,7 +14,7 @@ import {Link} from 'react-router-dom';
 class Login extends Component {
 	constructor(props) {
 		super(props);
-		this.state = { username: '', password: ''};
+		this.state = { username: '', password: '', show: false};
 	}
 
 	handleChange = (e, { name, value }) => {
@@ -30,25 +30,33 @@ class Login extends Component {
 		}
 	}
 
+	handleShowPassword(e)
+	{
+		e.preventDefault();
+		this.setState({
+			show: !this.state.show
+		})
+	}
+
 	handleSubmit = () => {
 		postLogin('/auth/signin', {username: this.state.username, password: this.state.password})
         .then((response) => {
             if (response.status === 200)
             {
-                //console.log(response.data);
-                localStorage.setItem('accessToken', response.data.accessToken);
-				sessionStorage.setItem('user_id', response.data.id);
-				sessionStorage.setItem('username', response.data.username);
-                if (response.data.roles[0] === "ROLE_ADMIN" || response.data.roles[0] === "ROLE_PM")
+				localStorage.setItem('accessToken', response.data.accessToken);
+				localStorage.setItem('role', response.data.roles[0]);
+				localStorage.setItem('user_id', response.data.id);
+				localStorage.setItem('username', response.data.username);
+                if (response.data.roles[0] === "ADMIN" || response.data.roles[0] === "STAFF")
                 {
-					alert('Login Successfully!');
 					this.props.history.push("/admin");
+					window.location.reload();
 					
 				}
-				else if (response.data.roles[0] === "ROLE_USER")
+				else if (response.data.roles[0] === "USER")
 				{
-					alert('Login Successfully!');
 					this.props.history.push("/");
+					window.location.reload();
 				}
             }
             
@@ -58,9 +66,10 @@ class Login extends Component {
 
 	render() {
 		return (
-			<Segment style={{ padding: '8em 0em' }} placeholder>
+			<Segment style={{ padding: '8em 0em', marginTop: '6rem' }} placeholder>
 				<Grid columns={2} relaxed='very' stackable>
 				<Grid.Column width={8}>
+					<h2 style={{ marginLeft: '355px', marginBottom: '25px' }}>Sign In</h2>
 					<Form onSubmit={(event) => this.handleSubmit(event)}>
 					<Form.Input
 						icon='user'
@@ -76,10 +85,13 @@ class Login extends Component {
 						label='Password'
 						type='password'
 						placeholder='Enter Password '
-						type='password' name='password' value={this.state.password} onChange={this.handleChange}
+						type={this.state.show === false ? 'password' : 'text'}
+						name='password' value={this.state.password} onChange={this.handleChange}
 						required
 					/>
-
+					<Form.Field>
+						<Checkbox label='Show password' onChange={(e) => this.handleShowPassword(e)}/>
+					</Form.Field>
 					<Button type='submit' content='Login' primary/>
 					</Form>
 				</Grid.Column>

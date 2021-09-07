@@ -1,14 +1,15 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faHome,
-  faBriefcase,
-  faPaperPlane,
-  faQuestion,
-  faImage,
-  faCopy,
-  faUser,
   faSignOutAlt,
   faMoneyBill,
+  faPeopleArrows,
+  faBox,
+  faIdCard,
+  faFileImport,
+  faCity,
+  faChartArea,
+  faArchive,
 } from "@fortawesome/free-solid-svg-icons";
 import { NavItem, NavLink, Nav } from "reactstrap";
 import classNames from "classnames";
@@ -21,6 +22,7 @@ import { withRouter } from "react-router";
 class SideBar extends Component {
     state = {
         categories: [],
+        statistical: [{id: 'chart', name: 'Chart'}],
         isDisplayForm: false,
         redirect: false
     }
@@ -37,12 +39,19 @@ class SideBar extends Component {
     }
 
     onLogOut = () => {
-        localStorage.setItem('accessToken', '');
-        sessionStorage.removeItem('user_id');
-        sessionStorage.removeItem('username');
-        //this.props.onAdminOut();
-        this.props.history.push("/");
-        window.location.reload();
+        get("/auth/logout")
+        .then((response) => {
+            if (response.status === 200)
+            {
+                localStorage.removeItem('accessToken');
+                localStorage.removeItem('role');
+                localStorage.removeItem('user_id');
+                localStorage.removeItem('username');
+                this.props.history.push("/");
+                window.location.reload();
+            }
+        })
+        .catch((error) => {})
     }
 
     render() {
@@ -52,33 +61,52 @@ class SideBar extends Component {
                     <span color="info" onClick={this.props.toggle} style={{ color: "#fff" }}>
                         &times;
                     </span>
-                    <h3>DashBoard</h3>
+                    <h3>The Playstation</h3>
                 </div>
                 <div className="side-menu">
                     <Nav vertical className="list-unstyled pb-3">
-                        <SubMenu title="Category" icon={faHome} items={this.state.categories} />
+                        <SubMenu title="Category" icon={faArchive} items={this.state.categories} url="category"/>
                         
                         <NavItem>
-                        <NavLink tag={Link} to={"/admin/product"} className="letter">
-                            <FontAwesomeIcon icon={faBriefcase} className="mr-2" />
-                            Product
-                        </NavLink>
+                            <NavLink tag={Link} to={"/admin/product"} className="letter m-2">
+                                <FontAwesomeIcon icon={faBox}/>{' '}
+                                Product
+                            </NavLink>
                         </NavItem>
                         <NavItem>
-                        <NavLink tag={Link} to={"/admin/user"} className="letter">
-                            <FontAwesomeIcon icon={faCopy} className="mr-2" />
-                            User
-                        </NavLink>
+                            <NavLink tag={Link} to={"/admin/user"} className="letter m-2">
+                                <FontAwesomeIcon icon={faPeopleArrows}/>{' '}
+                                User
+                            </NavLink>
                         </NavItem>
                         <NavItem>
-                        <NavLink tag={Link} to={"/admin/bill"} className="letter">
-                            <FontAwesomeIcon icon={faMoneyBill} className="mr-2" />
-                            Bill
-                        </NavLink>
+                            <NavLink tag={Link} to={"/admin/bill"} className="letter m-2">
+                                <FontAwesomeIcon icon={faMoneyBill}/>{' '}
+                                Bill
+                            </NavLink>
                         </NavItem>
                         <NavItem>
-                            <NavLink tag={Link} className="letter" onClick={this.onLogOut}>
-                            <FontAwesomeIcon className="mr-3" icon={faSignOutAlt}/>
+                            <NavLink tag={Link} to={"/admin/placeorder"} className="letter m-2">
+                                <FontAwesomeIcon icon={faIdCard}/>{' '}
+                                Place Order
+                            </NavLink>
+                        </NavItem>
+                        <NavItem>
+                            <NavLink tag={Link} to={"/admin/import"} className="letter m-2">
+                                <FontAwesomeIcon icon={faFileImport}/>{' '}
+                                Import
+                            </NavLink>
+                        </NavItem>
+                        <NavItem>
+                            <NavLink tag={Link} to={"/admin/supplier"} className="letter m-2">
+                                <FontAwesomeIcon icon={faCity}/>{' '}
+                                Supplier
+                            </NavLink>
+                        </NavItem>
+                        <SubMenu title="Statistical" icon={faChartArea} items={this.state.statistical} url="statistical"/>
+                        <NavItem>
+                            <NavLink tag={Link} className="letter m-2" onClick={this.onLogOut}>
+                            <FontAwesomeIcon icon={faSignOutAlt}/>{' '}
                             Log Out
                             </NavLink>
                         </NavItem>

@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
 import {
     Button,
-    Modal,
     Grid,
     Segment,
     Form,
-    Checkbox,
 } from 'semantic-ui-react';
 import {post} from './../../../Utils/httpHelper'
 
@@ -31,13 +29,16 @@ export default class ChangePassword extends Component {
 			});
 			return;
 		}
-		post('/auth/profile', {user_id: sessionStorage.getItem('user_id'), newpassword: this.state.newpassword,
+		post('/auth/profile', {user_id: localStorage.getItem('user_id'), newpassword: this.state.newpassword,
                                             confirmpassword: this.state.confirmpassword})
         .then((response) => {
             if (response.status === 200)
             {
-                alert(response.data.message);
-                //window.location.reload();
+				alert(response.data.message);
+				this.setState({
+					newpassword: "",
+					confirmpassword: ""
+				});
             }
             
         })
@@ -59,9 +60,6 @@ export default class ChangePassword extends Component {
 								<Form.Field>
 									<label>Confirm Password</label>
 									<Form.Input placeholder='Confirm New Password' type='password' name='confirmpassword' value={this.state.confirmpassword} onChange={this.handleChange} required/>
-								</Form.Field>
-								<Form.Field>
-									<Checkbox label='Remember me' />
 								</Form.Field>
 								<Button type='submit'>Confirm</Button>
 							</Form>

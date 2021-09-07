@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { withRouter } from "react-router";
 import { put, get } from '../../Utils/httpHelper';
 import { Col, Row, Button, Form, FormGroup, Label, Input } from 'reactstrap';
+import { TextArea } from 'semantic-ui-react';
 
 class UpdateProduct extends Component {
     state = {
@@ -14,6 +15,7 @@ class UpdateProduct extends Component {
         imageurl: null,
         category_id: "",
         supplier_id: "",
+        status:"",
         categories: [],
         suppliers: [],
         base64: "",
@@ -27,7 +29,6 @@ class UpdateProduct extends Component {
         .then((response) => {
             if (response.status === 200)
             {
-                //console.log(response.data);
                 this.setState({products: response.data});
             }
         })
@@ -35,11 +36,8 @@ class UpdateProduct extends Component {
 
         get(`/products/${this.state.id}`)
         .then((response) => {
-            //console.log(response.data);
             if (response.status === 200)
             {
-                
-                // alert(`${id} is found`);
                 this.setState({
                     name: response.data.name,
                     description: response.data.description,
@@ -47,17 +45,16 @@ class UpdateProduct extends Component {
                     price: response.data.price,
                     totalrating: response.data.totalrating,
                     imageurl: response.data.imageurl,
-                    category_id: response.data.category_id,
-                    supplier_id: response.data.supplier_id,
+                    category_id: response.data.category.id,
+                    supplier_id: response.data.supplier.id,
+                    status: response.data.status
                 })
-                //console.log(this.state.imageurl);
             }
         });
         get("/categories")
         .then((response) => {
             if (response.status === 200)
             {
-                //console.log(response.data);
                 this.setState({
                     categories: response.data
                 });
@@ -68,7 +65,6 @@ class UpdateProduct extends Component {
         .then((response) => {
             if (response.status === 200)
             {
-                //console.log(response.data);
                 this.setState({
                     suppliers: response.data
                 });
@@ -103,7 +99,6 @@ class UpdateProduct extends Component {
     };
     
     changeValue(e){
-        //this.setState({name: e.target.value})
         this.setState({
             [e.target.name]: e.target.value
         });
@@ -149,16 +144,16 @@ class UpdateProduct extends Component {
                 }
             }
         }
-        
         put(`/products/${this.state.id}`, {name: this.state.name.trim(), description:this.state.description.trim(), quantity: this.state.quantity, price: this.state.price,
-                                           totalrating:this.state.totalrating ,imageurl: this.state.imageurl, category_id: this.state.category_id, supplier_id: this.state.supplier_id})
+                                           totalrating:this.state.totalrating ,imageurl: this.state.imageurl, category_id: this.state.category_id, supplier_id: this.state.supplier_id,
+                                           status: this.state.status})
         .then((response) => {
             if (response.status === 200)
             {
-                //console.log(response.data);
                 this.props.history.push("/admin/product");
             }
         })
+        .catch((error) => {})
     }
 
     handleClear = () => {
@@ -182,58 +177,62 @@ class UpdateProduct extends Component {
         return (
             <div>
                 <h3>Update Product</h3>
-                <Form onSubmit={(event) => this.handleUpdate(event)}>
-                <FormGroup>
-                    <Label for="name">Name</Label>
-                    <Input type="text" name="name" id="name" placeholder="PlayStation 4" onChange={(e) => this.changeValue(e)} value = {this.state.name} required="required"/>
-                    {this.state.key === 'name' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
-                </FormGroup>
-                <FormGroup>
-                    <Label for="description">Description</Label>
-                    <Input type="text" name="description" id="description" placeholder="PlayStation 4 Pro" onChange={(e) => this.changeValue(e)} value = {this.state.description} required="required"/>
-                </FormGroup>
-                <FormGroup>
-                    <Label for="quantity">Quantity</Label>
-                    <Input type="number" name="quantity" id="quantity" placeholder="1000" onChange={(e) => this.changeValue(e)} value = {this.state.quantity} required="required"/>
-                    {this.state.key === 'quantity' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
-                </FormGroup>
-                <FormGroup>
-                    <Label for="price">Price</Label>
-                    <Input type="number" name="price" id="price" placeholder="1.000.000 VNĐ" onChange={(e) => this.changeValue(e)} value = {this.state.price} required="required"/>
-                    {this.state.key === 'price' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
-                </FormGroup>
-                <FormGroup>
-                    <Label for="image">Image</Label>
-                    <br></br>
-                    <Input type="file" name="image" id="image" accept=".jpeg, .png, .jpg" onChange={(e) => {this.uploadImage(e)}}/>
-                    <br></br>
-                    <img src={`data:image/jpeg;base64,${this.state.imageurl}`} alt="" height="150px"></img>
-                </FormGroup>
-                <FormGroup className="mb-2">
-                    <Label for="category">Category</Label>
-                    <Input type="select" name="category_id" id="category" value = {this.state.category_id} onChange={(e) => this.changeValue(e)}>
-                        {
-                            this.state.categories.map((c) => (
-                                <option key={c.id} value={c.id}>{c.name}</option>
-                            ))
-                        }
-                    </Input>
-                </FormGroup>
-                <FormGroup className="mb-2">
-                    <Label for="supplier">Supplier</Label>
-                    <Input type="select" name="supplier_id" id="supplier" value = {this.state.supplier_id} onChange={(e) => this.changeValue(e)}>
-                        {
-                            this.state.suppliers.map((s) => (
-                                <option key={s.id} value={s.id}>{s.name}</option>
-                            ))
-                        }
-                    </Input>
-                </FormGroup>
-                <div className="mb-5">
-                    <Button type="submit" outline color="warning" >Update</Button>{' '}
-                    <Button outline color="danger" onClick={this.handleClear.bind(this)}>Cancel</Button>
-                </div>
-                </Form>
+                <Row form>
+                    <Col md={4}>
+                        <Form onSubmit={(event) => this.handleUpdate(event)}>
+                        <FormGroup>
+                            <Label for="name">Name</Label>
+                            <Input type="text" name="name" id="name" placeholder="PlayStation 4" onChange={(e) => this.changeValue(e)} value = {this.state.name} required="required" disabled={this.state.status === 'Stop'}/>
+                            {this.state.key === 'name' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
+                        </FormGroup>
+                        <FormGroup>
+                            <Label for="description">Description</Label><br></br>
+                            <textarea style={{resize: 'none', width: '545px'}} rows="4" name="description" id="description" placeholder="PlayStation 4 Pro" onChange={(e) => this.changeValue(e)} value = {this.state.description} required="required" disabled={this.state.status === 'Stop'}></textarea>
+                        </FormGroup>
+                        <FormGroup>
+                            <Label for="quantity">Quantity</Label>
+                            <Input type="number" name="quantity" id="quantity" placeholder="1000" onChange={(e) => this.changeValue(e)} value = {this.state.quantity} required="required" disabled={this.state.status === 'Stop'}/>
+                            {this.state.key === 'quantity' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
+                        </FormGroup>
+                        <FormGroup>
+                            <Label for="price">Price</Label>
+                            <Input type="number" name="price" id="price" placeholder="1.000.000 VNĐ" onChange={(e) => this.changeValue(e)} value = {this.state.price} required="required" disabled={this.state.status === 'Stop'}/>
+                            {this.state.key === 'price' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
+                        </FormGroup>
+                        <FormGroup>
+                            <Label for="image">Image</Label>
+                            <br></br>
+                            <Input type="file" name="image" id="image" accept=".jpeg, .png, .jpg" onChange={(e) => {this.uploadImage(e)}} disabled={this.state.status === 'Stop'}/>
+                            <br></br>
+                            <img src={`data:image/jpeg;base64,${this.state.imageurl}`} alt="" height="150px"></img>
+                        </FormGroup>
+                        <FormGroup className="mb-2">
+                            <Label for="category">Category</Label>
+                            <Input type="select" name="category_id" id="category" value = {this.state.category_id} onChange={(e) => this.changeValue(e)} disabled={this.state.status === 'Stop'}>
+                                {
+                                    this.state.categories.map((c) => (
+                                        <option key={c.id} value={c.id}>{c.name}</option>
+                                    ))
+                                }
+                            </Input>
+                        </FormGroup>
+                        <FormGroup className="mb-2">
+                            <Label for="supplier">Supplier</Label>
+                            <Input type="select" name="supplier_id" id="supplier" value = {this.state.supplier_id} onChange={(e) => this.changeValue(e)} disabled={this.state.status === 'Stop'}>
+                                {
+                                    this.state.suppliers.map((s) => (
+                                        <option key={s.id} value={s.id}>{s.name}</option>
+                                    ))
+                                }
+                            </Input>
+                        </FormGroup>
+                        <div className="mt-3">
+                            <Button type="submit" outline color="warning" >Update</Button>{' '}
+                            <Button outline color="danger" onClick={this.handleClear.bind(this)}>Cancel</Button>
+                        </div>
+                        </Form>
+                    </Col>
+                </Row>
             </div>
         )
     }

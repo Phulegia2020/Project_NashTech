@@ -17,6 +17,8 @@ public class ProductDTO {
 
     private float totalrating;
 
+    private String status;
+
     @Lob
     @Type(type="org.hibernate.type.BinaryType")
     private byte[] imageurl;
@@ -95,5 +97,13 @@ public class ProductDTO {
 
     public void setSupplier_id(String supplier_id) {
         this.supplier_id = supplier_id;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

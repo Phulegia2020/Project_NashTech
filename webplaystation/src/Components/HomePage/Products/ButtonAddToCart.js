@@ -32,7 +32,7 @@ class ButtonAddToCart extends Component {
 
     render() {
         return(
-            <Button color='green' animated='vertical' onClick={this.onAddToCart.bind(this, this.props.product)}>
+            <Button color='green' animated='vertical' onClick={this.onAddToCart.bind(this, this.props.product)} disabled={this.props.product.quantity === 0}>
                 <Button.Content hidden>Add to cart</Button.Content>
                 <Button.Content visible>
                     <Icon name='shop'/> Shop

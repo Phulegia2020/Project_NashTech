@@ -1,27 +1,31 @@
 import React, { Component } from 'react'
 import "./../Category/Category.css";
-import {del, get, post, put} from "./../../Utils/httpHelper";
+import {del, get, post} from "./../../Utils/httpHelper";
+import {formatQuantity, formatCurrency} from "./../../Utils/Utils";
 import { Link } from 'react-router-dom';
 import { withRouter } from "react-router";
 import Add from "./Add"
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Pagination, PaginationItem, PaginationLink } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { Input } from 'semantic-ui-react';
 
 class Product extends Component {
     state = {
         products: [],
         isDisplayForm: false,
+        isDisplayFormDel: false,
         pageNumber: 0,
-        pageToTal: 0
+        pageToTal: 0,
+        id: "",
+        search: ""
     }
 
     componentDidMount(){
-        get("/products")
+        get("/products/onSale")
         .then((response) => {
             if (response.status === 200)
             {
-                //console.log(response.data);
                 this.setState({
                     pageToTal: Math.ceil(response.data.length / 3)
                 })
@@ -29,7 +33,7 @@ class Product extends Component {
         })
         .catch(error => {console.log(error)})
 
-        get(`/products/page?pageNumber=0&pageSize=3&sortBy=id`)
+        get(`/products/pageOnSale?pageNumber=0&pageSize=3&sortBy=id`)
         .then((response) => {
             this.setState({
                 products: response.data,
@@ -43,18 +47,17 @@ class Product extends Component {
         .then((response) => {
             if (response.status === 200)
             {
-                //console.log(response.data);
             }
         })
     }
 
-    delProduct = (id) =>
+    delProduct = (e, id) =>
     {
+        e.preventDefault();
         del(`/products/${id}`)
         .then((response) => {
-            //console.log(response.data);
             this.setState({products: this.state.products.filter(p => p.id !== id)})
-            alert(response.data.message);
+            this.setState({isDisplayFormDel: false})
         })
         .catch(error => {alert('The product was ordered. Can not delete!')})
     }
@@ -64,7 +67,6 @@ class Product extends Component {
                         price: newProduct.price, totalrating: 0,imageurl: newProduct.imageurl, category_id: newProduct.category_id,
                         supplier_id: newProduct.supplier_id})
         .then((response) => {
-            //console.log(response.data);
             window.location.reload();
             this.setState({
                 products: [...this.state.products, response.data],
@@ -84,8 +86,22 @@ class Product extends Component {
         });
     }
 
+    onToggleFormDel = (e, id) => {
+        e.preventDefault()
+        this.setState({
+            isDisplayFormDel: !this.state.isDisplayFormDel,
+            id: id
+        });
+    }
+
+    onCloseFormDel = (e) => {
+        e.preventDefault()
+        this.setState({
+            isDisplayFormDel: false,
+        });
+    }
+
     onAdd = (data) => {
-        //console.log(data);
         this.createProduct(data);
     }
 
@@ -106,21 +122,78 @@ class Product extends Component {
                 pageNumber: (this.state.pageToTal)
             }, () => console.log(this.state.pageNumber));
         }
-        
-        get(`/products/page?pageNumber=${pageNumber}&pageSize=3&sortBy=id`)
-        .then((response) => {
-            this.setState({
-                products: response.data,
-            });
-        })
-        .catch(error => console.log(error));
+
+        if (this.state.search === '')
+        {
+            get(`/products/pageOnSale?pageNumber=${pageNumber}&pageSize=3&sortBy=id`)
+            .then((response) => {
+                this.setState({
+                    products: response.data,
+                });
+            })
+            .catch(error => console.log(error));
+        }
+        else
+        {
+            get(`/products/namePage?name=${this.state.search}&pageNumber=${pageNumber}&pageSize=3&sortBy=id`)
+            .then((response) => {
+                if (response.status === 200)
+                {
+                    this.setState({products: response.data});
+                }
+            })
+            .catch(error => {console.log(error)})
+        }
     }
 
-    formatCurrency(number) {
-        var options = {style: 'currency', currency: 'VND'};
-        var numberFormat = new Intl.NumberFormat('en-US', options);
+    async handleSearch(e){
+        e.preventDefault()
+        await this.setState({
+            search: e.target.value
+        })
+        if (this.state.search === '')
+        {
+            get("/products/onSale")
+            .then((response) => {
+                if (response.status === 200)
+                {
+                    this.setState({
+                        pageToTal: Math.ceil(response.data.length / 3)
+                    })
+                }
+            })
+            .catch(error => {console.log(error)})
 
-        return numberFormat.format(number);
+            get(`/products/pageOnSale?pageNumber=0&pageSize=3&sortBy=id`)
+            .then((response) => {
+                this.setState({
+                    products: response.data,
+                });
+            })
+            .catch(error => console.log(error));
+        }
+        else
+        {
+            get(`/products/name?name=${this.state.search}`)
+            .then((response) => {
+                if (response.status === 200)
+                {
+                    this.setState({
+                        pageToTal: Math.ceil(response.data.length / 3)
+                    })
+                }
+            })
+            .catch(error => {console.log(error)})
+            
+            get(`/products/namePage?name=${this.state.search}&pageNumber=0&pageSize=3&sortBy=id`)
+            .then((response) => {
+                if (response.status === 200)
+                {
+                    this.setState({products: response.data});
+                }
+            })
+            .catch(error => {console.log(error)})
+        }
     }
 
     componentWillUnmount() {
@@ -133,23 +206,47 @@ class Product extends Component {
     render() {
         return (
             <div>
+                <Modal
+                    isOpen={this.state.isDisplayFormDel}
+                    aria-labelledby="contained-modal-title-vcenter"
+                    centered
+                    toggle={this.onToggleFormDel}
+                    >
+                    <ModalHeader>
+                        Delete
+                    </ModalHeader>
+                    <ModalBody>
+                        <p>
+                        Do you want to stop selling this product?
+                        </p>
+                    </ModalBody>
+                    <ModalFooter>
+                        <Button onClick={(e) => this.delProduct(e, this.state.id)} className="btn-danger">Delete</Button>
+                        <Button onClick={(e) => this.onCloseFormDel(e)}>Close</Button>
+                    </ModalFooter>
+                </Modal>
                 <button type="button" className="btn btn-primary" onClick={this.onToggleForm}>
                     <FontAwesomeIcon icon={faPlus} className="mr-2"/>{' '}
                     Creat New Product
                 </button>
+                <Input
+                    style={{marginLeft: '100rem'}}
+                    placeholder="Search for..."
+                    value={this.state.search}
+                    onChange={(e) => this.handleSearch(e)}
+                    icon="search"
+                />
                 <table id="table">
                     <thead>
                         <tr>
-                            <th>ID</th>
-                            <th>Name</th>
-                            <th>Description</th>
-                            <th>Quantity</th>
-                            <th>Price</th>
-                            <th>Image</th>
-                            {/* <th>Category</th>
-                            <th>Supplier</th> */}
-                            <th></th>
-                            <th></th>
+                            <th><b>ID</b></th>
+                            <th><b>Product</b></th>
+                            <th><b>Name</b></th>
+                            <th><b>Description</b></th>
+                            <th><b>Quantity</b></th>
+                            <th><b>Price</b></th>
+                            <th>Update</th>
+                            <th>Delete</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -157,27 +254,24 @@ class Product extends Component {
                             this.state.products.map((p) => (
                                 <tr key={p.id}>
                                     <td>{p.id}</td>
-                                    <td>{p.name}</td>
-                                    <td>{p.description}</td>
-                                    <td>{p.quantity}</td>
-                                    <td>{this.formatCurrency(p.price)}</td>
                                     <td>
                                         <img src={`data:image/jpeg;base64,${p.imageurl}`} alt="" height="100px"></img>
                                     </td>
-                                    {/* <td>{p.category_id}</td>
-                                    <td>{p.supplier_id}</td> */}
-                                    <td><button onClick={() => this.delProduct(p.id)} className="btn btn-danger">
-                                        <FontAwesomeIcon icon={faTrash} className="mr-2"/>{' '}
-                                        Del
-                                        </button>
-                                    </td>
+                                    <td>{p.name}</td>
+                                    <td className="descriptionTable">{p.description}</td>
+                                    <td>{formatQuantity(p.quantity)}</td>
+                                    <td>{formatCurrency(p.price)}</td>
                                     <td>
                                         <Link to={`/admin/product/update/${p.id}`}>
                                             <button className="btn btn-success">
                                             <FontAwesomeIcon icon={faEdit} className="mr-2"/>{' '}
-                                                Update
+                                                
                                             </button>
                                         </Link>
+                                    </td>
+                                    <td><button onClick={(e) => this.onToggleFormDel(e, p.id)} className="btn btn-danger" disabled={p.status === 'Stop'}>
+                                        <FontAwesomeIcon icon={faTrash} className="mr-2"/>{' '}
+                                        </button>
                                     </td>
                                 </tr>
                             ))

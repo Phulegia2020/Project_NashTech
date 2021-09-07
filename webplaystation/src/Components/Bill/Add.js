@@ -18,11 +18,10 @@ export default class Add extends Component {
     }
     
     componentDidMount(){
-        get("/users")
+        get("/users/customer")
         .then((response) => {
             if (response.status === 200)
             {
-                //console.log(response.data);
                 this.setState({users: response.data});
             }
         })
@@ -32,7 +31,6 @@ export default class Add extends Component {
         .then((response) => {
             if (response.status === 200)
             {
-                //console.log(response.data);
                 this.setState({
                     billStatus: response.data
                 });
@@ -46,18 +44,12 @@ export default class Add extends Component {
         });
     }
 
-    handleCreate(event){
+    async handleCreate(event){
         event.preventDefault();
-        if (event.target.total.value.trim() <= 0)
-        {
-            this.setState({
-                key: 'total'
-            })
-            this.setState({
-                Error: "Total price is not less than 1!"
-            });
-            return;
-        }
+        await this.setState({
+            user_id: event.target.user_id.value,
+            billStatus_id: "3"
+        })
 
         this.props.onAdd(this.state);
     }
@@ -84,26 +76,16 @@ export default class Add extends Component {
                 <Form onSubmit={(event) => this.handleCreate(event)}>
                 <FormGroup>
                     <Label for="total">Total</Label>
-                    <Input type="number" name="total" id="total" placeholder="VND" onChange={(e) => this.changeValue(e)} value = {this.state.total} required="required"/>
+                    <Input type="number" name="total" id="total" placeholder="VND" onChange={(e) => this.changeValue(e)} value = {this.state.total} required="required" disabled/>
                     {this.state.key === 'total' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
                 </FormGroup>
                 
                 <FormGroup className="mb-2">
-                    <Label for="user">User</Label>
-                    <Input type="select" name="user_id" id="user" value = {this.state.user_id} onChange={(e) => this.changeValue(e)}>
+                    <Label for="user">Customer</Label>
+                    <Input type="select" name="user_id" id="user" onChange={(e) => this.changeValue(e)} multiple required>
                         {
                             this.state.users.map((u) => (
                                 <option key={u.id} value={u.id}>{u.name}</option>
-                            ))
-                        }
-                    </Input>
-                </FormGroup>
-                <FormGroup className="mb-5">
-                    <Label for="status">Status</Label>
-                    <Input type="select" name="billStatus_id" id="status" value = {this.state.billStatus_id} onChange={(e) => this.changeValue(e)}>
-                        {
-                            this.state.billStatus.map((bs) => (
-                                <option key={bs.id} value={bs.id}>{bs.description}</option>
                             ))
                         }
                     </Input>

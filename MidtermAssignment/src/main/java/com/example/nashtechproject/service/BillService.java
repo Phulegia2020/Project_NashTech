@@ -1,6 +1,7 @@
 package com.example.nashtechproject.service;
 
 import com.example.nashtechproject.dto.BillDTO;
+import com.example.nashtechproject.dto.MailRequestDTO;
 import com.example.nashtechproject.entity.Bill;
 import com.example.nashtechproject.page.ProductPage;
 
@@ -18,4 +19,8 @@ public interface BillService {
     public void deleteBill(Long billId);
 
     public void updateBill(Bill bill);
+
+    public void sendEmail(MailRequestDTO mail);
+
+    public List<Bill> getBillsDone();
 }

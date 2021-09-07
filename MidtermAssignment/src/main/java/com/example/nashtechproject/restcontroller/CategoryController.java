@@ -3,6 +3,7 @@ package com.example.nashtechproject.restcontroller;
 import com.example.nashtechproject.entity.Category;
 import com.example.nashtechproject.exception.CategoryException;
 import com.example.nashtechproject.page.ProductPage;
+import com.example.nashtechproject.payload.response.MessageResponse;
 import com.example.nashtechproject.service.CategoryService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -93,7 +94,6 @@ public class CategoryController {
         {
             category.setName(categoryDetails.getName().trim());
             category.setDescription(categoryDetails.getDescription().trim());
-            //category.setProducts(categoryDetails.getProducts());
             categoryService.updateCategory(category);
         }
         return category;
@@ -104,7 +104,7 @@ public class CategoryController {
     @ApiResponses(value = { @ApiResponse(code = 200, message = "Success"),
             @ApiResponse(code = 400, message = "Bad request"),
             @ApiResponse(code = 500, message = "Internal server error") })
-    public HashMap<String, String> deleteCategory(@PathVariable(name = "categoryId") Long categoryId)
+    public ResponseEntity<?> deleteCategory(@PathVariable(name = "categoryId") Long categoryId)
     {
         Category category = categoryService.getCategory(categoryId);
         if (category == null)
@@ -112,8 +112,6 @@ public class CategoryController {
             throw new CategoryException(categoryId);
         }
         categoryService.deleteCategory(categoryId);
-        HashMap<String, String> map = new HashMap<>();
-        map.put("message", "Delete Succesfully!");
-        return map;
+        return ResponseEntity.ok(new MessageResponse("Delete Successfully"));
     }
 }

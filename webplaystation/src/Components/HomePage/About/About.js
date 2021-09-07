@@ -5,12 +5,8 @@ import {
     Divider,
     Grid,
     Header,
-    Icon,
     Image,
-    List,
-    Menu,
     Segment,
-    Visibility,
 } from 'semantic-ui-react'
 
 export default class About extends Component {
@@ -35,7 +31,7 @@ export default class About extends Component {
                                 <Image
                                     bordered
                                     size='large'
-                                    src='https://cnet3.cbsistatic.com/img/WVv-bFSMaZ_1Mv0yeqLzYE3kB8s=/1200x675/2019/09/25/ecbbf358-089a-4235-8a91-80980ea1e867/playstation-store.jpg'
+                                    src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQSVR3FyjIu8xz4pf0Qsu743dvskdWXW3ISjg&usqp=CAU'
                                 />
                             </Grid.Column>
                         </Grid.Row>

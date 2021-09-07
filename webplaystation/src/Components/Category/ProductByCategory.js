@@ -4,11 +4,15 @@ import { withRouter } from "react-router";
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { formatCurrency, formatQuantity } from '../../Utils/Utils';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Pagination, PaginationItem, PaginationLink } from 'reactstrap';
 
 class ProductByCategory extends Component {
     state = {
         id: this.props.match.params.id,
-        products: []
+        products: [],
+        iddel: "",
+        isDisplayFormDel: false,
     }
 
     componentDidMount(){
@@ -16,7 +20,6 @@ class ProductByCategory extends Component {
         .then((response) => {
             if (response.status === 200)
             {
-                //console.log(response.data);
                 this.setState({
                     products: response.data
                 });
@@ -24,15 +27,29 @@ class ProductByCategory extends Component {
         })
     }
 
-    delProduct = (id) =>
+    delProduct = (e, id) =>
     {
+        e.preventDefault();
         del(`/products/${id}`)
         .then((response) => {
-            //console.log(response.data);
-            this.setState({products: this.state.products.filter(p => p.id !== id)})
-            alert(response.data.message);
+            this.setState({products: this.state.products.filter(p => p.id !== id), isDisplayFormDel: false})
         })
         .catch(error => {console.log(error)})
+    }
+
+    onToggleFormDel = (e, id) => {
+        e.preventDefault()
+        this.setState({
+            isDisplayFormDel: !this.state.isDisplayFormDel,
+            iddel: id
+        });
+    }
+
+    onCloseFormDel = (e) => {
+        e.preventDefault()
+        this.setState({
+            isDisplayFormDel: false,
+        });
     }
 
     componentWillUnmount() {
@@ -48,19 +65,36 @@ class ProductByCategory extends Component {
     render() {
         return (
             <div>
+                <Modal
+                    isOpen={this.state.isDisplayFormDel}
+                    aria-labelledby="contained-modal-title-vcenter"
+                    centered
+                    toggle={this.onToggleFormDel}
+                    >
+                    <ModalHeader>
+                        Delete
+                    </ModalHeader>
+                    <ModalBody>
+                        <p>
+                        Do you want to stop selling this product?
+                        </p>
+                    </ModalBody>
+                    <ModalFooter>
+                        <Button onClick={(e) => this.delProduct(e, this.state.iddel)} className="btn-danger">Delete</Button>
+                        <Button onClick={(e) => this.onCloseFormDel(e)}>Close</Button>
+                    </ModalFooter>
+                </Modal>
                 <table id="table">
                     <thead>
                         <tr>
-                            <th>ID</th>
-                            <th>Name</th>
-                            <th>Description</th>
-                            <th>Quantity</th>
-                            <th>Price</th>
-                            <th>Image</th>
-                            {/* <th>Category</th>
-                            <th>Supplier</th> */}
-                            <th></th>
-                            <th></th>
+                            <th><b>ID</b></th>
+                            <th><b>Product</b></th>
+                            <th><b>Name</b></th>
+                            <th><b>Description</b></th>
+                            <th><b>Quantity</b></th>
+                            <th><b>Price</b></th>
+                            <th>Update</th>
+                            <th>Delete</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -68,28 +102,26 @@ class ProductByCategory extends Component {
                             this.state.products.map((p) => (
                                 <tr key={p.id}>
                                     <td>{p.id}</td>
-                                    <td>{p.name}</td>
-                                    <td>{p.description}</td>
-                                    <td>{p.quantity}</td>
-                                    <td>{p.price}</td>
                                     <td>
                                         <img src={`data:image/jpeg;base64,${p.imageurl}`} alt="" height="100px"></img>
                                     </td>
-                                    {/* <td>{p.imageurl}</td> */}
-                                    {/* <td>{p.category_id}</td>
-                                    <td>{p.supplier_id}</td> */}
-                                    <td><button className="btn btn-danger" onClick={() => this.delProduct(p.id)}>
-                                        <FontAwesomeIcon icon={faTrash} className="mr-2"/>{' '}
-                                        Del
-                                        </button>
-                                    </td>
+                                    <td>{p.name}</td>
+                                    <td className="descriptionTable">{p.description}</td>
+                                    <td>{formatQuantity(p.quantity)}</td>
+                                    <td>{formatCurrency(p.price)}</td>
+                                    <td>{p.status}</td>
                                     <td>
                                         <Link to={`/admin/product/update/${p.id}`}>
                                             <button className="btn btn-success">
                                                 <FontAwesomeIcon icon={faEdit} className="mr-2"/>{' '}
-                                                Update
+                                                
                                             </button>
                                         </Link>
+                                    </td>
+                                    <td><button className="btn btn-danger" onClick={(e) => this.onToggleFormDel(e, p.id)} disabled={p.status === 'Stop'}>
+                                        <FontAwesomeIcon icon={faTrash} className="mr-2"/>{' '}
+                                        
+                                        </button>
                                     </td>
                                 </tr>
                             ))

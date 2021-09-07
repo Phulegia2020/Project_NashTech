@@ -7,11 +7,13 @@ import {
 import {post, postLogin} from "./../../../Utils/httpHelper";
 import { withRouter } from "react-router";
 import {get} from '../../../Utils/httpHelper';
+import { checkPhoneNumber } from '../../../Utils/Utils';
+import "./SignUp.css";
 
 class SignUp extends Component {
     constructor(props) {
 		super(props);
-		this.state = { name: "", username: "", password: "", gender: "Male",
+		this.state = { name: "", gender: "Male",
         address: "",
         email: "",
         phone: "",
@@ -20,7 +22,8 @@ class SignUp extends Component {
         role: "",
         Error: "",
         key: "",
-        users: [],};
+        users: [],
+        show: false};
     }
     
     componentDidMount(){
@@ -28,7 +31,6 @@ class SignUp extends Component {
         .then((response) => {
             if (response.status === 200)
             {
-                //console.log(response.data);
                 this.setState({users: response.data});
             }
         })
@@ -46,6 +48,14 @@ class SignUp extends Component {
             this.setState({ [name]: value });
         }
     }
+
+    handleShowPassword(e)
+	{
+		e.preventDefault();
+		this.setState({
+			show: !this.state.show
+		})
+	}
 
     handleSubmit = (event) => {
         if (event.target.password.value.length < 6)
@@ -91,24 +101,35 @@ class SignUp extends Component {
                 return;
             }
         }
-
+        if (!checkPhoneNumber(event.target.phone.value.trim()))
+        {
+            console.log('error')
+            this.setState({
+                key: 'phone'
+            })
+            this.setState({
+                Error: "Phone must be numbers and start with 0!"
+            });
+            return;
+        }
+        this.setState({
+            gender: event.target.gender.value
+        });
         post(`/auth/signup`, {name: this.state.name, gender: this.state.gender, address: this.state.address,
             email: this.state.email, phone: this.state.phone, username: this.state.username,
             password: this.state.password, role: this.state.role})
         .then((response) => {
             if (response.status === 200)
             {
-                //console.log(response.data);
                 alert('Register Successfully!')
                 postLogin('/auth/signin', {username: this.state.username, password: this.state.password})
                 .then((response) => {
                     if (response.status === 200)
                     {
-                        console.log(response.data);
                         localStorage.setItem('accessToken', response.data.accessToken);
-                        sessionStorage.setItem('user_id', response.data.id);
-				        sessionStorage.setItem('username', response.data.username);
-                        if (response.data.roles[0] === "ROLE_USER")
+                        localStorage.setItem('user_id', response.data.id);
+				        localStorage.setItem('username', response.data.username);
+                        if (response.data.roles[0] === "USER")
                         {
                             this.props.history.push("/");
                         }
@@ -147,28 +168,37 @@ class SignUp extends Component {
                                         <label>Gender</label>
                                         <Form.Field
                                             label='Male'
-                                            control='input'
-                                            type='radio'
+                                            control={Radio}
+                                            value='Male'
                                             name='gender'
+                                            onChange={this.handleChange}
+                                            checked={this.state.gender === 'Male'}
                                         />
                                         <Form.Field
                                             label='Female'
-                                            control='input'
-                                            type='radio'
+                                            control={Radio}
+                                            value='Female'
                                             name='gender'
+                                            onChange={this.handleChange}
+                                            checked={this.state.gender === 'Female'}
                                         />
                                     </Form.Group>
                                     <Form.Field inline required>
-                                        <label>UserName</label>
+                                        <label>Username</label>
                                         <Form.Input placeholder='Username' name='username' value={this.state.username} onChange={this.handleChange} required/>
                                         {this.state.key === 'username' ? <Label basic color='red' pointing='left'>{this.state.Error}</Label> : '' }
                                     </Form.Field>
-                                    <Form.Field required>
-                                        <label>Password</label>
-                                        <Form.Input placeholder='123456' minLength="6" type='password' name='password' value={this.state.password} onChange={this.handleChange} required/>
-                                        {this.state.key === 'password' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
-                                    </Form.Field>
-                                    <Form.Field inline>
+                                    <Form.Group inline>
+                                        <Form.Field required inline>
+                                            <label>Password</label>
+                                            <Form.Input placeholder='123456' minLength="6" type={this.state.show === false? 'password' : 'text'} name='password' value={this.state.password} onChange={this.handleChange} required/>
+                                            {this.state.key === 'password' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
+                                        </Form.Field>
+                                        <Form.Field className="cb">
+                                            <Checkbox label='Show password' onChange={(e) => this.handleShowPassword(e)} className="cb"/>
+                                        </Form.Field>
+                                    </Form.Group>
+                                    <Form.Field>
                                         <label>Email</label>
                                         <Form.Input type="email" placeholder='abc@gmail.com' name='email' value={this.state.email} onChange={this.handleChange} required/>
                                         {this.state.key === 'email' ? <Label basic color='red' pointing='left'>{this.state.Error}</Label> : '' }
@@ -179,13 +209,10 @@ class SignUp extends Component {
                                     </Form.Field>
                                     <Form.Field inline>
                                         <label>Phone</label>
-                                        <Form.Input placeholder='0123456789' type="number" name='phone' value={this.state.phone} onChange={this.handleChange} required/>
+                                        <Form.Input placeholder='0123456789' type="text" maxLength={10} minLength={10} name='phone' value={this.state.phone} onChange={this.handleChange} required/>
                                         {this.state.key === 'phone' ? <Label basic color='red' pointing='left'>{this.state.Error}</Label> : '' }
                                     </Form.Field>
-                                    <Form.Field>
-                                        <Checkbox label='Remember me' />
-                                    </Form.Field>
-                                    <Button type='submit'>Sign Up</Button>
+                                    <Button type='submit' color='google plus'>Sign Up</Button>
                                 </Form>
                             </Grid.Column>
                         </Grid.Row>

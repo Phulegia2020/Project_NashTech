@@ -35,7 +35,6 @@ export default class NavBar extends Component{
             if (response.status === 200)
             {
                 this.setState({categories: response.data});
-                //console.log(response.data);
             }
         })
         .catch(error => {console.log(error)})
@@ -86,7 +85,6 @@ export default class NavBar extends Component{
                     </ul>
     
                     <div className="nav-details">
-                    {/* <p className="nav-username"> {this.state.username} </p> */}
                     </div>
                 </nav>
             </div>

@@ -12,12 +12,15 @@ import java.util.Optional;
 public interface UserService {
     public List<User> retrieveUsers();
 
-    //public boolean getUserByAccount(String account);
     public Optional<User> getUserByAccount(String account);
 
     public User getUser(Long userId);
 
-    public List<UserDTO> getUsersPage(UserPage userPage);
+    public List<User> getUsersPage(UserPage userPage);
+
+    public List<User> getUsers();
+
+    public List<User> getEmployee();
 
     public User saveUser(User user);
 
@@ -30,4 +33,6 @@ public interface UserService {
     public boolean existEmail(String email);
 
     public boolean existPhone(String phone);
+
+    public List<User> getUsersActive();
 }

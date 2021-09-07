@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import com.example.nashtechproject.entity.User;
+import com.example.nashtechproject.exception.UserException;
 import com.example.nashtechproject.payload.request.ChangPasswordRequest;
 import com.example.nashtechproject.security.jwt.JwtAuthTokenFilter;
 import com.example.nashtechproject.service.AuthService;
@@ -61,11 +62,6 @@ public class AuthController {
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
         // TODO, authenticate when login
-        // Username, pass from client
-        // com.nashtech.rookies.security.WebSecurityConfig.configure(org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder)
-//        authenticationManagerBuilder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
-        // on this step, we tell to authenticationManager how we load data from database
-        // and the password encoder
 
         JwtResponse jp = authService.getJwtResponse(loginRequest);
 

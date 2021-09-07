@@ -4,14 +4,17 @@ import com.example.nashtechproject.dto.RatingDTO;
 import com.example.nashtechproject.entity.Product;
 import com.example.nashtechproject.entity.Rating;
 import com.example.nashtechproject.entity.User;
+import com.example.nashtechproject.exception.ObjectNotFoundException;
 import com.example.nashtechproject.exception.ProductException;
 import com.example.nashtechproject.exception.RatingPointException;
 import com.example.nashtechproject.exception.UserException;
+import com.example.nashtechproject.payload.response.MessageResponse;
 import com.example.nashtechproject.service.ProductService;
 import com.example.nashtechproject.service.RatingPointService;
 import com.example.nashtechproject.service.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -65,6 +68,17 @@ public class RatingPointController {
         return ratings.stream().map(this::convertToDTO).sorted(Comparator.comparing(RatingDTO::getId).reversed()).collect(Collectors.toList());
     }
 
+    @GetMapping("/search")
+    public float getRatingByUserAndProduct(@RequestParam Long userId, @RequestParam Long productId)
+    {
+        Rating rating = ratingPointService.getRatingByUserIdAndProductId(userId, productId);
+        if (rating == null)
+        {
+            return 0;
+        }
+        return rating.getRatingPoint();
+    }
+
     @PostMapping
     public RatingDTO saveRating(@RequestBody RatingDTO rating)
     {
@@ -95,15 +109,13 @@ public class RatingPointController {
         {
             throw new RatingPointException(ratingId);
         }
-//        rating.setUser(u);
-//        rating.setProduct(pro);
         rating.setRatingPoint(newRating.getRatingPoint());
         ratingPointService.updateRating(rating);
         return convertToDTO(rating);
     }
 
     @DeleteMapping("/{ratingId}")
-    public HashMap<String, String> deleteCategory(@PathVariable(name = "ratingId") Long ratingId)
+    public ResponseEntity<?> deleteCategory(@PathVariable(name = "ratingId") Long ratingId)
     {
         Rating rid = ratingPointService.getRating(ratingId);
         if (rid == null)
@@ -111,9 +123,7 @@ public class RatingPointController {
             throw new RatingPointException(ratingId);
         }
         ratingPointService.deleteRating(ratingId);
-        HashMap<String, String> map = new HashMap<>();
-        map.put("message", "Delete Succesfully!");
-        return map;
+        return ResponseEntity.ok(new MessageResponse("Delete Successfully"));
     }
 
     private RatingDTO convertToDTO(Rating rating)

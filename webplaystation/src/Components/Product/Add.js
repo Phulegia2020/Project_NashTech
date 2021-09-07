@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Col, Row, Button, Form, FormGroup, Label, Input } from 'reactstrap';
 import { get } from '../../Utils/httpHelper';
+import "./Product.css"
 
 export default class Add extends Component {
     constructor(props)
@@ -28,7 +29,6 @@ export default class Add extends Component {
         .then((response) => {
             if (response.status === 200)
             {
-                //console.log(response.data);
                 this.setState({products: response.data});
             }
         })
@@ -38,7 +38,6 @@ export default class Add extends Component {
         .then((response) => {
             if (response.status === 200)
             {
-                //console.log(response.data);
                 this.setState({
                     categories: response.data
                 });
@@ -49,7 +48,6 @@ export default class Add extends Component {
         .then((response) => {
             if (response.status === 200)
             {
-                //console.log(response.data);
                 this.setState({
                     suppliers: response.data
                 });
@@ -89,8 +87,12 @@ export default class Add extends Component {
         });
     }
 
-    handleCreate(event){
+    async handleCreate(event){
         event.preventDefault();
+        await this.setState({
+            category_id: event.target.category_id.value,
+            supplier_id: event.target.supplier_id.value
+        })
 
         if (event.target.quantity.value.trim() <= 0)
         {
@@ -125,7 +127,10 @@ export default class Add extends Component {
                 return;
             }
         }
-
+        this.setState({
+            key: '',
+            Error: ''
+        })
         this.props.onAdd(this.state);
     }
 
@@ -135,7 +140,6 @@ export default class Add extends Component {
             description: "",
             quantity: 0,
             price: 0,
-            //imageurl: null,
             category_id: "",
             supplier_id: "",
         });
@@ -160,7 +164,7 @@ export default class Add extends Component {
                 </FormGroup>
                 <FormGroup>
                     <Label for="description">Description</Label>
-                    <Input type="text" name="description" id="description" placeholder="PlayStation 4 Pro" onChange={(e) => this.changeValue(e)} value = {this.state.description} required="required"/>
+                    <textarea style={{resize: 'none', width: '470px'}} rows="3" type="text" name="description" id="description" placeholder="PlayStation 4 Pro" onChange={(e) => this.changeValue(e)} value = {this.state.description} required="required"/>
                 </FormGroup>
                 <FormGroup>
                     <Label for="quantity">Quantity</Label>
@@ -178,18 +182,20 @@ export default class Add extends Component {
                     <Input type="file" name="image" id="image" accept=".jpeg, .png, .jpg" onChange={(e) => {this.uploadImage(e);}} required="required"/>
                 </FormGroup>
                 <FormGroup className="mb-2">
+                    
                     <Label for="category">Category</Label>
-                    <Input type="select" name="category_id" id="category" value = {this.state.category_id} onChange={(e) => this.changeValue(e)}>
+                    <Input type="select" name="category_id" id="category" onChange={(e) => this.changeValue(e)} multiple required>
                         {
                             this.state.categories.map((c) => (
                                 <option key={c.id} value={c.id}>{c.name}</option>
                             ))
                         }
                     </Input>
+                    
                 </FormGroup>
                 <FormGroup className="mb-5">
                     <Label for="supplier">Supplier</Label>
-                    <Input type="select" name="supplier_id" id="supplier" value = {this.state.supplier_id} onChange={(e) => this.changeValue(e)}>
+                    <Input type="select" name="supplier_id" id="supplier" onChange={(e) => this.changeValue(e)} multiple required>
                         {
                             this.state.suppliers.map((s) => (
                                 <option key={s.id} value={s.id}>{s.name}</option>

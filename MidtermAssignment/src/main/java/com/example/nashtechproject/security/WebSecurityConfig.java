@@ -74,15 +74,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .antMatchers(HttpMethod.GET,"/api/categories/**").permitAll()
             .antMatchers(HttpMethod.GET,"/api/ratings/**").permitAll()
             .antMatchers(HttpMethod.GET,"/api/suppliers/**").permitAll()
-//            .antMatchers("/api/bills/**").permitAll()
-//            .antMatchers("/api/billDetails/**").permitAll()
             .antMatchers(HttpMethod.GET, "/api/roles/**").permitAll()
             .antMatchers(HttpMethod.GET, "/api/users/**").permitAll()
             .antMatchers("/swagger-ui.html").permitAll()
             .anyRequest().authenticated();
 
         http.logout().logoutUrl("api/auth/logout").invalidateHttpSession(true);
-        //http.logout().logoutUrl("api/signout").invalidateHttpSession(true);
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 

@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Entity
@@ -18,9 +19,6 @@ public class Bill {
     @Column(name = "total")
     private float total;
 
-    @Column(name = "customer_id")
-    private Long cus_id;
-
     @JsonFormat(pattern="dd/MM/yyyy")
     @Column(name = "createddate")
     private LocalDateTime createddate;
@@ -30,16 +28,16 @@ public class Bill {
     private LocalDateTime checkout_date;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "employee_id")
+    @JoinColumn(name = "user_id")
     private User user;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "billstatus_id")
     private BillStatus billStatus;
 
-    @OneToMany(mappedBy = "bill", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "bill", fetch = FetchType.EAGER)
     @JsonIgnore
-    private List<BillDetails> products = new ArrayList<>();
+    private Collection<BillDetails> billDetails = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -87,13 +85,5 @@ public class Bill {
 
     public void setBillStatus(BillStatus billStatus) {
         this.billStatus = billStatus;
-    }
-
-    public Long getCus_id() {
-        return cus_id;
-    }
-
-    public void setCus_id(Long cus_id) {
-        this.cus_id = cus_id;
     }
 }

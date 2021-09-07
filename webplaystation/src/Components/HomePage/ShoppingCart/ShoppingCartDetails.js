@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {Table, Button, Header, Image} from 'semantic-ui-react';
+import {formatCurrency} from "../../../Utils/Utils";
 
 class ShoppingCartDetails extends Component {
     constructor(props) {
@@ -53,19 +54,11 @@ class ShoppingCartDetails extends Component {
 
 
     // TOTAL
-    formatCurrency(number) {
-        var options = {style: 'currency', currency: 'VND'};
-        var numberFormat = new Intl.NumberFormat('en-US', options);
-
-        return numberFormat.format(number);
-    }
-
     getTotal() {
         var total = Object.keys(this.state.ShoppingCartItems).reduce((previous, key) => {
             return previous + this.state.ShoppingCartItems[key].price * this.state.ShoppingCartItems[key].quantity;
         }, 0);
-        localStorage.setItem('totalCart', total);
-        return this.formatCurrency(total);
+        return formatCurrency(total);
     }
 
     render() {
@@ -92,13 +85,13 @@ class ShoppingCartDetails extends Component {
                                     <Table.Cell textAlign="right">{index + 1}</Table.Cell>
                                     <Table.Cell textAlign="right"><Image style={{height: '75px'}} src={`data:image/jpeg;base64,${item.url}`}/></Table.Cell>
                                     <Table.Cell textAlign="left">{item.name}</Table.Cell>
-                                    <Table.Cell textAlign="right">{this.formatCurrency(item.price)}</Table.Cell>
+                                    <Table.Cell textAlign="right">{formatCurrency(item.price)}</Table.Cell>
                                     <Table.Cell textAlign="right">
                                         <Button onClick={this.onDecreaseQuantity.bind(this, item)} className="btn btn-xs btn-warning">-</Button>
                                         &nbsp;{item.quantity}&nbsp;
                                         <Button onClick={this.onIncreaseQuantity.bind(this, item)} className="btn btn-xs btn-warning">+</Button>
                                     </Table.Cell>
-                                    <Table.Cell textAlign="right">{this.formatCurrency(item.price * item.quantity)}</Table.Cell>
+                                    <Table.Cell textAlign="right">{formatCurrency(item.price * item.quantity)}</Table.Cell>
                                     <Table.Cell textAlign="right">
                                         <Button onClick={this.onRemoveCart.bind(this, item)} className="btn btn-xs btn-danger">Remove</Button>
                                     </Table.Cell>

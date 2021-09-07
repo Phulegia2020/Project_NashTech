@@ -6,6 +6,7 @@ import com.example.nashtechproject.entity.RoleName;
 import com.example.nashtechproject.entity.User;
 import com.example.nashtechproject.exception.UserException;
 import com.example.nashtechproject.page.UserPage;
+import com.example.nashtechproject.payload.response.MessageResponse;
 import com.example.nashtechproject.repository.RoleRepository;
 import com.example.nashtechproject.service.RoleService;
 import com.example.nashtechproject.service.UserService;
@@ -64,6 +65,17 @@ public class UserController {
         return usersDTO;
     }
 
+    @GetMapping("/active")
+    @ApiOperation(value = "Get all users active")
+    @ApiResponses(value = { @ApiResponse(code = 200, message = "Success"),
+            @ApiResponse(code = 400, message = "Bad request"),
+            @ApiResponse(code = 500, message = "Internal server error") })
+    public int getAllUsersActive()
+    {
+        List<User> users = userService.getUsersActive();
+        return users.size();
+    }
+
     @GetMapping("/{userId}")
     @ApiOperation(value = "Get User By ID")
     @ApiResponses(value = { @ApiResponse(code = 200, message = "Success"),
@@ -84,9 +96,33 @@ public class UserController {
     @ApiResponses(value = { @ApiResponse(code = 200, message = "Success"),
             @ApiResponse(code = 400, message = "Bad request"),
             @ApiResponse(code = 500, message = "Internal server error") })
-    public ResponseEntity<List<UserDTO>> getUsersPages(UserPage userPage)
+    public ResponseEntity<List<User>> getUsersPages(UserPage userPage)
     {
         return new ResponseEntity<>(userService.getUsersPage(userPage), HttpStatus.OK);
+    }
+
+    @GetMapping("/customer")
+    public List<UserDTO> getAllCustomers()
+    {
+        List<UserDTO> usersDTO = new ArrayList<>();
+        List<User> users = userService.getUsers();
+        for (int i = 0; i < users.size(); i++) {
+            UserDTO u = convertToDTO(users.get(i));
+            usersDTO.add(u);
+        }
+        return usersDTO;
+    }
+
+    @GetMapping("/employee")
+    public List<UserDTO> getAllEmployees()
+    {
+        List<UserDTO> usersDTO = new ArrayList<>();
+        List<User> users = userService.getEmployee();
+        for (int i = 0; i < users.size(); i++) {
+            UserDTO u = convertToDTO(users.get(i));
+            usersDTO.add(u);
+        }
+        return usersDTO;
     }
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
@@ -128,25 +164,6 @@ public class UserController {
         }
         else
         {
-//            List<User> userList = userService.retrieveUsers();
-//            for (int i = 0; i < userList.size(); i++)
-//            {
-//                if (userList.get(i).getId() != userId)
-//                {
-//                    if (userService.existUsername(userDetails.getAccount()))
-//                    {
-//                        throw new UserException(userDetails.getAccount());
-//                    }
-//                    if (userService.existEmail(userDetails.getEmail()))
-//                    {
-//                        throw new UserException(userDetails.getEmail());
-//                    }
-//                    if (userService.existPhone(userDetails.getPhone()))
-//                    {
-//                        throw new UserException(userDetails.getPhone());
-//                    }
-//                }
-//            }
             UserUpdate(user, userDetails);
             userService.updateUser(user);
         }
@@ -158,31 +175,23 @@ public class UserController {
     @ApiResponses(value = { @ApiResponse(code = 200, message = "Success"),
             @ApiResponse(code = 400, message = "Bad request"),
             @ApiResponse(code = 500, message = "Internal server error") })
-    public HashMap<String, String> deleteUser(@PathVariable(name = "userId") Long userId)
+    public ResponseEntity<?> deleteUser(@PathVariable(name = "userId") Long userId)
     {
         User user = userService.getUser(userId);
         if (user == null)
         {
             throw new UserException(userId);
         }
-        userService.deleteUser(userId);
-        HashMap<String, String> map = new HashMap<>();
-        map.put("message", "Delete Succesfully!");
-        return map;
+        user.setActive_status("Inactive");
+        userService.updateUser(user);
+        return ResponseEntity.ok(new MessageResponse("Delete Successfully"));
     }
 
     private UserDTO convertToDTO(User u)
     {
         UserDTO udto = modelMapper.map(u, UserDTO.class);
-        if (u.getRole() != null)
-        {
-            String role_id = String.valueOf(u.getRole().getId());
-            udto.setRole_id(role_id);
-        }
-        else
-        {
-            udto.setRole_id("");
-        }
+        String role_id = String.valueOf(u.getRole().getId());
+        udto.setRole_id(role_id);
         return udto;
     }
 
@@ -194,10 +203,6 @@ public class UserController {
         user.setEmail(userDetails.getEmail().trim());
         user.setPhone(userDetails.getPhone());
         user.setAccount(userDetails.getAccount());
-//            if (!userDetails.getPassword().equals(""))
-//            {
-//                user.setPassword(encoder.encode(userDetails.getPassword()));
-//            }
         user.setActive_status(userDetails.getActive_status());
         Role r = roleService.getRole(Long.valueOf(userDetails.getRole_id()));
         user.setRole(r);

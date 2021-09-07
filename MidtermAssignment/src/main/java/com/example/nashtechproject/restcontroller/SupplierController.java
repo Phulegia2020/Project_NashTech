@@ -1,9 +1,15 @@
 package com.example.nashtechproject.restcontroller;
 
+import com.example.nashtechproject.dto.PlaceOrderDTO;
+import com.example.nashtechproject.entity.PlaceOrder;
 import com.example.nashtechproject.entity.Supplier;
 import com.example.nashtechproject.exception.SupplierException;
+import com.example.nashtechproject.page.ProductPage;
+import com.example.nashtechproject.payload.response.MessageResponse;
 import com.example.nashtechproject.service.SupplierService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -35,6 +41,11 @@ public class SupplierController {
             throw new SupplierException(supplierId);
         }
         return supplierService.getSupplier(supplierId);
+    }
+    @GetMapping("/page")
+    public ResponseEntity<List<Supplier>> getSuppliersPages(ProductPage productPage)
+    {
+        return new ResponseEntity<>(supplierService.getSuppliersPage(productPage), HttpStatus.OK);
     }
 
     @PostMapping
@@ -70,7 +81,7 @@ public class SupplierController {
     }
 
     @DeleteMapping("/{supplierId}")
-    public HashMap<String, String> deleteSupplier(@PathVariable(name = "supplierId") Long supplierId)
+    public ResponseEntity<?> deleteSupplier(@PathVariable(name = "supplierId") Long supplierId)
     {
         Supplier supplier = supplierService.getSupplier(supplierId);
         if (supplier == null)
@@ -78,8 +89,6 @@ public class SupplierController {
             throw new SupplierException(supplierId);
         }
         supplierService.deleteSupplier(supplierId);
-        HashMap<String, String> map = new HashMap<>();
-        map.put("message", "Delete Succesfully!");
-        return map;
+        return ResponseEntity.ok(new MessageResponse("Delete Successfully"));
     }
 }
