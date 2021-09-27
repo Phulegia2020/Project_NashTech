@@ -1,6 +1,7 @@
 package com.example.nashtechproject.restcontroller;
 
 import com.example.nashtechproject.dto.PlaceOrderDTO;
+import com.example.nashtechproject.entity.Bill;
 import com.example.nashtechproject.entity.PlaceOrder;
 import com.example.nashtechproject.entity.Supplier;
 import com.example.nashtechproject.exception.SupplierException;
@@ -46,6 +47,19 @@ public class SupplierController {
     public ResponseEntity<List<Supplier>> getSuppliersPages(ProductPage productPage)
     {
         return new ResponseEntity<>(supplierService.getSuppliersPage(productPage), HttpStatus.OK);
+    }
+
+    @GetMapping("/name")
+    public int getSupplierByName(@RequestParam String name)
+    {
+        List<Supplier> suppliers = supplierService.getSupplierByName(name);
+        return suppliers.size();
+    }
+
+    @GetMapping("/namePage")
+    public ResponseEntity<List<Supplier>> getSupplierByNamePage(ProductPage productPage, @RequestParam String name)
+    {
+        return new ResponseEntity<>(supplierService.getSupplierByNamePage(name, productPage), HttpStatus.OK);
     }
 
     @PostMapping

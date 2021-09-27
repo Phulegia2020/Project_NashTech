@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { Col, Row, Button, Form, FormGroup, Label, Input } from 'reactstrap';
 import { get } from '../../Utils/httpHelper';
-import { checkPhoneNumber } from '../../Utils/Utils';
 import { Checkbox} from 'semantic-ui-react';
 
 export default class Add extends Component {
@@ -130,7 +129,14 @@ export default class Add extends Component {
         }
         this.setState({
             key: '',
-            blankError: ''
+            blankError: '',
+            // name: "",
+            // gender: "",
+            // address: "",
+            // email: "",
+            // phone: "",
+            // username: "",
+            // password: "",
         })
         this.props.onAdd(this.state);
     }
@@ -169,7 +175,7 @@ export default class Add extends Component {
             <div>
                 <Form onSubmit={(event) => this.handleCreate(event)}>
                     <FormGroup>
-                        <Label for="name">Name</Label>
+                        <Label htmlFor="name">Name</Label>
                         <Input type="text" name="fullname" id="name" placeholder="Phu Le Gia" onChange={(e) => this.changeValue(e)} value = {this.state.fullname} required/>
                     </FormGroup>
                     <FormGroup tag="fieldset" row>
@@ -193,14 +199,14 @@ export default class Add extends Component {
                     <Row form>
                         <Col md={6}>
                             <FormGroup>
-                                <Label for="username">Username</Label>
+                                <Label htmlFor="username">Username</Label>
                                 <Input type="text" name="username" id="username" placeholder="Football" onChange={(e) => this.changeValue(e)} value = {this.state.username} required/>
                                 {this.state.key === 'username' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.blankError}</span> : '' }
                             </FormGroup>
                         </Col>
                         <Col md={6}>
                             <FormGroup>
-                                <Label for="password">Password</Label>
+                                <Label htmlFor="password">Password</Label>
                                 <Input type={this.state.show === false? 'password' : 'text'} minLength="6" name="password" id="password" placeholder="******" onChange={(e) => this.changeValue(e)} value = {this.state.password} required/>
                                 {this.state.key === 'password' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.blankError}</span> : '' }
                                 <Checkbox label='Show password' onChange={(e) => this.handleShowPassword(e)}/>
@@ -208,21 +214,21 @@ export default class Add extends Component {
                         </Col>
                     </Row>
                     <FormGroup>
-                        <Label for="email">Email</Label>
+                        <Label htmlFor="email">Email</Label>
                         <Input type="email" name="email" id="email" placeholder="abc@gmail.com" onChange={(e) => this.changeValue(e)} value = {this.state.email} required/>
                         {this.state.key === 'email' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.blankError}</span> : '' }
                     </FormGroup>
                     <FormGroup>
-                        <Label for="address">Address</Label>
+                        <Label htmlFor="address">Address</Label>
                         <Input type="text" name="address" id="address" placeholder="1234 Main St, HCM City" onChange={(e) => this.changeValue(e)} value = {this.state.address} required/>
                     </FormGroup>
                     <FormGroup>
-                        <Label for="phone">Phone</Label>
+                        <Label htmlFor="phone">Phone</Label>
                         <Input type="number" minLength="10" maxLength="10" name="phone" id="phone" placeholder="0987654321" onChange={(e) => this.changeValue(e)} value = {this.state.phone} required/>
                         {this.state.key === 'phone' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.blankError}</span> : '' }
                     </FormGroup>
                     <FormGroup className="mb-2">
-                        <Label for="role">Role</Label>
+                        <Label htmlFor="role">Role</Label>
                         <Input type="select" name="role" id="role" onChange={(e) => this.changeValue(e)} required>
                             <option defaultValue="ADMIN">ADMIN</option>
                             <option value="STAFF">STAFF</option>

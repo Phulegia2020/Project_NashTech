@@ -42,7 +42,7 @@ class UpdatePlaceOrderDetails extends Component {
 
     handleUpdate(event){
         event.preventDefault();
-        if (this.state.quantity.trim() <= 0)
+        if (this.state.quantity <= 0)
         {
             this.setState({
                 key: 'quantity'
@@ -69,6 +69,7 @@ class UpdatePlaceOrderDetails extends Component {
                 this.props.history.push(`/admin/placeorder/${this.state.placeorder_id}`);
             }
         })
+        .catch((error) => alert('The Place Order had already this product'));
     }
 
     handleClear = () => {
@@ -94,17 +95,17 @@ class UpdatePlaceOrderDetails extends Component {
                     <Col md={4}>
                         <Form onSubmit={(event) => this.handleUpdate(event)}>
                         <FormGroup>
-                            <Label for="quantity">Quantity</Label>
+                            <Label htmlFor="quantity">Quantity</Label>
                             <Input type="number" name="quantity" id="quantity" placeholder="100" onChange={(e) => this.changeValue(e)} value = {this.state.quantity} required="required"/>
                             {this.state.key === 'quantity' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
                         </FormGroup>
                         <FormGroup>
-                            <Label for="quantity">Price</Label>
+                            <Label htmlFor="quantity">Price</Label>
                             <Input type="number" name="price" id="quantity" placeholder="100" onChange={(e) => this.changeValue(e)} value = {this.state.price} required="required"/>
                             {this.state.key === 'price' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
                         </FormGroup>
                         <FormGroup className="mb-2">
-                            <Label for="product">Product</Label>
+                            <Label htmlFor="product">Product</Label>
                             <Input type="text" name="product_id" id="product" value = {this.state.product_id} onChange={(e) => this.changeValue(e)} disabled />
                         </FormGroup>
                         <div className="mb-5">

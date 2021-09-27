@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
-import {Card, Icon, Image, Segment, Grid, Header, Rating, Divider, Table, Message} from 'semantic-ui-react'
+import {Icon, Segment, Grid, Header, Rating, Divider, Table, Message, Comment, Button, Form} from 'semantic-ui-react'
 import ButtonAddToCart from "./ButtonAddToCart";
 import { get, post, put } from '../../../Utils/httpHelper';
 import { formatCurrency, formatQuantity } from '../../../Utils/Utils';
 import { withRouter } from "react-router";
-import { Link } from 'react-router-dom';
+import './style.css'
 
 class ProductDetails extends Component {
     constructor(props) {
@@ -16,7 +16,9 @@ class ProductDetails extends Component {
             user_id: '',
             product_id: this.props.match.params.id,
             proByRate: [],
-            totalrating: 0
+            totalrating: 0,
+            comments: [],
+            content: ''
         };
         this.onRating = this.onRating.bind(this);
     }
@@ -29,7 +31,8 @@ class ProductDetails extends Component {
             if (response.status === 200)
             {
                 this.setState({
-                    Product: response.data
+                    Product: response.data,
+                    totalrating: response.data.totalrating
                 });
             }
         })
@@ -63,6 +66,16 @@ class ProductDetails extends Component {
             .catch((error) => {console.log(error)});
         }
         
+        get(`/comments/product/${this.state.product_id}`)
+        .then((response) => {
+            if (response.status === 200)
+            {
+                this.setState({
+                    comments: response.data
+                })
+            }
+        })
+        .catch(error => console.log(error));
     }
 
     onCheckRated(user_id)
@@ -103,7 +116,7 @@ class ProductDetails extends Component {
                             this.handleTotalRating();
                             this.handleUpdateRating(this.state.product_id, this.state.Product);
                             alert('Thanks for review');
-                            window.location.reload();
+                            //window.location.reload();
                         }
                     })
                 }
@@ -137,6 +150,34 @@ class ProductDetails extends Component {
         });
     }
 
+    changeValue(e){
+        this.setState({
+            [e.target.name]: e.target.value
+        });
+    }
+
+    handleComment = (e) => {
+        e.preventDefault();
+        const body = JSON.stringify({
+            content: e.target.content.value.trim(),
+            user_id: localStorage.getItem('user_id'),
+            username: localStorage.getItem('username'),
+            product_id: this.state.product_id
+        });
+        //console.log(body);
+        post('/comments', body)
+        .then((response) => {
+            if (response.status === 200)
+            {
+                this.setState({
+                    comments: [...this.state.comments, response.data],
+                    content: ''
+                });
+            }
+        })
+        .catch((error) => alert('Please, Login to Comment!'));
+    }
+
     componentWillUnmount() {
         // fix Warning: Can't perform a React state update on an unmounted component
         this.setState = (state,callback)=>{
@@ -152,13 +193,14 @@ class ProductDetails extends Component {
                 <Grid container stackable verticalAlign='middle'>
                     <Grid.Row>
                         <Grid.Column width={4}>
-                            <img src={`data:image/jpeg;base64,${product.imageurl}`}/>
+                            <img src={`data:image/jpeg;base64,${product.imageurl}`} alt='PlayStation' className='img-border'/>
                         </Grid.Column>
                         <Grid.Column width={12}>
                             <Header as="h1">{product.name}</Header>
                             <p style={{ fontSize: '1.33em' }}><b>Desciption: </b>{product.description}</p>
                             <p style={{ fontSize: '1.33em' }}><b>Price: </b>{formatCurrency(product.price)}</p>
-                            <p style={{ fontSize: '1.33em' }}><b>Rating: </b><Rating icon='star'  maxRating={5} onRate={this.onRating} name="rate" rating={product.totalrating} disabled/></p>
+                            <p style={{ fontSize: '1.33em' }}><b>Rating: </b><Rating icon='star'  maxRating={5} onRate={this.onRating} name="rate" rating={this.state.totalrating} disabled/>({product.totalrating}.0/5.0)</p>
+                            {/* product.totalrating */}
                             <Message info>
                                 <Message.Header>Contact to Buy Pruduct: (028) 38.295.258</Message.Header>
                                 <p>Please check the number of product before going to store!</p>
@@ -209,6 +251,52 @@ class ProductDetails extends Component {
                             
                             <Rating icon='star' maxRating={5} name="rate" size="huge" rating={this.state.rate} onRate={this.onRating}/>
                             
+                        </Grid.Column>
+                    </Grid.Row>
+
+                    <Grid.Row>
+                        <Divider horizontal >
+                                <Header as='h4'>
+                                    <Icon name='comment' />
+                                    BÌNH LUẬN ({this.state.comments.length})
+                                </Header>
+                        </Divider>
+                        <Grid.Column width={12} style={{marginLeft: '18em'}}>
+                        
+                            <Comment.Group>
+                                <div className='scroll-table'>
+                                    {this.state.comments.map((comment, index) => (
+                                        this.state.comments.length > 0 && (
+                                            
+                                                <Comment key={index}>
+                                                    <Comment.Avatar as='a' src='https://www.kindpng.com/picc/m/130-1300217_user-icon-member-icon-png-transparent-png.png' />
+                                                    <Comment.Content>
+                                                        <Comment.Author>{comment.username}</Comment.Author>
+                                                        <Comment.Metadata>{comment.date_comment}
+                                                        {/* <div></div> */}
+                                                        </Comment.Metadata>
+                                                        <Comment.Text>{comment.content}
+                                                        {/* <p>
+                                                            The hours, minutes and seconds stand as visible reminders that your
+                                                            effort put them all there.
+                                                        </p>
+                                                        <p>
+                                                            Preserve until your next run, when the watch lets you see how
+                                                            Impermanent your efforts are.
+                                                        </p> */}
+                                                        </Comment.Text>
+                                                    </Comment.Content>
+                                                </Comment>
+                                                
+                                            
+                                        )
+                                    ))}    
+                                </div>
+                                <Form reply onSubmit={(e) => this.handleComment(e)}>
+                                    <textarea name='content' rows='3' style={{ resize: 'none', marginBottom: '5px' }} onChange={(e) => this.changeValue(e)} value={this.state.content} required></textarea>
+                                    <Button content='Post' labelPosition='left' icon='edit' primary/>
+                                </Form>
+                            </Comment.Group>
                         </Grid.Column>
                     </Grid.Row>
                 </Grid>

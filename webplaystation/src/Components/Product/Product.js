@@ -8,7 +8,7 @@ import Add from "./Add"
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Pagination, PaginationItem, PaginationLink } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
-import { Input } from 'semantic-ui-react';
+import { Input, Breadcrumb } from 'semantic-ui-react';
 
 class Product extends Component {
     state = {
@@ -204,6 +204,10 @@ class Product extends Component {
     }
 
     render() {
+        const sections = [
+            { key: 'Quản Lý', content: 'Quản Lý', link: false },
+            { key: 'Sản Phẩm', content: 'Sản Phẩm', active: true }
+          ]
         return (
             <div>
                 <Modal
@@ -225,7 +229,9 @@ class Product extends Component {
                         <Button onClick={(e) => this.onCloseFormDel(e)}>Close</Button>
                     </ModalFooter>
                 </Modal>
-                <button type="button" className="btn btn-primary" onClick={this.onToggleForm}>
+                <Breadcrumb icon='right angle' sections={sections} size='large'/>
+                <br/>
+                <button type="button" className="btn btn-primary" onClick={this.onToggleForm} style={{marginTop: '30px'}}>
                     <FontAwesomeIcon icon={faPlus} className="mr-2"/>{' '}
                     Creat New Product
                 </button>

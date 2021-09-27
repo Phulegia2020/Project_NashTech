@@ -2,6 +2,7 @@ package com.example.nashtechproject.service.impl;
 
 import com.example.nashtechproject.entity.User;
 import com.example.nashtechproject.dto.UserDTO;
+import com.example.nashtechproject.page.ProductPage;
 import com.example.nashtechproject.page.UserPage;
 import com.example.nashtechproject.repository.UserRepository;
 import com.example.nashtechproject.service.UserService;
@@ -66,6 +67,21 @@ public class UserServiceImpl implements UserService {
         Sort sort = Sort.by(userPage.getSortDirection(), userPage.getSortBy());
         Pageable pageable = PageRequest.of(userPage.getPageNumber(), userPage.getPageSize(), sort);
         Page<User> page = userRepository.findByActivestatus("Active", pageable);
+        List<User> list = page.getContent();
+        return list;
+    }
+
+    public List<User> getUserAccount(String account)
+    {
+        List<User> users = userRepository.findByAccountContains(account);
+        return users;
+    }
+
+    public List<User> getUserAccountPage(UserPage userPage, String account)
+    {
+        Sort sort = Sort.by(userPage.getSortDirection(), userPage.getSortBy());
+        Pageable pageable = PageRequest.of(userPage.getPageNumber(), userPage.getPageSize(), sort);
+        Page<User> page = userRepository.findByAccountContains(account, pageable);
         List<User> list = page.getContent();
         return list;
     }

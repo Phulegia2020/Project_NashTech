@@ -3,6 +3,7 @@ package com.example.nashtechproject.service;
 import com.example.nashtechproject.dto.UserDTO;
 import com.example.nashtechproject.entity.User;
 import com.example.nashtechproject.entity.User;
+import com.example.nashtechproject.page.ProductPage;
 import com.example.nashtechproject.page.UserPage;
 import org.springframework.data.domain.Page;
 
@@ -35,4 +36,8 @@ public interface UserService {
     public boolean existPhone(String phone);
 
     public List<User> getUsersActive();
+
+    public List<User> getUserAccount(String account);
+
+    public List<User> getUserAccountPage(UserPage userPage, String account);
 }

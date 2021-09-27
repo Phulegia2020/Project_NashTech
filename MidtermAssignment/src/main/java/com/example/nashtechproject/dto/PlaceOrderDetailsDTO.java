@@ -1,8 +1,6 @@
 package com.example.nashtechproject.dto;
 
 public class PlaceOrderDetailsDTO {
-    private Long id;
-
     private int quantity;
 
     private float price;
@@ -10,14 +8,6 @@ public class PlaceOrderDetailsDTO {
     private String placeorder_id;
 
     private String product_id;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public int getQuantity() {
         return quantity;

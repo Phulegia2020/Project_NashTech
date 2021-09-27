@@ -1,21 +1,12 @@
 package com.example.nashtechproject.dto;
 
 public class BillDetailsDTO {
-    private Long id;
 
     private int quantity;
 
     private String bill_id;
 
     private String product_id;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public int getQuantity() {
         return quantity;

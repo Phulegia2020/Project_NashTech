@@ -1,10 +1,9 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
-import {Button, Card, Icon, Image, Menu, Rating} from 'semantic-ui-react'
-import { get, post, put } from '../../../Utils/httpHelper';
+import {Button, Card, Icon, Image, Menu, Rating, Label} from 'semantic-ui-react'
+import { get } from '../../../Utils/httpHelper';
 import {formatCurrency} from "./../../../Utils/Utils";
 import ButtonAddToCart from "./ButtonAddToCart";
-import { withRouter } from "react-router";
 import "../../Product/Product.css";
 const styles = {
     link: {
@@ -79,7 +78,10 @@ class ProductItem extends Component {
     render() {
         return (
             <Card color='blue'>
-                <Image style={{width: '100%'}} src={`data:image/jpeg;base64,${this.props.product.imageurl}`}/>
+                {/* <Label as='a' color='orange' ribbon>
+                Specs
+                </Label> */}
+                <Image style={{width: '100%'}} src={`data:image/jpeg;base64,${this.props.product.imageurl}`} label={{ color: 'red', corner: 'right', icon: 'certificate'}}/>
                 <Card.Content>
                     <Card.Header>
                         {this.props.product.name}

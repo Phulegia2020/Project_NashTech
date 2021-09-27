@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Col, Row, Button, Form, FormGroup, Label, Input } from 'reactstrap';
+import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
 import { get } from '../../Utils/httpHelper';
 import "./Product.css"
 
@@ -129,7 +129,11 @@ export default class Add extends Component {
         }
         this.setState({
             key: '',
-            Error: ''
+            Error: '',
+            // name: "",
+            // description: "",
+            // quantity: 0,
+            // price: 0,
         })
         this.props.onAdd(this.state);
     }
@@ -158,32 +162,32 @@ export default class Add extends Component {
             <div>
                 <Form onSubmit={(event) => this.handleCreate(event)}>
                 <FormGroup>
-                    <Label for="name">Name</Label>
+                    <Label htmlFor="name">Name</Label>
                     <Input type="text" name="name" id="name" placeholder="PlayStation 4" onChange={(e) => this.changeValue(e)} value = {this.state.name} required="required"/>
                     {this.state.key === 'name' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
                 </FormGroup>
                 <FormGroup>
-                    <Label for="description">Description</Label>
+                    <Label htmlFor="description">Description</Label>
                     <textarea style={{resize: 'none', width: '470px'}} rows="3" type="text" name="description" id="description" placeholder="PlayStation 4 Pro" onChange={(e) => this.changeValue(e)} value = {this.state.description} required="required"/>
                 </FormGroup>
                 <FormGroup>
-                    <Label for="quantity">Quantity</Label>
+                    <Label htmlFor="quantity">Quantity</Label>
                     <Input type="number" name="quantity" id="quantity" placeholder="1000" onChange={(e) => this.changeValue(e)} value = {this.state.quantity} required="required"/>
                     {this.state.key === 'quantity' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
                 </FormGroup>
                 <FormGroup>
-                    <Label for="price">Price</Label>
+                    <Label htmlFor="price">Price</Label>
                     <Input type="number" name="price" id="price" placeholder="1.000.000 VNĐ" onChange={(e) => this.changeValue(e)} value = {this.state.price} required="required"/>
                     {this.state.key === 'price' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
                 </FormGroup>
                 <FormGroup>
-                    <Label for="image">Image</Label>
+                    <Label htmlFor="image">Image</Label>
                     <br></br>
                     <Input type="file" name="image" id="image" accept=".jpeg, .png, .jpg" onChange={(e) => {this.uploadImage(e);}} required="required"/>
                 </FormGroup>
                 <FormGroup className="mb-2">
                     
-                    <Label for="category">Category</Label>
+                    <Label htmlFor="category">Category</Label>
                     <Input type="select" name="category_id" id="category" onChange={(e) => this.changeValue(e)} multiple required>
                         {
                             this.state.categories.map((c) => (
@@ -194,7 +198,7 @@ export default class Add extends Component {
                     
                 </FormGroup>
                 <FormGroup className="mb-5">
-                    <Label for="supplier">Supplier</Label>
+                    <Label htmlFor="supplier">Supplier</Label>
                     <Input type="select" name="supplier_id" id="supplier" onChange={(e) => this.changeValue(e)} multiple required>
                         {
                             this.state.suppliers.map((s) => (

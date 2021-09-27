@@ -1,5 +1,6 @@
 package com.example.nashtechproject.entity;
 
+import com.example.nashtechproject.entity.embedded.RateKey;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Type;
@@ -55,13 +56,20 @@ public class Product {
     @JoinColumn(name = "supplier_id")
     private Supplier supplier;
 
+    @Transient
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
     @JsonIgnore
     private List<Rating> ratings = new ArrayList<>();
 
+    @Transient
     @OneToMany(mappedBy = "product", fetch = FetchType.EAGER)
     @JsonIgnore
     private Collection<BillDetails> products;
+
+    @Transient
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<Comment> comments;
 
     @JoinColumn(name = "status")
     private String status;
@@ -80,7 +88,7 @@ public class Product {
         this.imageurl = imageurl;
         this.category = category;
         this.supplier = supplier;
-        this.ratings = ratings;
+        //this.ratings = ratings;
         this.products = products;
     }
 
@@ -172,13 +180,13 @@ public class Product {
         this.supplier = supplier;
     }
 
-    public List<Rating> getRatings() {
-        return ratings;
-    }
-
-    public void setRatings(List<Rating> ratings) {
-        this.ratings = ratings;
-    }
+//    public List<Rating> getRatings() {
+//        return ratings;
+//    }
+//
+//    public void setRatings(List<Rating> ratings) {
+//        this.ratings = ratings;
+//    }
 
     public String getStatus() {
         return status;

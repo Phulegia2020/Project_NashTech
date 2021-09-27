@@ -1,13 +1,17 @@
 package com.example.nashtechproject.entity;
 
+import com.example.nashtechproject.entity.embedded.ImportDetailsKey;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "import_details")
 public class ImportDetails {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    private Long id;
+    @EmbeddedId
+    private ImportDetailsKey key;
 
     @Column(name = "quantity")
     private int quantity;
@@ -15,21 +19,21 @@ public class ImportDetails {
     @Column(name = "price")
     private float price;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "import_id")
-    private Import imp;
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "product_id")
-    private Product product;
-
-    public Long getId() {
-        return id;
+    public ImportDetailsKey getKey() {
+        return key;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setKey(ImportDetailsKey key) {
+        this.key = key;
     }
+
+    //    public Long getId() {
+//        return id;
+//    }
+//
+//    public void setId(Long id) {
+//        this.id = id;
+//    }
 
     public int getQuantity() {
         return quantity;
@@ -47,19 +51,5 @@ public class ImportDetails {
         this.price = price;
     }
 
-    public Import getImp() {
-        return imp;
-    }
 
-    public void setImp(Import imp) {
-        this.imp = imp;
-    }
-
-    public Product getProduct() {
-        return product;
-    }
-
-    public void setProduct(Product product) {
-        this.product = product;
-    }
 }

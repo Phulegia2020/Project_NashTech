@@ -118,17 +118,17 @@ export default class Add extends Component {
             <div>
                 <Form onSubmit={(event) => this.handleCreate(event)}>
                     <FormGroup>
-                        <Label for="name">Name</Label>
+                        <Label htmlFor="name">Name</Label>
                         <Input type="text" name="name" id="name" placeholder="PS5" onChange={(e) => this.changeValue(e)} value = {this.state.name} required="required"/>
                         {this.state.key === 'supplier' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
                     </FormGroup>
                     <FormGroup>
-                        <Label for="address">Address</Label>
+                        <Label htmlFor="address">Address</Label>
                         <Input type="text" name="address" id="address" placeholder="1 Street, 2 Ward, 3 District, Ho Chi Minh City" onChange={(e) => this.changeValue(e)} value = {this.state.address} required="required"/>
                         {this.state.key === 'address' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
                     </FormGroup>
                     <FormGroup>
-                        <Label for="phone">Phone</Label>
+                        <Label htmlFor="phone">Phone</Label>
                         <Input type="text" name="phone" id="phone" minLength="10" maxLength="10" placeholder="0123456789" onChange={(e) => this.changeValue(e, 'phone')} value = {this.state.phone} required="required"/>
                         {this.state.key === 'phone' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
                     </FormGroup>

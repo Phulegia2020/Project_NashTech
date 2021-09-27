@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
-import {Link, Redirect} from 'react-router-dom';
-import { DropdownItem } from 'reactstrap';
+import {Link} from 'react-router-dom';
 import {
     Button,
     Menu,
@@ -8,9 +7,7 @@ import {
     Segment,
     Visibility,
     Dropdown,
-    Icon,
     Sticky,
-    Input
 } from 'semantic-ui-react'
 import ShoppingCart from "./../ShoppingCart/ShoppingCart";
 import {get} from "./../../../Utils/httpHelper";

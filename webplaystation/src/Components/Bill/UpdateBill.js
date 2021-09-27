@@ -103,13 +103,13 @@ class UpdateBill extends Component {
                     <Col md={4}>
                         <Form onSubmit={(event) => this.handleUpdate(event)}>
                         <FormGroup>
-                            <Label for="total">Total</Label>
+                            <Label htmlFor="total">Total</Label>
                             <Input type="number" name="total" id="total" placeholder="VND" onChange={(e) => this.changeValue(e)} value = {this.state.total} required="required" disabled/>
                             {this.state.key === 'total' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
                         </FormGroup>
                         
                         <FormGroup className="mb-2">
-                            <Label for="user">Customer</Label>
+                            <Label htmlFor="user">Customer</Label>
                             <Input type="select" name="user_id" id="user" value = {this.state.user_id} onChange={(e) => this.changeValue(e)}>
                                 {
                                     this.state.users.map((u) => (
@@ -119,7 +119,7 @@ class UpdateBill extends Component {
                             </Input>
                         </FormGroup>
                         <FormGroup className="mb-5">
-                            <Label for="status">Status</Label>
+                            <Label htmlFor="status">Status</Label>
                             <Input type="select" name="billStatus_id" id="status" value = {this.state.billStatus_id} onChange={(e) => this.changeValue(e)} disabled>
                                 {
                                     this.state.billStatus.map((bs) => (

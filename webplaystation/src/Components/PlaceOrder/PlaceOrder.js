@@ -1,13 +1,13 @@
 import React, { Component } from 'react'
 import "./../Category/Category.css";
-import {del, get, post, put} from "./../../Utils/httpHelper";
-import {formatCurrency, formatQuantity} from "./../../Utils/Utils";
+import {del, get, post} from "./../../Utils/httpHelper";
+import {formatCurrency} from "./../../Utils/Utils";
 import { Link } from 'react-router-dom';
 import Add from "./Add"
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Pagination, PaginationItem, PaginationLink } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faInfo, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
-import { Label } from 'semantic-ui-react';
+import { Label, Breadcrumb } from 'semantic-ui-react';
 
 export default class PlaceOrder extends Component {
     state = {
@@ -25,13 +25,13 @@ export default class PlaceOrder extends Component {
             if (response.status === 200)
             {
                 this.setState({
-                    pageToTal: Math.ceil(response.data.length / 10)
+                    pageToTal: Math.ceil(response.data.length / 9)
                 })
             }
         })
         .catch(error => {console.log(error)})
 
-        get(`/placeorders/page?pageNumber=0&pageSize=10&sortBy=id`)
+        get(`/placeorders/page?pageNumber=0&pageSize=9&sortBy=id`)
         .then((response) => {
             this.setState({
                 placeorders: response.data,
@@ -61,11 +61,11 @@ export default class PlaceOrder extends Component {
     createPlaceOrder(newPlaceOrder){
         post(`/placeorders`, {total: 0, user_id: newPlaceOrder.user_id, supplier_id: newPlaceOrder.supplier_id})
         .then((response) => {
-            window.location.reload();
+            //window.location.reload();
             if (response.status === 200)
             {
                 this.setState({
-                    placeorders: [...this.state.placeorders, response.data],
+                    placeorders: [response.data, ...this.state.placeorders],
                 });
             }
         });
@@ -120,7 +120,7 @@ export default class PlaceOrder extends Component {
             }, () => console.log(this.state.pageNumber));
         }
         
-        get(`/placeorders/page?pageNumber=${pageNumber}&pageSize=10&sortBy=id`)
+        get(`/placeorders/page?pageNumber=${pageNumber}&pageSize=9&sortBy=id`)
         .then((response) => {
             this.setState({
                 placeorders: response.data,
@@ -137,6 +137,10 @@ export default class PlaceOrder extends Component {
     }
 
     render() {
+        const sections = [
+            { key: 'Quản Lý', content: 'Quản Lý', link: false },
+            { key: 'Phiếu Đặt', content: 'Phiếu Đặt', active: true }
+          ]
         return (
             <div>
                 <Modal
@@ -158,7 +162,9 @@ export default class PlaceOrder extends Component {
                         <Button onClick={(e) => this.onCloseFormDel(e)}>Close</Button>
                     </ModalFooter>
                 </Modal>
-                <button type="button" className="btn btn-primary" onClick={this.onToggleForm}>
+                <Breadcrumb icon='right angle' sections={sections} size='large'/>
+                <br/>
+                <button type="button" className="btn btn-primary" onClick={this.onToggleForm} style={{marginTop: '30px'}}>
                     <FontAwesomeIcon icon={faPlus} className="mr-2"/>{' '}
                     Creat New Place Order
                 </button>

@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import "./../Category/Category.css";
-import {del, get, post, put} from "./../../Utils/httpHelper";
+import { get } from "./../../Utils/httpHelper";
 import {formatQuantity, formatCurrency} from "./../../Utils/Utils";
+import { Statistic } from 'semantic-ui-react'
 import "./Statistical.css";
 
 
@@ -101,12 +102,32 @@ class Statistical extends Component {
 
                 <div >
                     <div className="rp">
-                        <h3>BILLS DONE: {formatQuantity(this.state.bills.length)}</h3>
-                        <h3>TOTAL INCOME: {formatCurrency(this.state.income)}</h3>
+                        <Statistic.Group size='small' id="income">
+                            <Statistic>
+                                <Statistic.Value>{formatQuantity(this.state.bills.length)}</Statistic.Value>
+                                <Statistic.Label>BILLS DONE</Statistic.Label>
+                            </Statistic>
+                            <Statistic>
+                                <Statistic.Value>{formatCurrency(this.state.income)}</Statistic.Value>
+                                <Statistic.Label>TOTAL INCOME</Statistic.Label>
+                            </Statistic>
+                        </Statistic.Group>
+                        {/* <h3>BILLS DONE: {formatQuantity(this.state.bills.length)}</h3>
+                        <h3>TOTAL INCOME: {formatCurrency(this.state.income)}</h3> */}
                     </div>
                     <div className="rp" id="outcome">
-                        <h3>IMPORTS DONE: {formatQuantity(this.state.imports.length)}</h3>
-                        <h3>TOTAL OUTCOME: {formatCurrency(this.state.outcome)}</h3>
+                        <Statistic.Group size='small'>
+                            <Statistic>
+                                <Statistic.Value>{formatQuantity(this.state.imports.length)}</Statistic.Value>
+                                <Statistic.Label>IMPORTS DONE</Statistic.Label>
+                            </Statistic>
+                            <Statistic>
+                                <Statistic.Value>{formatCurrency(this.state.outcome)}</Statistic.Value>
+                                <Statistic.Label>TOTAL OUTCOME</Statistic.Label>
+                            </Statistic>
+                        </Statistic.Group>
+                        {/* <h3>IMPORTS DONE: {formatQuantity(this.state.imports.length)}</h3>
+                        <h3>TOTAL OUTCOME: {formatCurrency(this.state.outcome)}</h3> */}
                     </div>
                 </div>
             </div>

@@ -13,6 +13,10 @@ public interface SupplierService {
 
     public List<Supplier> getSuppliersPage(ProductPage productPage);
 
+    public List<Supplier> getSupplierByName(String name);
+
+    public List<Supplier> getSupplierByNamePage(String name, ProductPage productPage);
+
     public Supplier saveSupplier(Supplier supplier);
 
     public void deleteSupplier(Long supplierId);

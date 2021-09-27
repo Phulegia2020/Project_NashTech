@@ -1,14 +1,13 @@
 package com.example.nashtechproject.restcontroller;
 
 import com.example.nashtechproject.dto.ImportDetailsDTO;
-import com.example.nashtechproject.entity.Import;
-import com.example.nashtechproject.entity.ImportDetails;
-import com.example.nashtechproject.entity.PlaceOrderDetails;
-import com.example.nashtechproject.entity.Product;
+import com.example.nashtechproject.entity.*;
+import com.example.nashtechproject.entity.embedded.ImportDetailsKey;
 import com.example.nashtechproject.exception.BillDetailsException;
 import com.example.nashtechproject.exception.InvalidDataException;
 import com.example.nashtechproject.exception.ObjectNotFoundException;
 import com.example.nashtechproject.exception.ProductException;
+import com.example.nashtechproject.page.ProductPage;
 import com.example.nashtechproject.payload.response.MessageResponse;
 import com.example.nashtechproject.service.ImportDetailsService;
 import com.example.nashtechproject.service.ImportService;
@@ -16,6 +15,7 @@ import com.example.nashtechproject.service.PlaceOrderDetailsService;
 import com.example.nashtechproject.service.ProductService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -48,28 +48,36 @@ public class ImportDetailsController {
     public List<ImportDetails> getAllImportDetails()
     {
         List<ImportDetails> importDetails = importDetailsService.retrieveImportDetails();
-        return importDetails.stream().sorted(Comparator.comparing(ImportDetails::getId).reversed())
-                .collect(Collectors.toList());
+//        return importDetails.stream().sorted(Comparator.comparing(ImportDetails::getId).reversed())
+//                .collect(Collectors.toList());
+        return importDetails;
     }
 
-    @GetMapping("/{importDetailsId}")
-    public ImportDetailsDTO findImportDetails(@PathVariable Long importDetailsId)
+    @GetMapping("/{importId}-{productId}")
+    public ImportDetailsDTO findImportDetails(@PathVariable(name = "importId") Long importId, @PathVariable(name = "productId") Long productId)
     {
-        ImportDetails importDetails = importDetailsService.getImportDetails(importDetailsId);
+        ImportDetails importDetails = importDetailsService.getByImportAndProduct(importId, productId);
         if (importDetails == null)
         {
             throw new ObjectNotFoundException("The Place Order Details not found");
         }
-        return convertToDTO(importDetailsService.getImportDetails(importDetailsId));
+        return convertToDTO(importDetails);
     }
 
     @GetMapping("/import/{importId}")
     public List<ImportDetails> getImportDetailsByImport(@PathVariable(name = "importId") Long importId)
     {
         List<ImportDetails> importDetails = importDetailsService.getImportDetailsByImport(importId);
-        return importDetails.stream()
-                .sorted(Comparator.comparing(ImportDetails::getId))
-                .collect(Collectors.toList());
+//        return importDetails.stream()
+//                .sorted(Comparator.comparing(ImportDetails::getId))
+//                .collect(Collectors.toList());
+        return importDetails;
+    }
+
+    @GetMapping("/importPage/{importId}")
+    public ResponseEntity<List<ImportDetails>> getBillDetailsByBillPages(@PathVariable(name = "importId") Long importId, ProductPage productPage)
+    {
+        return new ResponseEntity<>(importDetailsService.getImportDetailsByImportPages(importId, productPage), HttpStatus.OK);
     }
 
     @PostMapping()
@@ -96,26 +104,26 @@ public class ImportDetailsController {
         return importDetailsService.saveImportDetails(impo);
     }
 
-    @PutMapping("/{importDetailsId}")
-    public ImportDetails updateImportDetails(@PathVariable(name = "importDetailsId") Long importDetailsId, @Valid @RequestBody ImportDetailsDTO newImportDetails)
+    @PutMapping("/{importId}-{productId}")
+    public ImportDetails updateImportDetails(@PathVariable(name = "importId") Long importId, @PathVariable(name = "productId") Long productId, @Valid @RequestBody ImportDetailsDTO newImportDetails)
     {
-        ImportDetails importDetails = importDetailsService.getImportDetails(importDetailsId);
+        ImportDetails importDetails = importDetailsService.getByImportAndProduct(importId, productId);
         if (importDetails == null)
         {
             throw new ObjectNotFoundException("The Import Details not found");
         }
         else
         {
-            Import imp = importService.getImport(importDetails.getImp().getId());
+            Import imp = importService.getImport(importDetails.getKey().getImp().getId());
 
-            PlaceOrderDetails pod = placeOrderDetailsService.getByPlaceOderAndProduct(imp.getPlaceOrder().getId(), importDetails.getProduct().getId());
+            PlaceOrderDetails pod = placeOrderDetailsService.getByPlaceOderAndProduct(imp.getPlaceOrder().getId(), importDetails.getKey().getProduct().getId());
             if (newImportDetails.getQuantity() > pod.getQuantity())
             {
                 throw new InvalidDataException("The quantity imported must not more than the quantity ordered");
             }
             importDetails.setQuantity(newImportDetails.getQuantity());
             importDetailsService.updateImportDetails(importDetails);
-            List<ImportDetails> list = importDetailsService.getImportDetailsByImport(importDetails.getImp().getId());
+            List<ImportDetails> list = importDetailsService.getImportDetailsByImport(importDetails.getKey().getImp().getId());
             float total = 0;
             for (int i = 0; i < list.size(); i++)
             {
@@ -127,27 +135,27 @@ public class ImportDetailsController {
         return importDetails;
     }
 
-    @DeleteMapping("/{importDetailsId}")
-    public ResponseEntity<?> deleteImportDetails(@PathVariable(name = "importDetailsId") Long importDetailsId)
+    @DeleteMapping("/{importId}-{productId}")
+    public ResponseEntity<?> deleteImportDetails(@PathVariable(name = "importId") Long importId, @PathVariable(name = "productId") Long productId)
     {
-        ImportDetails importDetails = importDetailsService.getImportDetails(importDetailsId);
+        ImportDetails importDetails = importDetailsService.getByImportAndProduct(importId, productId);
         if (importDetails == null)
         {
             throw new ObjectNotFoundException("The Import Details not found");
         }
-        Import imp = importService.getImport(importDetails.getImp().getId());
+        Import imp = importService.getImport(importDetails.getKey().getImp().getId());
         float total = imp.getTotal() - importDetails.getQuantity()*importDetails.getPrice();
         imp.setTotal(total);
         importService.updateImport(imp);
-        importDetailsService.deleteImportDetails(importDetailsId);
+        importDetailsService.deleteImportDetails(importId, productId);
         return ResponseEntity.ok(new MessageResponse("Delete Successfully"));
     }
 
     private ImportDetailsDTO convertToDTO(ImportDetails importDetails)
     {
         ImportDetailsDTO importDetailsDTO = modelMapper.map(importDetails, ImportDetailsDTO.class);
-        importDetailsDTO.setProduct_id(String.valueOf(importDetails.getProduct().getId()));
-        importDetailsDTO.setImp_id(String.valueOf(importDetails.getImp().getId()));
+        importDetailsDTO.setProduct_id(String.valueOf(importDetails.getKey().getProduct().getId()));
+        importDetailsDTO.setImp_id(String.valueOf(importDetails.getKey().getImp().getId()));
         return importDetailsDTO;
     }
 
@@ -155,9 +163,8 @@ public class ImportDetailsController {
     {
         ImportDetails importDetails = modelMapper.map(importDetailsDTO, ImportDetails.class);
         Import imp = importService.getImport(Long.valueOf(importDetailsDTO.getImp_id()));
-        importDetails.setImp(imp);
         Product pro = productService.getProduct(Long.valueOf(importDetailsDTO.getProduct_id()));
-        importDetails.setProduct(pro);
+        importDetails.setKey(new ImportDetailsKey(imp, pro));
         return importDetails;
     }
 }

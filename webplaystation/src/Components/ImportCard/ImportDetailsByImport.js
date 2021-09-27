@@ -15,7 +15,9 @@ class ImportDetailsByImport extends Component {
         import: {},
         isDisplayForm: false,
         isDisplayFormDel: false,
-        iddel: ""
+        iddel: {},
+        pageNumber: 0,
+        pageToTal: 0,
     }
 
     componentDidMount(){
@@ -24,10 +26,19 @@ class ImportDetailsByImport extends Component {
             if (response.status === 200)
             {
                 this.setState({
-                    importdetails: response.data
+                    //importdetails: response.data
+                    pageToTal: Math.ceil(response.data.length / 5)
                 })
             }
         })
+
+        get(`/importDetails/importPage/${this.state.id}?pageNumber=0&pageSize=5&sortBy=id`)
+        .then((response) => {
+            this.setState({
+                importdetails: response.data
+            });
+        })
+        .catch(error => console.log(error));
 
         get(`/imports/${this.state.id}`)
         .then((response) => {
@@ -43,9 +54,12 @@ class ImportDetailsByImport extends Component {
     delImportDetail = (e, id) =>
     {
         e.preventDefault();
-        del(`/importDetails/${id}`)
+        del(`/importDetails/${id.imp.id}-${id.product.id}`)
         .then((response) => {
-            this.setState({importdetails: this.state.importdetails.filter(b => b.id !== id), isDisplayFormDel: false})
+            if (response.status === 200)
+            {
+                this.setState({importdetails: this.state.importdetails.filter(b => `${b.key.imp.id}-${b.key.product.id}` !== `${id.imp.id}-${id.product.id}`), isDisplayFormDel: false})
+            }
         })
         .catch(error => {console.log(error)})
     }
@@ -91,6 +105,33 @@ class ImportDetailsByImport extends Component {
 
     onAdd = (data) => {
         this.createImportDetail(data);
+    }
+
+    onPage(event, pageNumber){
+        event.preventDefault();
+        this.setState({
+            pageNumber: pageNumber
+        }, () => console.log(this.state.pageNumber))
+        if (pageNumber < 0)
+        {
+            this.setState({
+                pageNumber: 0
+            }, () => console.log(this.state.pageNumber))
+        }
+        if (pageNumber > (this.state.pageToTal-1))
+        {
+            this.setState({
+                pageNumber: (this.state.pageToTal)
+            }, () => console.log(this.state.pageNumber));
+        }
+        
+        get(`/importDetails/importPage/${this.state.id}?pageNumber=${pageNumber}&pageSize=5&sortBy=id`)
+        .then((response) => {
+            this.setState({
+                importdetails: response.data,
+            });
+        })
+        .catch(error => console.log(error));
     }
 
     componentWillUnmount() {
@@ -141,23 +182,23 @@ class ImportDetailsByImport extends Component {
                     <tbody>
                         {
                             this.state.importdetails.map((imp, index) => (
-                                <tr key={imp.id}>
+                                <tr key={index}>
                                     <td>{index + 1}</td>
                                     <td>
-                                        <img src={`data:image/jpeg;base64,${imp.product.imageurl}`} alt="" height="100px"></img>
+                                        <img src={`data:image/jpeg;base64,${imp.key.product.imageurl}`} alt="" height="100px"></img>
                                     </td>
-                                    <td>{imp.product.name}</td>
+                                    <td>{imp.key.product.name}</td>
                                     <td>{formatQuantity(imp.quantity)}</td>
                                     <td>{formatCurrency(imp.price)}</td>
                                     <td>
-                                        <Link to={`/admin/importDetails/update/${imp.id}`}  onClick={this.state.import.status !== 'Waiting' ? (e) => e.preventDefault() : ''} className={this.state.import.status !== 'Waiting' ? "disable-link" : ""}>
+                                        <Link to={`/admin/importDetails/update/${imp.key.imp.id}-${imp.key.product.id}`}  onClick={this.state.import.status !== 'Waiting' ? (e) => e.preventDefault() : ''} className={this.state.import.status !== 'Waiting' ? "disable-link" : ""}>
                                             <button className="btn btn-success" disabled={this.state.import.status !== 'Waiting'}>
                                             <FontAwesomeIcon icon={faEdit} className="mr-2"/>{' '}
                                                 
                                             </button>
                                         </Link>
                                     </td>
-                                    <td><button onClick={(e) => this.onToggleFormDel(e, imp.id)} className="btn btn-danger" disabled={this.state.import.status !== 'Waiting'}>
+                                    <td><button onClick={(e) => this.onToggleFormDel(e, imp.key)} className="btn btn-danger" disabled={this.state.import.status !== 'Waiting'}>
                                         <FontAwesomeIcon icon={faTrash} className="mr-2"/>{' '}
                                         
                                         </button>
@@ -167,6 +208,27 @@ class ImportDetailsByImport extends Component {
                         }
                     </tbody>
                 </table>
+                <Pagination aria-label="Page navigation example">
+                    <PaginationItem>
+                        <PaginationLink first  onClick={(event) => this.onPage(event, 0)}/>
+                    </PaginationItem>
+                    <PaginationItem>
+                        <PaginationLink previous onClick={(event) => this.onPage(event, this.state.pageNumber - 1)}/>
+                    </PaginationItem>
+                    {[...Array(this.state.pageToTal)].map((page, i) => 
+                        <PaginationItem active={i === this.state.pageNumber} key={i}>
+                            <PaginationLink onClick={(event) => this.onPage(event, i)}>
+                            {i + 1}
+                            </PaginationLink>
+                        </PaginationItem>
+                    )}
+                    <PaginationItem>
+                        <PaginationLink next onClick={(event) => this.onPage(event, this.state.pageNumber + 1)}/>
+                    </PaginationItem>
+                    <PaginationItem>
+                        <PaginationLink last onClick={(event) => this.onPage(event, this.state.pageToTal-1)} />
+                    </PaginationItem>
+                </Pagination>
                 <div className="container">
                     <Modal isOpen={this.state.isDisplayForm} toggle={this.onToggleForm}>
                         <ModalHeader toggle={this.onToggleForm}>Create New Import Detail</ModalHeader>

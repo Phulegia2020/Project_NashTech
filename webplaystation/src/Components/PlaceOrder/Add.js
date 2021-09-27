@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Col, Row, Button, Form, FormGroup, Label, Input } from 'reactstrap';
+import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
 import { get } from '../../Utils/httpHelper';
 
 export default class Add extends Component {
@@ -64,12 +64,12 @@ export default class Add extends Component {
             <div>
                 <Form onSubmit={(event) => this.handleCreate(event)}>
                 <FormGroup>
-                    <Label for="total">Total</Label>
+                    <Label htmlFor="total">Total</Label>
                     <Input type="number" name="total" id="total" placeholder="VND" onChange={(e) => this.changeValue(e)} value = {this.state.total} disabled/>
                     {this.state.key === 'total' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
                 </FormGroup>
                 <FormGroup className="mb-2">
-                    <Label for="supplier">Supplier</Label>
+                    <Label htmlFor="supplier">Supplier</Label>
                     <Input type="select" name="supplier_id" id="supplier" onChange={(e) => this.changeValue(e)} multiple required>
                         {
                             this.state.suppliers.map((sup) => (

@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {Table, Button, Header, Image} from 'semantic-ui-react';
 import {formatCurrency} from "../../../Utils/Utils";
+import "./Order.css";
 
 class ShoppingCartDetails extends Component {
     constructor(props) {
@@ -98,9 +99,9 @@ class ShoppingCartDetails extends Component {
                                 </Table.Row>
                             )
                         }
+                        
                     </Table.Body>
                 </Table>
-
                 <Header>TOTAL: {this.getTotal()}</Header>
             </div>
         );

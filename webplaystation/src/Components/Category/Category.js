@@ -1,12 +1,12 @@
 import React, {Component} from 'react';
 import "./Category.css";
-import {del, get, post, put} from "./../../Utils/httpHelper";
+import {del, get, post} from "./../../Utils/httpHelper";
 import { Link } from 'react-router-dom';
 import Add from "./Add"
-import Update from './UpdateCategory';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Pagination, PaginationItem, PaginationLink, Toast } from 'reactstrap';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Pagination, PaginationItem, PaginationLink } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { Breadcrumb, Input } from 'semantic-ui-react'
 
 export default class Category extends Component {
     state = {
@@ -16,7 +16,8 @@ export default class Category extends Component {
         iddel: '',
         pageNumber: 0,
         pageToTal: 0,
-        msgDel: false
+        msgDel: false,
+        search: ""
     }
 
     componentDidMount(){
@@ -127,20 +128,91 @@ export default class Category extends Component {
             }, () => console.log(this.state.pageNumber));
         }
         
-        get(`/categories/page?pageNumber=${pageNumber}&pageSize=5&sortBy=id`)
-        .then((response) => {
-            this.setState({
-                categories: response.data,
-            });
-        })
-        .catch(error => console.log(error));
+        if (this.state.search === '')
+        {
+            get(`/categories/page?pageNumber=${pageNumber}&pageSize=5&sortBy=id`)
+            .then((response) => {
+                this.setState({
+                    categories: response.data,
+                });
+            })
+            .catch(error => console.log(error));
+        }
+        else
+        {
+            get(`/categories/namePage?name=${this.state.search}&pageNumber=${pageNumber}&pageSize=5&sortBy=id`)
+            .then((response) => {
+                this.setState({
+                    categories: response.data,
+                });
+            })
+            .catch(error => console.log(error));
+        }
     }
 
-    handleDelete(id){
-        this.setState({
-            isDisplayFormDel: !this.state.isDisplayFormDel,
-            iddel: id
+    // handleDelete(id){
+    //     this.setState({
+    //         isDisplayFormDel: !this.state.isDisplayFormDel,
+    //         iddel: id
+    //     })
+    // }
+
+    async handleSearch(e){
+        e.preventDefault()
+        await this.setState({
+            search: e.target.value
         })
+        if (this.state.search === '')
+        {
+            get("/categories")
+            .then((response) => {
+                if (response.status === 200)
+                {
+                    this.setState({
+                        pageToTal: Math.ceil(response.data.length / 5)
+                    })
+                }
+            })
+            .catch(error => {console.log(error)})
+
+            get(`/categories/page?pageNumber=0&pageSize=5&sortBy=id`)
+            .then((response) => {
+                this.setState({
+                    categories: response.data
+                });
+            })
+            .catch(error => console.log(error));
+        }
+        else
+        {
+            get(`/categories/name?name=${this.state.search}`)
+            .then((response) => {
+                if (response.status === 200)
+                {
+                    this.setState({
+                        pageToTal: Math.ceil(response.data / 5)
+                    });
+                }
+            })
+            .catch(error => {console.log(error)})
+
+            get(`/categories/namePage?name=${this.state.search}&pageNumber=0&pageSize=5&sortBy=id`)
+            .then((response) => {
+                this.setState({
+                    categories: response.data,
+                });
+            })
+            .catch(error => console.log(error));
+        }
+    }
+
+    handleSort = (e) => {
+        e.preventDefault();
+        //this.state.categories.sort((e1, e2) => (e1.id > e2.id ? 1 : -1));
+        this.setState({
+            categories: this.state.categories.sort((e1, e2) => (e1.id > e2.id ? 1 : -1))
+        })
+        console.log('sort');
     }
 
     componentWillUnmount() {
@@ -151,6 +223,10 @@ export default class Category extends Component {
     }
 
     render() {
+        const sections = [
+            { key: 'Quản Lý', content: 'Quản Lý', link: false },
+            { key: 'Loại Sản Phẩm', content: 'Loại Sản Phẩm', active: true }
+          ]
         return (
             <div>
                 <Modal
@@ -172,14 +248,23 @@ export default class Category extends Component {
                         <Button onClick={(e) => this.onCloseFormDel(e)}>Close</Button>
                     </ModalFooter>
                 </Modal>
-                <button type="button" className="btn btn-primary" onClick={this.onToggleForm}>
+                <Breadcrumb icon='right angle' sections={sections} size='large'/>
+                <br/>
+                <button type="button" className="btn btn-primary" onClick={this.onToggleForm} style={{marginTop: '30px'}}>
                     <FontAwesomeIcon icon={faPlus} className="mr-2"/>{' '}
                     Creat New Category
                 </button>
+                <Input
+                    style={{marginLeft: '100rem'}}
+                    placeholder="Tên loại..."
+                    value={this.state.search}
+                    onChange={(e) => this.handleSearch(e)}
+                    icon="search"
+                />
                 <table id="table">
                     <thead>
                         <tr>
-                            <th><b>ID</b></th>
+                            <th><span onClick={(e) => this.handleSort(e)}><b>ID</b></span></th>
                             <th><b>Name</b></th>
                             <th><b>Description</b></th>
                             <th>Update</th>

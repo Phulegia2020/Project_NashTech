@@ -22,7 +22,7 @@ class SubMenu extends Component {
             <div>
                 <NavItem
                     onClick={this.toggle}
-                    className={{ "menu-open": !this.state.collapsed }}
+                    className={{"menu-open": !this.state.collapsed }}
                 >
                     <NavLink className="dropdown-toggle letter m-2" tag={Link} to={`/admin/${this.props.url}`}>
                     <FontAwesomeIcon icon={this.props.icon}/>{' '}

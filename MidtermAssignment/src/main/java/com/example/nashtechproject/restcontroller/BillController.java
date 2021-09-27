@@ -2,10 +2,7 @@ package com.example.nashtechproject.restcontroller;
 
 import com.example.nashtechproject.dto.BillDTO;
 import com.example.nashtechproject.dto.MailRequestDTO;
-import com.example.nashtechproject.entity.Bill;
-import com.example.nashtechproject.entity.BillDetails;
-import com.example.nashtechproject.entity.BillStatus;
-import com.example.nashtechproject.entity.User;
+import com.example.nashtechproject.entity.*;
 import com.example.nashtechproject.exception.BillException;
 import com.example.nashtechproject.exception.BillStatusException;
 import com.example.nashtechproject.exception.InvalidDataException;
@@ -122,12 +119,25 @@ public class BillController {
                 .collect(Collectors.toList());
     }
 
+    @GetMapping("/fullName")
+    public int getBillByUsername(@RequestParam String name)
+    {
+        List<Bill> bills = billService.getBillByUsername(name);
+        return bills.size();
+    }
+
+    @GetMapping("/fullNamePage")
+    public ResponseEntity<List<Bill>> getBillByUsernamePages(ProductPage productPage, @RequestParam String name)
+    {
+        return new ResponseEntity<>(billService.getBillByUsernamePage(name, productPage), HttpStatus.OK);
+    }
+
     @PostMapping()
     @ApiOperation(value = "Create New bill")
     @ApiResponses(value = { @ApiResponse(code = 200, message = "Success"),
             @ApiResponse(code = 400, message = "Bad request"),
             @ApiResponse(code = 500, message = "Internal server error") })
-    public BillDTO saveBill(@RequestBody BillDTO bill)
+    public Bill saveBill(@RequestBody BillDTO bill)
     {
         User u = userService.getUser(Long.valueOf(bill.getUser_id()));
         if (u == null)
@@ -141,7 +151,8 @@ public class BillController {
         }
         Bill b = convertToEntity(bill);
         b.setCreateddate(LocalDateTime.now());
-        return convertToDTO(billService.saveBill(b));
+//        return convertToDTO(billService.saveBill(b));
+        return billService.saveBill(b);
     }
 
     @PutMapping("/{billId}")
@@ -233,7 +244,7 @@ public class BillController {
         List<BillDetails> list = billDetailsService.getBillDetailsByBill(bill);
         for (int i = 0; i < list.size(); i++)
         {
-            content = content + "<br><br><b>Product:</b> " + list.get(i).getProduct().getName() + " <br><b>Quantity:</b> " + String.format("%,d", list.get(i).getQuantity()) + " <br><b>Price:</b> " + String.format("%,d", list.get(i).getProduct().getPrice())  + " VND";
+            content = content + "<br><br><b>Product:</b> " + list.get(i).getKey().getProduct().getName() + " <br><b>Quantity:</b> " + String.format("%,d", list.get(i).getQuantity()) + " <br><b>Price:</b> " + String.format("%,d", list.get(i).getKey().getProduct().getPrice())  + " VND";
         }
         mailRequest.setContent(content);
         billService.sendEmail(mailRequest);

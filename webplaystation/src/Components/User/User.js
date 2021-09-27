@@ -1,11 +1,12 @@
 import React, { Component } from 'react'
 import "./../Category/Category.css";
-import {del, get, post, put} from "./../../Utils/httpHelper";
+import {del, get, post} from "./../../Utils/httpHelper";
 import { Link } from 'react-router-dom';
 import Add from "./Add"
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Pagination, PaginationItem, PaginationLink } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { Breadcrumb, Input } from 'semantic-ui-react';
 
 export default class User extends Component {
     constructor (props){
@@ -18,7 +19,8 @@ export default class User extends Component {
             isDisplayFormDel: false,
             pageNumber: 0,
             pageToTal: 0,
-            id: ""
+            id: "",
+            search: ""
         }
 
         this.onPage = this.onPage.bind(this);
@@ -135,13 +137,75 @@ export default class User extends Component {
             }, () => console.log(this.state.pageNumber));
         }
         
-        get(`/users/page?pageNumber=${pageNumber}&pageSize=5&sortBy=id`)
-        .then((response) => {
-            this.setState({
-                users: response.data,
-            });
+        if (this.state.search === '')
+        {
+            get(`/users/page?pageNumber=${pageNumber}&pageSize=5&sortBy=id`)
+            .then((response) => {
+                this.setState({
+                    users: response.data,
+                });
+            })
+            .catch(error => console.log(error));
+        }
+        else
+        {
+            get(`/users/usernamePage?username=${this.state.search}&pageNumber=${pageNumber}&pageSize=5&sortBy=id`)
+            .then((response) => {
+                this.setState({
+                    users: response.data,
+                });
+            })
+            .catch(error => console.log(error));
+        }
+    }
+
+    async handleSearch(e){
+        e.preventDefault()
+        await this.setState({
+            search: e.target.value
         })
-        .catch(error => console.log(error));
+        if (this.state.search === '')
+        {
+            get("/users/active")
+            .then((response) => {
+                if (response.status === 200)
+                {
+                    this.setState({
+                        pageToTal: Math.ceil(response.data / 5)
+                    });
+                }
+            })
+            .catch(error => {console.log(error)})
+
+            get(`/users/page?pageNumber=0&pageSize=5&sortBy=id`)
+            .then((response) => {
+                this.setState({
+                    users: response.data,
+                });
+            })
+            .catch(error => console.log(error));
+        }
+        else
+        {
+            get(`/users/username?username=${this.state.search}`)
+            .then((response) => {
+                if (response.status === 200)
+                {
+                    this.setState({
+                        pageToTal: Math.ceil(response.data / 5)
+                    });
+                }
+            })
+            .catch(error => {console.log(error)})
+
+            get(`/users/usernamePage?username=${this.state.search}&pageNumber=0&pageSize=5&sortBy=id`)
+            .then((response) => {
+                this.setState({
+                    users: response.data,
+                });
+            })
+            .catch(error => console.log(error));
+        }
     }
 
     componentWillUnmount() {
@@ -152,6 +216,10 @@ export default class User extends Component {
     }
 
     render() {
+        const sections = [
+            { key: 'Quản Lý', content: 'Quản Lý', link: false },
+            { key: 'Người Dùng', content: 'Người Dùng', active: true }
+          ]
         return (
             <div>
                 <Modal
@@ -173,11 +241,20 @@ export default class User extends Component {
                         <Button onClick={(e) => this.onCloseFormDel(e)}>Close</Button>
                     </ModalFooter>
                 </Modal>
+                <Breadcrumb icon='right angle' sections={sections} size='large'/>
+                <br/>
                 <div className="m-3">
                 <button type="button" className="btn btn-primary" onClick={this.onToggleForm} disabled={localStorage.getItem('role') === 'STAFF'}>
                     <FontAwesomeIcon icon={faPlus} className="mr-2"/>{' '}
                     Creat New User
                 </button>
+                <Input
+                    style={{marginLeft: '100rem'}}
+                    placeholder="Tên tài khoản..."
+                    value={this.state.search}
+                    onChange={(e) => this.handleSearch(e)}
+                    icon="search"
+                />
                 </div>
                 <table id="table">
                     <thead>

@@ -161,7 +161,7 @@ class UpdateUser extends React.Component {
                     <Col md={4}>
                         <Form onSubmit={(event) => this.handleUpdate(event)}>
                         <FormGroup>
-                            <Label for="name">Name</Label>
+                            <Label htmlFor="name">Name</Label>
                             <Input type="text" name="name" id="name" placeholder="Phu Le Gia" onChange={(e) => this.changeValue(e)} value = {this.state.name} required disabled={this.state.active_status === 'Inactive'}/>
                         </FormGroup>
                         <FormGroup tag="fieldset" row>
@@ -182,26 +182,26 @@ class UpdateUser extends React.Component {
                             </Col>
                         </FormGroup>
                                 <FormGroup>
-                                    <Label for="username">Username</Label>
+                                    <Label htmlFor="username">Username</Label>
                                     <Input type="text" name="username" id="username" placeholder="Football" onChange={(e) => this.changeValue(e)} value = {this.state.username} disabled/>
                                     {this.state.key === 'username' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
                                 </FormGroup>
                                 <FormGroup>
-                                    <Label for="email">Email</Label>
+                                    <Label htmlFor="email">Email</Label>
                                     <Input type="email" name="email" id="email" placeholder="abc@gmail.com" onChange={(e) => this.changeValue(e)} value = {this.state.email} required disabled={this.state.active_status === 'Inactive'}/>
                                     {this.state.key === 'email' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
                                 </FormGroup>
                         <FormGroup>
-                            <Label for="address">Address</Label>
+                            <Label htmlFor="address">Address</Label>
                             <Input type="text" name="address" id="address" placeholder="1234 Main St, HCM City" onChange={(e) => this.changeValue(e)} value = {this.state.address} required disabled={this.state.active_status === 'Inactive'}/>
                         </FormGroup>
                         <FormGroup>
-                            <Label for="phone">Phone</Label>
+                            <Label htmlFor="phone">Phone</Label>
                             <Input type="text" minLength={10} maxLength={10} name="phone" id="phone" placeholder="0987654321" onChange={(e) => this.changeValue(e)} value = {this.state.phone} required disabled={this.state.active_status === 'Inactive'}/>
                             {this.state.key === 'phone' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
                         </FormGroup>
                         <FormGroup className="mb-2">
-                            <Label for="role">Role</Label>
+                            <Label htmlFor="role">Role</Label>
                             <Input type="select" name="role_id" id="role" value = {this.state.role_id} onChange={(e) => this.changeValue(e)} disabled={localStorage.getItem('role') === 'STAFF' || this.state.active_status === 'Inactive'}>
                                 {
                                     this.state.roles.map((r) => (

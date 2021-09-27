@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import "./../Category/Category.css";
 import {del, get, post, put} from "./../../Utils/httpHelper";
-import {formatCurrency, formatQuantity} from "./../../Utils/Utils";
+import {formatCurrency} from "./../../Utils/Utils";
 import { Link } from 'react-router-dom';
 import { withRouter } from "react-router";
 import Add from "./Add"
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Pagination, PaginationItem, PaginationLink } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheck, faClosedCaptioning, faDoorClosed, faEdit, faInfo, faPlus, faRemoveFormat, faTrash } from '@fortawesome/free-solid-svg-icons';
-import { Label, Loader } from 'semantic-ui-react';
+import { faCheck, faEdit, faInfo, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { Label, Breadcrumb, Input } from 'semantic-ui-react';
 
 class Bill extends Component {
     state = {
@@ -23,7 +23,8 @@ class Bill extends Component {
         user:"",
         usermail: '',
         username: "",
-        id: ""
+        id: "",
+        search: ""
     }
 
     componentDidMount(){
@@ -32,13 +33,13 @@ class Bill extends Component {
             if (response.status === 200)
             {
                 this.setState({
-                    pageToTal: Math.ceil(response.data.length / 10)
+                    pageToTal: Math.ceil(response.data.length / 9)
                 })
             }
         })
         .catch(error => {console.log(error)})
 
-        get(`/bills/page?pageNumber=0&pageSize=10&sortBy=id`)
+        get(`/bills/page?pageNumber=0&pageSize=9&sortBy=id`)
         .then((response) => {
             this.setState({
                 bills: response.data,
@@ -82,9 +83,9 @@ class Bill extends Component {
     createBill(newBill){
         post(`/bills`, {total: 0, user_id: newBill.user_id, billStatus_id: newBill.billStatus_id})
         .then((response) => {
-            window.location.reload();
+            //window.location.reload();
             this.setState({
-                bills: [...this.state.bills, response.data],
+                bills: [response.data, ...this.state.bills],
             });
         });
     }
@@ -138,13 +139,26 @@ class Bill extends Component {
             }, () => console.log(this.state.pageNumber));
         }
         
-        get(`/bills/page?pageNumber=${pageNumber}&pageSize=10&sortBy=id`)
-        .then((response) => {
-            this.setState({
-                bills: response.data,
-            });
-        })
-        .catch(error => console.log(error));
+        if (this.state.search === '')
+        {
+            get(`/bills/page?pageNumber=${pageNumber}&pageSize=9&sortBy=id`)
+            .then((response) => {
+                this.setState({
+                    bills: response.data,
+                });
+            })
+            .catch(error => console.log(error));
+        }
+        else
+        {
+            get(`/bills/fullNamePage?name=${this.state.search}&pageNumber=${pageNumber}&pageSize=9&sortBy=id`)
+            .then((response) => {
+                this.setState({
+                    bills: response.data,
+                });
+            })
+            .catch(error => console.log(error));
+        }
     }
 
     async handleCheckOut(event, id, key){
@@ -195,6 +209,55 @@ class Bill extends Component {
         })
     }
 
+    async handleSearch(e){
+        e.preventDefault()
+        await this.setState({
+            search: e.target.value
+        })
+        if (this.state.search === '')
+        {
+            get("/bills")
+            .then((response) => {
+                if (response.status === 200)
+                {
+                    this.setState({
+                        pageToTal: Math.ceil(response.data.length / 9)
+                    })
+                }
+            })
+            .catch(error => {console.log(error)})
+
+            get(`/bills/page?pageNumber=0&pageSize=9&sortBy=id`)
+            .then((response) => {
+                this.setState({
+                    bills: response.data,
+                });
+            })
+            .catch(error => console.log(error));
+        }
+        else
+        {
+            get(`/bills/fullName?name=${this.state.search}`)
+            .then((response) => {
+                if (response.status === 200)
+                {
+                    this.setState({
+                        pageToTal: Math.ceil(response.data / 9)
+                    });
+                }
+            })
+            .catch(error => {console.log(error)})
+
+            get(`/bills/fullNamePage?name=${this.state.search}&pageNumber=0&pageSize=9&sortBy=id`)
+            .then((response) => {
+                this.setState({
+                    bills: response.data,
+                });
+            })
+            .catch(error => console.log(error));
+        }
+    }
+
     componentWillUnmount() {
         // fix Warning: Can't perform a React state update on an unmounted component
         this.setState = (state,callback)=>{
@@ -203,6 +266,10 @@ class Bill extends Component {
     }
 
     render() {
+        const sections = [
+            { key: 'Quản Lý', content: 'Quản Lý', link: false },
+            { key: 'Hóa Đơn', content: 'Hóa Đơn', active: true }
+          ]
         return (
             <div>
                 <Modal
@@ -224,10 +291,19 @@ class Bill extends Component {
                         <Button onClick={(e) => this.onCloseFormDel(e)}>Close</Button>
                     </ModalFooter>
                 </Modal>
-                <button type="button" className="btn btn-primary" onClick={this.onToggleForm}>
+                <Breadcrumb icon='right angle' sections={sections} size='large'/>
+                <br/>
+                <button type="button" className="btn btn-primary" onClick={this.onToggleForm} style={{marginTop: '15px', marginBottom: '5px'}}>
                     <FontAwesomeIcon icon={faPlus} className="mr-2"/>{' '}
                     Creat New Bill
                 </button>
+                <Input
+                    style={{marginLeft: '100rem'}}
+                    placeholder="Tên khách hàng..."
+                    value={this.state.search}
+                    onChange={(e) => this.handleSearch(e)}
+                    icon="search"
+                />
                 <table id="table">
                     <thead>
                         <tr>

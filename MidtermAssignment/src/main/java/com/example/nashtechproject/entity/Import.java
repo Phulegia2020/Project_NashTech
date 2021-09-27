@@ -32,6 +32,7 @@ public class Import {
     @JoinColumn(name = "status")
     private String status;
 
+    @Transient
     @OneToMany(mappedBy = "imp", fetch = FetchType.EAGER)
     private Set<ImportDetails> importDetails;
 

@@ -44,6 +44,20 @@ public class SupplierServiceImpl implements SupplierService {
         return list;
     }
 
+    public List<Supplier> getSupplierByName(String name)
+    {
+        List<Supplier> suppliers = supplierRepository.findByNameContains(name);
+        return suppliers;
+    }
+
+    public List<Supplier> getSupplierByNamePage(String name, ProductPage productPage)
+    {
+        Sort sort = Sort.by(productPage.getSortDirection(), productPage.getSortBy());
+        Pageable pageable = PageRequest.of(productPage.getPageNumber(), productPage.getPageSize(), sort);
+        List<Supplier> list = supplierRepository.findByNameContains(name, pageable).getContent();
+        return list;
+    }
+
     public boolean existPhone(String phone)
     {
         if (supplierRepository.existsByPhone(phone))

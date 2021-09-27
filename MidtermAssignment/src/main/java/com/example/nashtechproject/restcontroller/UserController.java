@@ -125,6 +125,19 @@ public class UserController {
         return usersDTO;
     }
 
+    @GetMapping("/username")
+    public int getUsername(@RequestParam String username)
+    {
+        List<User> users = userService.getUserAccount(username);
+        return users.size();
+    }
+
+    @GetMapping("/usernamePage")
+    public ResponseEntity<List<User>> getUsernamePages(@RequestParam String username, UserPage userPage)
+    {
+        return new ResponseEntity<>(userService.getUserAccountPage(userPage, username), HttpStatus.OK);
+    }
+
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Create User")
     @ApiResponses(value = { @ApiResponse(code = 200, message = "Success"),

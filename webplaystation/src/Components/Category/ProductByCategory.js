@@ -3,9 +3,10 @@ import { get, del } from '../../Utils/httpHelper'
 import { withRouter } from "react-router";
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { formatCurrency, formatQuantity } from '../../Utils/Utils';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Pagination, PaginationItem, PaginationLink } from 'reactstrap';
+import { Breadcrumb } from 'semantic-ui-react'
 
 class ProductByCategory extends Component {
     state = {
@@ -13,6 +14,9 @@ class ProductByCategory extends Component {
         products: [],
         iddel: "",
         isDisplayFormDel: false,
+        pageNumber: 0,
+        pageToTal: 0,
+        category: ''
     }
 
     componentDidMount(){
@@ -21,8 +25,28 @@ class ProductByCategory extends Component {
             if (response.status === 200)
             {
                 this.setState({
-                    products: response.data
+                    //products: response.data
+                    pageToTal: Math.ceil(response.data.length / 3)
                 });
+            }
+        })
+
+        get(`/products/searchPage?categoryId=${this.state.id}&pageNumber=0&pageSize=3&sortBy=id`)
+        .then((response) => {
+            if (response.status === 200)
+            {
+                this.setState({products: response.data});
+            }
+        })
+        .catch(error => {console.log(error)})
+
+        get(`/categories/${this.state.id}`)
+        .then((response) => {
+            if (response.status === 200)
+            {
+                this.setState({
+                    category: response.data.name
+                })
             }
         })
     }
@@ -52,6 +76,34 @@ class ProductByCategory extends Component {
         });
     }
 
+    onPage(event, pageNumber){
+        event.preventDefault();
+        this.setState({
+            pageNumber: pageNumber
+        }, () => console.log(this.state.pageNumber))
+        if (pageNumber < 0)
+        {
+            this.setState({
+                pageNumber: 0
+            }, () => console.log(this.state.pageNumber))
+        }
+        if (pageNumber > (this.state.pageToTal-1))
+        {
+            this.setState({
+                pageNumber: (this.state.pageToTal)
+            }, () => console.log(this.state.pageNumber));
+        }
+
+        get(`/products/searchPage?categoryId=${this.state.id}&pageNumber=${pageNumber}&pageSize=3&sortBy=id`)
+        .then((response) => {
+            if (response.status === 200)
+            {
+                this.setState({products: response.data});
+            }
+        })
+        .catch(error => {console.log(error)})
+    }
+
     componentWillUnmount() {
         this.setState({
             products: []
@@ -63,6 +115,11 @@ class ProductByCategory extends Component {
     }
 
     render() {
+        const sections = [
+            { key: 'Quản Lý', content: 'Quản Lý', link: false },
+            { key: 'Loại Sản Phẩm', content: 'Loại Sản Phẩm'},
+            { key: `${this.state.category}`, content: `${this.state.category}`, active: true }
+          ]
         return (
             <div>
                 <Modal
@@ -84,6 +141,7 @@ class ProductByCategory extends Component {
                         <Button onClick={(e) => this.onCloseFormDel(e)}>Close</Button>
                     </ModalFooter>
                 </Modal>
+                <Breadcrumb icon='right angle' sections={sections} size='large'/>
                 <table id="table">
                     <thead>
                         <tr>
@@ -128,6 +186,28 @@ class ProductByCategory extends Component {
                         }
                     </tbody>
                 </table>
+
+                <Pagination aria-label="Page navigation example">
+                    <PaginationItem>
+                        <PaginationLink first  onClick={(event) => this.onPage(event, 0)}/>
+                    </PaginationItem>
+                    <PaginationItem>
+                        <PaginationLink previous onClick={(event) => this.onPage(event, this.state.pageNumber - 1)}/>
+                    </PaginationItem>
+                    {[...Array(this.state.pageToTal)].map((page, i) => 
+                        <PaginationItem active={i === this.state.pageNumber} key={i}>
+                            <PaginationLink onClick={(event) => this.onPage(event, i)}>
+                            {i + 1}
+                            </PaginationLink>
+                        </PaginationItem>
+                    )}
+                    <PaginationItem>
+                        <PaginationLink next onClick={(event) => this.onPage(event, this.state.pageNumber + 1)}/>
+                    </PaginationItem>
+                    <PaginationItem>
+                        <PaginationLink last onClick={(event) => this.onPage(event, this.state.pageToTal-1)} />
+                    </PaginationItem>
+                </Pagination>
             </div>
         )
     }

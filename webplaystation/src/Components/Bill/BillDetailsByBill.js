@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { get, del, post } from '../../Utils/httpHelper'
 import {formatCurrency} from "./../../Utils/Utils";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheck, faEdit, faInfo, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 import { withRouter } from "react-router";
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Pagination, PaginationItem, PaginationLink } from 'reactstrap';
@@ -13,8 +13,10 @@ class BillDetailsByBill extends Component {
         id: this.props.match.params.id,
         billdetails: [],
         bill: {},
-        iddel: "",
+        iddel: {},
         isDisplayFormDel: false,
+        pageNumber: 0,
+        pageToTal: 0,
     }
 
     componentDidMount(){
@@ -23,10 +25,19 @@ class BillDetailsByBill extends Component {
             if (response.status === 200)
             {
                 this.setState({
-                    billdetails: response.data
+                    //billdetails: response.data
+                    pageToTal: Math.ceil(response.data.length / 5)
                 })
             }
         })
+
+        get(`/billDetails/billPage/${this.state.id}?pageNumber=0&pageSize=5&sortBy=id`)
+        .then((response) => {
+            this.setState({
+                billdetails: response.data
+            });
+        })
+        .catch(error => console.log(error));
 
         get(`/bills/${this.state.id}`)
         .then((response) => {
@@ -42,11 +53,11 @@ class BillDetailsByBill extends Component {
     delBillDetail = (e, id) =>
     {
         e.preventDefault();
-        del(`/billDetails/${id}`)
+        del(`/billDetails/${id.bill.id}-${id.product.id}`)
         .then((response) => {
             if (response.status === 200)
             {
-                this.setState({billdetails: this.state.billdetails.filter(b => b.id !== id),
+                this.setState({billdetails: this.state.billdetails.filter(b => `${b.key.bill.id}-${b.key.product.id}` !== `${id.bill.id}-${id.product.id}`),
                                isDisplayFormDel: false})
             }
         })
@@ -97,6 +108,33 @@ class BillDetailsByBill extends Component {
         this.createBillDetail(data);
     }
 
+    onPage(event, pageNumber){
+        event.preventDefault();
+        this.setState({
+            pageNumber: pageNumber
+        }, () => console.log(this.state.pageNumber))
+        if (pageNumber < 0)
+        {
+            this.setState({
+                pageNumber: 0
+            }, () => console.log(this.state.pageNumber))
+        }
+        if (pageNumber > (this.state.pageToTal-1))
+        {
+            this.setState({
+                pageNumber: (this.state.pageToTal)
+            }, () => console.log(this.state.pageNumber));
+        }
+        
+        get(`/billDetails/billPage/${this.state.id}?pageNumber=${pageNumber}&pageSize=5&sortBy=id`)
+        .then((response) => {
+            this.setState({
+                billdetails: response.data,
+            });
+        })
+        .catch(error => console.log(error));
+    }
+
     componentWillUnmount() {
         // fix Warning: Can't perform a React state update on an unmounted component
         this.setState = (state,callback)=>{
@@ -105,6 +143,7 @@ class BillDetailsByBill extends Component {
     }
 
     render() {
+        // const stt = 0;
         return (
             <div>
                 <Modal
@@ -145,21 +184,21 @@ class BillDetailsByBill extends Component {
                     <tbody>
                         {
                             this.state.billdetails.map((b, index) => (
-                                <tr key={b.id}>
+                                <tr key={index}>
                                     <td>{index + 1}</td>
-                                    <td><img src={`data:image/jpeg;base64,${b.product.imageurl}`} alt="" height="75px"></img></td>
-                                    <td>{b.product.name}</td>
+                                    <td><img src={`data:image/jpeg;base64,${b.key.product.imageurl}`} alt="" height="75px"></img></td>
+                                    <td>{b.key.product.name}</td>
                                     <td>{b.quantity}</td>
-                                    <td>{formatCurrency(b.product.price)}</td>
+                                    <td>{formatCurrency(b.key.product.price)}</td>
                                     <td>
-                                        <Link to={`/admin/billDetails/update/${b.id}`} billId={this.state.id} onClick={this.state.bill.billStatus_id === '1' ? (e) => e.preventDefault() : ''}>
+                                        <Link to={`/admin/billDetails/update/${b.key.bill.id}-${b.key.product.id}`} billId={this.state.id} onClick={this.state.bill.billStatus_id === '1' ? (e) => e.preventDefault() : ''}>
                                             <button className="btn btn-success" disabled={this.state.bill.billStatus_id === '1'}>
                                             <FontAwesomeIcon icon={faEdit} className="mr-2"/>{' '}
                                                 
                                             </button>
                                         </Link>
                                     </td>
-                                    <td><button onClick={(e) => this.onToggleFormDel(e, b.id)} className="btn btn-danger" disabled={this.state.bill.billStatus_id === '1'}>
+                                    <td><button onClick={(e) => this.onToggleFormDel(e, b.key)} className="btn btn-danger" disabled={this.state.bill.billStatus_id === '1'}>
                                         <FontAwesomeIcon icon={faTrash} className="mr-2"/>{' '}
                                         
                                         </button>
@@ -169,6 +208,27 @@ class BillDetailsByBill extends Component {
                         }
                     </tbody>
                 </table>
+                <Pagination aria-label="Page navigation example">
+                    <PaginationItem>
+                        <PaginationLink first  onClick={(event) => this.onPage(event, 0)}/>
+                    </PaginationItem>
+                    <PaginationItem>
+                        <PaginationLink previous onClick={(event) => this.onPage(event, this.state.pageNumber - 1)}/>
+                    </PaginationItem>
+                    {[...Array(this.state.pageToTal)].map((page, i) => 
+                        <PaginationItem active={i === this.state.pageNumber} key={i}>
+                            <PaginationLink onClick={(event) => this.onPage(event, i)}>
+                            {i + 1}
+                            </PaginationLink>
+                        </PaginationItem>
+                    )}
+                    <PaginationItem>
+                        <PaginationLink next onClick={(event) => this.onPage(event, this.state.pageNumber + 1)}/>
+                    </PaginationItem>
+                    <PaginationItem>
+                        <PaginationLink last onClick={(event) => this.onPage(event, this.state.pageToTal-1)} />
+                    </PaginationItem>
+                </Pagination>
                 <div className="container">
                     <Modal isOpen={this.state.isDisplayForm} toggle={this.onToggleForm}>
                         <ModalHeader toggle={this.onToggleForm}>Create New Bill Detail</ModalHeader>

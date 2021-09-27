@@ -77,7 +77,7 @@ public class PlaceOrderController {
     }
 
     @PostMapping()
-    public PlaceOrderDTO savePlaceOrder(@RequestBody PlaceOrderDTO placeOrder)
+    public PlaceOrder savePlaceOrder(@RequestBody PlaceOrderDTO placeOrder)
     {
         User u = userService.getUser(Long.valueOf(placeOrder.getUser_id()));
         if (u == null)
@@ -92,7 +92,8 @@ public class PlaceOrderController {
         PlaceOrder po = convertToEntity(placeOrder);
         po.setCreateddate(LocalDateTime.now());
         po.setStatus("Waiting");
-        return convertToDTO(placeOrderService.savePlaceOrder(po));
+//        return convertToDTO(placeOrderService.savePlaceOrder(po));
+        return placeOrderService.savePlaceOrder(po);
     }
 
     @PutMapping("/{placeOrderId}")

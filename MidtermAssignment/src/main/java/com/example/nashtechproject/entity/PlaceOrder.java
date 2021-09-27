@@ -36,6 +36,7 @@ public class PlaceOrder {
     @Column(name = "status")
     private String status;
 
+    @Transient
     @OneToMany(mappedBy = "placeOrder", fetch = FetchType.EAGER)
     private Set<PlaceOrderDetails> placeOrderDetails;
 

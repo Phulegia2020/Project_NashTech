@@ -223,7 +223,7 @@ public class ProductController {
                 List<BillDetails> billDetails = billDetailsService.getBillDetailsByBill(bills.get(j).getId());
                 for (int k = 0; k < billDetails.size(); k++)
                 {
-                    if (products.get(i).getId() == billDetails.get(k).getProduct().getId())
+                    if (products.get(i).getId() == billDetails.get(k).getKey().getProduct().getId())
                     {
                         ts = ts + billDetails.get(k).getQuantity();
                     }

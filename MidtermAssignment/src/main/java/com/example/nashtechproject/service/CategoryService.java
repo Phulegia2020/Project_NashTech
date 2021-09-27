@@ -10,6 +10,10 @@ public interface CategoryService {
 
     public List<Category> getCategoriesPage(ProductPage productPage);
 
+    public List<Category> getCategoryByName(String name);
+
+    public List<Category> getCategoryByNamePage(String name, ProductPage productPage);
+
     public Category getCategory(Long categoryId);
 
     public Category saveCategory(Category category);

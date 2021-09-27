@@ -57,6 +57,20 @@ public class BillServiceImpl implements BillService {
         return bill;
     }
 
+    public List<Bill> getBillByUsername(String name)
+    {
+        List<Bill> bills = billRepository.findByUserNameContains(name);
+        return bills;
+    }
+
+    public List<Bill> getBillByUsernamePage(String name, ProductPage productPage)
+    {
+        Sort sort = Sort.by(Sort.Direction.DESC, productPage.getSortBy());
+        Pageable pageable = PageRequest.of(productPage.getPageNumber(), productPage.getPageSize(), sort);
+        List<Bill> bills = billRepository.findByUserNameContains(name, pageable).getContent();
+        return bills;
+    }
+
     @Override
     public Bill saveBill(Bill bill) {
         return billRepository.save(bill);

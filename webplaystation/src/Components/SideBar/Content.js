@@ -29,6 +29,8 @@ import UpdateImportDetails from "../ImportDetails/UpdateImportDetails";
 import Statistical from "../Statistical/Statistical";
 import Footer from "./Footer";
 import Chart from "../Statistical/Chart";
+import Comment from "../Comment/Comment";
+import UpdateComment from "../Comment/UpdateComment";
 
 class Content extends Component {
     render() {
@@ -111,6 +113,12 @@ class Content extends Component {
                     </Route>
                     <Route exact path="/admin/statistical/chart">
                         <Chart/>
+                    </Route>
+                    <Route exact path="/admin/comment">
+                        <Comment/>
+                    </Route>
+                    <Route exact path="/admin/comment/update/:id">
+                        <UpdateComment/>
                     </Route>
                 </Switch>
                 <Footer/>

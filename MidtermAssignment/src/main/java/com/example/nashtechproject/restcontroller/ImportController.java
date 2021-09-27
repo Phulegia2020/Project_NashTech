@@ -2,6 +2,7 @@ package com.example.nashtechproject.restcontroller;
 
 import com.example.nashtechproject.dto.ImportDTO;
 import com.example.nashtechproject.entity.*;
+import com.example.nashtechproject.entity.embedded.ImportDetailsKey;
 import com.example.nashtechproject.exception.InvalidDataException;
 import com.example.nashtechproject.exception.ObjectNotFoundException;
 import com.example.nashtechproject.exception.UserException;
@@ -83,7 +84,7 @@ public class ImportController {
     }
 
     @PostMapping()
-    public ImportDTO saveImport(@RequestBody ImportDTO imp)
+    public Import saveImport(@RequestBody ImportDTO imp)
     {
         User u = userService.getUser(Long.valueOf(imp.getUser_id()));
         if (u == null)
@@ -120,8 +121,9 @@ public class ImportController {
         for (int k = 0; k < l.size(); k++)
         {
             ImportDetails impd = new ImportDetails();
-            impd.setImp(i);
-            impd.setProduct(l.get(k).getProduct());
+//            impd.getKey().setImp(i);
+//            impd.getKey().setProduct(l.get(k).getKey().getProduct());
+            impd.setKey(new ImportDetailsKey(i, l.get(k).getKey().getProduct()));
             impd.setQuantity(l.get(k).getQuantity());
             impd.setPrice(l.get(k).getPrice());
             importDetailsService.saveImportDetails(impd);
@@ -132,7 +134,8 @@ public class ImportController {
         importService.updateImport(updateImp);
         po.setStatus("Done");
         placeOrderService.updatePlaceOrder(po);
-        return importDTO;
+//        return importDTO;
+        return updateImp;
     }
 
     @PutMapping("/confirm/{importId}")
@@ -148,7 +151,7 @@ public class ImportController {
             List<ImportDetails> importDetailsList = importDetailsService.getImportDetailsByImport(imp.getId());
             for (int i = 0; i < importDetailsList.size(); i++)
             {
-                Product pro = productService.getProduct(importDetailsList.get(i).getProduct().getId());
+                Product pro = productService.getProduct(importDetailsList.get(i).getKey().getProduct().getId());
                 pro.setQuantity(pro.getQuantity() + importDetailsList.get(i).getQuantity());
                 productService.updateProduct(pro);
             }
@@ -205,7 +208,7 @@ public class ImportController {
         List<PlaceOrderDetails> list = placeOrderDetailsService.getPlaceOrderDetailsByPlaceOrder(imp.getPlaceOrder().getId());
         for (int i = 0; i < list.size(); i++)
         {
-            placeOrderDetailsService.deletePlaceOrderDetails(list.get(i).getId());
+            placeOrderDetailsService.deletePlaceOrderDetails(list.get(i).getKey().getPlaceOrder().getId(), list.get(i).getKey().getProduct().getId());
         }
         importService.deleteImport(importId);
         return ResponseEntity.ok(new MessageResponse("Delete Successfully"));

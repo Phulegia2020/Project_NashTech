@@ -35,6 +35,7 @@ public class Bill {
     @JoinColumn(name = "billstatus_id")
     private BillStatus billStatus;
 
+    @Transient
     @OneToMany(mappedBy = "bill", fetch = FetchType.EAGER)
     @JsonIgnore
     private Collection<BillDetails> billDetails = new ArrayList<>();

@@ -38,7 +38,7 @@ class App extends React.Component{
                   <Route exact path="/WebPlayStation">
                       <MainMenu/>
                       <Products/>
-                      <Footer/>
+                      {/* <Footer/> */}
                   </Route>
                   <Route exact path="/WebPlayStation/about">
                       <MainMenu/>

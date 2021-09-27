@@ -9,8 +9,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 public class ImportDetailsDTO {
-    private Long id;
-
     private int quantity;
 
     private float price;
@@ -18,14 +16,6 @@ public class ImportDetailsDTO {
     private String imp_id;
 
     private String product_id;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public int getQuantity() {
         return quantity;

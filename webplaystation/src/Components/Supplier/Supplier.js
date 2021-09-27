@@ -6,6 +6,7 @@ import Add from "./Add"
 import { Modal, ModalHeader, ModalBody, ModalFooter, Pagination, PaginationItem, PaginationLink, Button} from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { Breadcrumb, Input } from 'semantic-ui-react';
 
 export default class Supplier extends Component {
     state = {
@@ -15,7 +16,8 @@ export default class Supplier extends Component {
         pageNumber: 0,
         pageToTal: 0,
         msgDel: false,
-        id: ""
+        id: "",
+        search: ""
     }
 
     componentDidMount(){
@@ -125,13 +127,75 @@ export default class Supplier extends Component {
             }, () => console.log(this.state.pageNumber));
         }
         
-        get(`/suppliers/page?pageNumber=${pageNumber}&pageSize=5&sortBy=id`)
-        .then((response) => {
-            this.setState({
-                suppliers: response.data,
-            });
+        if (this.state.search === '')
+        {
+            get(`/suppliers/page?pageNumber=${pageNumber}&pageSize=5&sortBy=id`)
+            .then((response) => {
+                this.setState({
+                    suppliers: response.data,
+                });
+            })
+            .catch(error => console.log(error));
+        }
+        else
+        {
+            get(`/suppliers/namePage?name=${this.state.search}&pageNumber=${pageNumber}&pageSize=5&sortBy=id`)
+            .then((response) => {
+                this.setState({
+                    suppliers: response.data,
+                });
+            })
+            .catch(error => console.log(error));
+        }
+    }
+
+    async handleSearch(e){
+        e.preventDefault()
+        await this.setState({
+            search: e.target.value
         })
-        .catch(error => console.log(error));
+        if (this.state.search === '')
+        {
+            get("/suppliers")
+            .then((response) => {
+                if (response.status === 200)
+                {
+                    this.setState({
+                        pageToTal: Math.ceil(response.data.length / 5)
+                    })
+                }
+            })
+            .catch(error => {console.log(error)})
+
+            get(`/suppliers/page?pageNumber=0&pageSize=5&sortBy=id`)
+            .then((response) => {
+                this.setState({
+                    suppliers: response.data
+                });
+            })
+            .catch(error => console.log(error));
+        }
+        else
+        {
+            get(`/suppliers/name?name=${this.state.search}`)
+            .then((response) => {
+                if (response.status === 200)
+                {
+                    this.setState({
+                        pageToTal: Math.ceil(response.data / 10)
+                    });
+                }
+            })
+            .catch(error => {console.log(error)})
+
+            get(`/suppliers/namePage?name=${this.state.search}&pageNumber=0&pageSize=5&sortBy=id`)
+            .then((response) => {
+                this.setState({
+                    suppliers: response.data,
+                });
+            })
+            .catch(error => console.log(error));
+        }
     }
 
     componentWillUnmount() {
@@ -142,6 +206,10 @@ export default class Supplier extends Component {
     }
 
     render() {
+        const sections = [
+            { key: 'Quản Lý', content: 'Quản Lý', link: false },
+            { key: 'Nhà Cung Cấp', content: 'Nhà Cung Cấp', active: true }
+          ]
         return (
             <div>
                 <Modal
@@ -163,10 +231,19 @@ export default class Supplier extends Component {
                         <Button onClick={(e) => this.onCloseFormDel(e)}>Close</Button>
                     </ModalFooter>
                 </Modal>
-                <button type="button" className="btn btn-primary" onClick={this.onToggleForm}>
+                <Breadcrumb icon='right angle' sections={sections} size='large'/>
+                <br/>
+                <button type="button" className="btn btn-primary" onClick={this.onToggleForm} style={{marginTop: '30px'}}>
                     <FontAwesomeIcon icon={faPlus} className="mr-2"/>{' '}
                     Creat New Supplier
                 </button>
+                <Input
+                    style={{marginLeft: '100rem'}}
+                    placeholder="Tên nhà cung cấp..."
+                    value={this.state.search}
+                    onChange={(e) => this.handleSearch(e)}
+                    icon="search"
+                />
                 <table id="table">
                     <thead>
                         <tr>

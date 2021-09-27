@@ -96,12 +96,12 @@ class UpdatePlaceOrder extends Component {
                     <Col md={4}>
                         <Form onSubmit={(event) => this.handleUpdate(event)}>
                         <FormGroup>
-                            <Label for="total">Total</Label>
+                            <Label htmlFor="total">Total</Label>
                             <Input type="number" name="total" id="total" placeholder="VND" onChange={(e) => this.changeValue(e)} value = {this.state.total} disabled/>
                             {this.state.key === 'total' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
                         </FormGroup>
                         <FormGroup className="mb-2">
-                            <Label for="user">Employee</Label>
+                            <Label htmlFor="user">Employee</Label>
                             <Input type="select" name="user_id" id="user" value = {this.state.user_id} onChange={(e) => this.changeValue(e)}>
                                 {
                                     this.state.users.map((u) => (
@@ -111,7 +111,7 @@ class UpdatePlaceOrder extends Component {
                             </Input>
                         </FormGroup>
                         <FormGroup className="mb-2">
-                            <Label for="supplier">Supplier</Label>
+                            <Label htmlFor="supplier">Supplier</Label>
                             <Input type="select" name="supplier_id" id="supplier" value = {this.state.supplier_id} onChange={(e) => this.changeValue(e)}>
                                 {
                                     this.state.suppliers.map((sup) => (

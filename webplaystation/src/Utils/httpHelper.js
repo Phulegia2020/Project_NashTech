@@ -19,6 +19,7 @@ export function post(url, body)
         headers:{
             Authorization: `Bearer ${accessToken}`,
             "Access-Control-Allow-Origin": "*",
+            'Content-Type': 'application/json; charset=utf-8',
         }
     });
 }

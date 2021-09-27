@@ -99,12 +99,12 @@ class UpdateImport extends Component {
                     <Col md={4}>
                         <Form onSubmit={(event) => this.handleUpdate(event)}>
                         <FormGroup>
-                            <Label for="total">Total</Label>
+                            <Label htmlFor="total">Total</Label>
                             <Input type="number" name="total" id="total" placeholder="VND" onChange={(e) => this.changeValue(e)} value = {this.state.total} disabled/>
                             {this.state.key === 'total' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
                         </FormGroup>
                         <FormGroup className="mb-2">
-                            <Label for="user">Employee</Label>
+                            <Label htmlFor="user">Employee</Label>
                             <Input type="select" name="user_id" id="user" value = {this.state.user_id} onChange={(e) => this.changeValue(e)}>
                                 {
                                     this.state.users.map((u) => (
@@ -114,7 +114,7 @@ class UpdateImport extends Component {
                             </Input>
                         </FormGroup>
                         <FormGroup className="mb-2">
-                            <Label for="placeorder">Place Order</Label>
+                            <Label htmlFor="placeorder">Place Order</Label>
                             <Input type="select" name="placeorder_id" id="placeorder" value = {this.state.placeorder_id} onChange={(e) => this.changeValue(e)} disabled>
                                 {
                                     this.state.placeorders.map((po) => (

@@ -42,6 +42,20 @@ public class CategoryServiceImpl implements CategoryService {
         return cate;
     }
 
+    public List<Category> getCategoryByName(String name)
+    {
+        List<Category> list = categoryRepository.findByNameContains(name);
+        return list;
+    }
+
+    public List<Category> getCategoryByNamePage(String name, ProductPage productPage)
+    {
+        Sort sort = Sort.by(productPage.getSortDirection(), productPage.getSortBy());
+        Pageable pageable = PageRequest.of(productPage.getPageNumber(), productPage.getPageSize(), sort);
+        List<Category> categories = categoryRepository.findByNameContains(name, pageable).getContent();
+        return categories;
+    }
+
     public boolean existByName(String name)
     {
         if (categoryRepository.existsByName(name))

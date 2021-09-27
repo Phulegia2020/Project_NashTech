@@ -1,6 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faHome,
   faSignOutAlt,
   faMoneyBill,
   faPeopleArrows,
@@ -10,6 +9,7 @@ import {
   faCity,
   faChartArea,
   faArchive,
+  faComment,
 } from "@fortawesome/free-solid-svg-icons";
 import { NavItem, NavLink, Nav } from "reactstrap";
 import classNames from "classnames";
@@ -101,6 +101,12 @@ class SideBar extends Component {
                             <NavLink tag={Link} to={"/admin/supplier"} className="letter m-2">
                                 <FontAwesomeIcon icon={faCity}/>{' '}
                                 Supplier
+                            </NavLink>
+                        </NavItem>
+                        <NavItem>
+                            <NavLink tag={Link} to={"/admin/comment"} className="letter m-2">
+                                <FontAwesomeIcon icon={faComment}/>{' '}
+                                Bình Luận
                             </NavLink>
                         </NavItem>
                         <SubMenu title="Statistical" icon={faChartArea} items={this.state.statistical} url="statistical"/>

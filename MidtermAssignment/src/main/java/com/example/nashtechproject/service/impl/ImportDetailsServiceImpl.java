@@ -1,10 +1,15 @@
 package com.example.nashtechproject.service.impl;
 
+import com.example.nashtechproject.entity.BillDetails;
 import com.example.nashtechproject.entity.ImportDetails;
+import com.example.nashtechproject.page.ProductPage;
 import com.example.nashtechproject.repository.ImportDetailsRepository;
 import com.example.nashtechproject.service.ImportDetailsService;
 import com.example.nashtechproject.service.ImportService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,22 +30,23 @@ public class ImportDetailsServiceImpl implements ImportDetailsService {
         return importDetails;
     }
 
-    public ImportDetails getImportDetails(Long importDetailsId)
-    {
-        ImportDetails importDetails = importDetailsRepository.findById(importDetailsId).get();
-        return importDetails;
-    }
-
     public ImportDetails getByImportAndProduct(Long imp_id, Long product_id)
     {
-        ImportDetails importDetails = importDetailsRepository.findByImpIdAndProductId(imp_id, product_id);
+        ImportDetails importDetails = importDetailsRepository.findByKey_Imp_IdAndKey_Product_Id(imp_id, product_id);
         return importDetails;
     }
 
     public List<ImportDetails> getImportDetailsByImport(Long imp_id)
     {
-        List<ImportDetails> importDetails = importDetailsRepository.findByImpId(imp_id);
+        List<ImportDetails> importDetails = importDetailsRepository.findByKey_Imp_Id(imp_id);
         return importDetails;
+    }
+
+    public List<ImportDetails> getImportDetailsByImportPages(Long imp_id, ProductPage productPage)
+    {
+        Pageable pageable = PageRequest.of(productPage.getPageNumber(), productPage.getPageSize());
+        Page<ImportDetails> page = importDetailsRepository.findByKey_Imp_Id(imp_id, pageable);
+        return page.getContent();
     }
 
     @Override
@@ -49,8 +55,8 @@ public class ImportDetailsServiceImpl implements ImportDetailsService {
     }
 
     @Override
-    public void deleteImportDetails(Long importDetailsId) {
-        ImportDetails importDetails = importDetailsRepository.findById(importDetailsId).get();
+    public void deleteImportDetails(Long imp_id, Long product_id) {
+        ImportDetails importDetails = importDetailsRepository.findByKey_Imp_IdAndKey_Product_Id(imp_id, product_id);
 
         importDetailsRepository.delete(importDetails);
     }

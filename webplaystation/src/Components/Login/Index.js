@@ -7,8 +7,6 @@ import {
 } from 'semantic-ui-react'
 import { postLogin } from '../../Utils/httpHelper';
 import { withRouter } from "react-router";
-import MainMenu from '../HomePage/MainMenu/MainMenu';
-import { render } from 'react-dom';
 import {Link} from 'react-router-dom';
 
 class Login extends Component {

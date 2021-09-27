@@ -1,6 +1,7 @@
 package com.example.nashtechproject.restcontroller;
 
 import com.example.nashtechproject.entity.Category;
+import com.example.nashtechproject.entity.User;
 import com.example.nashtechproject.exception.CategoryException;
 import com.example.nashtechproject.page.ProductPage;
 import com.example.nashtechproject.payload.response.MessageResponse;
@@ -62,6 +63,19 @@ public class CategoryController {
             throw new CategoryException(categoryId);
         }
         return categoryService.getCategory(categoryId);
+    }
+
+    @GetMapping("/name")
+    public int getCategoryByName(@RequestParam String name)
+    {
+        List<Category> categories = categoryService.getCategoryByName(name);
+        return categories.size();
+    }
+
+    @GetMapping("/namePage")
+    public ResponseEntity<List<Category>> getCategoryByNamePages(ProductPage productPage, @RequestParam String name)
+    {
+        return new ResponseEntity<>(categoryService.getCategoryByNamePage(name, productPage), HttpStatus.OK);
     }
 
     @PostMapping

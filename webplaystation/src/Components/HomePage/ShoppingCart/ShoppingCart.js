@@ -31,8 +31,7 @@ class ShoppingCart extends Component {
         }
     }
 
-    async onCheckOut(){
-        
+    onCheckOut(){
         const shoppingCartItems = JSON.parse(localStorage.getItem('shopping-cart') || '[]');
         if (localStorage.getItem('user_id') === null)
         {

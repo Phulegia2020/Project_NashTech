@@ -77,7 +77,7 @@ class UpdateBillDetails extends Component {
         }
         for (let i = 0; i < this.state.billdetails.length; i++)
         {
-            if (this.state.billdetails[i].id != this.state.id)
+            if (`${this.state.billdetails[i].key.bill.id}-${this.state.billdetails[i].key.product.id}` != this.state.id)
             {
                 if (event.target.product_id.value == this.state.billdetails[i].product.id)
                 {
@@ -124,13 +124,13 @@ class UpdateBillDetails extends Component {
                     <Col md={4}>
                         <Form onSubmit={(event) => this.handleUpdate(event)}>
                         <FormGroup>
-                            <Label for="quantity">Quantity</Label>
+                            <Label htmlFor="quantity">Quantity</Label>
                             <Input type="number" name="quantity" id="quantity" placeholder="100" onChange={(e) => this.changeValue(e)} value = {this.state.quantity} required="required"/>
                             {this.state.key === 'quantity' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
                         </FormGroup>
                         
                         <FormGroup className="mb-2">
-                            <Label for="product">Product</Label>
+                            <Label htmlFor="product">Product</Label>
                             <Input type="select" name="product_id" id="product" value = {this.state.product_id} onChange={(e) => this.changeValue(e)} required disabled>
                                 {
                                     this.state.products.map((p) => (

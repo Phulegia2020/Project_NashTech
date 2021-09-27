@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import { withRouter } from "react-router";
 import { put, get } from '../../Utils/httpHelper';
 import { Col, Row, Button, Form, FormGroup, Label, Input } from 'reactstrap';
-import { TextArea } from 'semantic-ui-react';
 
 class UpdateProduct extends Component {
     state = {
@@ -181,33 +180,33 @@ class UpdateProduct extends Component {
                     <Col md={4}>
                         <Form onSubmit={(event) => this.handleUpdate(event)}>
                         <FormGroup>
-                            <Label for="name">Name</Label>
+                            <Label htmlFor="name">Name</Label>
                             <Input type="text" name="name" id="name" placeholder="PlayStation 4" onChange={(e) => this.changeValue(e)} value = {this.state.name} required="required" disabled={this.state.status === 'Stop'}/>
                             {this.state.key === 'name' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
                         </FormGroup>
                         <FormGroup>
-                            <Label for="description">Description</Label><br></br>
+                            <Label htmlFor="description">Description</Label><br></br>
                             <textarea style={{resize: 'none', width: '545px'}} rows="4" name="description" id="description" placeholder="PlayStation 4 Pro" onChange={(e) => this.changeValue(e)} value = {this.state.description} required="required" disabled={this.state.status === 'Stop'}></textarea>
                         </FormGroup>
                         <FormGroup>
-                            <Label for="quantity">Quantity</Label>
+                            <Label htmlFor="quantity">Quantity</Label>
                             <Input type="number" name="quantity" id="quantity" placeholder="1000" onChange={(e) => this.changeValue(e)} value = {this.state.quantity} required="required" disabled={this.state.status === 'Stop'}/>
                             {this.state.key === 'quantity' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
                         </FormGroup>
                         <FormGroup>
-                            <Label for="price">Price</Label>
+                            <Label htmlFor="price">Price</Label>
                             <Input type="number" name="price" id="price" placeholder="1.000.000 VNĐ" onChange={(e) => this.changeValue(e)} value = {this.state.price} required="required" disabled={this.state.status === 'Stop'}/>
                             {this.state.key === 'price' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
                         </FormGroup>
                         <FormGroup>
-                            <Label for="image">Image</Label>
+                            <Label htmlFor="image">Image</Label>
                             <br></br>
                             <Input type="file" name="image" id="image" accept=".jpeg, .png, .jpg" onChange={(e) => {this.uploadImage(e)}} disabled={this.state.status === 'Stop'}/>
                             <br></br>
                             <img src={`data:image/jpeg;base64,${this.state.imageurl}`} alt="" height="150px"></img>
                         </FormGroup>
                         <FormGroup className="mb-2">
-                            <Label for="category">Category</Label>
+                            <Label htmlFor="category">Category</Label>
                             <Input type="select" name="category_id" id="category" value = {this.state.category_id} onChange={(e) => this.changeValue(e)} disabled={this.state.status === 'Stop'}>
                                 {
                                     this.state.categories.map((c) => (
@@ -217,7 +216,7 @@ class UpdateProduct extends Component {
                             </Input>
                         </FormGroup>
                         <FormGroup className="mb-2">
-                            <Label for="supplier">Supplier</Label>
+                            <Label htmlFor="supplier">Supplier</Label>
                             <Input type="select" name="supplier_id" id="supplier" value = {this.state.supplier_id} onChange={(e) => this.changeValue(e)} disabled={this.state.status === 'Stop'}>
                                 {
                                     this.state.suppliers.map((s) => (

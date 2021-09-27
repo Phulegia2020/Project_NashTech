@@ -4,6 +4,7 @@ import com.example.nashtechproject.dto.RatingDTO;
 import com.example.nashtechproject.entity.Product;
 import com.example.nashtechproject.entity.Rating;
 import com.example.nashtechproject.entity.User;
+import com.example.nashtechproject.entity.embedded.RateKey;
 import com.example.nashtechproject.exception.ObjectNotFoundException;
 import com.example.nashtechproject.exception.ProductException;
 import com.example.nashtechproject.exception.RatingPointException;
@@ -43,17 +44,17 @@ public class RatingPointController {
     public List<RatingDTO> getAllRatings() throws RatingPointException
     {
         List<Rating> ratings = ratingPointService.retrieveRatings();
-        return ratings.stream().map(this::convertToDTO).sorted(Comparator.comparing(RatingDTO::getId).reversed()).collect(Collectors.toList());
+        return ratings.stream().map(this::convertToDTO).collect(Collectors.toList());
     }
 
-    @GetMapping("/{ratingId}")
-    public RatingDTO findRating(@PathVariable(name = "ratingId") Long ratingId) throws RatingPointException
+    @GetMapping("/{userId}-{productId}")
+    public RatingDTO findRating(@PathVariable(name = "userId") Long userId, @PathVariable(name = "productId") Long productId) throws RatingPointException
     {
-        if (ratingPointService.getRating(ratingId) == null)
+        if (ratingPointService.getRatingByUserIdAndProductId(userId, productId) == null)
         {
-            throw new RatingPointException(ratingId);
+            throw new ObjectNotFoundException("Could not find rating with user_id = " + userId + " and product_id = " + productId);
         }
-        return convertToDTO(ratingPointService.getRating(ratingId));
+        return convertToDTO(ratingPointService.getRatingByUserIdAndProductId(userId, productId));
     }
 
     @GetMapping("/product/{productId}")
@@ -65,7 +66,7 @@ public class RatingPointController {
             return null;
         }
         List<Rating> ratings = ratingPointService.getRatingByProduct(productId);
-        return ratings.stream().map(this::convertToDTO).sorted(Comparator.comparing(RatingDTO::getId).reversed()).collect(Collectors.toList());
+        return ratings.stream().map(this::convertToDTO).collect(Collectors.toList());
     }
 
     @GetMapping("/search")
@@ -101,36 +102,36 @@ public class RatingPointController {
         return convertToDTO(ratingPointService.saveRating(r));
     }
 
-    @PutMapping("/{ratingId}")
-    public RatingDTO updateCategory(@PathVariable(name = "ratingId") Long ratingId, @Valid @RequestBody RatingDTO newRating)
+    @PutMapping("/{userId}-{productId}")
+    public RatingDTO updateRating(@PathVariable(name = "userId") Long userId, @PathVariable(name = "productId") Long productId, @Valid @RequestBody RatingDTO newRating)
     {
-        Rating rating = ratingPointService.getRating(ratingId);
+        Rating rating = ratingPointService.getRatingByUserIdAndProductId(userId, productId);
         if (rating == null)
         {
-            throw new RatingPointException(ratingId);
+            throw new ObjectNotFoundException("Could not find rating with user_id = " + userId + " and product_id = " + productId);
         }
         rating.setRatingPoint(newRating.getRatingPoint());
         ratingPointService.updateRating(rating);
         return convertToDTO(rating);
     }
 
-    @DeleteMapping("/{ratingId}")
-    public ResponseEntity<?> deleteCategory(@PathVariable(name = "ratingId") Long ratingId)
+    @DeleteMapping("/{userId}-{productId}")
+    public ResponseEntity<?> deleteRating(@PathVariable(name = "userId") Long userId, @PathVariable(name = "productId") Long productId)
     {
-        Rating rid = ratingPointService.getRating(ratingId);
+        Rating rid = ratingPointService.getRatingByUserIdAndProductId(userId, productId);
         if (rid == null)
         {
-            throw new RatingPointException(ratingId);
+            throw new ObjectNotFoundException("Could not find rating with user_id = " + userId + " and product_id = " + productId);
         }
-        ratingPointService.deleteRating(ratingId);
+        ratingPointService.deleteRating(userId, productId);
         return ResponseEntity.ok(new MessageResponse("Delete Successfully"));
     }
 
     private RatingDTO convertToDTO(Rating rating)
     {
         RatingDTO ratingDTO = modelMapper.map(rating, RatingDTO.class);
-        ratingDTO.setProduct_id(String.valueOf(rating.getProduct().getId()));
-        ratingDTO.setUser_id(String.valueOf(rating.getUser().getId()));
+        ratingDTO.setProduct_id(String.valueOf(rating.getKey().getProduct().getId()));
+        ratingDTO.setUser_id(String.valueOf(rating.getKey().getUser().getId()));
         return ratingDTO;
     }
 
@@ -138,9 +139,8 @@ public class RatingPointController {
     {
         Rating rating = modelMapper.map(ratingDTO, Rating.class);
         User u = userService.getUser(Long.valueOf(ratingDTO.getUser_id()));
-        rating.setUser(u);
         Product p = productService.getProduct(Long.valueOf(ratingDTO.getProduct_id()));
-        rating.setProduct(p);
+        rating.setKey(new RateKey(u, p));
         return rating;
     }
 }

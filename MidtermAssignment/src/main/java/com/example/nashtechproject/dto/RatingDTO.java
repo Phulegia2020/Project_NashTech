@@ -9,21 +9,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 public class RatingDTO {
-    private Long id;
 
     private float ratingPoint;
 
     private String user_id;
 
     private String product_id;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public float getRatingPoint() {
         return ratingPoint;

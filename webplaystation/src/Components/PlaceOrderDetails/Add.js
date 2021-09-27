@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Col, Row, Button, Form, FormGroup, Label, Input } from 'reactstrap';
+import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
 import { get } from '../../Utils/httpHelper';
 
 export default class Add extends Component {
@@ -76,7 +76,9 @@ export default class Add extends Component {
             }
         }
         this.setState({
-            Error: ""
+            Error: "",
+            // quantity: 0,
+            // price: 0,
         })
         this.props.onAdd(this.state);
     }
@@ -101,18 +103,18 @@ export default class Add extends Component {
             <div>
                 <Form onSubmit={(event) => this.handleCreate(event)}>
                 <FormGroup>
-                    <Label for="quantity">Quantity</Label>
+                    <Label htmlFor="quantity">Quantity</Label>
                     <Input type="number" name="quantity" id="quantity" placeholder="100" onChange={(e) => this.changeValue(e)} value = {this.state.quantity} required="required"/>
                     {this.state.key === 'quantity' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
                 </FormGroup>
                 <FormGroup>
-                    <Label for="price">Price</Label>
+                    <Label htmlFor="price">Price</Label>
                     <Input type="number" name="price" id="price" placeholder="1.000.000 VND" onChange={(e) => this.changeValue(e)} value = {this.state.price} required="required"/>
                     {this.state.key === 'price' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
                 </FormGroup>
                 
                 <FormGroup className="mb-2">
-                    <Label for="product">Product</Label>
+                    <Label htmlFor="product">Product</Label>
                     <Input type="select" name="product_id" id="product" onChange={(e) => this.changeValue(e)} multiple required>
                         {
                             this.state.products.map((p) => (
