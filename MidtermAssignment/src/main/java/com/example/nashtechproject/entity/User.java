@@ -64,12 +64,12 @@ public class User {
     @JsonIgnore
     private Set<Bill> bills;
 
-    @Transient
+//    @Transient
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonIgnore
     private Set<Rating> ratings;
 
-    @Transient
+//    @Transient
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonIgnore
     private Set<Comment> comments;

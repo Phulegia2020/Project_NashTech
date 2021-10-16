@@ -10,7 +10,8 @@ import java.util.List;
 public interface BillRepository extends JpaRepository<Bill, Long> {
     List<Bill> findAllByOrderByIdAsc();
 
-    List<Bill> findAllByBillStatusId(Long id);
+//    List<Bill> findAllByBillStatusId(Long id);
+    List<Bill> findAllByStatus(String status);
 
     List<Bill> findByUserNameContains(String name);
 

@@ -68,13 +68,13 @@ public class PlaceOrderDetailsController {
     }
 
     @GetMapping("/placeOrderPage/{placeOrderId}")
-    public ResponseEntity<List<PlaceOrderDetails>> getBillDetailsByBillPages(@PathVariable(name = "placeOrderId") Long placeOrderId, ProductPage productPage)
+    public ResponseEntity<List<PlaceOrderDetailsDTO>> getBillDetailsByBillPages(@PathVariable(name = "placeOrderId") Long placeOrderId, ProductPage productPage)
     {
-        return new ResponseEntity<>(placeOrderDetailsService.getPlaceOrderDetailsByPlaceOrderPages(placeOrderId, productPage), HttpStatus.OK);
+        return new ResponseEntity<>(placeOrderDetailsService.getPlaceOrderDetailsByPlaceOrderPages(placeOrderId, productPage).stream().map(this::convertToDTO).collect(Collectors.toList()), HttpStatus.OK);
     }
 
     @PostMapping()
-    public PlaceOrderDetails savePlaceOrderDetails(@RequestBody PlaceOrderDetailsDTO placeOrderDetails)
+    public PlaceOrderDetailsDTO savePlaceOrderDetails(@RequestBody PlaceOrderDetailsDTO placeOrderDetails)
     {
         PlaceOrder po = placeOrderService.getPlaceOrder(Long.valueOf(placeOrderDetails.getPlaceorder_id()));
         if (po == null)
@@ -94,7 +94,7 @@ public class PlaceOrderDetailsController {
         float total = po.getTotal() + placeOrder.getQuantity()*placeOrder.getPrice();
         po.setTotal(total);
         placeOrderService.updatePlaceOrder(po);
-        return placeOrderDetailsService.savePlaceOrderDetails(placeOrder);
+        return convertToDTO(placeOrderDetailsService.savePlaceOrderDetails(placeOrder));
     }
 
     @PutMapping("/{placeOrderId}-{productId}")
@@ -148,6 +148,8 @@ public class PlaceOrderDetailsController {
         PlaceOrderDetailsDTO placeOrderDetailsDTO = modelMapper.map(placeOrderDetails, PlaceOrderDetailsDTO.class);
         placeOrderDetailsDTO.setProduct_id(String.valueOf(placeOrderDetails.getKey().getProduct().getId()));
         placeOrderDetailsDTO.setPlaceorder_id(String.valueOf(placeOrderDetails.getKey().getPlaceOrder().getId()));
+        placeOrderDetailsDTO.setProductName(placeOrderDetails.getKey().getProduct().getName());
+        placeOrderDetailsDTO.setProductImg(placeOrderDetails.getKey().getProduct().getImageurl());
         return placeOrderDetailsDTO;
     }
 
@@ -156,6 +158,8 @@ public class PlaceOrderDetailsController {
         PlaceOrderDetails placeOrderDetails = modelMapper.map(placeOrderDetailsDTO, PlaceOrderDetails.class);
         PlaceOrder placeOrder = placeOrderService.getPlaceOrder(Long.valueOf(placeOrderDetailsDTO.getPlaceorder_id()));
         Product pro = productService.getProduct(Long.valueOf(placeOrderDetailsDTO.getProduct_id()));
+//        placeOrderDetails.setPlaceOrder(placeOrder);
+//        placeOrderDetails.setProduct(pro);
         placeOrderDetails.setKey(new PlaceOrderDetailsKey(placeOrder, pro));
         return placeOrderDetails;
     }

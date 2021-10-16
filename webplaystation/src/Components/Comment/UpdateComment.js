@@ -3,6 +3,7 @@ import { withRouter } from 'react-router-dom';
 import { Button, Form, FormGroup, Label, Input, Row, Col } from 'reactstrap';
 import { get, put } from '../../Utils/httpHelper';
 // import { Select } from 'semantic-ui-react';
+import "../Category/Category.css";
 
 class UpdateComment extends Component {
     constructor(props)
@@ -90,15 +91,15 @@ class UpdateComment extends Component {
         // const userArr = [];
         // this.state.users.map((u) => userArr.push({key: `${u.id}`, value: `${u.id}`, text: `${u.account}`}))
         return (
-            <div>
-                <h3>Update Bill</h3>
-                <Row form>
-                    <Col md={4}>
+            <div className="update-form">
+                <h3>Update Bình Luận</h3>
+                {/* <Row form>
+                    <Col md={4}> */}
                         <Form onSubmit={(event) => this.handleUpdate(event)}>
                         <FormGroup>
                             <Label htmlFor="content">Nội Dung</Label>
                             <br></br>
-                            <textarea style={{resize: 'none', width: '540px'}} rows="3" type="text" name="content" id="content" placeholder="Content..." onChange={(e) => this.changeValue(e)} value = {this.state.content} required="required"/>
+                            <textarea style={{resize: 'none', width: '100%'}} rows="3" type="text" name="content" id="content" placeholder="Content..." onChange={(e) => this.changeValue(e)} value = {this.state.content} required="required"/>
                         </FormGroup>
                         
                             
@@ -129,8 +130,8 @@ class UpdateComment extends Component {
                             <Button outline color="danger" onClick={this.handleClear.bind(this)}>Hủy</Button>
                         </div>
                         </Form>
-                    </Col>
-                </Row>
+                    {/* </Col>
+                </Row> */}
             </div>
         )
     }

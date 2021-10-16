@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { withRouter } from "react-router";
 import { put, get } from '../../Utils/httpHelper';
 import { Col, Row, Button, Form, FormGroup, Label, Input } from 'reactstrap';
+import "./Category.css";
 
 class UpdateCategory extends React.Component {
 
@@ -88,18 +89,18 @@ class UpdateCategory extends React.Component {
 
     render() {
         return (
-            <div>
+            <div className="update-form">
                 <h3>Update Category</h3>
-                <Row form>
-                    <Col md={4}>
+                {/* <Row form>
+                    <Col md={4}> */}
                         <Form onSubmit={(event) => this.handleUpdate(event)}>
                             <FormGroup>
-                                <Label htmlFor="name">Name</Label>
+                                <Label htmlFor="name"><b>Name</b></Label>
                                 <Input type="text" name="name" id="name" placeholder="PS5" onChange={(e) => this.changeValue(e)} value = {this.state.name} required="required"/>
                                 {this.state.key === 'name' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
                             </FormGroup>
                             <FormGroup>
-                                <Label htmlFor="description">Description</Label>
+                                <Label htmlFor="description"><b>Description</b></Label>
                                 <Input type="text" name="description" id="description" placeholder="PlayStation 5 Pro" onChange={(e) => this.changeValue(e)} value = {this.state.description} required="required"/>
                             </FormGroup>
                             
@@ -108,8 +109,8 @@ class UpdateCategory extends React.Component {
                                 <Button outline color="danger" onClick={this.handleClear.bind(this)}>Cancel</Button>
                             </div>
                         </Form>
-                    </Col>
-                </Row>
+                    {/* </Col>
+                </Row> */}
             </div>
         )
     }

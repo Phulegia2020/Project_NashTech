@@ -71,9 +71,10 @@ export default class Supplier extends Component {
     createSupplier(newSupplier){
         post(`/suppliers`, {name: newSupplier.name.trim(), address: newSupplier.address.trim(), phone: newSupplier.phone.trim()})
         .then((response) => {
-            window.location.reload();
+            //window.location.reload();
             this.setState({
-                suppliers: [...this.state.suppliers, response.data],
+                suppliers: [response.data, ...this.state.suppliers ],
+                isDisplayForm: false,
             });
         });
     }

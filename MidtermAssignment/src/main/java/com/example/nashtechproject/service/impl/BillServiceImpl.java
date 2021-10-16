@@ -6,6 +6,7 @@ import com.example.nashtechproject.entity.Bill;
 import com.example.nashtechproject.entity.BillStatus;
 import com.example.nashtechproject.exception.BillStatusException;
 import com.example.nashtechproject.page.ProductPage;
+import com.example.nashtechproject.page.STATE;
 import com.example.nashtechproject.repository.BillRepository;
 import com.example.nashtechproject.repository.BillStatusRepository;
 import com.example.nashtechproject.service.BillService;
@@ -109,7 +110,7 @@ public class BillServiceImpl implements BillService {
 
     public List<Bill> getBillsDone()
     {
-        List<Bill> bills = billRepository.findAllByBillStatusId(1L);
+        List<Bill> bills = billRepository.findAllByStatus(STATE.DONE);
         return bills;
     }
 }

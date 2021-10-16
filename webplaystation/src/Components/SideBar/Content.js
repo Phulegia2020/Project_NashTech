@@ -31,8 +31,13 @@ import Footer from "./Footer";
 import Chart from "../Statistical/Chart";
 import Comment from "../Comment/Comment";
 import UpdateComment from "../Comment/UpdateComment";
+import ChangePassword from "../User/ChangePassword";
 
 class Content extends Component {
+    componentDidMount(){
+        this.props.handleChatBot();
+    }
+    
     render() {
         return (
             <Container
@@ -119,6 +124,9 @@ class Content extends Component {
                     </Route>
                     <Route exact path="/admin/comment/update/:id">
                         <UpdateComment/>
+                    </Route>
+                    <Route exact path="/admin/info">
+                        <ChangePassword/>
                     </Route>
                 </Switch>
                 <Footer/>

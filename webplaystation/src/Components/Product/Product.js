@@ -67,9 +67,10 @@ class Product extends Component {
                         price: newProduct.price, totalrating: 0,imageurl: newProduct.imageurl, category_id: newProduct.category_id,
                         supplier_id: newProduct.supplier_id})
         .then((response) => {
-            window.location.reload();
+            //window.location.reload();
             this.setState({
-                products: [...this.state.products, response.data],
+                products: [response.data, ...this.state.products],
+                isDisplayForm: false,
             });
         });
     }

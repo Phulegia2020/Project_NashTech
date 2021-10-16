@@ -15,6 +15,10 @@ class Login extends Component {
 		this.state = { username: '', password: '', show: false};
 	}
 
+	// componentDidMount(){
+	// 	this.props.handleChatBot();
+	// }
+
 	handleChange = (e, { name, value }) => {
 		if (name === 'username')
         {
@@ -64,10 +68,10 @@ class Login extends Component {
 
 	render() {
 		return (
-			<Segment style={{ padding: '8em 0em', marginTop: '6rem' }} placeholder>
+			<Segment style={{ padding: '8em 0em', marginTop: '4rem' }} placeholder>
 				<Grid columns={2} relaxed='very' stackable>
 				<Grid.Column width={8}>
-					<h2 style={{ marginLeft: '355px', marginBottom: '25px' }}>Sign In</h2>
+					<h2 style={{ marginLeft: '355px', marginBottom: '25px', fontWeight: '900' }}>Sign In</h2>
 					<Form onSubmit={(event) => this.handleSubmit(event)}>
 					<Form.Input
 						icon='user'

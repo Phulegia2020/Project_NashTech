@@ -195,8 +195,9 @@ public class UserController {
         {
             throw new UserException(userId);
         }
-        user.setActive_status("Inactive");
-        userService.updateUser(user);
+//        user.setActive_status("Inactive");
+//        userService.updateUser(user);
+        userService.deleteUser(userId);
         return ResponseEntity.ok(new MessageResponse("Delete Successfully"));
     }
 

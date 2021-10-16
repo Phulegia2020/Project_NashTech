@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap');
+
 #table {
     border-collapse: separate;
     border-radius: 10px;
@@ -57,3 +59,49 @@
   .descriptionTable{
     width: 500px;
   }
+
+.update-form
+{
+  border-top: 3px solid #eaeef0;
+  border-left: 3px solid #eaeef0;
+  border-top-right-radius: 10px;
+  border-bottom-left-radius: 10px;
+  box-shadow: -10px -10px 15px rgba(255, 255, 255, 0.9), 8px 8px 25px rgba(0, 0, 0, 0.1);
+  height: 80%;
+  padding: 10px;
+  width: 50%;
+  font-size: medium;
+}
+
+.update-form h3, .update-form-product h3{
+  /* text-align: center;
+  align-content: center;
+  justify-content: center;
+  justify-items: center;
+  align-items: center; */
+  font-weight: 600;
+}
+
+.update-form Label, .update-form-product label
+{
+  font-family: 'Merriweather';
+}
+
+.update-form Input
+{
+  /* margin-top: 5px; */
+  margin-bottom: 15px;
+}
+
+.update-form-product
+{
+  border-top: 3px solid #eaeef0;
+  border-left: 3px solid #eaeef0;
+  border-top-right-radius: 10px;
+  border-bottom-left-radius: 10px;
+  box-shadow: -10px -10px 15px rgba(255, 255, 255, 0.9), 8px 8px 25px rgba(0, 0, 0, 0.1);
+  height: 80%;
+  padding: 10px;
+  width: 50%;
+  font-size: medium;
+}

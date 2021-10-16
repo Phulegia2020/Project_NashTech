@@ -7,6 +7,7 @@ import com.example.nashtechproject.exception.InvalidDataException;
 import com.example.nashtechproject.exception.ObjectNotFoundException;
 import com.example.nashtechproject.exception.UserException;
 import com.example.nashtechproject.page.ProductPage;
+import com.example.nashtechproject.page.STATE;
 import com.example.nashtechproject.payload.response.MessageResponse;
 import com.example.nashtechproject.service.*;
 import org.modelmapper.ModelMapper;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -83,6 +85,63 @@ public class ImportController {
                 .collect(Collectors.toList());
     }
 
+    @GetMapping("/profit")
+    public List<ImportDTO> getAllImportsProfit(@RequestParam String month, @RequestParam String quy, @RequestParam String year)
+    {
+        List<Import> imports = importService.getImportsDone();
+        List<Import> list = new ArrayList<>();
+        for (int i = 0; i < imports.size(); i++)
+        {
+            //income = income + bills.get(i).getTotal();
+            if (imports.get(i).getCreateddate().getYear() == Integer.valueOf(year))
+            {
+                if (quy.equals("1"))
+                {
+                    if (1 <= imports.get(i).getCreateddate().getMonth().getValue() && imports.get(i).getCreateddate().getMonth().getValue() <= 3)
+                    {
+                        list.add(imports.get(i));
+                    }
+                }
+                else if (quy.equals("2"))
+                {
+                    if (4 <= imports.get(i).getCreateddate().getMonth().getValue() && imports.get(i).getCreateddate().getMonth().getValue() <= 6)
+                    {
+                        list.add(imports.get(i));
+                    }
+                }
+                else if (quy.equals("3"))
+                {
+                    if (7 <= imports.get(i).getCreateddate().getMonth().getValue() && imports.get(i).getCreateddate().getMonth().getValue() <= 9)
+                    {
+                        list.add(imports.get(i));
+                    }
+                }
+                else if (quy.equals("4"))
+                {
+                    if (10 <= imports.get(i).getCreateddate().getMonth().getValue() && imports.get(i).getCreateddate().getMonth().getValue() <= 12)
+                    {
+                        list.add(imports.get(i));
+                    }
+                }
+                else
+                {
+                    if (!month.equals("0"))
+                    {
+                        if (imports.get(i).getCreateddate().getMonth().getValue() == Integer.valueOf(month))
+                        {
+                            list.add(imports.get(i));
+                        }
+                    }
+                    else
+                    {
+                        list.add(imports.get(i));
+                    }
+                }
+            }
+        }
+        return list.stream().map(this::convertToDTO).collect(Collectors.toList());
+    }
+
     @PostMapping()
     public Import saveImport(@RequestBody ImportDTO imp)
     {
@@ -110,7 +169,8 @@ public class ImportController {
         }
         Import i = convertToEntity(imp);
         i.setCreateddate(LocalDateTime.now());
-        i.setStatus("Waiting");
+//        i.setStatus("Waiting");
+        i.setStatus(STATE.WAITING);
         ImportDTO importDTO = convertToDTO(importService.saveImport(i));
         if (importDTO == null)
         {
@@ -132,7 +192,8 @@ public class ImportController {
         Import updateImp = importService.getImport(i.getId());
         updateImp.setTotal(total);
         importService.updateImport(updateImp);
-        po.setStatus("Done");
+//        po.setStatus("Done");
+        po.setStatus(STATE.DONE);
         placeOrderService.updatePlaceOrder(po);
 //        return importDTO;
         return updateImp;
@@ -157,9 +218,11 @@ public class ImportController {
             }
 
             PlaceOrder placeOrder = placeOrderService.getPlaceOrder(imp.getPlaceOrder().getId());
-            placeOrder.setStatus("Done");
+//            placeOrder.setStatus("Done");
+            placeOrder.setStatus(STATE.DONE);
             placeOrderService.updatePlaceOrder(placeOrder);
-            imp.setStatus("Done");
+//            imp.setStatus("Done");
+            imp.setStatus(STATE.DONE);
             importService.updateImport(imp);
             return ResponseEntity.ok(new MessageResponse("Confirm Import successfully!"));
         }
@@ -201,7 +264,7 @@ public class ImportController {
         {
             throw new ObjectNotFoundException("The Place Order not found");
         }
-        if (imp.getStatus().equals("Done"))
+        if (imp.getStatus().equals(STATE.DONE))
         {
             throw new InvalidDataException("The Import is checked out. Can not delete!");
         }

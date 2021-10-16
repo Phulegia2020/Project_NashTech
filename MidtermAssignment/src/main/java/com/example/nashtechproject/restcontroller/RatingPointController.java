@@ -130,8 +130,10 @@ public class RatingPointController {
     private RatingDTO convertToDTO(Rating rating)
     {
         RatingDTO ratingDTO = modelMapper.map(rating, RatingDTO.class);
-        ratingDTO.setProduct_id(String.valueOf(rating.getKey().getProduct().getId()));
-        ratingDTO.setUser_id(String.valueOf(rating.getKey().getUser().getId()));
+//        ratingDTO.setProduct_id(String.valueOf(rating.getKey().getProduct().getId()));
+        ratingDTO.setProduct_id(String.valueOf(rating.getKey().getProductId()));
+//        ratingDTO.setUser_id(String.valueOf(rating.getKey().getUser().getId()));
+        ratingDTO.setUser_id(String.valueOf(rating.getKey().getUserId()));
         return ratingDTO;
     }
 
@@ -140,7 +142,9 @@ public class RatingPointController {
         Rating rating = modelMapper.map(ratingDTO, Rating.class);
         User u = userService.getUser(Long.valueOf(ratingDTO.getUser_id()));
         Product p = productService.getProduct(Long.valueOf(ratingDTO.getProduct_id()));
-        rating.setKey(new RateKey(u, p));
+        rating.setUser(u);
+        rating.setProduct(p);
+        rating.setKey(new RateKey(u.getId(), p.getId()));
         return rating;
     }
 }

@@ -81,11 +81,13 @@ class Bill extends Component {
     }
 
     createBill(newBill){
-        post(`/bills`, {total: 0, user_id: newBill.user_id, billStatus_id: newBill.billStatus_id})
+        // post(`/bills`, {total: 0, user_id: newBill.user_id, billStatus_id: newBill.billStatus_id})
+        post(`/bills`, {total: 0, user_id: newBill.user_id, status: newBill.status})
         .then((response) => {
             //window.location.reload();
             this.setState({
                 bills: [response.data, ...this.state.bills],
+                isDisplayForm: false,
             });
         });
     }
@@ -184,22 +186,23 @@ class Bill extends Component {
             }
         })
         .catch((error) => {})
-        console.log(this.state.billdetails.length);
+        //console.log(this.state.billdetails.length);
         if (this.state.billdetails.length === 0)
         {
             alert('The Bill does not details. Can not Check Out');
             return;
         }
-        var status;
-        if (key == 'notcheck')
-        {
-            status = '1';
-        }
-        else
-        {
-            status = '3';
-        }
-        put(`/bills/confirm/${id}`, {total: this.state.billCheckOut.total, user_id: this.state.billCheckOut.user_id, billStatus_id: status})
+        // var status;
+        // if (key == 'notcheck')
+        // {
+        //     status = '1';
+        // }
+        // else
+        // {
+        //     status = '3';
+        // }
+        // put(`/bills/confirm/${id}`, {total: this.state.billCheckOut.total, user_id: this.state.billCheckOut.user_id, billStatus_id: status})
+        put(`/bills/confirm/${id}`, {total: this.state.billCheckOut.total, user_id: this.state.billCheckOut.user_id, status: 'Done'})
         .then((response) => {
             if (response.status === 200)
             {
@@ -328,9 +331,10 @@ class Bill extends Component {
                                     <td>{b.createddate}</td>
                                     <td>{b.checkout_date}</td>
                                     <td>{b.user.name}</td>
-                                    <td>{b.billStatus.id === 1 ? <Label color="teal">Done</Label> : <Label color="grey">Waiting CheckOut</Label>}</td>
+                                    {/* <td>{b.billStatus.id === 1 ? <Label color="teal">Done</Label> : <Label color="grey">Waiting CheckOut</Label>}</td> */}
+                                    <td>{b.status === 'Done' ? <Label color="teal">Hoàn Tất</Label> : <Label color="grey">Chờ Xác Nhận</Label>}</td>
                                     <td>
-                                        {b.billStatus.id != 1 ? 
+                                        {/* {b.billStatus.id != 1 ? 
                                         <Link to={`/admin/bill/update/${b.id}`}>
                                             <button className="btn btn-success" disabled={b.billStatus.id == 1}>
                                             <FontAwesomeIcon icon={faEdit} className="mr-2"/>{' '}
@@ -339,25 +343,41 @@ class Bill extends Component {
                                         <button className="btn btn-success" disabled={b.billStatus.id == 1}>
                                         <FontAwesomeIcon icon={faEdit} className="mr-2"/>{' '}
                                         </button>
+                                        } */}
+                                        {b.status !== 'Done' ? 
+                                        <Link to={`/admin/bill/update/${b.id}`}>
+                                            <button className="btn btn-success" disabled={b.status === 'Done'}>
+                                                <FontAwesomeIcon icon={faEdit} className="mr-2"/>{' '}
+                                            </button>
+                                        </Link> : 
+                                        <button className="btn btn-success" disabled={b.status === 'Done'}>
+                                            <FontAwesomeIcon icon={faEdit} className="mr-2"/>{' '}
+                                        </button>
                                         }
                                     </td>
                                     <td>
-                                        <button onClick={(e) => this.onToggleFormDel(e, b.id)} className="btn btn-danger" disabled={b.billStatus.id == 1}>
-                                        <FontAwesomeIcon icon={faTrash} className="mr-2" />{' '}
+                                        {/* <button onClick={(e) => this.onToggleFormDel(e, b.id)} className="btn btn-danger" disabled={b.billStatus.id == 1}> */}
+                                        <button onClick={(e) => this.onToggleFormDel(e, b.id)} className="btn btn-danger" disabled={b.status === 'Done'}>
+                                            <FontAwesomeIcon icon={faTrash} className="mr-2" />{' '}
                                         </button>
                                     </td>
                                     <td>
                                         <Link to={`/admin/bill/${b.id}`}>
                                             <button className="btn btn-info">
-                                            <FontAwesomeIcon icon={faInfo} className="mr-2"/>{' '}
+                                                <FontAwesomeIcon icon={faInfo} className="mr-2"/>{' '}
                                             </button>
                                         </Link>
                                     </td>
                                     <td>
-                                        <Link to={`/admin/bill`} onClick={b.billStatus.id == 1 ? (e) => e.preventDefault() : (event) => this.handleCheckOut(event, b.id, 'notcheck')} className={b.billStatus.id == 1 ? "disable-link" : ""}>
+                                        {/* <Link to={`/admin/bill`} onClick={b.billStatus.id == 1 ? (e) => e.preventDefault() : (event) => this.handleCheckOut(event, b.id, 'notcheck')} className={b.billStatus.id == 1 ? "disable-link" : ""}>
                                             <button className="btn btn-warning" disabled={b.billStatus.id == 1}>
                                             <FontAwesomeIcon icon={faCheck} className="mr-2"/>{' '}
                                                 
+                                            </button>
+                                        </Link> */}
+                                        <Link to={`/admin/bill`} onClick={b.status === 'Done' ? (e) => e.preventDefault() : (event) => this.handleCheckOut(event, b.id, '')} className={b.status === 'Done' ? "disable-link" : ""}>
+                                            <button className="btn btn-warning" disabled={b.status === 'Done'}>
+                                                <FontAwesomeIcon icon={faCheck} className="mr-2"/>{' '}
                                             </button>
                                         </Link>
                                     </td>

@@ -3,6 +3,7 @@ package com.example.nashtechproject.service.impl;
 import com.example.nashtechproject.dto.PlaceOrderDTO;
 import com.example.nashtechproject.entity.PlaceOrder;
 import com.example.nashtechproject.page.ProductPage;
+import com.example.nashtechproject.page.STATE;
 import com.example.nashtechproject.repository.PlaceOrderRepository;
 import com.example.nashtechproject.service.PlaceOrderService;
 import org.modelmapper.ModelMapper;
@@ -64,7 +65,7 @@ public class PlaceOrderServiceImpl implements PlaceOrderService {
     @Override
     public List<PlaceOrder> getPlaceOrderNotDone()
     {
-        List<PlaceOrder> list = placeOrderRepository.findByStatus("Waiting");
+        List<PlaceOrder> list = placeOrderRepository.findByStatus(STATE.WAITING);
         return list;
     }
 }

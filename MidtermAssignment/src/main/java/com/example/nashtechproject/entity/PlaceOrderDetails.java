@@ -10,6 +10,16 @@ public class PlaceOrderDetails {
     @EmbeddedId
     private PlaceOrderDetailsKey key;
 
+//    @ManyToOne(fetch = FetchType.EAGER)
+//    @MapsId("placeOrderId")
+//    @JoinColumn(name = "place_order_id")
+//    private PlaceOrder placeOrder;
+//
+//    @ManyToOne(fetch = FetchType.EAGER)
+//    @MapsId("productId")
+//    @JoinColumn(name = "product_id")
+//    private Product product;
+
     @Column(name = "quantity")
     private int quantity;
 
@@ -39,4 +49,20 @@ public class PlaceOrderDetails {
     public void setPrice(float price) {
         this.price = price;
     }
+
+//    public PlaceOrder getPlaceOrder() {
+//        return placeOrder;
+//    }
+//
+//    public void setPlaceOrder(PlaceOrder placeOrder) {
+//        this.placeOrder = placeOrder;
+//    }
+//
+//    public Product getProduct() {
+//        return product;
+//    }
+//
+//    public void setProduct(Product product) {
+//        this.product = product;
+//    }
 }

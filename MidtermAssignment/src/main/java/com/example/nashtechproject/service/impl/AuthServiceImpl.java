@@ -132,7 +132,7 @@ public class AuthServiceImpl implements AuthService {
 
         if (!changPasswordRequest.getConfirmpassword().equals(changPasswordRequest.getNewpassword()))
         {
-            return ResponseEntity.ok()
+            return ResponseEntity.badRequest()
                     .body(new MessageResponse("Confirm Password is not correct!"));
         }
         User user = userRepository.findById(changPasswordRequest.getUser_id()).get();

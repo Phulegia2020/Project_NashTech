@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { get, put } from '../../Utils/httpHelper'
 import { withRouter } from "react-router";
 import { Col, Row, Button, Form, FormGroup, Label, Input } from 'reactstrap';
+import "../Category/Category.css";
 
 class UpdatePlaceOrderDetails extends Component {
     constructor(props)
@@ -89,10 +90,10 @@ class UpdatePlaceOrderDetails extends Component {
 
     render() {
         return (
-            <div>
+            <div className="update-form">
                 <h3>Update Place Order Detail</h3>
-                <Row form>
-                    <Col md={4}>
+                {/* <Row form>
+                    <Col md={4}> */}
                         <Form onSubmit={(event) => this.handleUpdate(event)}>
                         <FormGroup>
                             <Label htmlFor="quantity">Quantity</Label>
@@ -113,8 +114,8 @@ class UpdatePlaceOrderDetails extends Component {
                             <Button outline color="danger" onClick={this.handleClear.bind(this)}>Cancel</Button>
                         </div>
                         </Form>
-                    </Col>
-                </Row>
+                    {/* </Col>
+                </Row> */}
             </div>
         )
     }

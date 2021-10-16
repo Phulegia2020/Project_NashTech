@@ -7,6 +7,8 @@ import { Link } from 'react-router-dom';
 import { withRouter } from "react-router";
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Pagination, PaginationItem, PaginationLink } from 'reactstrap';
 import Add from '../BillDetails/Add';
+import './Bill.css';
+import {Icon} from 'semantic-ui-react';
 
 class BillDetailsByBill extends Component {
     state = {
@@ -17,6 +19,7 @@ class BillDetailsByBill extends Component {
         isDisplayFormDel: false,
         pageNumber: 0,
         pageToTal: 0,
+        user: {}
     }
 
     componentDidMount(){
@@ -26,12 +29,12 @@ class BillDetailsByBill extends Component {
             {
                 this.setState({
                     //billdetails: response.data
-                    pageToTal: Math.ceil(response.data.length / 5)
+                    pageToTal: Math.ceil(response.data.length / 3)
                 })
             }
         })
 
-        get(`/billDetails/billPage/${this.state.id}?pageNumber=0&pageSize=5&sortBy=id`)
+        get(`/billDetails/billPage/${this.state.id}?pageNumber=0&pageSize=3&sortBy=id`)
         .then((response) => {
             this.setState({
                 billdetails: response.data
@@ -45,9 +48,28 @@ class BillDetailsByBill extends Component {
             {
                 this.setState({
                     bill: response.data
-                })
+                }, () => {get(`/users/${this.state.bill.user_id}`)
+                        .then((response) => {
+                            if (response.status === 200)
+                            {
+                                this.setState({
+                                    user: response.data
+                                })
+                            }
+                        })})
             }
         });
+        // console.log(this.state.bill);
+        // console.log(this.state.bill.user_id);
+        // get(`/users/${this.state.bill.user_id}`)
+        // .then((response) => {
+        //     if (response.status === 200)
+        //     {
+        //         this.setState({
+        //             user: response.data
+        //         })
+        //     }
+        // })
     }
 
     delBillDetail = (e, id) =>
@@ -71,6 +93,7 @@ class BillDetailsByBill extends Component {
             {
                 this.setState({
                     billdetails: [...this.state.billdetails, response.data],
+                    isDisplayForm: false,
                 })
             }
         })
@@ -126,7 +149,7 @@ class BillDetailsByBill extends Component {
             }, () => console.log(this.state.pageNumber));
         }
         
-        get(`/billDetails/billPage/${this.state.id}?pageNumber=${pageNumber}&pageSize=5&sortBy=id`)
+        get(`/billDetails/billPage/${this.state.id}?pageNumber=${pageNumber}&pageSize=3&sortBy=id`)
         .then((response) => {
             this.setState({
                 billdetails: response.data,
@@ -169,6 +192,16 @@ class BillDetailsByBill extends Component {
                     <FontAwesomeIcon icon={faPlus} className="mr-2"/>{' '}
                     Creat New Bill Detail
                 </button>
+
+                <div className='info-user-bill'>
+                    <h4 style={{fontWeight:'bold'}}>Thông Tin Khách Hàng</h4>
+                    <p><Icon name="user" size="large"/>{this.state.user.account}</p>
+                    <p><Icon name="id card outline" size="large"/>{this.state.user.name}</p>
+                    <p><Icon name="home" size="large"/>{this.state.user.address}</p>
+                    <p><Icon name="mail outline" size="large"/>{this.state.user.email}</p>
+                    <p><Icon name="phone" size="large"/>{this.state.user.phone}</p>
+                </div>
+
                 <table id="table">
                     <thead>
                         <tr>
@@ -191,16 +224,18 @@ class BillDetailsByBill extends Component {
                                     <td>{b.quantity}</td>
                                     <td>{formatCurrency(b.key.product.price)}</td>
                                     <td>
-                                        <Link to={`/admin/billDetails/update/${b.key.bill.id}-${b.key.product.id}`} billId={this.state.id} onClick={this.state.bill.billStatus_id === '1' ? (e) => e.preventDefault() : ''}>
-                                            <button className="btn btn-success" disabled={this.state.bill.billStatus_id === '1'}>
-                                            <FontAwesomeIcon icon={faEdit} className="mr-2"/>{' '}
-                                                
+                                        {/* <Link to={`/admin/billDetails/update/${b.key.bill.id}-${b.key.product.id}`} billId={this.state.id} onClick={this.state.bill.billStatus_id === '1' ? (e) => e.preventDefault() : ''}>
+                                            <button className="btn btn-success" disabled={this.state.bill.billStatus_id === '1'}> */}
+                                        <Link to={`/admin/billDetails/update/${b.key.bill.id}-${b.key.product.id}`} billId={this.state.id} onClick={this.state.bill.status === 'Done' ? (e) => e.preventDefault() : ''}>
+                                            <button className="btn btn-success" disabled={this.state.bill.status === 'Done'}>
+                                                <FontAwesomeIcon icon={faEdit} className="mr-2"/>{' '}
                                             </button>
                                         </Link>
                                     </td>
-                                    <td><button onClick={(e) => this.onToggleFormDel(e, b.key)} className="btn btn-danger" disabled={this.state.bill.billStatus_id === '1'}>
-                                        <FontAwesomeIcon icon={faTrash} className="mr-2"/>{' '}
-                                        
+                                    <td>
+                                        {/* <button onClick={(e) => this.onToggleFormDel(e, b.key)} className="btn btn-danger" disabled={this.state.bill.billStatus_id === '1'}> */}
+                                        <button onClick={(e) => this.onToggleFormDel(e, b.key)} className="btn btn-danger" disabled={this.state.bill.status === 'Done'}>
+                                            <FontAwesomeIcon icon={faTrash} className="mr-2"/>{' '}
                                         </button>
                                     </td>
                                 </tr>

@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap');
+
 .scroll-table {
   overflow-y: scroll;
   height: 15rem;
@@ -18,3 +20,51 @@
   border: 2px dashed #bdc3c7;
   padding-top: 10px;
 }
+
+/* df-messenger {
+  --df-messenger-button-titlebar-color: #df9b56;
+  --df-messenger-chat-background-color: #fafafa;
+  --df-messenger-send-icon: #878fac;
+
+  --df-messenger-bot-message: #636e72;
+  --df-messenger-font-color: white;
+  --df-messenger-user-message: #479b3d;
+} */
+
+.grid-comments
+{
+  width: 500px;
+}
+
+#ps-card
+{
+  background: #fff;
+  /* border: 1px solid black; */
+  /* box-shadow: -10px -10px 15px rgba(255, 255, 255, 0.9), 7px 7px 25px rgba(0, 0, 0, 0.08); */
+  box-shadow: -10px -10px 15px rgba(255, 255, 255, 0.9), 8px 8px 25px rgba(0, 0, 0, 0.2);
+  /* transition: 1s ease-in-out; */
+}
+
+#ps-card:hover{
+  box-shadow: -10px -10px 15px rgba(255, 255, 255, 0.9), 8px 8px 25px rgba(0, 0, 0, 0.2);
+  transform: scale(1.1);
+  /* scale: 1.5; */
+}
+
+.header-home
+{
+  font-family: 'Merriweather';
+  font-weight: 900;
+}
+
+#ps-card .product-price
+{
+  font-size: large;
+}
+
+/* .toast-message
+{
+  position: absolute;
+  top: 0;
+  left: 0;
+} */

@@ -1,0 +1,54 @@
+.ps-logo
+{
+    position: relative;
+    display: inline-flex;
+}
+
+.ps-logo h3
+{
+    /* position: absolute; */
+    /* top: 0;
+    left: 115px; */
+    /* top: 60px;
+    left: 42px; */
+    /* font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; */
+    font-weight: 500;
+    /* font-size: 15px; */
+    line-height: 1.5;
+    color: #fff;
+    /* color: transparent;
+    -webkit-text-stroke: 1px #fff;
+    background: url(/src/assets/back.png);
+    -webkit-background-clip: border-box;
+    background-position: 0 0;
+    animation: back 20s linear infinite; */
+    border: 1px solid white;
+    border-radius: 10px;
+    width: fit-content;
+    padding: 5px;
+    /* transform: translateX(810px); */
+    /* transition: 1s ease-in-out; */
+    margin-top: 5px;
+    margin-left: 5px;
+    text-align: center;
+    align-content: center;
+    justify-content: center;
+}
+
+/* @keyframes back{
+    100%{
+        background-position: 2000px 0;
+    }
+} */
+
+/* .ps-logo img
+{
+    position: absolute;
+    top: 0;
+    left: 10px;
+} */
+
+.ps-logo span
+{
+    display: inline-flex;
+}

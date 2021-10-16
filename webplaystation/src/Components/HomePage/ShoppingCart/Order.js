@@ -14,7 +14,8 @@ export default class Order extends Component {
             bill: {},
             billDetails: [],
             user: {},
-            type: 'cod'
+            type: 'cod',
+            //loading: false
         };
         this.onCheckOut = this.onCheckOut.bind(this);
     }
@@ -48,10 +49,15 @@ export default class Order extends Component {
             alert('The Order is empty. Can not Confirm!');
             return;
         }
-        
-        if (this.state.type === 'cod')
-        {
-            await post('/bills', {total: 0, user_id: localStorage.getItem('user_id'), billStatus_id: '3'})
+        // if (this.state.type === 'cod')
+        // {
+        //     await this.setState({
+        //         loading: true
+        //     })
+        // }
+        // if (this.state.type === 'cod')
+        // {
+            await post('/bills', {total: 0, user_id: localStorage.getItem('user_id'), status: 'Waiting'})
             .then((response) => {
                 if (response.status === 200)
                 {
@@ -76,20 +82,36 @@ export default class Order extends Component {
             .then((response) => {
                 if (response.status === 200)
                 {
-                    console.log(response.data);
+                    //console.log(response.data);
                     this.setState({
                         bill: response.data
                     })
                 }
             })
+            //localStorage.setItem('shopping-cart', []);
+
             this.handleSendMail();
-        }
-        else if (this.state.type === 'paypal')
+
+            //console.log('paypal');
+        // }
+        // else 
+        if (this.state.type === 'paypal')
         {
-            console.log(this.state.type);
-            alert('paypal');
+            var pay = (this.state.bill.total) / 20000;
+            //var pay = 5;
+            post(`/payment/pay?price=${pay}`)
+            .then((response) => {
+                if (response.status === 200)
+                {
+                    window.location.href=`${response.data}`;
+                    //console.log(response.data);
+                }
+            })
+            .catch(error => console.log(error));
+
+            // alert('paypal');
+            // console.log(pay);
         }
-        
     }
 
     handleSendMail()
@@ -102,11 +124,29 @@ export default class Order extends Component {
         .then((response) => {
             if (response.status === 200)
             {
-                alert('Thank you for Purchasing, Confirm your email!');
-                window.location.href='/WebPlayStation';
+                
+                // this.setState({
+                //     loading: false
+                // })
+                
+                if (this.state.type === 'cod')
+                {
+                    // alert('Thank you for Purchasing, Confirm your email!');
+                    // window.location.href='/WebPlayStation';
+                    window.location.href='/WebPlayStation/success';
+                }
             }
         })
         .catch((error) => console.log(error));
+        // this.setState({
+        //     loading: false
+        // })
+        
+        // if (this.state.type === 'cod')
+        // {
+        //     alert('Thank you for Purchasing, Confirm your email!');
+        //     window.location.href='/WebPlayStation';
+        // }
     }
 
     changeValue(e){
@@ -175,6 +215,7 @@ export default class Order extends Component {
                     </Table>
                     <Header style={{marginLeft: '75rem'}}>TOTAL: {this.getTotal()}</Header>
                     <Button positive icon='checkmark' labelPosition='right' content="Confirm" onClick={this.onCheckOut} style={{marginLeft: '75rem'}}/>
+                    {/* loading={this.state.loading} */}
                 </div>
 
                 <div className='info-user'>
@@ -202,7 +243,7 @@ export default class Order extends Component {
                 </div>
                 {/* <Header style={{marginLeft: '100rem'}}>TOTAL: {this.getTotal()}</Header>
                 <Button positive icon='checkmark' labelPosition='right' content="Confirm" onClick={this.onCheckOut} style={{marginLeft: '100rem', marginBottom: '1rem'}}/> */}
-                <div className={this.state.ShoppingCartItems.length < 5 ? "fixed-bottom": ''}>
+                <div className={this.state.ShoppingCartItems.length < 4 ? "fixed-bottom": ''}>
                     <Footer/>
                 </div>
             </div>

@@ -11,12 +11,16 @@ class ShoppingCart extends Component {
             open: true,
             bill: {},
             billDetails: [],
-            user: {}
+            user: {},
+            // shoppingCartItems: []
         }
         this.onCheckOut = this.onCheckOut.bind(this);
     }
 
     componentDidMount(){
+        // this.setState({
+        //     shoppingCartItems: JSON.parse(localStorage.getItem('shopping-cart') || '[]')
+        // })
         if (localStorage.getItem('user_id') !== null)
         {
             get(`/users/${localStorage.getItem('user_id')}`)
@@ -30,6 +34,16 @@ class ShoppingCart extends Component {
             })
         }
     }
+
+    // componentDidUpdate(prevProps, prevState)
+    // {
+    //     if (prevState.shoppingCartItems.length !== this.state.shoppingCartItems.length)
+    //     {
+    //         this.setState({
+    //             shoppingCartItems: JSON.parse(localStorage.getItem('shopping-cart') || '[]')
+    //         })
+    //     }
+    // }
 
     onCheckOut(){
         const shoppingCartItems = JSON.parse(localStorage.getItem('shopping-cart') || '[]');
@@ -54,8 +68,12 @@ class ShoppingCart extends Component {
     }
 
     render() {
+        // const shoppingCartItems = JSON.parse(localStorage.getItem('shopping-cart') || '[]');
         return (
-                <Modal trigger={<Button animated='vertical' inverted style={{marginRight: '0.5em'}}>
+                <Modal trigger={<Button animated='vertical' inverted style={{marginRight: '0.5em'}} className="shopping-cart">
+                    <i
+					class="fas fa-shopping-cart fa-x text-white"></i><span
+                    class="cart-number">0</span>
                                     <Button.Content visible>Cart</Button.Content>
                                     <Button.Content hidden>
                                         <Icon name='shop' />

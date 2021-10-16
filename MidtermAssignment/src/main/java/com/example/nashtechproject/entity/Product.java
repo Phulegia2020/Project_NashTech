@@ -56,18 +56,18 @@ public class Product {
     @JoinColumn(name = "supplier_id")
     private Supplier supplier;
 
-    @Transient
-    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
+//    @Transient
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Rating> ratings = new ArrayList<>();
 
     @Transient
-    @OneToMany(mappedBy = "product", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "product", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JsonIgnore
-    private Collection<BillDetails> products;
+    private Collection<BillDetails> billDetails;
 
-    @Transient
-    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
+//    @Transient
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Comment> comments;
 
@@ -77,7 +77,7 @@ public class Product {
     public Product() {
     }
 
-    public Product(Long id, String name, String description, int quantity, int price, LocalDateTime createddate, LocalDateTime updateddate, byte[] imageurl, Category category, Supplier supplier, List<Rating> ratings, Collection<BillDetails> products) {
+    public Product(Long id, String name, String description, int quantity, int price, LocalDateTime createddate, LocalDateTime updateddate, byte[] imageurl, Category category, Supplier supplier, List<Rating> ratings, Collection<BillDetails> billDetails) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -89,7 +89,7 @@ public class Product {
         this.category = category;
         this.supplier = supplier;
         //this.ratings = ratings;
-        this.products = products;
+        this.billDetails = billDetails;
     }
 
     public Long getId() {

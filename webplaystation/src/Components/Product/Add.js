@@ -69,6 +69,7 @@ export default class Add extends Component {
     };
 
     uploadImage = async (e) => {
+        //console.log(e.target.files);
         const file = e.target.files[0];
         const base64 = await this.convertBase64(file);
         this.setState({

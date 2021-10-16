@@ -54,11 +54,11 @@ class ImportDetailsByImport extends Component {
     delImportDetail = (e, id) =>
     {
         e.preventDefault();
-        del(`/importDetails/${id.imp.id}-${id.product.id}`)
+        del(`/importDetails/${id.imp_id}-${id.product_id}`)
         .then((response) => {
             if (response.status === 200)
             {
-                this.setState({importdetails: this.state.importdetails.filter(b => `${b.key.imp.id}-${b.key.product.id}` !== `${id.imp.id}-${id.product.id}`), isDisplayFormDel: false})
+                this.setState({importdetails: this.state.importdetails.filter(b => `${b.imp_id}-${b.product_id}` !== `${id.imp_id}-${id.product_id}`), isDisplayFormDel: false})
             }
         })
         .catch(error => {console.log(error)})
@@ -71,6 +71,7 @@ class ImportDetailsByImport extends Component {
             {
                 this.setState({
                     importdetails: [...this.state.importdetails, response.data],
+                    isDisplayForm: false,
                 })
             }
         })
@@ -185,20 +186,20 @@ class ImportDetailsByImport extends Component {
                                 <tr key={index}>
                                     <td>{index + 1}</td>
                                     <td>
-                                        <img src={`data:image/jpeg;base64,${imp.key.product.imageurl}`} alt="" height="100px"></img>
+                                        <img src={`data:image/jpeg;base64,${imp.productImg}`} alt="" height="100px"></img>
                                     </td>
-                                    <td>{imp.key.product.name}</td>
+                                    <td>{imp.productName}</td>
                                     <td>{formatQuantity(imp.quantity)}</td>
                                     <td>{formatCurrency(imp.price)}</td>
                                     <td>
-                                        <Link to={`/admin/importDetails/update/${imp.key.imp.id}-${imp.key.product.id}`}  onClick={this.state.import.status !== 'Waiting' ? (e) => e.preventDefault() : ''} className={this.state.import.status !== 'Waiting' ? "disable-link" : ""}>
+                                        <Link to={`/admin/importDetails/update/${imp.imp_id}-${imp.product_id}`}  onClick={this.state.import.status !== 'Waiting' ? (e) => e.preventDefault() : ''} className={this.state.import.status !== 'Waiting' ? "disable-link" : ""}>
                                             <button className="btn btn-success" disabled={this.state.import.status !== 'Waiting'}>
                                             <FontAwesomeIcon icon={faEdit} className="mr-2"/>{' '}
                                                 
                                             </button>
                                         </Link>
                                     </td>
-                                    <td><button onClick={(e) => this.onToggleFormDel(e, imp.key)} className="btn btn-danger" disabled={this.state.import.status !== 'Waiting'}>
+                                    <td><button onClick={(e) => this.onToggleFormDel(e, imp)} className="btn btn-danger" disabled={this.state.import.status !== 'Waiting'}>
                                         <FontAwesomeIcon icon={faTrash} className="mr-2"/>{' '}
                                         
                                         </button>

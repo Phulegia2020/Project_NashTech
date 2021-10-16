@@ -5,6 +5,7 @@ import { get } from '../../../Utils/httpHelper';
 import {formatCurrency} from "./../../../Utils/Utils";
 import ButtonAddToCart from "./ButtonAddToCart";
 import "../../Product/Product.css";
+import "./style.css";
 const styles = {
     link: {
         color: '#ffffff'
@@ -77,7 +78,7 @@ class ProductItem extends Component {
 
     render() {
         return (
-            <Card color='blue'>
+            <Card color='blue' id='ps-card'>
                 {/* <Label as='a' color='orange' ribbon>
                 Specs
                 </Label> */}
@@ -86,8 +87,10 @@ class ProductItem extends Component {
                     <Card.Header>
                         {this.props.product.name}
                     </Card.Header>
-                    <Card.Meta>
+                    <Card.Meta className="product-price">
+                        <b>
                         Price: {formatCurrency(this.props.product.price)}
+                        </b>
                     </Card.Meta>
 
                     <Card.Description>

@@ -16,9 +16,9 @@ public class BillStatus {
     @Column(name = "description")
     private String description;
 
-    @OneToMany(mappedBy = "billStatus", fetch = FetchType.EAGER)
-    @JsonIgnore
-    private List<Bill> bills = new ArrayList<>();
+//    @OneToMany(mappedBy = "billStatus", fetch = FetchType.EAGER)
+//    @JsonIgnore
+//    private List<Bill> bills = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -36,11 +36,11 @@ public class BillStatus {
         this.description = description;
     }
 
-    public List<Bill> getBills() {
-        return bills;
-    }
-
-    public void setBills(List<Bill> bills) {
-        this.bills = bills;
-    }
+//    public List<Bill> getBills() {
+//        return bills;
+//    }
+//
+//    public void setBills(List<Bill> bills) {
+//        this.bills = bills;
+//    }
 }

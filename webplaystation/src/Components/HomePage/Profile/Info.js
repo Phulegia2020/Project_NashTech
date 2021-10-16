@@ -8,6 +8,7 @@ import {put} from "./../../../Utils/httpHelper";
 import { withRouter } from "react-router";
 import {get} from '../../../Utils/httpHelper';
 import { checkPhoneNumber } from '../../../Utils/Utils';
+import "../SignUp/SignUp.css";
 
 class SignUp extends Component {
     constructor(props) {
@@ -83,7 +84,7 @@ class SignUp extends Component {
                         key: 'email'
                     })
                     this.setState({
-                        Error: "This email is existed!"
+                        Error: "This email is used already!"
                     });
                     return;
                 }
@@ -131,13 +132,13 @@ class SignUp extends Component {
     
     render() {
         return (
-            <div>
-                <Segment style={{ padding: '8em 0em' }} vertical>
-                    
+            <div className="info-profile">
+                {/* <Segment style={{ padding: '5em 0em', marginLeft: '600px' }} vertical id="alter-user">
+                
                     <Grid container stackable verticalAlign='middle'>
                         <Grid.Row>
                             <Grid.Column width={8}>
-                                <h2>Infomation User</h2>
+                                <h2 className="title-profile">Infomation User</h2>
                                 <Form onSubmit={(event) => this.handleSubmit(event)}>
                                     <Form.Field >
                                         <label>Name</label>
@@ -162,7 +163,7 @@ class SignUp extends Component {
                                     </Form.Group>
                                     <Form.Field inline>
                                         <label>Username</label>
-                                        <Form.Input placeholder='Username' name='username' value={this.state.username} onChange={this.handleChange} required disabled/>
+                                        <Form.Input placeholder='Username' name='username' value={this.state.username} onChange={this.handleChange} required disabled style={{backgroundColor: '#fff'}}/>
                                         {this.state.key === 'username' ? <Label basic color='red' pointing='left'>{this.state.Error}</Label> : '' }
                                     </Form.Field>
                                     <Form.Field>
@@ -184,7 +185,151 @@ class SignUp extends Component {
                             </Grid.Column>
                         </Grid.Row>
                     </Grid>
-                </Segment>
+                </Segment> */}
+
+                {/* <df-messenger
+                    intent="WELCOME"
+                    chat-title="THE PLAYSTATION SHOP"
+                    agent-id="3d2eb8db-0f5e-4a16-9c2a-3cea0cadb3a7"
+                    language-code="en"
+                ></df-messenger> */}
+
+                <div class="site-section mt-3 mb-4">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-lg-2 col-md-3 col-sm-3"></div>
+                                <div class="col-md-8" >
+                                    <div class="col-lg-12 col-md-12 col-sm-12 mt-3">
+                                        <h2 class="h3 mb-3 text-black">Thông tin tài khoản</h2>
+                                    </div>
+                                    <Form onSubmit={(event) => this.handleSubmit(event)}>
+                                        <div class="p-3 p-lg-6 border" id="account-form">
+                                            {/* <div class="form-group row">
+                                                <div class="col-md-12">
+                                                    <p class="text-danger">${message}</p>
+                                                </div>
+                                            </div> */}
+                                            <div class="form-group row">
+                                                <div class="col-md-2">
+                                                    <label class="text-black">Họ tên</label>
+                                                </div>
+                                                <div class="col-md-10">
+                                                    <Form.Input placeholder='Full Name' name='name' value={this.state.name} onChange={this.handleChange} required/>
+                                                    {/* <input value="${sessionScope.usersession.displayName}"
+                                                        type="text" class="form-control" readonly /> */}
+                                                </div>
+                                            </div>
+                                            <div class="form-group row mt-5">
+                                                <div class="col-md-2">
+                                                    <label>Gender</label>
+                                                </div>
+                                                <div class="col-md-10">
+                                                    <Form.Group inline>
+                                                        <Form.Radio
+                                                            label='Male'
+                                                            value="Male"
+                                                            name='gender'
+                                                            checked={this.state.gender == "Male"}
+                                                            onChange={this.handleChange}
+                                                        />
+                                                        <Form.Radio
+                                                            label='Female'
+                                                            value="Female"
+                                                            name='gender'
+                                                            checked={this.state.gender == "Female"}
+                                                            onChange={this.handleChange}
+                                                        />
+                                                    </Form.Group>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row mt-5">
+                                                <div class="col-md-2">
+                                                <label>Username</label>
+                                                </div>
+                                                <div class="col-md-10">
+                                                    <Form.Input placeholder='Username' name='username' value={this.state.username} onChange={this.handleChange} required disabled id="input-username"/>
+                                                    {this.state.key === 'username' ? <Label basic color='red' pointing='left'>{this.state.Error}</Label> : '' }
+                                                </div>
+                                            </div>
+                                            <div class="form-group row mt-5">
+                                                <div class="col-md-2">
+                                                    <label class="text-black">Email</label>
+                                                </div>
+                                                <div class="col-md-10">
+                                                    <Form.Input type="email" placeholder='abc@gmail.com' name='email' value={this.state.email} onChange={this.handleChange} required/>
+                                                    {this.state.key === 'email' ? <Label basic color='red' pointing='left'>{this.state.Error}</Label> : '' }
+                                                    {/* <input value="${sessionScope.usersession.email}" type="email"
+                                                        class="form-control" readonly /> */}
+                                                </div>
+                                            </div>
+                                            <div class="form-group row mt-5">
+                                                <div class="col-md-2">
+                                                    <label>Địa chỉ</label>
+                                                </div>
+                                                <div class="col-md-10">
+                                                    <Form.Input placeholder='123 Main st, Ward, District, Ho Chi Minh City' name='address' value={this.state.address} onChange={this.handleChange} required/>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row mt-5">
+                                                <div class="col-md-2">
+                                                    <label class="text-black">Số điện thoại</label>
+                                                </div>
+                                                <div class="col-md-10">
+                                                    <Form.Input placeholder='0123456789' type="text" name='phone' maxLength={10} minLength={10} value={this.state.phone} onChange={this.handleChange} required/>
+                                                    {this.state.key === 'phone' ? <Label basic color='red' pointing='left'>{this.state.Error}</Label> : '' }
+                                                    {/* <input value="${sessionScope.usersession.phone}" type="number"
+                                                        class="form-control" readonly /> */}
+                                                </div>
+                                            </div>
+                                            {/* <div class="form-group row">
+                                                <div class="col-md-6 justify-content-center">
+                                                    <label class="h4 mb-3 text-black">Thay đổi mật khẩu</label>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <div class="col-md-4">
+                                                    <label class="text-black">Mật khẩu cũ</label>
+                                                </div>
+                                                <div class="col-md-8">
+                                                    <input path="password" type="password"
+                                                        class="form-control" />
+                                                    <errors path="password" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <div class="col-md-4">
+                                                    <label class="text-black">Mật khẩu mới</label>
+                                                </div>
+                                                <div class="col-md-8">
+                                                    <input path="newPassword" type="password"
+                                                        class="form-control"/>
+                                                    <errors path="newPassword" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <div class="col-md-4">
+                                                    <label class="text-black">Nhập lại mật khẩu mới</label>
+                                                </div>
+                                                <div class="col-md-8">
+                                                    <input path="confirmNewPassword" type="password"
+                                                        class="form-control"/>
+                                                    <errors path="confirmNewPassword" />
+                                                </div>
+                                            </div> */}
+                                            <br/>
+                                            <div class="form-group row">
+                                                <div class="col-lg-5"></div>
+                                                <div class="col-lg-4">
+                                                    <button type="submit" class="btn btn-danger btn-lg btn-block" disabled={this.state.btndis}>Cập nhật</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </Form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
             </div>
         )
     }

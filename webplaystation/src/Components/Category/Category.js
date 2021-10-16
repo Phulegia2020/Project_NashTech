@@ -71,9 +71,11 @@ export default class Category extends Component {
     createCategory(newCategory){
         post(`/categories`, {name: newCategory.name.trim(), description: newCategory.description.trim()})
         .then((response) => {
-            window.location.reload();
+            //window.location.reload();
             this.setState({
-                categories: [...this.state.categories, response.data],
+                categories: [response.data, ...this.state.categories],
+                isDisplayForm: false,
+                //pageToTal: Math.ceil(this.state.categories.length / 5)
             });
         });
     }

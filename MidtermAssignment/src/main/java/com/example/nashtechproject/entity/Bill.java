@@ -31,12 +31,14 @@ public class Bill {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "billstatus_id")
-    private BillStatus billStatus;
+//    @ManyToOne(fetch = FetchType.EAGER)
+//    @JoinColumn(name = "billstatus_id")
+//    private BillStatus billStatus;
+    @Column(name = "status")
+    private String status;
 
     @Transient
-    @OneToMany(mappedBy = "bill", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "bill", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JsonIgnore
     private Collection<BillDetails> billDetails = new ArrayList<>();
 
@@ -80,11 +82,19 @@ public class Bill {
         this.user = user;
     }
 
-    public BillStatus getBillStatus() {
-        return billStatus;
+//    public BillStatus getBillStatus() {
+//        return billStatus;
+//    }
+//
+//    public void setBillStatus(BillStatus billStatus) {
+//        this.billStatus = billStatus;
+//    }
+
+    public String getStatus() {
+        return status;
     }
 
-    public void setBillStatus(BillStatus billStatus) {
-        this.billStatus = billStatus;
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

@@ -26,13 +26,14 @@ public class RatingPointServiceImpl implements RatingPointService {
 
     public Rating getRatingByUserIdAndProductId(Long uid, Long pid)
     {
-        Rating rat = ratingRepository.findByKey_User_IdAndKey_Product_Id(uid, pid);
+        //Rating rat = ratingRepository.findByKey_User_IdAndKey_Product_Id(uid, pid);
+        Rating rat = ratingRepository.findByKey_UserIdAndKey_ProductId(uid, pid);
         return rat;
     }
 
     public List<Rating> getRatingByProduct(Long productId)
     {
-        List<Rating> ratings = ratingRepository.findByKey_Product_Id(productId);
+        List<Rating> ratings = ratingRepository.findByKey_ProductId(productId);
         return ratings;
     }
 
@@ -44,7 +45,7 @@ public class RatingPointServiceImpl implements RatingPointService {
     @Override
     public void deleteRating(Long uid, Long pid) {
 //        Rating rat = ratingRepository.findByUserIdAndProductId(uid, pid);
-        Rating rat = ratingRepository.findByKey_User_IdAndKey_Product_Id(uid, pid);
+        Rating rat = ratingRepository.findByKey_UserIdAndKey_ProductId(uid, pid);
 
         ratingRepository.delete(rat);
     }

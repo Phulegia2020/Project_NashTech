@@ -13,6 +13,7 @@ import ShoppingCart from "./../ShoppingCart/ShoppingCart";
 import {get} from "./../../../Utils/httpHelper";
 import Profile from '../Profile/Profile';
 import { withRouter } from "react-router";
+import "./MainMenu.css";
 
 class MainMenu extends Component {
     constructor(props) {
@@ -75,8 +76,19 @@ class MainMenu extends Component {
                     style={{padding: '1em 0em'}}
                     vertical
                 >
+                    
+                    <div className="ps-logo">
+                        <img src='https://gmedia.playstation.com/is/image/SIEPDC/ps-store-listing-thumb-01-en-05nov20?$facebook$' alt='logo' width='100px'></img>
+                        {/* <h3 className="navbar-brand">THE PLAYSTATION SHOP</h3> */}
+                        {/* <div><span>The</span></div> */}
+                        <h3>The Playstation Store</h3>
+                        {/* <span>Store</span> */}
+                    </div>
                     <Container>
                         <Menu inverted pointing secondary size='large'>
+                            {/* <Menu.Item position='left'>
+                            <img src='https://gmedia.playstation.com/is/image/SIEPDC/ps-store-listing-thumb-01-en-05nov20?$facebook$' alt='logo' ></img>
+                            </Menu.Item> */}
                             <Dropdown text='Category' pointing className='link item'>
                                 <Dropdown.Menu>
                                     <Dropdown.Header>Categories</Dropdown.Header>

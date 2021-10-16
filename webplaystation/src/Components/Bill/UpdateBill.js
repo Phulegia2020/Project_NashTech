@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { Col, Row, Button, Form, FormGroup, Label, Input } from 'reactstrap';
 import { get, put } from '../../Utils/httpHelper';
+import "../Category/Category.css";
 
 class UpdateBill extends Component {
     constructor(props)
@@ -11,9 +12,10 @@ class UpdateBill extends Component {
             id: this.props.match.params.id,
             total: 0,
             user_id: "",
-            billStatus_id: "",
+            // billStatus_id: "",
+            status: "",
             users: [],
-            billStatus: [],
+            // billStatus: [],
             Error: "",
             key: "",
         }
@@ -41,15 +43,15 @@ class UpdateBill extends Component {
             }
         });
 
-        get("/billstatuses")
-        .then((response) => {
-            if (response.status === 200)
-            {
-                this.setState({
-                    billStatus: response.data
-                });
-            }
-        })
+        // get("/billstatuses")
+        // .then((response) => {
+        //     if (response.status === 200)
+        //     {
+        //         this.setState({
+        //             billStatus: response.data
+        //         });
+        //     }
+        // })
     }
 
     changeValue(e){
@@ -70,7 +72,8 @@ class UpdateBill extends Component {
             });
             return;
         }
-        put(`/bills/${this.state.id}`, {total: this.state.total, user_id: this.state.user_id, billStatus_id: this.state.billStatus_id})
+        // put(`/bills/${this.state.id}`, {total: this.state.total, user_id: this.state.user_id, billStatus_id: this.state.billStatus_id})
+        put(`/bills/${this.state.id}`, {total: this.state.total, user_id: this.state.user_id, status: this.state.status})
         .then((response) => {
             if (response.status === 200)
             {
@@ -83,7 +86,8 @@ class UpdateBill extends Component {
         this.setState({
             total: 0,
             user_id: "",
-            billStatus_id: "",
+            // billStatus_id: "",
+            status: ""
         });
         this.props.history.push("/admin/bill");
     }
@@ -97,10 +101,10 @@ class UpdateBill extends Component {
 
     render() {
         return (
-            <div>
+            <div className="update-form">
                 <h3>Update Bill</h3>
-                <Row form>
-                    <Col md={4}>
+                {/* <Row form>
+                    <Col md={4}> */}
                         <Form onSubmit={(event) => this.handleUpdate(event)}>
                         <FormGroup>
                             <Label htmlFor="total">Total</Label>
@@ -120,12 +124,16 @@ class UpdateBill extends Component {
                         </FormGroup>
                         <FormGroup className="mb-5">
                             <Label htmlFor="status">Status</Label>
-                            <Input type="select" name="billStatus_id" id="status" value = {this.state.billStatus_id} onChange={(e) => this.changeValue(e)} disabled>
+                            {/* <Input type="select" name="billStatus_id" id="status" value = {this.state.billStatus_id} onChange={(e) => this.changeValue(e)} disabled>
                                 {
                                     this.state.billStatus.map((bs) => (
                                         <option key={bs.id} value={bs.id}>{bs.description}</option>
                                     ))
                                 }
+                            </Input> */}
+                            <Input type="select" name="status" id="status" value = {this.state.status} onChange={(e) => this.changeValue(e)} disabled>
+                                <option value="Done">Hoàn Tất</option>
+                                <option value="Waiting">Chờ Xác Nhận</option>
                             </Input>
                         </FormGroup>
                         <div className="mb-5">
@@ -133,8 +141,8 @@ class UpdateBill extends Component {
                             <Button outline color="danger" onClick={this.handleClear.bind(this)}>Cancel</Button>
                         </div>
                         </Form>
-                    </Col>
-                </Row>
+                    {/* </Col>
+                </Row> */}
             </div>
         )
     }

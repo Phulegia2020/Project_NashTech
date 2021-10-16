@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {Table, Button, Header, Image} from 'semantic-ui-react';
+import { get } from '../../../Utils/httpHelper';
 import {formatCurrency} from "../../../Utils/Utils";
 import "./Order.css";
 
@@ -7,13 +8,26 @@ class ShoppingCartDetails extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            ShoppingCartItems: []
+            ShoppingCartItems: [],
+            products: []
         };
     }
 
     componentDidMount() {
         this.state.ShoppingCartItems = JSON.parse(localStorage.getItem('shopping-cart') || '[]');
         this.setState(this.state);
+        for (var i = 0; i < this.state.ShoppingCartItems.length; i++)
+        {
+            get(`/products/${this.state.ShoppingCartItems[i].id}`)
+            .then((response) => {
+                if (response.status === 200)
+                {
+                    this.state.products.push(response.data);
+                    //console.log(response.data);
+                }
+            })
+            .catch((error) => console.log(error))
+        }
     }
 
     onRemoveCart(item) {
@@ -32,6 +46,14 @@ class ShoppingCartDetails extends Component {
         var items = this.state.ShoppingCartItems;
         for (var i = 0; i < items.length; i++) {
             if (items[i].id === item.id) {
+                for (var j = 0; j < this.state.products.length; j++)
+                {
+                    //console.log(this.state.products[j]);
+                    if (this.state.products[j].id === item.id && this.state.products[j].quantity === item.quantity)
+                    {
+                        return;
+                    }
+                }
                 items[i].quantity++;
                 this.setState({ShoppingCartItems: items});
                 localStorage.setItem('shopping-cart', JSON.stringify(this.state.ShoppingCartItems));

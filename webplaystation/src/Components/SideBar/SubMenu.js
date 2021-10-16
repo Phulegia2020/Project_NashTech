@@ -3,8 +3,8 @@ import classNames from "classnames";
 import { Collapse, NavItem, NavLink } from "reactstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
-
-import React, { Component } from 'react'
+import React, { Component } from 'react';
+import "./Footer.css";
 
 class SubMenu extends Component {
     state = {
@@ -33,6 +33,7 @@ class SubMenu extends Component {
                     isOpen={!this.state.collapsed}
                     navbar
                     className={classNames("items-menu", { "mb-1": !this.state.collapsed })}
+                    id={this.props.items.length > 3 ? "items-nav" : ''}
                 >
                     {this.props.items.map((item, index) => (
                     <NavItem key={index} className="pl-4">

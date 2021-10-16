@@ -83,6 +83,7 @@ export default class Import extends Component {
             this.setState({
                 // imports: [...this.state.imports, response.data],
                 imports: [response.data, ...this.state.imports],
+                isDisplayForm: false,
             });
         })
         .catch((error) => {});

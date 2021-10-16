@@ -75,13 +75,13 @@ public class ImportDetailsController {
     }
 
     @GetMapping("/importPage/{importId}")
-    public ResponseEntity<List<ImportDetails>> getBillDetailsByBillPages(@PathVariable(name = "importId") Long importId, ProductPage productPage)
+    public ResponseEntity<List<ImportDetailsDTO>> getBillDetailsByBillPages(@PathVariable(name = "importId") Long importId, ProductPage productPage)
     {
-        return new ResponseEntity<>(importDetailsService.getImportDetailsByImportPages(importId, productPage), HttpStatus.OK);
+        return new ResponseEntity<>(importDetailsService.getImportDetailsByImportPages(importId, productPage).stream().map(this::convertToDTO).collect(Collectors.toList()), HttpStatus.OK);
     }
 
     @PostMapping()
-    public ImportDetails saveImportDetails(@RequestBody ImportDetailsDTO importDetails)
+    public ImportDetailsDTO saveImportDetails(@RequestBody ImportDetailsDTO importDetails)
     {
         Import imp = importService.getImport(Long.valueOf(importDetails.getImp_id()));
         if (imp == null)
@@ -101,7 +101,7 @@ public class ImportDetailsController {
         float total = imp.getTotal() + impo.getQuantity()*impo.getPrice();
         imp.setTotal(total);
         importService.updateImport(imp);
-        return importDetailsService.saveImportDetails(impo);
+        return convertToDTO(importDetailsService.saveImportDetails(impo));
     }
 
     @PutMapping("/{importId}-{productId}")
@@ -156,6 +156,8 @@ public class ImportDetailsController {
         ImportDetailsDTO importDetailsDTO = modelMapper.map(importDetails, ImportDetailsDTO.class);
         importDetailsDTO.setProduct_id(String.valueOf(importDetails.getKey().getProduct().getId()));
         importDetailsDTO.setImp_id(String.valueOf(importDetails.getKey().getImp().getId()));
+        importDetailsDTO.setProductImg(importDetails.getKey().getProduct().getImageurl());
+        importDetailsDTO.setProductName(importDetails.getKey().getProduct().getName());
         return importDetailsDTO;
     }
 

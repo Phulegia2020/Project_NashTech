@@ -9,7 +9,8 @@ export default class Add extends Component {
         this.state = {
             total: 0,
             user_id: "",
-            billStatus_id: "",
+            // billStatus_id: "",
+            status: '',
             users: [],
             billStatus: [],
             Error: "",
@@ -48,7 +49,8 @@ export default class Add extends Component {
         event.preventDefault();
         await this.setState({
             user_id: event.target.user_id.value,
-            billStatus_id: "3"
+            // billStatus_id: "3"
+            status: 'Waiting'
         })
 
         this.props.onAdd(this.state);
@@ -58,7 +60,8 @@ export default class Add extends Component {
         this.setState({
             total: 0,
             user_id: "",
-            billStatus_id: "",
+            // billStatus_id: "",
+            status: "",
         });
         this.props.onCloseForm();
     }

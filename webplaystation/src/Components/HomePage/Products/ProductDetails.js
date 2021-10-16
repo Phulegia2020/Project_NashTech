@@ -218,7 +218,7 @@ class ProductDetails extends Component {
                             </Header>
                         </Divider>
 
-                        <Table definition >
+                        <Table definition>
                             <Table.Body>
                                 <Table.Row>
                                     <Table.Cell width={3}>Manufacturer</Table.Cell>
@@ -261,8 +261,7 @@ class ProductDetails extends Component {
                                     BÌNH LUẬN ({this.state.comments.length})
                                 </Header>
                         </Divider>
-                        <Grid.Column width={12} style={{marginLeft: '18em'}}>
-                        
+                        <Grid.Column className="grid-comments" width={16} style={{marginLeft: '18em'}}>
                             <Comment.Group>
                                 <div className='scroll-table'>
                                     {this.state.comments.map((comment, index) => (
@@ -304,6 +303,13 @@ class ProductDetails extends Component {
                 
             </Segment>
             
+            {/* <df-messenger
+                intent="WELCOME"
+                chat-title="THE PLAYSTATION SHOP"
+                agent-id="3d2eb8db-0f5e-4a16-9c2a-3cea0cadb3a7"
+                language-code="en"
+            ></df-messenger> */}
+
             </div>
         );
     }

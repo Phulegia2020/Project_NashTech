@@ -202,9 +202,12 @@ class Products extends Component {
                         <Grid.Column textAlign='center'>
                             {/* <Header as='h3' style={{ fontSize: '2em' }}>Top Products</Header> */}
                             <Divider horizontal >
-                                <Header as='h1'>
-                                    {/* <Icon name='star' /> */}
+                                {/* <Header as='h1' style={{ fontWeight: '900' }} className="header-home">
+                                    
                                     Trang Chủ
+                                </Header> */}
+                                <Header>
+                                    <h3 className="header-home">Trang Chủ</h3>
                                 </Header>
                             </Divider>
                             <Input
@@ -233,6 +236,14 @@ class Products extends Component {
             <div className={this.state.Products.length > 0 ? '' : 'fixed-bottom'}>
                     <Footer/>
             </div>
+
+            {/* <df-messenger
+                intent="WELCOME"
+                chat-title="THE PLAYSTATION SHOP"
+                agent-id="3d2eb8db-0f5e-4a16-9c2a-3cea0cadb3a7"
+                language-code="en"
+            ></df-messenger> */}
+
             </div>
         );
     }

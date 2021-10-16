@@ -4,12 +4,13 @@ import {
   faMoneyBill,
   faPeopleArrows,
   faBox,
-  faIdCard,
   faFileImport,
   faCity,
   faChartArea,
   faArchive,
   faComment,
+  faAddressCard,
+  faNewspaper,
 } from "@fortawesome/free-solid-svg-icons";
 import { NavItem, NavLink, Nav } from "reactstrap";
 import classNames from "classnames";
@@ -23,6 +24,7 @@ class SideBar extends Component {
     state = {
         categories: [],
         statistical: [{id: 'chart', name: 'Chart'}],
+        info: [{id: 'info', name: 'Change Password'}],
         isDisplayForm: false,
         redirect: false
     }
@@ -61,13 +63,17 @@ class SideBar extends Component {
                     <span color="info" onClick={this.props.toggle} style={{ color: "#fff" }}>
                         &times;
                     </span>
-                    <h3>The Playstation</h3>
+                    
+                    <h3>
+                        <img src="/images/logoPlayStation.jpg" alt='' width='25px' height='25px' style={{marginRight:'9px'}}></img>
+                        The Playstation
+                    </h3>
                 </div>
                 <div className="side-menu">
                     <Nav vertical className="list-unstyled pb-3">
-                        <SubMenu title="Category" icon={faArchive} items={this.state.categories} url="category"/>
+                        <SubMenu title="Danh Mục" icon={faArchive} items={this.state.categories} url="category"/>
                         
-                        <NavItem>
+                        <NavItem className="nav-item">
                             <NavLink tag={Link} to={"/admin/product"} className="letter m-2">
                                 <FontAwesomeIcon icon={faBox}/>{' '}
                                 Product
@@ -87,7 +93,7 @@ class SideBar extends Component {
                         </NavItem>
                         <NavItem>
                             <NavLink tag={Link} to={"/admin/placeorder"} className="letter m-2">
-                                <FontAwesomeIcon icon={faIdCard}/>{' '}
+                                <FontAwesomeIcon icon={faNewspaper}/>{' '}
                                 Place Order
                             </NavLink>
                         </NavItem>
@@ -109,7 +115,14 @@ class SideBar extends Component {
                                 Bình Luận
                             </NavLink>
                         </NavItem>
-                        <SubMenu title="Statistical" icon={faChartArea} items={this.state.statistical} url="statistical"/>
+                        <SubMenu title="Thống Kê" icon={faChartArea} items={this.state.statistical} url="statistical"/>
+                        {/* <SubMenu title="Information" icon={faInfo} items={this.state.info} url="info"/> */}
+                        <NavItem>
+                            <NavLink tag={Link} to={"/admin/info"} className="letter m-2">
+                                <FontAwesomeIcon icon={faAddressCard}/>{' '}
+                                Thông Tin Cá Nhân
+                            </NavLink>
+                        </NavItem>
                         <NavItem>
                             <NavLink tag={Link} className="letter m-2" onClick={this.onLogOut}>
                             <FontAwesomeIcon icon={faSignOutAlt}/>{' '}

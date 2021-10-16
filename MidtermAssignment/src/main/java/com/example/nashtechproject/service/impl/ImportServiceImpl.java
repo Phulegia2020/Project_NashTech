@@ -2,6 +2,7 @@ package com.example.nashtechproject.service.impl;
 
 import com.example.nashtechproject.entity.Import;
 import com.example.nashtechproject.page.ProductPage;
+import com.example.nashtechproject.page.STATE;
 import com.example.nashtechproject.repository.ImportRepository;
 import com.example.nashtechproject.service.ImportService;
 import org.modelmapper.ModelMapper;
@@ -45,7 +46,8 @@ public class ImportServiceImpl implements ImportService {
 
     public List<Import> getImportsDone()
     {
-        List<Import> imports = importRepository.findByStatus("Done");
+//        List<Import> imports = importRepository.findByStatus("Done");
+        List<Import> imports = importRepository.findByStatus(STATE.DONE);
         return imports;
     }
 

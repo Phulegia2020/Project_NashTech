@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { get, put } from '../../Utils/httpHelper'
 import { withRouter } from "react-router";
 import { Col, Row, Button, Form, FormGroup, Label, Input } from 'reactstrap';
+import "../Category/Category.css";
 
 class UpdateBillDetails extends Component {
     constructor(props)
@@ -79,7 +80,7 @@ class UpdateBillDetails extends Component {
         {
             if (`${this.state.billdetails[i].key.bill.id}-${this.state.billdetails[i].key.product.id}` != this.state.id)
             {
-                if (event.target.product_id.value == this.state.billdetails[i].product.id)
+                if (event.target.product_id.value == this.state.billdetails[i].key.product.id)
                 {
                     this.setState({
                         key: 'product'
@@ -118,10 +119,10 @@ class UpdateBillDetails extends Component {
     
     render() {
         return (
-            <div>
+            <div className="update-form">
                 <h3>Update Bill Detail</h3>
-                <Row form>
-                    <Col md={4}>
+                {/* <Row form>
+                    <Col md={4}> */}
                         <Form onSubmit={(event) => this.handleUpdate(event)}>
                         <FormGroup>
                             <Label htmlFor="quantity">Quantity</Label>
@@ -145,8 +146,8 @@ class UpdateBillDetails extends Component {
                             <Button outline color="danger" onClick={this.handleClear.bind(this)}>Cancel</Button>
                         </div>
                         </Form>
-                    </Col>
-                </Row>
+                    {/* </Col>
+                </Row> */}
             </div>
         )
     }

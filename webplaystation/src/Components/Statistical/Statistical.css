@@ -1,11 +1,21 @@
 .txtexplain{
-    text-align: center;
+    /* text-align: center; */
+    /* text-align: left; */
+    /* white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis; */
+    margin-right: 30px;
+    display: flex;
 }
 
 .explain-note{
     display: inline-block;
     font-size: 1.75rem;
     margin-left: 5rem;
+    /* white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: center; */
 }
 
 .explain-color{
@@ -16,24 +26,199 @@
 }
 
 .rp{
-    display: inline-block;
-    margin-top: 2rem;
+    /* display: inline-block; */
+    margin-top: 5rem;
+}
+
+.rp #doanhthu
+{
+    margin-top: 7rem;
 }
 
 #outcome{
     text-align: left;
-    margin-left: 60rem;
+    /* margin-left: 18rem; */
+    margin-left: 10px;
+    margin-top: 7rem;
     /* padding-right: 10rem; */
-    border: 1px solid;
+    border: 1px solid #fff;
     width: 380px;
-    box-shadow: 0 0 25px #aaa;
+    /* box-shadow: 0 0 25px #aaa; */
     padding: 20px;
+    border-radius: 20px;
+    box-shadow: -10px -10px 15px rgba(255, 255, 255, 0.9), 8px 8px 25px rgba(0, 0, 0, 0.5);
+    background: #eaeef0;
 }
 
 #income{
-    border: 1px solid;
+    border: 1px solid #fff;
     width: 400px;
-    box-shadow: 0 0 25px #aaa;
+    /* box-shadow: 0 0 25px #aaa; */
     padding: 10px;
     margin-left: 10px;
+    margin-bottom: 50px;
+    border-radius: 20px;
+    box-shadow: -10px -10px 15px rgba(255, 255, 255, 0.9), 8px 8px 25px rgba(0, 0, 0, 0.5);
+    background: #eaeef0;
+}
+
+.thang-quy-nam
+{
+    display: inline-flex;
+    /* margin-bottom: 5px; */
+}
+
+.thang-quy-nam h4{
+    margin-right: 5px;
+}
+
+.thang-quy-nam #month
+{
+    border-radius: 30px;
+}
+
+.thang-quy-nam #quy
+{
+    border-radius: 30px;
+}
+
+.thang-quy-nam #year
+{
+    border-radius: 30px;
+}
+
+#doanhthu{
+    border: 1px solid #fff;
+    width: 400px;
+    /* box-shadow: 0 0 25px #aaa; */
+    padding: 10px;
+    /* margin-left: 300px; */
+    margin-left: 10px;
+    margin-bottom: 50px;
+    border-radius: 20px;
+    box-shadow: -10px -10px 15px rgba(255, 255, 255, 0.9), 8px 8px 25px rgba(0, 0, 0, 0.5);
+    background: #eaeef0;
+    /* background: #fff; */
+    text-align: center;
+    align-content: center;
+    justify-content: center;
+    /* font-weight: 500;
+    font-size: 2.5em;
+    color: #287bff; */
+}
+
+/* #doanhthu:hover{
+    background: #fff;
+    color: #287bff;
+} */
+
+/* .rp #doanhthu Statistic:hover
+{
+    background: #fff;
+    color: #287bff;
+} */
+
+.bao-cao
+{
+    margin-bottom: 20px;
+}
+
+.top-best-sale
+{
+    position: absolute;
+    top: 200px;
+    right: 30px;
+    width: 60%;
+    /* border: 1px solid #fff; */
+    /* box-shadow: -10px -10px 15px rgba(255, 255, 255, 0.9), 8px 8px 25px rgba(0, 0, 0, 0.5); */
+    padding: 20px;
+    background: #fff;
+    box-shadow: 0 7px 25px rgba(0, 0, 0, 0.08);
+}
+
+.top-best-sale h2
+{
+    color: #287bff;
+    font-weight: 600;
+    text-align: center;
+}
+
+.top-best-sale #table-tk
+{
+    border-collapse: collapse;
+    width: 100%;
+    font-weight: 500;
+}
+
+.top-best-sale #table-tk thead tr th
+{
+    font-weight: 600;
+}
+
+.top-best-sale #table-tk #tr-tk
+{
+    color: black;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.top-best-sale #table-tk #tr-tk:last-child
+{
+    border-bottom: none;
+}
+
+.top-best-sale #table-tk tbody tr:hover
+{
+    /* background-color: #287bff; */
+    color: #287bff;
+}
+
+.charts
+{
+    position: relative;
+}
+
+.pie-chart
+{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 50%;
+    padding: 20px;
+    background: #fff;
+    box-shadow: 0 7px 25px rgba(0, 0, 0, 0.08);
+    /* text-align: center; */
+    align-content: center;
+    justify-content: center;
+    height: 685px;
+}
+
+.line-chart
+{
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 45%;
+    padding: 20px;
+    background: #fff;
+    box-shadow: 0 7px 25px rgba(0, 0, 0, 0.08);
+}
+
+.line-chart h4
+{
+    text-align: center;
+    color: #287bff;
+    font-weight: 600;
+    margin-bottom: 50px;
+}
+
+.custom-tooltip
+{
+    border: 1px solid #bdc3c7;
+    background: #dff9fb;
+    padding: 10px;
+}
+
+.custom-tooltip p
+{
+    font-weight: 500;
 }

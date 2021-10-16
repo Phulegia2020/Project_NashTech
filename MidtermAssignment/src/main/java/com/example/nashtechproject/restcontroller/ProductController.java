@@ -202,17 +202,18 @@ public class ProductController {
     {
         int thang = Integer.valueOf(month);
         List<StatisticalDTO> topSale = new ArrayList<>();
-        List<Bill> billList = billService.retrieveBills();
+//        List<Bill> billList = billService.retrieveBills();
+        List<Bill> billList = billService.getBillsDone();
         List<Bill> bills = new ArrayList<>();
         for (int i = 0; i < billList.size(); i++)
         {
-            if (billList.get(i).getBillStatus().getId() == 1)
-            {
+//            if (billList.get(i).getBillStatus().getId() == 1)
+//            {
                 if (billList.get(i).getCheckout_date().getMonth().getValue() == thang)
                 {
                     bills.add(billList.get(i));
                 }
-            }
+//            }
         }
         List<Product> products = productService.retrieveProducts();
         for (int i = 0; i < products.size(); i++)
@@ -309,8 +310,9 @@ public class ProductController {
         {
             throw new ProductException(productId);
         }
-        product.setStatus("Stop");
-        productService.updateProduct(product);
+//        product.setStatus("Stop");
+//        productService.updateProduct(product);
+        productService.deleteProduct(productId);
         return ResponseEntity.ok(new MessageResponse("Delete Successfully"));
     }
 

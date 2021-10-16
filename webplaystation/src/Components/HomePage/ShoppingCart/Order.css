@@ -52,3 +52,18 @@
     height: 15rem;
     width: 100%;
 }
+.shopping-cart
+{
+    position: relative;
+}
+
+.shopping-cart .cart-number
+{
+    border-radius: 60%;
+    border: 3px solid red;
+    background-color: red;
+    color: white;
+    position: absolute;
+    top: 7px;
+    right: 5px;
+}

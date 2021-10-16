@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { withRouter } from "react-router";
 import { put, get } from '../../Utils/httpHelper';
 import { Col, Row, Button, Form, FormGroup, Label, Input } from 'reactstrap';
+import "../Category/Category.css";
 
 class UpdateProduct extends Component {
     state = {
@@ -174,10 +175,10 @@ class UpdateProduct extends Component {
 
     render() {
         return (
-            <div>
+            <div className="update-form-product">
                 <h3>Update Product</h3>
-                <Row form>
-                    <Col md={4}>
+                {/* <Row form>
+                    <Col md={4}> */}
                         <Form onSubmit={(event) => this.handleUpdate(event)}>
                         <FormGroup>
                             <Label htmlFor="name">Name</Label>
@@ -186,7 +187,7 @@ class UpdateProduct extends Component {
                         </FormGroup>
                         <FormGroup>
                             <Label htmlFor="description">Description</Label><br></br>
-                            <textarea style={{resize: 'none', width: '545px'}} rows="4" name="description" id="description" placeholder="PlayStation 4 Pro" onChange={(e) => this.changeValue(e)} value = {this.state.description} required="required" disabled={this.state.status === 'Stop'}></textarea>
+                            <textarea style={{resize: 'none', width: '100%'}} rows="3" name="description" id="description" placeholder="PlayStation 4 Pro" onChange={(e) => this.changeValue(e)} value = {this.state.description} required="required" disabled={this.state.status === 'Stop'}></textarea>
                         </FormGroup>
                         <FormGroup>
                             <Label htmlFor="quantity">Quantity</Label>
@@ -230,8 +231,8 @@ class UpdateProduct extends Component {
                             <Button outline color="danger" onClick={this.handleClear.bind(this)}>Cancel</Button>
                         </div>
                         </Form>
-                    </Col>
-                </Row>
+                    {/* </Col>
+                </Row> */}
             </div>
         )
     }

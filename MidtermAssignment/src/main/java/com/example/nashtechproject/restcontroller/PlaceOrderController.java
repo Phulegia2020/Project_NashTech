@@ -9,6 +9,7 @@ import com.example.nashtechproject.exception.InvalidDataException;
 import com.example.nashtechproject.exception.ObjectNotFoundException;
 import com.example.nashtechproject.exception.UserException;
 import com.example.nashtechproject.page.ProductPage;
+import com.example.nashtechproject.page.STATE;
 import com.example.nashtechproject.payload.response.MessageResponse;
 import com.example.nashtechproject.service.*;
 import org.modelmapper.ModelMapper;
@@ -91,7 +92,8 @@ public class PlaceOrderController {
         }
         PlaceOrder po = convertToEntity(placeOrder);
         po.setCreateddate(LocalDateTime.now());
-        po.setStatus("Waiting");
+//        po.setStatus("Waiting");
+        po.setStatus(STATE.WAITING);
 //        return convertToDTO(placeOrderService.savePlaceOrder(po));
         return placeOrderService.savePlaceOrder(po);
     }
@@ -133,7 +135,7 @@ public class PlaceOrderController {
         {
             throw new ObjectNotFoundException("The Place Order not found");
         }
-        if (placeOrder.getStatus().equals("Done"))
+        if (placeOrder.getStatus().equals(STATE.DONE))
         {
             throw new InvalidDataException("The PlaceOrder is imported. Can not delete!");
         }

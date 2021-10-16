@@ -66,6 +66,7 @@ export default class PlaceOrder extends Component {
             {
                 this.setState({
                     placeorders: [response.data, ...this.state.placeorders],
+                    isDisplayForm: false,
                 });
             }
         });

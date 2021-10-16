@@ -18,7 +18,8 @@ public class BillDTO {
 
     private String user_id;
 
-    private String billStatus_id;
+//    private String billStatus_id;
+    private String status;
 
     public Long getId() {
         return id;
@@ -60,11 +61,19 @@ public class BillDTO {
         this.user_id = user_id;
     }
 
-    public String getBillStatus_id() {
-        return billStatus_id;
+//    public String getBillStatus_id() {
+//        return billStatus_id;
+//    }
+//
+//    public void setBillStatus_id(String billStatus_id) {
+//        this.billStatus_id = billStatus_id;
+//    }
+
+    public String getStatus() {
+        return status;
     }
 
-    public void setBillStatus_id(String billStatus_id) {
-        this.billStatus_id = billStatus_id;
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

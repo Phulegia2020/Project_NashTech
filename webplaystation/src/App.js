@@ -14,23 +14,35 @@ import SideBar from './Components/SideBar/SideBar';
 import Content from './Components/SideBar/Content';
 import Info from './Components/HomePage/Profile/Info';
 import Order from './Components/HomePage/ShoppingCart/Order';
+import Success from './Components/HomePage/Pages/Success';
+import NotFound from './Components/HomePage/Pages/NotFound';
 
 class App extends React.Component{
     state = {
-        sidebarIsOpen: true
+        sidebarIsOpen: true,
+        chatbot: true
     }
 
     toggleSidebar = () => {
         this.setState({
-            sidebarIsOpen: !this.state.sidebarIsOpen
+            sidebarIsOpen: !this.state.sidebarIsOpen,
+            // chatbot: false
         })
     };
+
+    handleChatBot = () => {
+        this.setState({
+            chatbot: false
+        })
+    }
 
   render()
   {
       return (
           <Router>
               <Switch>
+                  {/* <Route> */}
+                  
                   <Route exact path="/" render={() => (
                       <Redirect to="/WebPlayStation"/>
                   )}>
@@ -47,14 +59,14 @@ class App extends React.Component{
                   </Route>
                   <Route exact path="/WebPlayStation/login">
                       <MainMenu/>
-                      <Login/>
+                      <Login handleChatBot={this.handleChatBot}/>
                       <div className="fixed-bottom">
                         <Footer/>
                       </div>
                   </Route>
                   <Route exact path="/WebPlayStation/signup">
                       <MainMenu/>
-                      <SignUp/>
+                      <SignUp handleChatBot={this.handleChatBot}/>
                       <Footer/>
                   </Route>
                   <Route exact path="/WebPlayStation/profile">
@@ -77,21 +89,50 @@ class App extends React.Component{
                   <Route exact path="/WebPlayStation/category/:id">
                       <MainMenu/>
                       <ProductsByCategory/>
-                      <div className="fixed-bottom">
-                        <Footer/>
-                      </div>
+                      {/* <div className="fixed-bottom">
+                        
+                      </div> */}
+                      <Footer/>
                   </Route>
                   <Route exact path="/WebPlayStation/order">
                       <MainMenu/>
                       <Order/>
                   </Route>
+                  <Route exact path="/WebPlayStation/success">
+                      <MainMenu/>
+                      <Success/>
+                      <div className="fixed-bottom">
+                        <Footer/>
+                      </div>
+                  </Route>
+                  <Route exact path="/WebPlayStation/404">
+                      <MainMenu/>
+                      <NotFound/>
+                      <div className="fixed-bottom">
+                        <Footer/>
+                      </div>
+                  </Route>
+
+                  
+
+                  {/* </Route> */}
                   <Router path="/admin">
                     <div className="AppSideBar wrapper">
                         <SideBar toggle={this.toggleSidebar} isOpen={this.state.sidebarIsOpen}/>
-                        <Content toggleSidebar={this.toggleSidebar} sidebarIsOpen={this.state.sidebarIsOpen} />
+                        <Content toggleSidebar={this.toggleSidebar} sidebarIsOpen={this.state.sidebarIsOpen} handleChatBot={this.handleChatBot}/>
                     </div>
                   </Router>
+
+                  
               </Switch>
+              {this.state.chatbot === true && <df-messenger
+                    intent="WELCOME"
+                    chat-title="THE PLAYSTATION SHOP"
+                    agent-id="3d2eb8db-0f5e-4a16-9c2a-3cea0cadb3a7"
+                    language-code="en"
+                    // wait-open="true"
+                    // chat-icon="https://media.comicbook.com/2019/02/playstation-logo-orange-1157594.jpeg"
+                ></df-messenger>}
           </Router>
       );
   }

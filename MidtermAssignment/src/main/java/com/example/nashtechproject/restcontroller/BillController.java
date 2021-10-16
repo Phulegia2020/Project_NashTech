@@ -2,12 +2,15 @@ package com.example.nashtechproject.restcontroller;
 
 import com.example.nashtechproject.dto.BillDTO;
 import com.example.nashtechproject.dto.MailRequestDTO;
+import com.example.nashtechproject.dto.RevenueDTO;
+import com.example.nashtechproject.dto.StatisticalDTO;
 import com.example.nashtechproject.entity.*;
 import com.example.nashtechproject.exception.BillException;
 import com.example.nashtechproject.exception.BillStatusException;
 import com.example.nashtechproject.exception.InvalidDataException;
 import com.example.nashtechproject.exception.UserException;
 import com.example.nashtechproject.page.ProductPage;
+import com.example.nashtechproject.page.STATE;
 import com.example.nashtechproject.payload.response.MessageResponse;
 import com.example.nashtechproject.service.BillDetailsService;
 import com.example.nashtechproject.service.BillService;
@@ -26,6 +29,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.text.DecimalFormat;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -132,6 +136,92 @@ public class BillController {
         return new ResponseEntity<>(billService.getBillByUsernamePage(name, productPage), HttpStatus.OK);
     }
 
+    @GetMapping("/profit")
+    @ApiOperation(value = "Get all bill profit")
+    @ApiResponses(value = { @ApiResponse(code = 200, message = "Success"),
+            @ApiResponse(code = 400, message = "Bad request"),
+            @ApiResponse(code = 500, message = "Internal server error") })
+    public List<BillDTO> getAllBillsProfit(@RequestParam String month, @RequestParam String quy, @RequestParam String year)
+    {
+        float income = 0;
+        List<Bill> bills = billService.getBillsDone();
+        List<Bill> list = new ArrayList<>();
+        for (int i = 0; i < bills.size(); i++)
+        {
+            //income = income + bills.get(i).getTotal();
+            if (bills.get(i).getCheckout_date().getYear() == Integer.valueOf(year))
+            {
+                if (quy.equals("1"))
+                {
+                    if (1 <= bills.get(i).getCheckout_date().getMonth().getValue() && bills.get(i).getCheckout_date().getMonth().getValue() <= 3)
+                    {
+                        list.add(bills.get(i));
+                    }
+                }
+                else if (quy.equals("2"))
+                {
+                    if (4 <= bills.get(i).getCheckout_date().getMonth().getValue() && bills.get(i).getCheckout_date().getMonth().getValue() <= 6)
+                    {
+                        list.add(bills.get(i));
+                    }
+                }
+                else if (quy.equals("3"))
+                {
+                    if (7 <= bills.get(i).getCheckout_date().getMonth().getValue() && bills.get(i).getCheckout_date().getMonth().getValue() <= 9)
+                    {
+                        list.add(bills.get(i));
+                    }
+                }
+                else if (quy.equals("4"))
+                {
+                    if (10 <= bills.get(i).getCheckout_date().getMonth().getValue() && bills.get(i).getCheckout_date().getMonth().getValue() <= 12) {
+                        list.add(bills.get(i));
+                    }
+                }
+                else
+                {
+                    if (!month.equals("0"))
+                    {
+                        if (bills.get(i).getCheckout_date().getMonth().getValue() == Integer.valueOf(month))
+                        {
+                            list.add(bills.get(i));
+                        }
+                    }
+                    else
+                    {
+                        list.add(bills.get(i));
+                    }
+                }
+            }
+        }
+        return list.stream().map(this::convertToDTO).collect(Collectors.toList());
+    }
+
+    @GetMapping("/revenue")
+    public List<RevenueDTO> getRevenue()
+    {
+        List<RevenueDTO> revenue = new ArrayList<>();
+        List<Bill> billList = billService.getBillsDone();
+
+        for (int i = 0; i < 12; i++)
+        {
+            float rev = 0;
+            for (int j = 0; j < billList.size(); j++)
+            {
+                if (billList.get(j).getCheckout_date().getMonth().getValue() == (i+1)  && billList.get(j).getCheckout_date().getYear() == LocalDateTime.now().getYear())
+                {
+                    rev = rev + billList.get(j).getTotal();
+                }
+            }
+            rev = rev / 1000000;
+            RevenueDTO revenueDTO = new RevenueDTO();
+            revenueDTO.setName(String.valueOf(i+1));
+            revenueDTO.setRevenue(rev);
+            revenue.add(revenueDTO);
+        }
+        return revenue;
+    }
+
     @PostMapping()
     @ApiOperation(value = "Create New bill")
     @ApiResponses(value = { @ApiResponse(code = 200, message = "Success"),
@@ -144,13 +234,14 @@ public class BillController {
         {
             throw new UserException(u.getId());
         }
-        BillStatus bs = billStatusService.getBillStatus(Long.valueOf(bill.getBillStatus_id()));
-        if (bs == null)
-        {
-            throw new BillStatusException(bs.getId());
-        }
+//        BillStatus bs = billStatusService.getBillStatus(Long.valueOf(bill.getBillStatus_id()));
+//        if (bs == null)
+//        {
+//            throw new BillStatusException(bs.getId());
+//        }
         Bill b = convertToEntity(bill);
         b.setCreateddate(LocalDateTime.now());
+        b.setStatus(STATE.WAITING);
 //        return convertToDTO(billService.saveBill(b));
         return billService.saveBill(b);
     }
@@ -174,14 +265,14 @@ public class BillController {
             {
                 throw new UserException(u.getId());
             }
-            BillStatus bs = billStatusService.getBillStatus(Long.valueOf(billDetails.getBillStatus_id()));
-            if (bs == null)
-            {
-                throw new BillStatusException(bs.getId());
-            }
+//            BillStatus bs = billStatusService.getBillStatus(Long.valueOf(billDetails.getBillStatus_id()));
+//            if (bs == null)
+//            {
+//                throw new BillStatusException(bs.getId());
+//            }
             bill.setTotal(billDetails.getTotal());
             bill.setUser(u);
-            bill.setBillStatus(bs);
+//            bill.setBillStatus(bs);
             billService.updateBill(bill);
         }
         return convertToDTO(bill);
@@ -206,13 +297,14 @@ public class BillController {
             {
                 throw new UserException(u.getId());
             }
-            BillStatus bs = billStatusService.getBillStatus(Long.valueOf(billDetails.getBillStatus_id()));
-            if (bs == null)
-            {
-                throw new BillStatusException(bs.getId());
-            }
+//            BillStatus bs = billStatusService.getBillStatus(Long.valueOf(billDetails.getBillStatus_id()));
+//            if (bs == null)
+//            {
+//                throw new BillStatusException(bs.getId());
+//            }
             bill.setCheckout_date(LocalDateTime.now());
-            bill.setBillStatus(bs);
+//            bill.setBillStatus(bs);
+            bill.setStatus(STATE.DONE);
             billService.updateBill(bill);
         }
         return convertToDTO(bill);
@@ -230,7 +322,7 @@ public class BillController {
         {
             throw new BillException(billId);
         }
-        if (bill.getBillStatus().getId() == 1)
+        if (bill.getStatus().equals(STATE.DONE))
         {
             throw new InvalidDataException("The bill is checked out. Can not delete!");
         }
@@ -241,11 +333,19 @@ public class BillController {
     @PostMapping("/sendmail/{bill}")
     public ResponseEntity<String> sendMail(@PathVariable(name = "bill") Long bill, @RequestBody MailRequestDTO mailRequest) {
         String content = mailRequest.getContent();
+        content = content + "<table width='600px' style='border:2px solid black; border-collapse: collapse;'>"
+                            + "<tr align='center'>"
+                            + "<td><b>Máy <b></td>"
+                            + "<td><b>Số Lượng<b></td>"
+                            + "<td><b>Giá<b></td>"
+                            + "</tr>";;
         List<BillDetails> list = billDetailsService.getBillDetailsByBill(bill);
         for (int i = 0; i < list.size(); i++)
         {
-            content = content + "<br><br><b>Product:</b> " + list.get(i).getKey().getProduct().getName() + " <br><b>Quantity:</b> " + String.format("%,d", list.get(i).getQuantity()) + " <br><b>Price:</b> " + String.format("%,d", list.get(i).getKey().getProduct().getPrice())  + " VND";
+            //content = content + "<br><br><b>Product:</b> " + list.get(i).getKey().getProduct().getName() + " <br><b>Quantity:</b> " + String.format("%,d", list.get(i).getQuantity()) + " <br><b>Price:</b> " + String.format("%,d", list.get(i).getKey().getProduct().getPrice())  + " VND";
+            content = content + "<tr align='center' style='border-top: 1px solid #ddd'> "+"<td>"  + list.get(i).getKey().getProduct().getName()+ "</td>"+ "<td>"  + String.format("%,d", list.get(i).getQuantity()) + "</td>"+ "<td>" + String.format("%,d", list.get(i).getKey().getProduct().getPrice())  + " VND"+ "</td>"+"</tr>";
         }
+        content = content + "</table>";
         mailRequest.setContent(content);
         billService.sendEmail(mailRequest);
         return new ResponseEntity<>("Email has been sent to: " + mailRequest.getTo(),HttpStatus.OK);
@@ -256,7 +356,7 @@ public class BillController {
         BillDTO billDTO = modelMapper.map(b, BillDTO.class);
         String uid = String.valueOf(b.getUser().getId());
         billDTO.setUser_id(uid);
-        billDTO.setBillStatus_id(String.valueOf(b.getBillStatus().getId()));
+//        billDTO.setBillStatus_id(String.valueOf(b.getBillStatus().getId()));
         return billDTO;
     }
 
@@ -265,8 +365,8 @@ public class BillController {
         Bill bill = modelMapper.map(b, Bill.class);
         User u = userService.getUser(Long.valueOf(b.getUser_id()));
         bill.setUser(u);
-        BillStatus billStatus = billStatusService.getBillStatus(Long.valueOf(b.getBillStatus_id()));
-        bill.setBillStatus(billStatus);
+//        BillStatus billStatus = billStatusService.getBillStatus(Long.valueOf(b.getBillStatus_id()));
+//        bill.setBillStatus(billStatus);
         return bill;
     }
 }

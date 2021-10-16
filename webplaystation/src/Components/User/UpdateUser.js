@@ -3,6 +3,7 @@ import { withRouter } from "react-router";
 import { put, get } from '../../Utils/httpHelper';
 import { Col, Row, Button, Form, FormGroup, Label, Input } from 'reactstrap';
 import { checkPhoneNumber } from '../../Utils/Utils';
+import "../Category/Category.css";
 
 class UpdateUser extends React.Component {
     state = {
@@ -155,10 +156,10 @@ class UpdateUser extends React.Component {
 
     render() {
         return (
-            <div>
+            <div className="update-form">
                 <h3>Update User</h3>
-                <Row form>
-                    <Col md={4}>
+                {/* <Row form>
+                    <Col md={4}> */}
                         <Form onSubmit={(event) => this.handleUpdate(event)}>
                         <FormGroup>
                             <Label htmlFor="name">Name</Label>
@@ -215,8 +216,8 @@ class UpdateUser extends React.Component {
                             <Button outline color="danger" onClick={this.handleClear.bind(this)}>Cancel</Button>
                         </div>
                         </Form>
-                    </Col>
-                </Row>
+                    {/* </Col>
+                </Row> */}
             </div>
         )
     }

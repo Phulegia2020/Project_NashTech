@@ -54,11 +54,12 @@ class PlaceOrderDetailsByPlaceOrder extends Component {
     delPlaceOrderDetail = (e, id) =>
     {
         e.preventDefault();
-        del(`/placeorderDetails/${id.placeOrder.id}-${id.product.id}`)
+        del(`/placeorderDetails/${id.placeorder_id}-${id.product_id}`)
         .then((response) => {
             if (response.status === 200)
             {
-                this.setState({placeorderdetails: this.state.placeorderdetails.filter(b => `${b.key.placeOrder.id}-${b.key.product.id}` !== `${id.placeOrder.id}-${id.product.id}`), isDisplayFormDel: false})
+                // this.setState({placeorderdetails: this.state.placeorderdetails.filter(b => `${b.key.placeOrder.id}-${b.key.product.id}` !== `${id.placeOrder.id}-${id.product.id}`), isDisplayFormDel: false})
+                this.setState({placeorderdetails: this.state.placeorderdetails.filter(b => `${b.placeorder_id}-${b.product_id}` !== `${id.placeorder_id}-${id.product_id}`), isDisplayFormDel: false})
             }
         })
         .catch(error => {console.log(error)})
@@ -72,6 +73,7 @@ class PlaceOrderDetailsByPlaceOrder extends Component {
                 //console.log(response.data);
                 this.setState({
                     placeorderdetails: [...this.state.placeorderdetails, response.data],
+                    isDisplayForm: false,
                 })
             }
         })
@@ -188,20 +190,21 @@ class PlaceOrderDetailsByPlaceOrder extends Component {
                                 <tr key={index}>
                                     <td>{index + 1}</td>
                                     <td>
-                                        <img src={`data:image/jpeg;base64,${po.key.product.imageurl}`} alt="" height="100px"></img>
+                                        {/* <img src={`data:image/jpeg;base64,${po.key.product.imageurl}`} alt="" height="100px"></img> */}
+                                        <img src={`data:image/jpeg;base64,${po.productImg}`} alt="" height="100px"></img>
                                     </td>
-                                    <td>{po.key.product.name}</td>
+                                    <td>{po.productName}</td>
                                     <td>{formatQuantity(po.quantity)}</td>
                                     <td>{formatCurrency(po.price)}</td>
                                     <td>
-                                        <Link to={`/admin/placeorderDetails/update/${po.key.placeOrder.id}-${po.key.product.id}`} onClick={this.state.placeorder.status === 'Done' ? (e) => e.preventDefault() : ''} className={this.state.placeorder.status === 'Done' ? "disable-link" : ""}>
+                                        <Link to={`/admin/placeorderDetails/update/${po.placeorder_id}-${po.product_id}`} onClick={this.state.placeorder.status === 'Done' ? (e) => e.preventDefault() : ''} className={this.state.placeorder.status === 'Done' ? "disable-link" : ""}>
                                             <button className="btn btn-success" disabled={this.state.placeorder.status === 'Done'}>
                                             <FontAwesomeIcon icon={faEdit} className="mr-2"/>{' '}
                                                 
                                             </button>
                                         </Link>
                                     </td>
-                                    <td><button onClick={(e) => this.onToggleFormDel(e, po.key)} className="btn btn-danger" disabled={this.state.placeorder.status === 'Done'}>
+                                    <td><button onClick={(e) => this.onToggleFormDel(e, po)} className="btn btn-danger" disabled={this.state.placeorder.status === 'Done'}>
                                         <FontAwesomeIcon icon={faTrash} className="mr-2"/>{' '}
                                         
                                         </button>

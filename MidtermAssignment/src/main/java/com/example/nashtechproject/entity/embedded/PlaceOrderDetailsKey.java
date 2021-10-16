@@ -3,10 +3,7 @@ package com.example.nashtechproject.entity.embedded;
 import com.example.nashtechproject.entity.PlaceOrder;
 import com.example.nashtechproject.entity.Product;
 
-import javax.persistence.Embeddable;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import java.io.Serializable;
 
 @Embeddable
@@ -44,4 +41,33 @@ public class PlaceOrderDetailsKey implements Serializable {
     public void setProduct(Product product) {
         this.product = product;
     }
+
+//    @Column(name = "place_order_id")
+//    private Long placeOrderId;
+//
+//    @Column(name = "product_id")
+//    private Long productId;
+//
+//
+//
+//    public PlaceOrderDetailsKey(Long placeOrderId, Long productId) {
+//        this.placeOrderId = placeOrderId;
+//        this.productId = productId;
+//    }
+//
+//    public Long getPlaceOrderId() {
+//        return placeOrderId;
+//    }
+//
+//    public void setPlaceOrderId(Long placeOrderId) {
+//        this.placeOrderId = placeOrderId;
+//    }
+//
+//    public Long getProductId() {
+//        return productId;
+//    }
+//
+//    public void setProductId(Long productId) {
+//        this.productId = productId;
+//    }
 }
