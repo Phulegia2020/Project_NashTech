@@ -2,6 +2,7 @@ package com.example.nashtechproject.service.impl;
 
 import com.example.nashtechproject.entity.Category;
 import com.example.nashtechproject.page.ProductPage;
+import com.example.nashtechproject.page.STATE;
 import com.example.nashtechproject.repository.CategoryRepository;
 import com.example.nashtechproject.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,11 +29,18 @@ public class CategoryServiceImpl implements CategoryService {
         return categories;
     }
 
+    public List<Category> getCategoryByStatus()
+    {
+        List<Category> list = categoryRepository.findByStatus(STATE.SALE);
+        return list;
+    }
+
     public List<Category> getCategoriesPage(ProductPage productPage)
     {
         Sort sort = Sort.by(productPage.getSortDirection(), productPage.getSortBy());
         Pageable pageable = PageRequest.of(productPage.getPageNumber(), productPage.getPageSize(), sort);
-        List<Category> categories = categoryRepository.findAll(pageable).getContent();
+//        List<Category> categories = categoryRepository.findAll(pageable).getContent();
+        List<Category> categories = categoryRepository.findByStatus(STATE.SALE, pageable).getContent();
         return categories;
     }
 
@@ -44,7 +52,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     public List<Category> getCategoryByName(String name)
     {
-        List<Category> list = categoryRepository.findByNameContains(name);
+        List<Category> list = categoryRepository.findByNameContainsAndStatus(name, STATE.SALE);
         return list;
     }
 
@@ -52,7 +60,7 @@ public class CategoryServiceImpl implements CategoryService {
     {
         Sort sort = Sort.by(productPage.getSortDirection(), productPage.getSortBy());
         Pageable pageable = PageRequest.of(productPage.getPageNumber(), productPage.getPageSize(), sort);
-        List<Category> categories = categoryRepository.findByNameContains(name, pageable).getContent();
+        List<Category> categories = categoryRepository.findByNameContainsAndStatus(name, STATE.SALE, pageable).getContent();
         return categories;
     }
 

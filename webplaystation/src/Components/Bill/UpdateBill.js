@@ -38,7 +38,8 @@ class UpdateBill extends Component {
                 this.setState({
                     total: response.data.total,
                     user_id: response.data.user_id,
-                    billStatus_id: response.data.billStatus_id
+                    // billStatus_id: response.data.billStatus_id
+                    status: response.data.status
                 })
             }
         });
@@ -68,7 +69,7 @@ class UpdateBill extends Component {
                 key: 'total'
             })
             this.setState({
-                Error: "Total price is not less than 1!"
+                Error: "Tổng tiền không nhỏ hơn 1!"
             });
             return;
         }
@@ -102,18 +103,18 @@ class UpdateBill extends Component {
     render() {
         return (
             <div className="update-form">
-                <h3>Update Bill</h3>
+                <h3>Cập Nhật Hóa Đơn</h3>
                 {/* <Row form>
                     <Col md={4}> */}
                         <Form onSubmit={(event) => this.handleUpdate(event)}>
                         <FormGroup>
-                            <Label htmlFor="total">Total</Label>
+                            <Label htmlFor="total">Tổng Tiền</Label>
                             <Input type="number" name="total" id="total" placeholder="VND" onChange={(e) => this.changeValue(e)} value = {this.state.total} required="required" disabled/>
                             {this.state.key === 'total' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
                         </FormGroup>
                         
                         <FormGroup className="mb-2">
-                            <Label htmlFor="user">Customer</Label>
+                            <Label htmlFor="user">Khách Hàng</Label>
                             <Input type="select" name="user_id" id="user" value = {this.state.user_id} onChange={(e) => this.changeValue(e)}>
                                 {
                                     this.state.users.map((u) => (
@@ -123,7 +124,7 @@ class UpdateBill extends Component {
                             </Input>
                         </FormGroup>
                         <FormGroup className="mb-5">
-                            <Label htmlFor="status">Status</Label>
+                            <Label htmlFor="status">Trạng Thái</Label>
                             {/* <Input type="select" name="billStatus_id" id="status" value = {this.state.billStatus_id} onChange={(e) => this.changeValue(e)} disabled>
                                 {
                                     this.state.billStatus.map((bs) => (
@@ -137,8 +138,8 @@ class UpdateBill extends Component {
                             </Input>
                         </FormGroup>
                         <div className="mb-5">
-                            <Button type="submit" outline color="warning" >Update</Button>{' '}
-                            <Button outline color="danger" onClick={this.handleClear.bind(this)}>Cancel</Button>
+                            <Button type="submit" outline color="warning" >Cập Nhật</Button>{' '}
+                            <Button outline color="danger" onClick={this.handleClear.bind(this)}>Hủy</Button>
                         </div>
                         </Form>
                     {/* </Col>

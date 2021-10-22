@@ -198,6 +198,7 @@
     top: 0;
     right: 0;
     width: 45%;
+    height: 685px;
     padding: 20px;
     background: #fff;
     box-shadow: 0 7px 25px rgba(0, 0, 0, 0.08);
@@ -222,3 +223,24 @@
 {
     font-weight: 500;
 }
+
+.btn-exportReport {
+    position: absolute;
+    right: 23rem;
+    bottom: 1rem;
+    /* align-content: flex-end; */
+    height: 2.5rem;
+    width: 7rem;
+    border-radius: 5px;
+    border-color: white;
+    background-color: rgba(227, 12, 24, 1);
+    color: white;
+    white-space: nowrap;
+    text-align: center;
+    font-family: Helvetica Neue, Arial;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 1em;
+    /* margin-left: 300px; */
+    margin-top: 50px;
+  }

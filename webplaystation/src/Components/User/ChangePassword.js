@@ -3,6 +3,8 @@ import { Col, Row, Button, Form, FormGroup, Label, Input } from 'reactstrap';
 import {get, post} from '../../Utils/httpHelper';
 import { Checkbox, Breadcrumb} from 'semantic-ui-react';
 import './User.css';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default class ChangePassword extends Component {
     constructor(props) {
@@ -69,7 +71,8 @@ export default class ChangePassword extends Component {
         .then((response) => {
             if (response.status === 200)
             {
-				alert(response.data.message);
+                // alert(response.data.message);
+                toast.success('Thay đổi mật khẩu thành công!');
 				this.setState({
 					newpassword: "",
 					confirmpassword: ""
@@ -77,7 +80,8 @@ export default class ChangePassword extends Component {
             }
             
         })
-        .catch(error => alert('Check Password again!'));
+        // .catch(error => alert('Check Password again!'));
+        .catch(error => toast.error('Kiểm tra lại xác nhận mật khẩu'));
     }
 
     handleShowPassword(e)
@@ -129,6 +133,16 @@ export default class ChangePassword extends Component {
                     {localStorage.getItem('role') === 'ADMIN' && <p><b>Chức vụ:</b> Quản trị viên</p>}
                     {localStorage.getItem('role') === 'STAFF' && <p><b>Chức vụ:</b> Nhân viên</p>}
                 </div>
+                <ToastContainer position="top-center"
+                    autoClose={2000}
+                    hideProgressBar
+                    newestOnTop={false}
+                    closeOnClick={false}
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover
+					/>
             </div>
         )
     }

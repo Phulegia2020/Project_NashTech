@@ -8,6 +8,8 @@ import java.util.List;
 public interface CategoryService {
     public List<Category> retrieveCategories();
 
+    public List<Category> getCategoryByStatus();
+
     public List<Category> getCategoriesPage(ProductPage productPage);
 
     public List<Category> getCategoryByName(String name);

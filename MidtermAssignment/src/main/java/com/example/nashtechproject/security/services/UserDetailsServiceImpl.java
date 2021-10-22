@@ -1,6 +1,7 @@
 package com.example.nashtechproject.security.services;
 
 import com.example.nashtechproject.entity.User;
+import com.example.nashtechproject.page.STATE;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -23,7 +24,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(String username)
             throws UsernameNotFoundException {
 
-        User user = userRepository.findByAccountAndActivestatusNot(username, "Inactive")
+        User user = userRepository.findByAccountAndActivestatusNot(username, STATE.INACTIVE)
                 .orElseThrow(() ->
                         new UsernameNotFoundException("User Not Found with -> username or email : " + username)
                 );

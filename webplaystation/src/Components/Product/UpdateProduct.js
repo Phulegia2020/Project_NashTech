@@ -113,7 +113,7 @@ class UpdateProduct extends Component {
                 key: 'quantity'
             })
             this.setState({
-                Error: "Quantity is not less than 1!"
+                Error: "Số lượng không nhỏ hơn 1!"
             });
             return;
         }
@@ -123,7 +123,7 @@ class UpdateProduct extends Component {
                 key: 'price'
             })
             this.setState({
-                Error: "Price is not less than 1!"
+                Error: "Giá không nhỏ hơn 1!"
             });
             return;
         }
@@ -138,7 +138,7 @@ class UpdateProduct extends Component {
                         key: 'name'
                     })
                     this.setState({
-                        Error: "This name is existed!"
+                        Error: "Tên máy này đã được sử dụng!"
                     });
                     return;
                 }
@@ -176,38 +176,38 @@ class UpdateProduct extends Component {
     render() {
         return (
             <div className="update-form-product">
-                <h3>Update Product</h3>
+                <h3>Cập Nhật Máy</h3>
                 {/* <Row form>
                     <Col md={4}> */}
                         <Form onSubmit={(event) => this.handleUpdate(event)}>
                         <FormGroup>
-                            <Label htmlFor="name">Name</Label>
+                            <Label htmlFor="name">Tên Máy</Label>
                             <Input type="text" name="name" id="name" placeholder="PlayStation 4" onChange={(e) => this.changeValue(e)} value = {this.state.name} required="required" disabled={this.state.status === 'Stop'}/>
                             {this.state.key === 'name' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
                         </FormGroup>
                         <FormGroup>
-                            <Label htmlFor="description">Description</Label><br></br>
+                            <Label htmlFor="description">Thông Tin</Label><br></br>
                             <textarea style={{resize: 'none', width: '100%'}} rows="3" name="description" id="description" placeholder="PlayStation 4 Pro" onChange={(e) => this.changeValue(e)} value = {this.state.description} required="required" disabled={this.state.status === 'Stop'}></textarea>
                         </FormGroup>
                         <FormGroup>
-                            <Label htmlFor="quantity">Quantity</Label>
+                            <Label htmlFor="quantity">Số Lượng</Label>
                             <Input type="number" name="quantity" id="quantity" placeholder="1000" onChange={(e) => this.changeValue(e)} value = {this.state.quantity} required="required" disabled={this.state.status === 'Stop'}/>
                             {this.state.key === 'quantity' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
                         </FormGroup>
                         <FormGroup>
-                            <Label htmlFor="price">Price</Label>
+                            <Label htmlFor="price">Đơn Giá</Label>
                             <Input type="number" name="price" id="price" placeholder="1.000.000 VNĐ" onChange={(e) => this.changeValue(e)} value = {this.state.price} required="required" disabled={this.state.status === 'Stop'}/>
                             {this.state.key === 'price' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
                         </FormGroup>
                         <FormGroup>
-                            <Label htmlFor="image">Image</Label>
+                            <Label htmlFor="image">Hình Ảnh</Label>
                             <br></br>
                             <Input type="file" name="image" id="image" accept=".jpeg, .png, .jpg" onChange={(e) => {this.uploadImage(e)}} disabled={this.state.status === 'Stop'}/>
                             <br></br>
                             <img src={`data:image/jpeg;base64,${this.state.imageurl}`} alt="" height="150px"></img>
                         </FormGroup>
                         <FormGroup className="mb-2">
-                            <Label htmlFor="category">Category</Label>
+                            <Label htmlFor="category">Loại Máy</Label>
                             <Input type="select" name="category_id" id="category" value = {this.state.category_id} onChange={(e) => this.changeValue(e)} disabled={this.state.status === 'Stop'}>
                                 {
                                     this.state.categories.map((c) => (
@@ -217,7 +217,7 @@ class UpdateProduct extends Component {
                             </Input>
                         </FormGroup>
                         <FormGroup className="mb-2">
-                            <Label htmlFor="supplier">Supplier</Label>
+                            <Label htmlFor="supplier">Nhà Cung Cấp</Label>
                             <Input type="select" name="supplier_id" id="supplier" value = {this.state.supplier_id} onChange={(e) => this.changeValue(e)} disabled={this.state.status === 'Stop'}>
                                 {
                                     this.state.suppliers.map((s) => (
@@ -227,8 +227,8 @@ class UpdateProduct extends Component {
                             </Input>
                         </FormGroup>
                         <div className="mt-3">
-                            <Button type="submit" outline color="warning" >Update</Button>{' '}
-                            <Button outline color="danger" onClick={this.handleClear.bind(this)}>Cancel</Button>
+                            <Button type="submit" outline color="warning" >Cập Nhật</Button>{' '}
+                            <Button outline color="danger" onClick={this.handleClear.bind(this)}>Hủy</Button>
                         </div>
                         </Form>
                     {/* </Col>

@@ -5,6 +5,7 @@ import com.example.nashtechproject.entity.Category;
 import com.example.nashtechproject.entity.Product;
 import com.example.nashtechproject.entity.Supplier;
 import com.example.nashtechproject.page.ProductPage;
+import com.example.nashtechproject.page.STATE;
 import com.example.nashtechproject.repository.CategoryRepository;
 import com.example.nashtechproject.repository.ProductRepository;
 import com.example.nashtechproject.repository.SupplierRepository;
@@ -45,7 +46,7 @@ public class ProductServiceImpl implements ProductService {
 
     public List<Product> getProductByName(String pro_name)
     {
-        List<Product> pro = productRepository.findByNameContainsAndStatus(pro_name, "On Sale");
+        List<Product> pro = productRepository.findByNameContainsAndStatus(pro_name, STATE.SALE);
         return pro;
     }
 
@@ -70,7 +71,7 @@ public class ProductServiceImpl implements ProductService {
     {
         Sort sort = Sort.by(productPage.getSortDirection(), productPage.getSortBy());
         Pageable pageable = PageRequest.of(productPage.getPageNumber(), productPage.getPageSize(), sort);
-        Page<Product> page = productRepository.findByStatus("On Sale", pageable);
+        Page<Product> page = productRepository.findByStatus(STATE.SALE, pageable);
         List<ProductDTO> productDTOS = new ArrayList<>();
         page.getContent().forEach(p -> {
             ProductDTO productDTO = modelMapper.map(p, ProductDTO.class);
@@ -87,7 +88,7 @@ public class ProductServiceImpl implements ProductService {
     {
         Sort sort = Sort.by(productPage.getSortDirection(), productPage.getSortBy());
         Pageable pageable = PageRequest.of(productPage.getPageNumber(), productPage.getPageSize(), sort);
-        Page<Product> page = productRepository.findByNameContainsAndStatus(name, "On Sale",pageable);
+        Page<Product> page = productRepository.findByNameContainsAndStatus(name, STATE.SALE,pageable);
         List<ProductDTO> productDTOS = new ArrayList<>();
         page.getContent().forEach(p -> {
             ProductDTO productDTO = modelMapper.map(p, ProductDTO.class);
@@ -121,7 +122,7 @@ public class ProductServiceImpl implements ProductService {
     {
         Sort sort = Sort.by(productPage.getSortDirection(), productPage.getSortBy());
         Pageable pageable = PageRequest.of(productPage.getPageNumber(), productPage.getPageSize(), sort);
-        Page<Product> page = productRepository.findByCategoryIdAndStatus(categoryId, "On Sale", pageable);
+        Page<Product> page = productRepository.findByCategoryIdAndStatus(categoryId, STATE.SALE, pageable);
         List<ProductDTO> productDTOS = new ArrayList<>();
         page.getContent().forEach(p -> {
             ProductDTO productDTO = modelMapper.map(p, ProductDTO.class);
@@ -136,13 +137,13 @@ public class ProductServiceImpl implements ProductService {
 
     public List<Product> getProductsByCategory(Long categoryId)
     {
-        List<Product> products = productRepository.findByCategoryIdAndStatus(categoryId, "On Sale");
+        List<Product> products = productRepository.findByCategoryIdAndStatus(categoryId, STATE.SALE);
         return products;
     }
 
     public List<Product> getProductsByStatus()
     {
-        List<Product> products = productRepository.findByStatus("On Sale");
+        List<Product> products = productRepository.findByStatus(STATE.SALE);
         return products;
     }
 

@@ -10,6 +10,7 @@ class UpdateCategory extends React.Component {
         id: this.props.match.params.id,
         name: "",
         description: "",
+        status: "",
         Error: "",
         key: "",
         categories: [],
@@ -31,7 +32,8 @@ class UpdateCategory extends React.Component {
             {
                 this.setState({
                     name: response.data.name,
-                    description: response.data.description
+                    description: response.data.description,
+                    status: response.data.status
                 })
             }
         })
@@ -56,13 +58,13 @@ class UpdateCategory extends React.Component {
                         key: 'name'
                     })
                     this.setState({
-                        Error: "This name is existed!"
+                        Error: "Tên Loại này đã được sử dụng!"
                     });
                     return;
                 }
             }
         }
-        put(`/categories/${this.state.id}`, {name: this.state.name.trim(), description: this.state.description.trim()})
+        put(`/categories/${this.state.id}`, {name: this.state.name.trim(), description: this.state.description.trim(), status: this.state.status})
         .then((response) => {
             if (response.status === 200)
             {
@@ -90,23 +92,23 @@ class UpdateCategory extends React.Component {
     render() {
         return (
             <div className="update-form">
-                <h3>Update Category</h3>
+                <h3>Cập Nhật Loại Máy</h3>
                 {/* <Row form>
                     <Col md={4}> */}
                         <Form onSubmit={(event) => this.handleUpdate(event)}>
                             <FormGroup>
-                                <Label htmlFor="name"><b>Name</b></Label>
+                                <Label htmlFor="name"><b>Tên</b></Label>
                                 <Input type="text" name="name" id="name" placeholder="PS5" onChange={(e) => this.changeValue(e)} value = {this.state.name} required="required"/>
                                 {this.state.key === 'name' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
                             </FormGroup>
                             <FormGroup>
-                                <Label htmlFor="description"><b>Description</b></Label>
-                                <Input type="text" name="description" id="description" placeholder="PlayStation 5 Pro" onChange={(e) => this.changeValue(e)} value = {this.state.description} required="required"/>
+                                <Label htmlFor="description"><b>Mô Tả</b></Label>
+                                <Input type="text" name="description" id="description" placeholder="PlayStation 5" onChange={(e) => this.changeValue(e)} value = {this.state.description} required="required"/>
                             </FormGroup>
                             
                             <div className="mt-3">
-                                <Button type="submit" outline color="warning" >Update</Button>{' '}
-                                <Button outline color="danger" onClick={this.handleClear.bind(this)}>Cancel</Button>
+                                <Button type="submit" outline color="warning" >Cập Nhật</Button>{' '}
+                                <Button outline color="danger" onClick={this.handleClear.bind(this)}>Hủy</Button>
                             </div>
                         </Form>
                     {/* </Col>

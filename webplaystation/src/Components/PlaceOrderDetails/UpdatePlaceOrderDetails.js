@@ -3,6 +3,8 @@ import { get, put } from '../../Utils/httpHelper'
 import { withRouter } from "react-router";
 import { Col, Row, Button, Form, FormGroup, Label, Input } from 'reactstrap';
 import "../Category/Category.css";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 class UpdatePlaceOrderDetails extends Component {
     constructor(props)
@@ -49,7 +51,7 @@ class UpdatePlaceOrderDetails extends Component {
                 key: 'quantity'
             })
             this.setState({
-                Error: "Quantity is not less than 1!"
+                Error: "Số lượng không nhỏ hơn 1!"
             });
             return;
         }
@@ -59,7 +61,7 @@ class UpdatePlaceOrderDetails extends Component {
                 key: 'price'
             })
             this.setState({
-                Error: "Price is not less than 1!"
+                Error: "Giá không nhỏ hơn 1!"
             });
             return;
         }
@@ -70,7 +72,8 @@ class UpdatePlaceOrderDetails extends Component {
                 this.props.history.push(`/admin/placeorder/${this.state.placeorder_id}`);
             }
         })
-        .catch((error) => alert('The Place Order had already this product'));
+        // .catch((error) => alert('The Place Order had already this product'));
+        .catch((error) => toast.error('Phiếu đặt đã có sản phẩm này!'));
     }
 
     handleClear = () => {
@@ -91,31 +94,40 @@ class UpdatePlaceOrderDetails extends Component {
     render() {
         return (
             <div className="update-form">
-                <h3>Update Place Order Detail</h3>
+                <h3>Cập Nhật Chi Tiết</h3>
                 {/* <Row form>
                     <Col md={4}> */}
                         <Form onSubmit={(event) => this.handleUpdate(event)}>
                         <FormGroup>
-                            <Label htmlFor="quantity">Quantity</Label>
+                            <Label htmlFor="quantity">Số Lượng</Label>
                             <Input type="number" name="quantity" id="quantity" placeholder="100" onChange={(e) => this.changeValue(e)} value = {this.state.quantity} required="required"/>
                             {this.state.key === 'quantity' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
                         </FormGroup>
                         <FormGroup>
-                            <Label htmlFor="quantity">Price</Label>
+                            <Label htmlFor="quantity">Giá</Label>
                             <Input type="number" name="price" id="quantity" placeholder="100" onChange={(e) => this.changeValue(e)} value = {this.state.price} required="required"/>
                             {this.state.key === 'price' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
                         </FormGroup>
                         <FormGroup className="mb-2">
-                            <Label htmlFor="product">Product</Label>
+                            <Label htmlFor="product">Mã Máy</Label>
                             <Input type="text" name="product_id" id="product" value = {this.state.product_id} onChange={(e) => this.changeValue(e)} disabled />
                         </FormGroup>
                         <div className="mb-5">
-                            <Button type="submit" outline color="warning" >Update</Button>{' '}
-                            <Button outline color="danger" onClick={this.handleClear.bind(this)}>Cancel</Button>
+                            <Button type="submit" outline color="warning" >Cập Nhật</Button>{' '}
+                            <Button outline color="danger" onClick={this.handleClear.bind(this)}>Hủy</Button>
                         </div>
                         </Form>
                     {/* </Col>
                 </Row> */}
+                <ToastContainer position="top-center"
+                    autoClose={2000}
+                    hideProgressBar
+                    newestOnTop={false}
+                    closeOnClick={false}
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover/>
             </div>
         )
     }

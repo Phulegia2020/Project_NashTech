@@ -4,6 +4,7 @@ import com.example.nashtechproject.entity.Category;
 import com.example.nashtechproject.entity.User;
 import com.example.nashtechproject.exception.CategoryException;
 import com.example.nashtechproject.page.ProductPage;
+import com.example.nashtechproject.page.STATE;
 import com.example.nashtechproject.payload.response.MessageResponse;
 import com.example.nashtechproject.service.CategoryService;
 import io.swagger.annotations.Api;
@@ -36,7 +37,8 @@ public class CategoryController {
             @ApiResponse(code = 500, message = "Internal server error") })
     public List<Category> getAllCategories()
     {
-        List<Category> categories = categoryService.retrieveCategories();
+//        List<Category> categories = categoryService.retrieveCategories();
+        List<Category> categories = categoryService.getCategoryByStatus();
         return categories.stream().sorted(Comparator.comparingLong(Category::getId)).collect(Collectors.toList());
     }
 
@@ -89,6 +91,7 @@ public class CategoryController {
         {
             throw new CategoryException(category.getName());
         }
+        category.setStatus(STATE.SALE);
         return categoryService.saveCategory(category);
     }
 
@@ -125,7 +128,9 @@ public class CategoryController {
         {
             throw new CategoryException(categoryId);
         }
-        categoryService.deleteCategory(categoryId);
+//        categoryService.deleteCategory(categoryId);
+        category.setStatus(STATE.STOP);
+        categoryService.updateCategory(category);
         return ResponseEntity.ok(new MessageResponse("Delete Successfully"));
     }
 }

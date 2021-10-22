@@ -60,7 +60,7 @@ class UpdateSupplier extends Component {
                         key: 'supplier'
                     })
                     this.setState({
-                        Error: "This supplier is existed in list management at store!"
+                        Error: "Tên nhà cung cấp đã có tại cửa hàng!"
                     });
                     return;
                 }
@@ -70,7 +70,7 @@ class UpdateSupplier extends Component {
                     key: 'address'
                 })
                 this.setState({
-                    Error: "This address is existed in list management at store!"
+                    Error: "Địa chỉ nhà cung cấp đã có tại của hàng!"
                 });
                 return;
             }
@@ -80,7 +80,7 @@ class UpdateSupplier extends Component {
                         key: 'phone'
                     })
                     this.setState({
-                        Error: "This phone is existed!"
+                        Error: "Số điện thoại nhà cung cấp đã có tại cửa hàng!"
                     });
                     return;
                 }
@@ -92,7 +92,7 @@ class UpdateSupplier extends Component {
                 key: 'phone'
             })
             this.setState({
-                Error: "Phone must be numbers and start with 0!"
+                Error: "Số điện thoại nên bắt đầu bằng số 0!"
             });
             return;
         }
@@ -125,28 +125,28 @@ class UpdateSupplier extends Component {
     render() {
         return (
             <div className="update-form">
-                <h3>Update Supplier</h3>
+                <h3>Cập Nhật Nhà Cung Cấp</h3>
                 {/* <Row form>
                     <Col md={4}> */}
                         <Form onSubmit={(event) => this.handleUpdate(event)}>
                             <FormGroup>
-                                <Label htmlFor="name">Name</Label>
+                                <Label htmlFor="name">Tên</Label>
                                 <Input type="text" name="name" id="name" placeholder="PS5" onChange={(e) => this.changeValue(e)} value = {this.state.name} required="required" disabled={this.state.status === 'Disconnected'}/>
                                 {this.state.key === 'supplier' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
                             </FormGroup>
                             <FormGroup>
-                                <Label htmlFor="address">Address</Label>
+                                <Label htmlFor="address">Địa Chỉ</Label>
                                 <Input type="text" name="address" id="address" placeholder="1 Street, 2 Ward, 3 District, Ho Chi Minh City" onChange={(e) => this.changeValue(e)} value = {this.state.address} required="required" disabled={this.state.status === 'Disconnected'}/>
                                 {this.state.key === 'address' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
                             </FormGroup>
                             <FormGroup>
-                                <Label htmlFor="phone">Phone</Label>
+                                <Label htmlFor="phone">Số Điện Thoại</Label>
                                 <Input type="text" name="phone" id="phone" minLength="10" maxLength="10" placeholder="0123456789" onChange={(e) => this.changeValue(e)} value = {this.state.phone} required="required" disabled={this.state.status === 'Disconnected'}/>
                                 {this.state.key === 'phone' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
                             </FormGroup>
                             <div className="mt-3">
-                                <Button type="submit" outline color="warning">Udpate</Button>{' '}
-                                <Button outline color="danger" onClick={this.handleClear.bind(this)}>Cancel</Button>
+                                <Button type="submit" outline color="warning">Cập Nhật</Button>{' '}
+                                <Button outline color="danger" onClick={this.handleClear.bind(this)}>Hủy</Button>
                             </div>
                         </Form>
                     {/* </Col>

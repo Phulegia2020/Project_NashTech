@@ -21,6 +21,9 @@ public class Category {
     @Column(name = "description")
     private String description;
 
+    @Column(name = "status")
+    private String status;
+
     @OneToMany(mappedBy = "category", fetch = FetchType.EAGER)
     @JsonIgnore
     private List<Product> products = new ArrayList<>();
@@ -64,5 +67,13 @@ public class Category {
 
     public void setProducts(List<Product> products) {
         this.products = products;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

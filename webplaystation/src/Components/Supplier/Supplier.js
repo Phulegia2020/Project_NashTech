@@ -5,8 +5,10 @@ import { Link } from 'react-router-dom';
 import Add from "./Add"
 import { Modal, ModalHeader, ModalBody, ModalFooter, Pagination, PaginationItem, PaginationLink, Button} from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faPlus, faTrash, faArrowCircleDown, faArrowCircleUp } from '@fortawesome/free-solid-svg-icons';
 import { Breadcrumb, Input } from 'semantic-ui-react';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default class Supplier extends Component {
     state = {
@@ -65,7 +67,8 @@ export default class Supplier extends Component {
                 })
             }
         })
-        .catch(error => {alert('This Supplier is supplying products. Can not delete!')})
+        // .catch(error => {alert('This Supplier is supplying products. Can not delete!')})
+        .catch(error => {toast.error('Máy của nhà cung cấp này vẫn đang được bán tại cửa hàng!')})
     }
 
     createSupplier(newSupplier){
@@ -199,6 +202,24 @@ export default class Supplier extends Component {
         }
     }
 
+    handleSortInc = (e) => {
+        e.preventDefault();
+        //this.state.categories.sort((e1, e2) => (e1.id > e2.id ? 1 : -1));
+        this.setState({
+            suppliers: this.state.suppliers.sort((e1, e2) => (e1.id > e2.id ? 1 : -1))
+        })
+        // console.log('sort');
+    }
+
+    handleSortDes = (e) => {
+        e.preventDefault();
+        //this.state.categories.sort((e1, e2) => (e1.id > e2.id ? 1 : -1));
+        this.setState({
+            suppliers: this.state.suppliers.sort((e1, e2) => (e2.id > e1.id ? 1 : -1))
+        })
+        // console.log('sort');
+    }
+
     componentWillUnmount() {
         // fix Warning: Can't perform a React state update on an unmounted component
         this.setState = (state,callback)=>{
@@ -220,23 +241,23 @@ export default class Supplier extends Component {
                     toggle={this.onToggleFormDel}
                     >
                     <ModalHeader>
-                        Delete
+                        Xóa Nhà Cung Cấp
                     </ModalHeader>
                     <ModalBody>
                         <p>
-                        Are you sure?
+                        Bạn có chắc chắn muốn xóa?
                         </p>
                     </ModalBody>
                     <ModalFooter>
-                        <Button onClick={(e) => this.delSupplier(e, this.state.id)} className="btn-danger">Delete</Button>
-                        <Button onClick={(e) => this.onCloseFormDel(e)}>Close</Button>
+                        <Button onClick={(e) => this.delSupplier(e, this.state.id)} className="btn-danger">Xóa</Button>
+                        <Button onClick={(e) => this.onCloseFormDel(e)}>Hủy</Button>
                     </ModalFooter>
                 </Modal>
                 <Breadcrumb icon='right angle' sections={sections} size='large'/>
                 <br/>
                 <button type="button" className="btn btn-primary" onClick={this.onToggleForm} style={{marginTop: '30px'}}>
                     <FontAwesomeIcon icon={faPlus} className="mr-2"/>{' '}
-                    Creat New Supplier
+                    Thêm Nhà Cung Cấp
                 </button>
                 <Input
                     style={{marginLeft: '100rem'}}
@@ -248,12 +269,12 @@ export default class Supplier extends Component {
                 <table id="table">
                     <thead>
                         <tr>
-                            <th><b>ID</b></th>
-                            <th><b>Name</b></th>
-                            <th><b>Address</b></th>
-                            <th><b>Phone</b></th>
-                            <th>Update</th>
-                            <th>Delete</th>
+                            <th><b>ID</b>{' '}<FontAwesomeIcon icon={faArrowCircleUp} className="sort-icon" onClick={(e) => this.handleSortInc(e)}/><FontAwesomeIcon icon={faArrowCircleDown} className="sort-icon" onClick={(e) => this.handleSortDes(e)}/></th>
+                            <th><b>Tên</b></th>
+                            <th><b>Địa Chỉ</b></th>
+                            <th><b>Số Điện Thoại</b></th>
+                            <th>Cập Nhật</th>
+                            <th>Xóa</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -307,7 +328,7 @@ export default class Supplier extends Component {
 
                 <div className="container">
                     <Modal isOpen={this.state.isDisplayForm} toggle={this.onToggleForm}>
-                        <ModalHeader toggle={this.onToggleForm}>Create New Supplier</ModalHeader>
+                        <ModalHeader toggle={this.onToggleForm}>Thêm Nhà Cung Cấp</ModalHeader>
                         <ModalBody>
                             <Add onAdd={this.onAdd} onCloseForm={this.onCloseForm}/>
                         </ModalBody>
@@ -315,6 +336,16 @@ export default class Supplier extends Component {
                         </ModalFooter>
                     </Modal>
                 </div>
+                <ToastContainer position="top-center"
+                    autoClose={2500}
+                    hideProgressBar
+                    newestOnTop={false}
+                    closeOnClick={false}
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover
+					style={{width: '400px'}}/>
             </div>
         )
     }

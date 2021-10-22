@@ -12,10 +12,7 @@ import com.example.nashtechproject.exception.UserException;
 import com.example.nashtechproject.page.ProductPage;
 import com.example.nashtechproject.page.STATE;
 import com.example.nashtechproject.payload.response.MessageResponse;
-import com.example.nashtechproject.service.BillDetailsService;
-import com.example.nashtechproject.service.BillService;
-import com.example.nashtechproject.service.BillStatusService;
-import com.example.nashtechproject.service.UserService;
+import com.example.nashtechproject.service.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -49,8 +46,14 @@ public class BillController {
     @Autowired
     private UserService userService;
 
+//    @Autowired
+//    private BillStatusService billStatusService;
+
     @Autowired
-    private BillStatusService billStatusService;
+    private ProductService productService;
+
+    @Autowired
+    private ImportService importService;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -202,6 +205,7 @@ public class BillController {
     {
         List<RevenueDTO> revenue = new ArrayList<>();
         List<Bill> billList = billService.getBillsDone();
+        List<Import> importList = importService.getImportsDone();
 
         for (int i = 0; i < 12; i++)
         {
@@ -213,10 +217,20 @@ public class BillController {
                     rev = rev + billList.get(j).getTotal();
                 }
             }
+            float expense = 0;
+            for (int k = 0; k < importList.size(); k++)
+            {
+                if (importList.get(k).getCreateddate().getMonth().getValue() == (i+1) && importList.get(k).getCreateddate().getYear() == LocalDateTime.now().getYear())
+                {
+                    expense = expense + importList.get(k).getTotal();
+                }
+            }
             rev = rev / 1000000;
             RevenueDTO revenueDTO = new RevenueDTO();
             revenueDTO.setName(String.valueOf(i+1));
             revenueDTO.setRevenue(rev);
+            revenueDTO.setExpense(expense);
+            revenueDTO.setProfit(rev*1000000 - expense);
             revenue.add(revenueDTO);
         }
         return revenue;
@@ -304,6 +318,13 @@ public class BillController {
 //            }
             bill.setCheckout_date(LocalDateTime.now());
 //            bill.setBillStatus(bs);
+            List<BillDetails> list = billDetailsService.getBillDetailsByBill(billId);
+            for (int i = 0; i < list.size(); i++)
+            {
+                Product pro = productService.getProduct(list.get(i).getKey().getProduct().getId());
+                pro.setQuantity(pro.getQuantity() - list.get(i).getQuantity());
+                productService.updateProduct(pro);
+            }
             bill.setStatus(STATE.DONE);
             billService.updateBill(bill);
         }
@@ -326,7 +347,9 @@ public class BillController {
         {
             throw new InvalidDataException("The bill is checked out. Can not delete!");
         }
-        billService.deleteBill(billId);
+//        billService.deleteBill(billId);
+        bill.setStatus(STATE.CANCEL);
+        billService.updateBill(bill);
         return ResponseEntity.ok(new MessageResponse("Delete Successfully"));
     }
 

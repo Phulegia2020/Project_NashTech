@@ -8,6 +8,8 @@ import {
 } from 'semantic-ui-react';
 import {post} from './../../../Utils/httpHelper';
 import "../SignUp/SignUp.css";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default class ChangePassword extends Component {
     constructor(props) {
@@ -46,7 +48,8 @@ export default class ChangePassword extends Component {
         .then((response) => {
             if (response.status === 200)
             {
-				alert(response.data.message);
+				// alert(response.data.message);
+				toast.success('Thay đổi mật khẩu thành công!')
 				this.setState({
 					newpassword: "",
 					confirmpassword: "",
@@ -55,7 +58,8 @@ export default class ChangePassword extends Component {
             }
             
         })
-        .catch(error => alert('Check Password again!'));
+		// .catch(error => alert('Check Password again!'));
+		.catch(error => toast.error('Kiểm tra lại mật khẩu!'));
 	}
 
 	handleShowPassword(e)
@@ -76,22 +80,32 @@ export default class ChangePassword extends Component {
 							<h2 className="title-profile">Thay Đổi Mật Khẩu</h2>
 							<Form onSubmit={(event) => this.handleSubmit(event)}>
 								<Form.Field>
-									<label>New Password</label>
-									<Form.Input placeholder='Enter New Password' type={this.state.show === false ?'password' : 'text'} name='newpassword' value={this.state.newpassword} onChange={this.handleChange} required/>
+									<label>Mật Khẩu Mới</label>
+									<Form.Input placeholder='Nhập mật khẩu mới...' type={this.state.show === false ?'password' : 'text'} name='newpassword' value={this.state.newpassword} onChange={this.handleChange} required/>
 									{this.state.key === 'password' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}<br></br></span> : '' }
-									<Checkbox label='Show password' onChange={(e) => this.handleShowPassword(e)}/>
+									<Checkbox label='Hiển thị' onChange={(e) => this.handleShowPassword(e)}/>
 								</Form.Field>
 								<Form.Field>
-									<label>Confirm Password</label>
-									<Form.Input placeholder='Confirm New Password' type='password' name='confirmpassword' value={this.state.confirmpassword} onChange={this.handleChange} required/>
+									<label>Nhập Lại Mật Khẩu</label>
+									<Form.Input placeholder='Nhập lại mật khẩu...' type='password' name='confirmpassword' value={this.state.confirmpassword} onChange={this.handleChange} required/>
 									{this.state.key === 'confirmpassword' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
 								</Form.Field>
-								<Button type='submit' color="twitter">Confirm</Button>
+								<Button type='submit' color="twitter">XÁC NHẬN</Button>
 							</Form>
 						</Grid.Column>
 					</Grid.Row>
 				</Grid>
 			</Segment>
+			<ToastContainer position="top-center"
+                    autoClose={2000}
+                    hideProgressBar
+                    newestOnTop={false}
+                    closeOnClick={false}
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover
+					/>
 			</div>
         )
     }

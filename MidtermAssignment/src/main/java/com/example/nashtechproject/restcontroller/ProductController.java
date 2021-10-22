@@ -9,6 +9,7 @@ import com.example.nashtechproject.exception.CategoryException;
 import com.example.nashtechproject.exception.ProductException;
 import com.example.nashtechproject.exception.SupplierException;
 import com.example.nashtechproject.page.ProductPage;
+import com.example.nashtechproject.page.STATE;
 import com.example.nashtechproject.page.UserPage;
 import com.example.nashtechproject.payload.response.MessageResponse;
 import com.example.nashtechproject.service.*;
@@ -262,7 +263,7 @@ public class ProductController {
         Product pro = convertToEntity(product);
         pro.setCreateddate(LocalDateTime.now());
         pro.setUpdateddate(LocalDateTime.now());
-        pro.setStatus("On Sale");
+        pro.setStatus(STATE.SALE);
         return convertToDTO(productService.saveProduct(pro));
     }
 
@@ -310,9 +311,9 @@ public class ProductController {
         {
             throw new ProductException(productId);
         }
-//        product.setStatus("Stop");
-//        productService.updateProduct(product);
-        productService.deleteProduct(productId);
+        product.setStatus(STATE.STOP);
+        productService.updateProduct(product);
+//        productService.deleteProduct(productId);
         return ResponseEntity.ok(new MessageResponse("Delete Successfully"));
     }
 

@@ -97,9 +97,9 @@ public class BillDetailsController {
         float total = b.getTotal() + bill.getQuantity()*bill.getKey().getProduct().getPrice();
         b.setTotal(total);
         billService.updateBill(b);
-        int quantity = pro.getQuantity() - bill.getQuantity();
-        pro.setQuantity(quantity);
-        productService.updateProduct(pro);
+//        int quantity = pro.getQuantity() - bill.getQuantity();
+//        pro.setQuantity(quantity);
+//        productService.updateProduct(pro);
         return billDetailsService.saveBillDetails(bill);
     }
 
@@ -180,9 +180,9 @@ public class BillDetailsController {
         Bill b = billService.getBill(billDetails.getKey().getBill().getId());
         Product p = productService.getProduct(billDetails.getKey().getProduct().getId());
         float total = b.getTotal() - billDetails.getQuantity()*p.getPrice();
-        int quantity = p.getQuantity() + billDetails.getQuantity();
-        p.setQuantity(quantity);
-        productService.updateProduct(p);
+//        int quantity = p.getQuantity() + billDetails.getQuantity();
+//        p.setQuantity(quantity);
+//        productService.updateProduct(p);
         b.setTotal(total);
         billService.updateBill(b);
         billDetailsService.deleteBillDetails(billId, productId);

@@ -6,8 +6,10 @@ import { Link } from 'react-router-dom';
 import Add from "./Add"
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Pagination, PaginationItem, PaginationLink } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faInfo, faPlus, faTrash, faCheck } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faInfo, faPlus, faTrash, faCheck, faArrowCircleUp, faArrowCircleDown } from '@fortawesome/free-solid-svg-icons';
 import { Label, Breadcrumb } from 'semantic-ui-react';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default class Import extends Component {
     state = {
@@ -59,7 +61,8 @@ export default class Import extends Component {
             this.setState({imports: this.state.imports.filter(b => b.id !== id),
                            isDisplayFormDel: false})
         })
-        .catch(error => {alert('This Import had details. Can not Delete!')})
+        // .catch(error => {alert('This Import had details. Can not Delete!')})
+        .catch(error => {toast.error('Phiếu nhập đã được lập chi tiết!')})
     }
 
     async createImport(newImport){
@@ -74,7 +77,8 @@ export default class Import extends Component {
         })
         if (this.state.placeorderdetails.length === 0)
         {
-            alert('The Place Order has not details');
+            // alert('The Place Order has not details');
+            toast.error('Phiếu đặt này chưa được lập chi tiết!');
             return;
         }
         post(`/imports`, {total: 0, user_id: newImport.user_id, placeOrder_id: newImport.placeorder_id})
@@ -158,14 +162,40 @@ export default class Import extends Component {
                 });
             }
         })
-        put(`/imports/confirm/${id}`, {total: this.state.importConfirm.total, user_id: this.state.importConfirm.user_id, placeOrder_id: this.state.importConfirm.placeorder_id})
+        await put(`/imports/confirm/${id}`, {total: this.state.importConfirm.total, user_id: this.state.importConfirm.user_id, placeOrder_id: this.state.importConfirm.placeorder_id})
         .then((response) => {
             if (response.status === 200)
             {
-                window.location.href="/admin/import";
+                // window.location.href="/admin/import";
             }
         })
         .catch((error)=> {})
+
+        get(`/imports/page?pageNumber=${this.state.pageNumber}&pageSize=9&sortBy=id`)
+        .then((response) => {
+            this.setState({
+                imports: response.data,
+            });
+        })
+        .catch(error => console.log(error));
+    }
+
+    handleSortInc = (e) => {
+        e.preventDefault();
+        //this.state.categories.sort((e1, e2) => (e1.id > e2.id ? 1 : -1));
+        this.setState({
+            imports: this.state.imports.sort((e1, e2) => (e1.id > e2.id ? 1 : -1))
+        })
+        // console.log('sort');
+    }
+
+    handleSortDes = (e) => {
+        e.preventDefault();
+        //this.state.categories.sort((e1, e2) => (e1.id > e2.id ? 1 : -1));
+        this.setState({
+            imports: this.state.imports.sort((e1, e2) => (e2.id > e1.id ? 1 : -1))
+        })
+        // console.log('sort');
     }
 
     componentWillUnmount() {
@@ -189,50 +219,51 @@ export default class Import extends Component {
                     toggle={this.onToggleFormDel}
                     >
                     <ModalHeader>
-                        Delete
+                        Xóa Phiếu Nhập
                     </ModalHeader>
                     <ModalBody>
                         <p>
-                        Are you sure?
+                        Bạn có chắc chắn muốn xóa?
                         </p>
                     </ModalBody>
                     <ModalFooter>
-                        <Button onClick={(e) => this.delImport(e, this.state.id)} className="btn-danger">Delete</Button>
-                        <Button onClick={(e) => this.onCloseFormDel(e)}>Close</Button>
+                        <Button onClick={(e) => this.delImport(e, this.state.id)} className="btn-danger">Xóa</Button>
+                        <Button onClick={(e) => this.onCloseFormDel(e)}>Hủy</Button>
                     </ModalFooter>
                 </Modal>
                 <Breadcrumb icon='right angle' sections={sections} size='large'/>
                 <br/>
                 <button type="button" className="btn btn-primary" onClick={this.onToggleForm} style={{marginTop: '30px'}}>
                     <FontAwesomeIcon icon={faPlus} className="mr-2"/>{' '}
-                    Creat New Import
+                    Tạo Phiếu Nhập
                 </button>
                 <table id="table">
                     <thead>
                         <tr>
-                            <th><b>ID</b></th>
-                            <th><b>Total</b></th>
-                            <th><b>Created Date</b></th>
-                            <th><b>Place Order</b></th>
-                            <th><b>Employee</b></th>
-                            <th>Status</th>
-                            <th>Update</th>
-                            <th>Delete</th>
-                            <th>Details</th>
-                            <th>Confirm</th>
+                            <th><b>Mã Phiếu Nhập</b>{' '}<FontAwesomeIcon icon={faArrowCircleUp} className="sort-icon" onClick={(e) => this.handleSortInc(e)}/><FontAwesomeIcon icon={faArrowCircleDown} className="sort-icon" onClick={(e) => this.handleSortDes(e)}/></th>
+                            <th><b>Tổng Tiền</b></th>
+                            <th><b>Thời Gian</b></th>
+                            <th><b>Phiếu Đặt</b></th>
+                            <th><b>Nhân Viên</b></th>
+                            <th><b>Trạng Thái</b></th>
+                            <th>Cập Nhật</th>
+                            <th>Xóa</th>
+                            <th>Chi Tiết</th>
+                            <th>Xác Nhận</th>
                         </tr>
                     </thead>
                     <tbody>
                         {
                             this.state.imports.map((imp) => (
+                                imp.status !== 'Cancel' &&
                                 <tr key={imp.id}>
                                     <td>{imp.id}</td>
                                     <td>{formatCurrency(imp.total)}</td>
                                     <td>{imp.createddate}</td>
                                     <td>{imp.placeOrder.id}</td>
                                     <td>{imp.user.name}</td>
-                                    {imp.status === 'Done' && (<td><Label color="teal">{imp.status}</Label></td>)}
-                                    {imp.status === 'Waiting' && (<td><Label color="grey">{imp.status}</Label></td>)}
+                                    {imp.status === 'Done' && (<td><Label color="teal">Hoàn Tất</Label></td>)}
+                                    {imp.status === 'Waiting' && (<td><Label color="grey">Chờ Xác Nhận</Label></td>)}
                                     <td>
                                         <Link to={`/admin/import/update/${imp.id}`} onClick={imp.status !== 'Waiting' ? (e) => e.preventDefault() : ''} className={imp.status !== 'Waiting' ? "disable-link" : ""}>
                                             <button className="btn btn-success" disabled={imp.status !== 'Waiting'}>
@@ -292,7 +323,7 @@ export default class Import extends Component {
 
                 <div className="container">
                     <Modal isOpen={this.state.isDisplayForm} toggle={this.onToggleForm}>
-                        <ModalHeader toggle={this.onToggleForm}>Create New Import</ModalHeader>
+                        <ModalHeader toggle={this.onToggleForm}>Tạo Phiếu Nhập</ModalHeader>
                         <ModalBody>
                             <Add onAdd={this.onAdd} onCloseForm={this.onCloseForm}/>
                         </ModalBody>
@@ -300,6 +331,15 @@ export default class Import extends Component {
                         </ModalFooter>
                     </Modal>
                 </div>
+                <ToastContainer position="top-center"
+                    autoClose={2000}
+                    hideProgressBar
+                    newestOnTop={false}
+                    closeOnClick={false}
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover/>
             </div>
         )
     }

@@ -105,3 +105,8 @@
   width: 50%;
   font-size: medium;
 }
+
+.sort-icon:hover
+{
+  cursor: pointer;
+}

@@ -3,7 +3,7 @@ import { get, del } from '../../Utils/httpHelper'
 import { withRouter } from "react-router";
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faTrash,faArrowCircleDown,faArrowCircleUp } from '@fortawesome/free-solid-svg-icons';
 import { formatCurrency, formatQuantity } from '../../Utils/Utils';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Pagination, PaginationItem, PaginationLink } from 'reactstrap';
 import { Breadcrumb } from 'semantic-ui-react'
@@ -104,6 +104,24 @@ class ProductByCategory extends Component {
         .catch(error => {console.log(error)})
     }
 
+    handleSortInc = (e) => {
+        e.preventDefault();
+        //this.state.categories.sort((e1, e2) => (e1.id > e2.id ? 1 : -1));
+        this.setState({
+            products: this.state.products.sort((e1, e2) => (e1.price > e2.price ? 1 : -1))
+        })
+        // console.log('sort');
+    }
+
+    handleSortDes = (e) => {
+        e.preventDefault();
+        //this.state.categories.sort((e1, e2) => (e1.id > e2.id ? 1 : -1));
+        this.setState({
+            products: this.state.products.sort((e1, e2) => (e2.price > e1.price ? 1 : -1))
+        })
+        // console.log('sort');
+    }
+
     componentWillUnmount() {
         this.setState({
             products: []
@@ -129,30 +147,30 @@ class ProductByCategory extends Component {
                     toggle={this.onToggleFormDel}
                     >
                     <ModalHeader>
-                        Delete
+                        Xóa Máy
                     </ModalHeader>
                     <ModalBody>
                         <p>
-                        Do you want to stop selling this product?
+                        Bạn có chắc chắn muốn xóa?
                         </p>
                     </ModalBody>
                     <ModalFooter>
-                        <Button onClick={(e) => this.delProduct(e, this.state.iddel)} className="btn-danger">Delete</Button>
-                        <Button onClick={(e) => this.onCloseFormDel(e)}>Close</Button>
+                        <Button onClick={(e) => this.delProduct(e, this.state.iddel)} className="btn-danger">Xóa</Button>
+                        <Button onClick={(e) => this.onCloseFormDel(e)}>Hủy</Button>
                     </ModalFooter>
                 </Modal>
                 <Breadcrumb icon='right angle' sections={sections} size='large'/>
                 <table id="table">
                     <thead>
                         <tr>
-                            <th><b>ID</b></th>
-                            <th><b>Product</b></th>
-                            <th><b>Name</b></th>
-                            <th><b>Description</b></th>
-                            <th><b>Quantity</b></th>
-                            <th><b>Price</b></th>
-                            <th>Update</th>
-                            <th>Delete</th>
+                            <th><b>Mã Máy</b></th>
+                            <th><b>Hình Ảnh</b></th>
+                            <th><b>Tên</b></th>
+                            <th><b>Thông Tin</b></th>
+                            <th><b>Số Lượng</b></th>
+                            <th><b>Đơn Giá</b>{' '}<FontAwesomeIcon icon={faArrowCircleUp} className="sort-icon" onClick={(e) => this.handleSortInc(e)}/><FontAwesomeIcon icon={faArrowCircleDown} className="sort-icon" onClick={(e) => this.handleSortDes(e)}/></th>
+                            <th>Cập Nhật</th>
+                            <th>Xóa</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -167,7 +185,7 @@ class ProductByCategory extends Component {
                                     <td className="descriptionTable">{p.description}</td>
                                     <td>{formatQuantity(p.quantity)}</td>
                                     <td>{formatCurrency(p.price)}</td>
-                                    <td>{p.status}</td>
+                                    {/* <td>{p.status}</td> */}
                                     <td>
                                         <Link to={`/admin/product/update/${p.id}`}>
                                             <button className="btn btn-success">

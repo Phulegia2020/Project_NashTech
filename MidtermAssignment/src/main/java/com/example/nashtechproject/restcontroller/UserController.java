@@ -5,6 +5,7 @@ import com.example.nashtechproject.entity.Role;
 import com.example.nashtechproject.entity.RoleName;
 import com.example.nashtechproject.entity.User;
 import com.example.nashtechproject.exception.UserException;
+import com.example.nashtechproject.page.STATE;
 import com.example.nashtechproject.page.UserPage;
 import com.example.nashtechproject.payload.response.MessageResponse;
 import com.example.nashtechproject.repository.RoleRepository;
@@ -158,7 +159,7 @@ public class UserController {
         {
             throw new UserException(user.getPhone());
         }
-        user.setActive_status("Active");
+        user.setActive_status(STATE.ACTIVE);
         UserDTO userDTO = convertToDTO(userService.saveUser(user));
         return userDTO;
     }
@@ -195,9 +196,9 @@ public class UserController {
         {
             throw new UserException(userId);
         }
-//        user.setActive_status("Inactive");
-//        userService.updateUser(user);
-        userService.deleteUser(userId);
+        user.setActive_status(STATE.INACTIVE);
+        userService.updateUser(user);
+//        userService.deleteUser(userId);
         return ResponseEntity.ok(new MessageResponse("Delete Successfully"));
     }
 

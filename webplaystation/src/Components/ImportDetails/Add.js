@@ -102,18 +102,18 @@ export default class Add extends Component {
             <div>
                 <Form onSubmit={(event) => this.handleCreate(event)}>
                 <FormGroup>
-                    <Label htmlFor="quantity">Quantity</Label>
+                    <Label htmlFor="quantity">Số Lượng</Label>
                     <Input type="number" name="quantity" id="quantity" placeholder="100" onChange={(e) => this.changeValue(e)} value = {this.state.quantity} required="required"/>
                     {this.state.key === 'quantity' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
                 </FormGroup>
                 <FormGroup>
-                    <Label htmlFor="price">Price</Label>
+                    <Label htmlFor="price">Giá</Label>
                     <Input type="number" name="price" id="price" placeholder="1.000.000 VND" onChange={(e) => this.changeValue(e)} value = {this.state.price} required="required"/>
                     {this.state.key === 'price' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
                 </FormGroup>
                 
                 <FormGroup className="mb-2">
-                    <Label htmlFor="product">Product</Label>
+                    <Label htmlFor="product">Máy</Label>
                     <Input type="select" name="product_id" id="product" onChange={(e) => this.changeValue(e)} required>
                         {
                             this.state.products.map((p) => (
@@ -126,8 +126,8 @@ export default class Add extends Component {
                     {this.state.key === 'product' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
                 </FormGroup>
                 <div className="mb-5">
-                    <Button type="submit" outline color="warning" >Add</Button>{' '}
-                    <Button outline color="danger" onClick={this.handleClear.bind(this)}>Cancel</Button>
+                    <Button type="submit" outline color="warning" >Tạo</Button>{' '}
+                    <Button outline color="danger" onClick={this.handleClear.bind(this)}>Hủy</Button>
                 </div>
                 </Form>
             </div>

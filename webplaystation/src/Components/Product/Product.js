@@ -7,8 +7,10 @@ import { withRouter } from "react-router";
 import Add from "./Add"
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Pagination, PaginationItem, PaginationLink } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faPlus, faTrash, faArrowCircleUp, faArrowCircleDown } from '@fortawesome/free-solid-svg-icons';
 import { Input, Breadcrumb } from 'semantic-ui-react';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 class Product extends Component {
     state = {
@@ -59,7 +61,8 @@ class Product extends Component {
             this.setState({products: this.state.products.filter(p => p.id !== id)})
             this.setState({isDisplayFormDel: false})
         })
-        .catch(error => {alert('The product was ordered. Can not delete!')})
+        // .catch(error => {alert('The product was ordered. Can not delete!')})
+        .catch(error => {toast.error('Máy này đã bán!')})
     }
 
     createProduct(newProduct){
@@ -197,6 +200,24 @@ class Product extends Component {
         }
     }
 
+    handleSortInc = (e) => {
+        e.preventDefault();
+        //this.state.categories.sort((e1, e2) => (e1.id > e2.id ? 1 : -1));
+        this.setState({
+            products: this.state.products.sort((e1, e2) => (e1.price > e2.price ? 1 : -1))
+        })
+        // console.log('sort');
+    }
+
+    handleSortDes = (e) => {
+        e.preventDefault();
+        //this.state.categories.sort((e1, e2) => (e1.id > e2.id ? 1 : -1));
+        this.setState({
+            products: this.state.products.sort((e1, e2) => (e2.price > e1.price ? 1 : -1))
+        })
+        // console.log('sort');
+    }
+
     componentWillUnmount() {
         // fix Warning: Can't perform a React state update on an unmounted component
         this.setState = (state,callback)=>{
@@ -218,27 +239,27 @@ class Product extends Component {
                     toggle={this.onToggleFormDel}
                     >
                     <ModalHeader>
-                        Delete
+                        Xóa Máy
                     </ModalHeader>
                     <ModalBody>
                         <p>
-                        Do you want to stop selling this product?
+                        Bạn có chắc chắn muốn xóa?
                         </p>
                     </ModalBody>
                     <ModalFooter>
-                        <Button onClick={(e) => this.delProduct(e, this.state.id)} className="btn-danger">Delete</Button>
-                        <Button onClick={(e) => this.onCloseFormDel(e)}>Close</Button>
+                        <Button onClick={(e) => this.delProduct(e, this.state.id)} className="btn-danger">Xóa</Button>
+                        <Button onClick={(e) => this.onCloseFormDel(e)}>Hủy</Button>
                     </ModalFooter>
                 </Modal>
                 <Breadcrumb icon='right angle' sections={sections} size='large'/>
                 <br/>
                 <button type="button" className="btn btn-primary" onClick={this.onToggleForm} style={{marginTop: '30px'}}>
                     <FontAwesomeIcon icon={faPlus} className="mr-2"/>{' '}
-                    Creat New Product
+                    Thêm Máy Mới
                 </button>
                 <Input
                     style={{marginLeft: '100rem'}}
-                    placeholder="Search for..."
+                    placeholder="Tên Máy..."
                     value={this.state.search}
                     onChange={(e) => this.handleSearch(e)}
                     icon="search"
@@ -246,14 +267,14 @@ class Product extends Component {
                 <table id="table">
                     <thead>
                         <tr>
-                            <th><b>ID</b></th>
-                            <th><b>Product</b></th>
-                            <th><b>Name</b></th>
-                            <th><b>Description</b></th>
-                            <th><b>Quantity</b></th>
-                            <th><b>Price</b></th>
-                            <th>Update</th>
-                            <th>Delete</th>
+                            <th><b>Mã Máy</b></th>
+                            <th><b>Hình Ảnh</b></th>
+                            <th><b>Tên</b></th>
+                            <th><b>Thông Tin</b></th>
+                            <th><b>Số Lượng</b></th>
+                            <th><b>Đơn Giá</b>{' '}<FontAwesomeIcon icon={faArrowCircleUp} className="sort-icon" onClick={(e) => this.handleSortInc(e)}/><FontAwesomeIcon icon={faArrowCircleDown} className="sort-icon" onClick={(e) => this.handleSortDes(e)}/></th>
+                            <th>Cập Nhập</th>
+                            <th>Xóa</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -310,7 +331,7 @@ class Product extends Component {
 
                 <div className="container">
                     <Modal isOpen={this.state.isDisplayForm} toggle={this.onToggleForm}>
-                        <ModalHeader toggle={this.onToggleForm}>Create New Product</ModalHeader>
+                        <ModalHeader toggle={this.onToggleForm}>Thêm Máy Mới</ModalHeader>
                         <ModalBody>
                             <Add onAdd={this.onAdd} onCloseForm={this.onCloseForm}/>
                         </ModalBody>
@@ -318,6 +339,15 @@ class Product extends Component {
                         </ModalFooter>
                     </Modal>
                 </div>
+                <ToastContainer position="top-center"
+                    autoClose={2000}
+                    hideProgressBar
+                    newestOnTop={false}
+                    closeOnClick={false}
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover/>
             </div>
         )
     }

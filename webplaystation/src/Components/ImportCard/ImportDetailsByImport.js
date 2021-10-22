@@ -152,32 +152,32 @@ class ImportDetailsByImport extends Component {
                     toggle={this.onToggleFormDel}
                     >
                     <ModalHeader>
-                        Delete
+                        Xóa Chi Tiết
                     </ModalHeader>
                     <ModalBody>
                         <p>
-                        Are you sure?
+                        Bạn có chắc chắn muốn xóa?
                         </p>
                     </ModalBody>
                     <ModalFooter>
-                        <Button onClick={(e) => this.delImportDetail(e, this.state.iddel)} className="btn-danger">Delete</Button>
-                        <Button onClick={(e) => this.onCloseFormDel(e)}>Close</Button>
+                        <Button onClick={(e) => this.delImportDetail(e, this.state.iddel)} className="btn-danger">Xóa</Button>
+                        <Button onClick={(e) => this.onCloseFormDel(e)}>Hủy</Button>
                     </ModalFooter>
                 </Modal>
                 <button type="button" className="btn btn-primary" onClick={this.onToggleForm} disabled>
                     <FontAwesomeIcon icon={faPlus} className="mr-2"/>{' '}
-                    Creat New Import Detail
+                    Tạo Chi Tiết Mới
                 </button>
                 <table id="table">
                     <thead>
                         <tr>
                             <th><b>No.</b></th>
-                            <th><b>Product</b></th>
-                            <th><b>Product_Name</b></th>
-                            <th><b>Quantity</b></th>
-                            <th><b>Price</b></th>
-                            <th>Update</th>
-                            <th>Delete</th>
+                            <th><b>Hình Ảnh</b></th>
+                            <th><b>Máy</b></th>
+                            <th><b>Số Lượng</b></th>
+                            <th><b>Giá</b></th>
+                            <th>Cập Nhật</th>
+                            <th>Xóa</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -232,7 +232,7 @@ class ImportDetailsByImport extends Component {
                 </Pagination>
                 <div className="container">
                     <Modal isOpen={this.state.isDisplayForm} toggle={this.onToggleForm}>
-                        <ModalHeader toggle={this.onToggleForm}>Create New Import Detail</ModalHeader>
+                        <ModalHeader toggle={this.onToggleForm}>Tạo Chi Tiết</ModalHeader>
                         <ModalBody>
                             <Add onAdd={this.onAdd} onCloseForm={this.onCloseForm} import={this.state.id} importDet={this.state.importdetails}/>
                         </ModalBody>

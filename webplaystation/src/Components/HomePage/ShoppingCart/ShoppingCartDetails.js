@@ -90,14 +90,14 @@ class ShoppingCartDetails extends Component {
                 <Table celled>
                     <Table.Header>
                         <Table.Row>
-                            <Table.HeaderCell>ID</Table.HeaderCell>
-                            <Table.HeaderCell>Product</Table.HeaderCell>
-                            <Table.HeaderCell>Name</Table.HeaderCell>
-                            <Table.HeaderCell>Price</Table.HeaderCell>
-                            <Table.HeaderCell>Quantity</Table.HeaderCell>
-                            <Table.HeaderCell>Total</Table.HeaderCell>
+                            <Table.HeaderCell>STT</Table.HeaderCell>
+                            <Table.HeaderCell>Sản Phẩm</Table.HeaderCell>
+                            <Table.HeaderCell>Tên Máy</Table.HeaderCell>
+                            <Table.HeaderCell>Giá</Table.HeaderCell>
+                            <Table.HeaderCell>Số Lượng</Table.HeaderCell>
+                            <Table.HeaderCell>Tổng Giá</Table.HeaderCell>
                             <Table.HeaderCell>
-                                Action
+                                Xóa
                             </Table.HeaderCell>
                         </Table.Row>
                     </Table.Header>
@@ -116,7 +116,7 @@ class ShoppingCartDetails extends Component {
                                     </Table.Cell>
                                     <Table.Cell textAlign="right">{formatCurrency(item.price * item.quantity)}</Table.Cell>
                                     <Table.Cell textAlign="right">
-                                        <Button onClick={this.onRemoveCart.bind(this, item)} className="btn btn-xs btn-danger">Remove</Button>
+                                        <Button onClick={this.onRemoveCart.bind(this, item)} className="btn btn-xs btn-danger" color="red">X</Button>
                                     </Table.Cell>
                                 </Table.Row>
                             )
@@ -124,7 +124,7 @@ class ShoppingCartDetails extends Component {
                         
                     </Table.Body>
                 </Table>
-                <Header>TOTAL: {this.getTotal()}</Header>
+                <Header>Tổng Cộng: {this.getTotal()}</Header>
             </div>
         );
     }

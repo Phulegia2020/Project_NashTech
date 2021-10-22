@@ -162,6 +162,55 @@ class Products extends Component {
           ];
         return (
             <div>
+                {/* <div className="carousel slide carousel-multi-item mb-3" data-ride="carousel">
+                    <div className="carousel-inner">
+                        <div className="container">
+                            <div className="owl-carousel owl-theme">
+                                
+                                    <div className="col-md-4 item" style={{width:'20rem'}}>
+                                        <div className="card">
+                                            <img src="" alt="Img1" class="card-img-top"/>
+                                            <div className="card-body">
+                                                <h4 className="card-title">name1</h4>
+                                                <p className="card-text">
+                                                    <span>Giá: </span> VNĐ
+                                                </p>
+                                                <a href="shopping-cart/add/${l.id}.html" className="btn btn-danger ml-3">Mua ngay</a> 
+                                                <a href="detail/${l.id}.html" className="btn btn-success ml-3">Xem chi tiết</a>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="col-md-4 item" style={{width:'20rem'}}>
+                                        <div className="card">
+                                            <img src="" alt="Img1" className="card-img-top"/>
+                                            <div className="card-body">
+                                                <h4 className="card-title">name2</h4>
+                                                <p className="card-text">
+                                                    <span>Giá: </span> VNĐ
+                                                </p>
+                                                <a href="shopping-cart/add/${l.id}.html" className="btn btn-danger ml-3">Mua ngay</a> 
+                                                <a href="detail/${l.id}.html" className="btn btn-success ml-3">Xem chi tiết</a>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="col-md-4 item" style={{width:'20rem'}}>
+                                        <div className="card">
+                                            <div className="card-body">
+                                                <h4 className="card-title">name3</h4>
+                                                <p className="card-text">
+                                                    <span>Giá: </span> VNĐ
+                                                </p>
+                                                <a href="shopping-cart/add/${l.id}.html" className="btn btn-danger ml-3">Mua ngay</a> 
+                                                <a href="detail/${l.id}.html" className="btn btn-success ml-3">Xem chi tiết</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> */}
             <Segment style={{ padding: '2em 0em' }} vertical>
                 <Jumbotron fluid className='jumb'>
                     <Container fluid>
@@ -198,6 +247,7 @@ class Products extends Component {
                 {/* <Advertisement unit='billboard' style={{marginLeft:'5em'}}>
                     <Image src="https://game.haloshop.vn/image/cache/catalog/banners/game/categories/ps5-tang-mo-hinh-categories-1280x280.jpg" wrapped/>
                 </Advertisement> */}
+                
                     <Grid.Row>
                         <Grid.Column textAlign='center'>
                             {/* <Header as='h3' style={{ fontSize: '2em' }}>Top Products</Header> */}
@@ -207,7 +257,7 @@ class Products extends Component {
                                     Trang Chủ
                                 </Header> */}
                                 <Header>
-                                    <h3 className="header-home">Trang Chủ</h3>
+                                    <h3 className="header-home">TRANG CHỦ</h3>
                                 </Header>
                             </Divider>
                             <Input

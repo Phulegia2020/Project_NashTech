@@ -3,6 +3,8 @@ import { get, put } from '../../Utils/httpHelper'
 import { withRouter } from "react-router";
 import { Col, Row, Button, Form, FormGroup, Label, Input } from 'reactstrap';
 import "../Category/Category.css";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 class UpdateBillDetails extends Component {
     constructor(props)
@@ -72,7 +74,7 @@ class UpdateBillDetails extends Component {
                 key: 'quantity'
             })
             this.setState({
-                Error: "Quantity is not less than 1!"
+                Error: "Số lượng không nhỏ hơn 1!"
             });
             return;
         }
@@ -86,7 +88,7 @@ class UpdateBillDetails extends Component {
                         key: 'product'
                     })
                     this.setState({
-                        Error: "This product is existed in this Bill!"
+                        Error: "Máy này đã có trong hóa đơn!"
                     });
                     return;
                 }
@@ -100,7 +102,8 @@ class UpdateBillDetails extends Component {
                 this.props.history.push(`/admin/bill/${this.state.bill_id}`);
             }
         })
-        .catch((error) => {'This product does not have enough quantity!'})
+        // .catch((error) => {'This product does not have enough quantity!'})
+        .catch((error) => toast.error(`Hiện tại không có đủ ${this.state.quantity} máy loại này!`))
     }
 
     handleClear = () => {
@@ -120,18 +123,18 @@ class UpdateBillDetails extends Component {
     render() {
         return (
             <div className="update-form">
-                <h3>Update Bill Detail</h3>
+                <h3>Cập Nhật Chi Tiết</h3>
                 {/* <Row form>
                     <Col md={4}> */}
                         <Form onSubmit={(event) => this.handleUpdate(event)}>
                         <FormGroup>
-                            <Label htmlFor="quantity">Quantity</Label>
+                            <Label htmlFor="quantity">Số Lượng</Label>
                             <Input type="number" name="quantity" id="quantity" placeholder="100" onChange={(e) => this.changeValue(e)} value = {this.state.quantity} required="required"/>
                             {this.state.key === 'quantity' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
                         </FormGroup>
                         
                         <FormGroup className="mb-2">
-                            <Label htmlFor="product">Product</Label>
+                            <Label htmlFor="product">Máy</Label>
                             <Input type="select" name="product_id" id="product" value = {this.state.product_id} onChange={(e) => this.changeValue(e)} required disabled>
                                 {
                                     this.state.products.map((p) => (
@@ -142,12 +145,21 @@ class UpdateBillDetails extends Component {
                             {this.state.key === 'product' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
                         </FormGroup>
                         <div className="mb-5">
-                            <Button type="submit" outline color="warning" >Update</Button>{' '}
-                            <Button outline color="danger" onClick={this.handleClear.bind(this)}>Cancel</Button>
+                            <Button type="submit" outline color="warning" >Cập Nhật</Button>{' '}
+                            <Button outline color="danger" onClick={this.handleClear.bind(this)}>Hủy</Button>
                         </div>
                         </Form>
                     {/* </Col>
                 </Row> */}
+                <ToastContainer position="top-center"
+                    autoClose={2000}
+                    hideProgressBar
+                    newestOnTop={false}
+                    closeOnClick={false}
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover/>
             </div>
         )
     }

@@ -20,7 +20,8 @@ import NotFound from './Components/HomePage/Pages/NotFound';
 class App extends React.Component{
     state = {
         sidebarIsOpen: true,
-        chatbot: true
+        chatbot: true,
+        isOpen: false
     }
 
     toggleSidebar = () => {
@@ -33,6 +34,13 @@ class App extends React.Component{
     handleChatBot = () => {
         this.setState({
             chatbot: false
+        })
+    }
+
+    handleChatBot1 = (data) => {
+        console.log(data);
+        this.setState({
+            isOpen: data
         })
     }
 
@@ -83,7 +91,7 @@ class App extends React.Component{
                   </Route>
                   <Route exact path="/WebPlayStation/product/:id">
                       <MainMenu/>
-                      <ProductDetails/>
+                      <ProductDetails handleChatBot1={this.handleChatBot1}/>
                       <Footer/>
                   </Route>
                   <Route exact path="/WebPlayStation/category/:id">
@@ -130,7 +138,7 @@ class App extends React.Component{
                     chat-title="THE PLAYSTATION SHOP"
                     agent-id="3d2eb8db-0f5e-4a16-9c2a-3cea0cadb3a7"
                     language-code="en"
-                    // wait-open="true"
+                    // wait-open="false"
                     // chat-icon="https://media.comicbook.com/2019/02/playstation-logo-orange-1157594.jpeg"
                 ></df-messenger>}
           </Router>

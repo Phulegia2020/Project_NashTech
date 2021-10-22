@@ -221,19 +221,19 @@ class SignUp extends Component {
                                             </div>
                                             <div class="form-group row mt-5">
                                                 <div class="col-md-2">
-                                                    <label>Gender</label>
+                                                    <label>Giới Tính</label>
                                                 </div>
                                                 <div class="col-md-10">
                                                     <Form.Group inline>
                                                         <Form.Radio
-                                                            label='Male'
+                                                            label='Nam'
                                                             value="Male"
                                                             name='gender'
                                                             checked={this.state.gender == "Male"}
                                                             onChange={this.handleChange}
                                                         />
                                                         <Form.Radio
-                                                            label='Female'
+                                                            label='Nữ'
                                                             value="Female"
                                                             name='gender'
                                                             checked={this.state.gender == "Female"}
@@ -244,7 +244,7 @@ class SignUp extends Component {
                                             </div>
                                             <div class="form-group row mt-5">
                                                 <div class="col-md-2">
-                                                <label>Username</label>
+                                                <label>Tài Khoản</label>
                                                 </div>
                                                 <div class="col-md-10">
                                                     <Form.Input placeholder='Username' name='username' value={this.state.username} onChange={this.handleChange} required disabled id="input-username"/>

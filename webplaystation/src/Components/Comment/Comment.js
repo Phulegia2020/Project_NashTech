@@ -6,7 +6,7 @@ import { withRouter } from "react-router";
 import Add from "./Add"
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Pagination, PaginationItem, PaginationLink } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faPlus, faTrash, faArrowCircleUp, faArrowCircleDown } from '@fortawesome/free-solid-svg-icons';
 import { Input, Breadcrumb } from 'semantic-ui-react';
 
 class Comment extends React.Component {
@@ -199,6 +199,24 @@ class Comment extends React.Component {
         }
     }
 
+    handleSortInc = (e) => {
+        e.preventDefault();
+        //this.state.categories.sort((e1, e2) => (e1.id > e2.id ? 1 : -1));
+        this.setState({
+            comments: this.state.comments.sort((e1, e2) => (e1.id > e2.id ? 1 : -1))
+        })
+        // console.log('sort');
+    }
+
+    handleSortDes = (e) => {
+        e.preventDefault();
+        //this.state.categories.sort((e1, e2) => (e1.id > e2.id ? 1 : -1));
+        this.setState({
+            comments: this.state.comments.sort((e1, e2) => (e2.id > e1.id ? 1 : -1))
+        })
+        // console.log('sort');
+    }
+
     componentWillUnmount() {
         // fix Warning: Can't perform a React state update on an unmounted component
         this.setState = (state,callback)=>{
@@ -250,7 +268,7 @@ class Comment extends React.Component {
                 <table id="table">
                     <thead>
                         <tr>
-                            <th><b>Mã</b></th>
+                            <th><b>Mã</b>{' '}<FontAwesomeIcon icon={faArrowCircleUp} className="sort-icon" onClick={(e) => this.handleSortInc(e)}/><FontAwesomeIcon icon={faArrowCircleDown} className="sort-icon" onClick={(e) => this.handleSortDes(e)}/></th>
                             <th><b>Sản Phẩm</b></th>
                             <th><b>Tên Sản Phẩm</b></th>
                             <th><b>Thời Gian</b></th>

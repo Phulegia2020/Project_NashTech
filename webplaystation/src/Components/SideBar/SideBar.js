@@ -23,7 +23,7 @@ import { withRouter } from "react-router";
 class SideBar extends Component {
     state = {
         categories: [],
-        statistical: [{id: 'chart', name: 'Chart'}],
+        statistical: [{id: 'chart', name: 'Biều Đồ'}],
         info: [{id: 'info', name: 'Change Password'}],
         isDisplayForm: false,
         redirect: false
@@ -63,11 +63,12 @@ class SideBar extends Component {
                     <span color="info" onClick={this.props.toggle} style={{ color: "#fff" }}>
                         &times;
                     </span>
-                    
+                    <Link to={"/admin"} style={{textDecoration: 'none'}}>
                     <h3>
                         <img src="/images/logoPlayStation.jpg" alt='' width='25px' height='25px' style={{marginRight:'9px'}}></img>
                         The Playstation
                     </h3>
+                    </Link>
                 </div>
                 <div className="side-menu">
                     <Nav vertical className="list-unstyled pb-3">
@@ -76,37 +77,37 @@ class SideBar extends Component {
                         <NavItem className="nav-item">
                             <NavLink tag={Link} to={"/admin/product"} className="letter m-2">
                                 <FontAwesomeIcon icon={faBox}/>{' '}
-                                Product
+                                Máy PS
                             </NavLink>
                         </NavItem>
                         <NavItem>
                             <NavLink tag={Link} to={"/admin/user"} className="letter m-2">
                                 <FontAwesomeIcon icon={faPeopleArrows}/>{' '}
-                                User
+                                Người Dùng
                             </NavLink>
                         </NavItem>
                         <NavItem>
                             <NavLink tag={Link} to={"/admin/bill"} className="letter m-2">
                                 <FontAwesomeIcon icon={faMoneyBill}/>{' '}
-                                Bill
+                                Hóa Đơn
                             </NavLink>
                         </NavItem>
                         <NavItem>
                             <NavLink tag={Link} to={"/admin/placeorder"} className="letter m-2">
                                 <FontAwesomeIcon icon={faNewspaper}/>{' '}
-                                Place Order
+                                Phiếu Đặt Hàng
                             </NavLink>
                         </NavItem>
                         <NavItem>
                             <NavLink tag={Link} to={"/admin/import"} className="letter m-2">
                                 <FontAwesomeIcon icon={faFileImport}/>{' '}
-                                Import
+                                Phiếu Nhập Hàng
                             </NavLink>
                         </NavItem>
                         <NavItem>
                             <NavLink tag={Link} to={"/admin/supplier"} className="letter m-2">
                                 <FontAwesomeIcon icon={faCity}/>{' '}
-                                Supplier
+                                Nhà Cung Cấp
                             </NavLink>
                         </NavItem>
                         <NavItem>
@@ -126,7 +127,7 @@ class SideBar extends Component {
                         <NavItem>
                             <NavLink tag={Link} className="letter m-2" onClick={this.onLogOut}>
                             <FontAwesomeIcon icon={faSignOutAlt}/>{' '}
-                            Log Out
+                            Đăng Xuất
                             </NavLink>
                         </NavItem>
                     </Nav>

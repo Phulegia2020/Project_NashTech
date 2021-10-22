@@ -6,6 +6,7 @@ import com.example.nashtechproject.entity.PlaceOrder;
 import com.example.nashtechproject.entity.Supplier;
 import com.example.nashtechproject.exception.SupplierException;
 import com.example.nashtechproject.page.ProductPage;
+import com.example.nashtechproject.page.STATE;
 import com.example.nashtechproject.payload.response.MessageResponse;
 import com.example.nashtechproject.service.SupplierService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +30,8 @@ public class SupplierController {
     @GetMapping
     public List<Supplier> getAllSupplier()
     {
-        List<Supplier> suppliers = supplierService.retrieveSuppliers();
+//        List<Supplier> suppliers = supplierService.retrieveSuppliers();
+        List<Supplier> suppliers = supplierService.getSupplierByStatus();
         return suppliers.stream().sorted(Comparator.comparingLong(Supplier::getId)).collect(Collectors.toList());
     }
 
@@ -73,6 +75,7 @@ public class SupplierController {
         {
             throw new SupplierException(supplier.getPhone());
         }
+        supplier.setStatus(STATE.ACTIVE);
         return supplierService.saveSupplier(supplier);
     }
 
@@ -102,7 +105,9 @@ public class SupplierController {
         {
             throw new SupplierException(supplierId);
         }
-        supplierService.deleteSupplier(supplierId);
+//        supplierService.deleteSupplier(supplierId);
+        supplier.setStatus(STATE.INACTIVE);
+        supplierService.updateSupplier(supplier);
         return ResponseEntity.ok(new MessageResponse("Delete Successfully"));
     }
 }

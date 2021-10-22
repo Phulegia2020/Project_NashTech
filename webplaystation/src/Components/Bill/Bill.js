@@ -7,8 +7,10 @@ import { withRouter } from "react-router";
 import Add from "./Add"
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Pagination, PaginationItem, PaginationLink } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheck, faEdit, faInfo, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faCheck, faEdit, faInfo, faPlus, faTrash, faArrowCircleUp, faArrowCircleDown } from '@fortawesome/free-solid-svg-icons';
 import { Label, Breadcrumb, Input } from 'semantic-ui-react';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 class Bill extends Component {
     state = {
@@ -77,7 +79,8 @@ class Bill extends Component {
                                isDisplayFormDel: false})
             }
         })
-        .catch(error => {alert('This Bill had Details. Can not Delete!')})
+        // .catch(error => {alert('This Bill had Details. Can not Delete!')})
+        .catch(error => {toast.error('Hóa đơn đã được lập chi tiết!')})
     }
 
     createBill(newBill){
@@ -189,7 +192,8 @@ class Bill extends Component {
         //console.log(this.state.billdetails.length);
         if (this.state.billdetails.length === 0)
         {
-            alert('The Bill does not details. Can not Check Out');
+            // alert('The Bill does not details. Can not Check Out');
+            toast.error('Kiểm tra lại chi tiết hóa đơn trước khi xác nhận!');
             return;
         }
         // var status;
@@ -202,14 +206,35 @@ class Bill extends Component {
         //     status = '3';
         // }
         // put(`/bills/confirm/${id}`, {total: this.state.billCheckOut.total, user_id: this.state.billCheckOut.user_id, billStatus_id: status})
-        put(`/bills/confirm/${id}`, {total: this.state.billCheckOut.total, user_id: this.state.billCheckOut.user_id, status: 'Done'})
+        await put(`/bills/confirm/${id}`, {total: this.state.billCheckOut.total, user_id: this.state.billCheckOut.user_id, status: 'Done'})
         .then((response) => {
             if (response.status === 200)
             {
                 this.props.history.push("/admin/bill");
-                window.location.reload();
+                // window.location.reload();
             }
         })
+
+        if (this.state.search === '')
+        {
+            get(`/bills/page?pageNumber=${this.state.pageNumber}&pageSize=9&sortBy=id`)
+            .then((response) => {
+                this.setState({
+                    bills: response.data,
+                });
+            })
+            .catch(error => console.log(error));
+        }
+        else
+        {
+            get(`/bills/fullNamePage?name=${this.state.search}&pageNumber=${this.state.pageNumber}&pageSize=9&sortBy=id`)
+            .then((response) => {
+                this.setState({
+                    bills: response.data,
+                });
+            })
+            .catch(error => console.log(error));
+        }
     }
 
     async handleSearch(e){
@@ -261,6 +286,24 @@ class Bill extends Component {
         }
     }
 
+    handleSortInc = (e) => {
+        e.preventDefault();
+        //this.state.categories.sort((e1, e2) => (e1.id > e2.id ? 1 : -1));
+        this.setState({
+            bills: this.state.bills.sort((e1, e2) => (e1.id > e2.id ? 1 : -1))
+        })
+        // console.log('sort');
+    }
+
+    handleSortDes = (e) => {
+        e.preventDefault();
+        //this.state.categories.sort((e1, e2) => (e1.id > e2.id ? 1 : -1));
+        this.setState({
+            bills: this.state.bills.sort((e1, e2) => (e2.id > e1.id ? 1 : -1))
+        })
+        // console.log('sort');
+    }
+
     componentWillUnmount() {
         // fix Warning: Can't perform a React state update on an unmounted component
         this.setState = (state,callback)=>{
@@ -282,23 +325,23 @@ class Bill extends Component {
                     toggle={this.onToggleFormDel}
                     >
                     <ModalHeader>
-                        Delete
+                        Xóa Hóa Đơn
                     </ModalHeader>
                     <ModalBody>
                         <p>
-                        Are you sure?
+                        Bạn có chắc chắn muỗn xóa?
                         </p>
                     </ModalBody>
                     <ModalFooter>
-                        <Button onClick={(e) => this.delBill(e, this.state.id)} className="btn-danger">Delete</Button>
-                        <Button onClick={(e) => this.onCloseFormDel(e)}>Close</Button>
+                        <Button onClick={(e) => this.delBill(e, this.state.id)} className="btn-danger">Xóa</Button>
+                        <Button onClick={(e) => this.onCloseFormDel(e)}>Hủy</Button>
                     </ModalFooter>
                 </Modal>
                 <Breadcrumb icon='right angle' sections={sections} size='large'/>
                 <br/>
                 <button type="button" className="btn btn-primary" onClick={this.onToggleForm} style={{marginTop: '15px', marginBottom: '5px'}}>
                     <FontAwesomeIcon icon={faPlus} className="mr-2"/>{' '}
-                    Creat New Bill
+                    Tạo Hóa Đơn
                 </button>
                 <Input
                     style={{marginLeft: '100rem'}}
@@ -310,21 +353,22 @@ class Bill extends Component {
                 <table id="table">
                     <thead>
                         <tr>
-                            <th><b>ID</b></th>
-                            <th><b>Total</b></th>
-                            <th><b>Created Date</b></th>
-                            <th><b>CheckedOut Date</b></th>
-                            <th><b>Customer</b></th>
-                            <th><b>Status</b></th>
-                            <th>Update</th>
-                            <th>Delete</th>
-                            <th>Details</th>
-                            <th>Check Out</th>
+                            <th><b>Mã Hóa Đơn</b>{' '}<FontAwesomeIcon icon={faArrowCircleUp} className="sort-icon" onClick={(e) => this.handleSortInc(e)}/><FontAwesomeIcon icon={faArrowCircleDown} className="sort-icon" onClick={(e) => this.handleSortDes(e)}/></th>
+                            <th><b>Tổn Tiền</b></th>
+                            <th><b>Thời Gian Lập</b></th>
+                            <th><b>Thời Gian Xác Nhận</b></th>
+                            <th><b>Khách Hàng</b></th>
+                            <th><b>Trạng Thái</b></th>
+                            <th>Cập Nhập</th>
+                            <th>Xóa</th>
+                            <th>Chi Tiết</th>
+                            <th>Xác Nhận</th>
                         </tr>
                     </thead>
                     <tbody>
                         {
                             this.state.bills.map((b) => (
+                                b.status !== 'Cancel' &&
                                 <tr key={b.id}>
                                     <td>{b.id}</td>
                                     <td>{formatCurrency(b.total)}</td>
@@ -411,7 +455,7 @@ class Bill extends Component {
 
                 <div className="container">
                     <Modal isOpen={this.state.isDisplayForm} toggle={this.onToggleForm}>
-                        <ModalHeader toggle={this.onToggleForm}>Create New Bill</ModalHeader>
+                        <ModalHeader toggle={this.onToggleForm}>Tạo Hóa Đơn</ModalHeader>
                         <ModalBody>
                             <Add onAdd={this.onAdd} onCloseForm={this.onCloseForm}/>
                         </ModalBody>
@@ -419,6 +463,16 @@ class Bill extends Component {
                         </ModalFooter>
                     </Modal>
                 </div>
+                <ToastContainer position="top-center"
+                    autoClose={2000}
+                    hideProgressBar
+                    newestOnTop={false}
+                    closeOnClick={false}
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover
+					style={{width: '400px'}}/>
             </div>
         )
     }

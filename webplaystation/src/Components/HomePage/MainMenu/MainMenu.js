@@ -14,6 +14,8 @@ import {get} from "./../../../Utils/httpHelper";
 import Profile from '../Profile/Profile';
 import { withRouter } from "react-router";
 import "./MainMenu.css";
+// import { ToastContainer, toast } from 'react-toastify';
+// import 'react-toastify/dist/ReactToastify.css';
 
 class MainMenu extends Component {
     constructor(props) {
@@ -58,6 +60,8 @@ class MainMenu extends Component {
         .catch((error) => {})
     }
 
+    // notificationCart = (data) => toast.error(data);
+
     componentWillUnmount() {
         // fix Warning: Can't perform a React state update on an unmounted component
         this.setState = (state,callback)=>{
@@ -86,12 +90,13 @@ class MainMenu extends Component {
                     </div>
                     <Container>
                         <Menu inverted pointing secondary size='large'>
+                            <Menu.Item as={Link} to="/WebPlayStation" name='products' active={activeItem === "WebPlayStation"} onClick={this.onMenuItemClick}>Trang Chủ</Menu.Item> 
                             {/* <Menu.Item position='left'>
                             <img src='https://gmedia.playstation.com/is/image/SIEPDC/ps-store-listing-thumb-01-en-05nov20?$facebook$' alt='logo' ></img>
                             </Menu.Item> */}
-                            <Dropdown text='Category' pointing className='link item'>
+                            <Dropdown text='Thể Loại' pointing className='link item'>
                                 <Dropdown.Menu>
-                                    <Dropdown.Header>Categories</Dropdown.Header>
+                                    <Dropdown.Header>Danh Mục</Dropdown.Header>
                                     {
                                         this.state.categories.map((c) => (
                                         <Dropdown.Item as={Link} to={`/WebPlayStation/category/${c.id}`} key={c.id}>{c.name}</Dropdown.Item>
@@ -99,15 +104,24 @@ class MainMenu extends Component {
                                     }
                                 </Dropdown.Menu>
                             </Dropdown>
-                            <Menu.Item as={Link} to="/WebPlayStation" name='products' active={activeItem === "WebPlayStation"} onClick={this.onMenuItemClick}>Products</Menu.Item>                        
-                            <Menu.Item as={Link} to="/WebPlayStation/about" name="about" active={activeItem === "WebPlayStation/about"} onClick={this.onMenuItemClick}>About</Menu.Item>
+                                                   
+                            <Menu.Item as={Link} to="/WebPlayStation/about" name="about" active={activeItem === "WebPlayStation/about"} onClick={this.onMenuItemClick}>Giới Thiệu</Menu.Item>
                             <Menu.Item position='right'>
                                 <ShoppingCart/>
                                 {localStorage.getItem('accessToken') !== null ? <Profile onLogOut={this.onLogOut}/>
-                                         : <Button as={Link} to="/WebPlayStation/login" active={activeItem === "WebPlayStation/login"} onClick={this.onMenuItemClick} inverted >Log in</Button>}
+                                         : <Button as={Link} to="/WebPlayStation/login" active={activeItem === "WebPlayStation/login"} onClick={this.onMenuItemClick} inverted >Đăng Nhập</Button>}
                             </Menu.Item>
                         </Menu>
                     </Container>
+                    {/* <ToastContainer position="top-right"
+                        autoClose={2000}
+                        hideProgressBar
+                        newestOnTop={false}
+                        closeOnClick
+                        rtl={false}
+                        pauseOnFocusLoss
+                        draggable
+                        pauseOnHover/> */}
                 </Segment>
             </Visibility>
             </Sticky>

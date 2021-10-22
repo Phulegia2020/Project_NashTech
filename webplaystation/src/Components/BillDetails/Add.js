@@ -55,7 +55,7 @@ export default class Add extends Component {
                 key: 'quantity'
             })
             this.setState({
-                Error: "Quantity is not less than 1!"
+                Error: "Số lượng không nhỏ hơn 1!"
             });
             return;
         }
@@ -65,7 +65,7 @@ export default class Add extends Component {
                 key: 'quantity'
             })
             this.setState({
-                Error: "This product just has " + number + " ones"
+                Error: "Máy này chỉ còn " + number + " máy"
             });
             return;
         }
@@ -77,7 +77,7 @@ export default class Add extends Component {
                     key: 'product'
                 })
                 this.setState({
-                    Error: "This product is existed in this Bill. Update instead of Creating!"
+                    Error: "Máy này đã có trong hóa đơn!"
                 });
                 return;
             }
@@ -108,13 +108,13 @@ export default class Add extends Component {
             <div>
                 <Form onSubmit={(event) => this.handleCreate(event)}>
                 <FormGroup>
-                    <Label htmlFor="quantity">Quantity</Label>
+                    <Label htmlFor="quantity">Số Lượng</Label>
                     <Input type="number" name="quantity" id="quantity" placeholder="100" onChange={(e) => this.changeValue(e)} value = {this.state.quantity} required="required"/>
                     {this.state.key === 'quantity' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
                 </FormGroup>
                 
                 <FormGroup className="mb-2">
-                    <Label htmlFor="product">Product</Label>
+                    <Label htmlFor="product">Máy</Label>
                     <Input type="select" name="product_id" id="product" onChange={(e) => this.changeValue(e)} required multiple>
                         {
                             this.state.products.map((p) => (
@@ -125,8 +125,8 @@ export default class Add extends Component {
                     {this.state.key === 'product' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
                 </FormGroup>
                 <div className="mb-5">
-                    <Button type="submit" outline color="warning" >Add</Button>{' '}
-                    <Button outline color="danger" onClick={this.handleClear.bind(this)}>Cancel</Button>
+                    <Button type="submit" outline color="warning" >Tạo</Button>{' '}
+                    <Button outline color="danger" onClick={this.handleClear.bind(this)}>Hủy</Button>
                 </div>
                 </Form>
             </div>

@@ -4,6 +4,7 @@ import {get} from "../../Utils/httpHelper";
 import { Input } from 'reactstrap';
 import "./Statistical.css";
 import {formatQuantity} from "./../../Utils/Utils";
+import ReactExport from "react-data-export";
 
 const CustomTooltip = ({ active, payload, label }) => {
     if (active && payload && payload.length) {
@@ -41,6 +42,10 @@ const CustomizedLabel = ({ active, payload, label }) => {
       return null;
 };
 
+// const ReactExport = require("react-data-export");
+const ExcelFile = ReactExport.ExcelFile;
+const ExcelSheet = ExcelFile.ExcelSheet;
+
 export default class Chart extends Component {
     constructor (props){
         super(props);
@@ -50,7 +55,8 @@ export default class Chart extends Component {
             COLORS: ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#FF2C4F'],
             month: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
             monthValue: new Date().getMonth() + 1,
-            revenue: []
+            revenue: [],
+            
         }
     }
 
@@ -101,10 +107,26 @@ export default class Chart extends Component {
     }
 
     render() {
+        const dataSet = [
+            {
+                columns: [
+                  {title: "Tháng", style: {alignment:{horizontal: 'center'}, font: {bold: true}}},
+                  {title: "Doanh Thu (VNĐ)", width: {wpx: 150}, style: {alignment:{horizontal: 'center'}, font: {bold: true}}},
+                  {title: "Chi Phí (VNĐ)", width: {wpx: 150}, style: {alignment:{horizontal: 'center'}, font: {bold: true}}},
+                  {title: "Lợi Nhuận (VNĐ)", width: {wpx: 150}, style: {alignment:{horizontal: 'center'}, font: {bold: true}}}
+                ],
+                data: this.state.revenue.map(rev => [
+                  {value: rev.name, style: {alignment:{horizontal: 'center'}}},
+                  {value: formatQuantity(rev.revenue*1000000), style: {alignment:{horizontal: 'center'}}},
+                  {value: formatQuantity(rev.expense), style: {alignment:{horizontal: 'center'}}},
+                  {value: formatQuantity(rev.profit), style: {alignment:{horizontal: 'center'}}}
+                ])
+            }
+        ];
         return (
             <div className="charts">
                 <div className="pie-chart">
-                    <h4>Choose month:</h4>
+                    <h4>THÁNG:</h4>
                     <Input type="select" name="month" id="month" value={this.state.monthValue} onChange={(e) => this.changeValue(e)} style={{width: '150px'}}>
                         {
                             this.state.month.map((m, index) => (
@@ -112,7 +134,7 @@ export default class Chart extends Component {
                             ))
                         }
                     </Input>
-                    <h4 style={{textAlign: 'center'}}>TOP 5 BEST SALE PRODUCTS IN {this.state.monthValue}/{new Date().getFullYear()}</h4>
+                    <h4 style={{textAlign: 'center'}}>TOP 5 MÁY BÁN CHẠY NHẤT TRONG {this.state.monthValue}/{new Date().getFullYear()}</h4>
                     <PieChart width={1000} height={400} onMouseEnter={this.onPieEnter}>
                         <Pie
                         data={this.state.data}
@@ -146,8 +168,9 @@ export default class Chart extends Component {
                 </div>
 
                 <div className="line-chart">
+                
                 <h4>DOANH THU THEO TỪNG THÁNG TRONG NĂM {new Date().getFullYear()}</h4>
-                <LineChart width={600} height={570} data={this.state.revenue} margin={{ top: 5, right: 20, bottom: 5, left: 0 }}>
+                <LineChart width={600} height={550} data={this.state.revenue} margin={{ top: 5, right: 20, bottom: 5, left: 0 }}>
                     <Line type="monotone" dataKey="revenue" stroke="#82ca9d" />
                     {/* #8884d8   #e74c3c*/}
                     <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
@@ -155,6 +178,9 @@ export default class Chart extends Component {
                     <YAxis />
                     <Tooltip content={<CustomTooltip/>}/>
                 </LineChart>
+                <ExcelFile filename={`Report_Doanh_Thu_${new Date().getFullYear()}`} element={<button className="btn-exportReport">IN BÁO CÁO</button>}>
+                    <ExcelSheet dataSet={dataSet} name="Report_Sheet"/>
+                </ExcelFile>
                 </div>
             </div>
         )

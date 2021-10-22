@@ -35,7 +35,7 @@ class TopBar extends Component {
                     <Button color="info" onClick={this.props.toggleSidebar}>
                         <FontAwesomeIcon icon={faAlignLeft} />
                     </Button>
-                    <h3 className="m-3">Management</h3>
+                    <h3 className="m-3">Quản Lý</h3>
                     {/* <h3 style={{marginLeft: '1200px'}}><Icon name='user'/>{localStorage.getItem('username')}</h3> */}
                     {/* <div class="profile_details_left">
                         <ul class="nofitications-dropdown">

@@ -32,6 +32,7 @@ import Chart from "../Statistical/Chart";
 import Comment from "../Comment/Comment";
 import UpdateComment from "../Comment/UpdateComment";
 import ChangePassword from "../User/ChangePassword";
+import AnalyticsDashboard1 from "../DashBoard/DashBoard";
 
 class Content extends Component {
     componentDidMount(){
@@ -47,8 +48,8 @@ class Content extends Component {
                 <Topbar toggleSidebar={this.props.toggleSidebar} />
                 <Switch>
                     <Route exact path="/admin">
-                        <Category/>
-                        
+                        {/* <Category/> */}
+                        <AnalyticsDashboard1/>
                     </Route>
                     <Route exact path="/admin/category">
                         <Category/>

@@ -139,7 +139,9 @@ public class PlaceOrderController {
         {
             throw new InvalidDataException("The PlaceOrder is imported. Can not delete!");
         }
-        placeOrderService.deletePlaceOrder(placeOrderId);
+//        placeOrderService.deletePlaceOrder(placeOrderId);
+        placeOrder.setStatus(STATE.CANCEL);
+        placeOrderService.updatePlaceOrder(placeOrder);
         return ResponseEntity.ok(new MessageResponse("Delete Successfully"));
     }
 

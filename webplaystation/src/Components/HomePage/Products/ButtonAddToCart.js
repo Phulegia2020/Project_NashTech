@@ -1,17 +1,7 @@
 import React, {Component} from 'react';
 import {Button, Icon} from "semantic-ui-react";
-// import { Toast, ToastBody, ToastHeader } from 'reactstrap';
-// import "./style.css";
 
 class ButtonAddToCart extends Component {
-    // constructor(props)
-    // {
-    //     super(props);
-    //     this.state = {
-    //         show: false
-    //     }
-    // }
-
     onAddToCart = (product) => {
         const shoppingCartItems = JSON.parse(localStorage.getItem('shopping-cart') || '[]');
 
@@ -38,36 +28,17 @@ class ButtonAddToCart extends Component {
             shoppingCartItems.push(cartItem);
             localStorage.setItem('shopping-cart', JSON.stringify(shoppingCartItems));
         }
-
-        // this.setState({
-        //     show: true
-        // })
-
-        // setTimeout(
-        //     () => this.setState({ show: false }), 
-        //     2000
-        // );
+        this.props.notification();
     }
 
     render() {
         return(
-            
             <Button color='green' animated='vertical' onClick={this.onAddToCart.bind(this, this.props.product)} disabled={this.props.product.quantity === 0}>
-                <Button.Content hidden>Add to cart</Button.Content>
+                <Button.Content hidden>Thêm Vào Giỏ</Button.Content>
                 <Button.Content visible>
-                    <Icon name='shop'/> Shop
+                    <Icon name='shop'/> Mua
                 </Button.Content>
-                {/* <Toast isOpen={this.state.show} className="toast-message">
-                    <ToastHeader>
-                    Reactstrap
-                    </ToastHeader>
-                    <ToastBody>
-                    This is a toast on a white background — check it out!
-                    </ToastBody>
-                </Toast> */}
             </Button>
-
-            
         );
     }
 }

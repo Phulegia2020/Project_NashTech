@@ -78,13 +78,13 @@ export default class Add extends Component {
             <div>
                 <Form onSubmit={(event) => this.handleCreate(event)}>
                 <FormGroup>
-                    <Label htmlFor="total">Total</Label>
+                    <Label htmlFor="total">Tổng Tiền</Label>
                     <Input type="number" name="total" id="total" placeholder="VND" onChange={(e) => this.changeValue(e)} value = {this.state.total} required="required" disabled/>
                     {this.state.key === 'total' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
                 </FormGroup>
                 
                 <FormGroup className="mb-2">
-                    <Label htmlFor="user">Customer</Label>
+                    <Label htmlFor="user">Khách Hàng</Label>
                     <Input type="select" name="user_id" id="user" onChange={(e) => this.changeValue(e)} multiple required>
                         {
                             this.state.users.map((u) => (
@@ -94,8 +94,8 @@ export default class Add extends Component {
                     </Input>
                 </FormGroup>
                 <div className="mb-5">
-                    <Button type="submit" outline color="warning" >Add</Button>{' '}
-                    <Button outline color="danger" onClick={this.handleClear.bind(this)}>Cancel</Button>
+                    <Button type="submit" outline color="warning" >Tạo</Button>{' '}
+                    <Button outline color="danger" onClick={this.handleClear.bind(this)}>Hủy</Button>
                 </div>
                 </Form>
             </div>

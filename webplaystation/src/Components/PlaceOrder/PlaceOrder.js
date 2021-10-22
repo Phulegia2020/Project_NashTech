@@ -6,8 +6,10 @@ import { Link } from 'react-router-dom';
 import Add from "./Add"
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Pagination, PaginationItem, PaginationLink } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faInfo, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faInfo, faPlus, faTrash, faArrowCircleDown, faArrowCircleUp } from '@fortawesome/free-solid-svg-icons';
 import { Label, Breadcrumb } from 'semantic-ui-react';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default class PlaceOrder extends Component {
     state = {
@@ -55,7 +57,8 @@ export default class PlaceOrder extends Component {
         .then((response) => {
             this.setState({placeorders: this.state.placeorders.filter(b => b.id !== id), isDisplayFormDel: false})
         })
-        .catch((error) => {alert('The Place Order had details or approved by import card. Can not delete!')});
+        // .catch((error) => {alert('The Place Order had details or approved by import card. Can not delete!')});
+        .catch((error) => {toast.error('Phiếu đặt này đã được lập chi tiết!')});
     }
 
     createPlaceOrder(newPlaceOrder){
@@ -130,6 +133,24 @@ export default class PlaceOrder extends Component {
         .catch(error => console.log(error));
     }
 
+    handleSortInc = (e) => {
+        e.preventDefault();
+        //this.state.categories.sort((e1, e2) => (e1.id > e2.id ? 1 : -1));
+        this.setState({
+            placeorders: this.state.placeorders.sort((e1, e2) => (e1.id > e2.id ? 1 : -1))
+        })
+        // console.log('sort');
+    }
+
+    handleSortDes = (e) => {
+        e.preventDefault();
+        //this.state.categories.sort((e1, e2) => (e1.id > e2.id ? 1 : -1));
+        this.setState({
+            placeorders: this.state.placeorders.sort((e1, e2) => (e2.id > e1.id ? 1 : -1))
+        })
+        // console.log('sort');
+    }
+
     componentWillUnmount() {
         // fix Warning: Can't perform a React state update on an unmounted component
         this.setState = (state,callback)=>{
@@ -151,49 +172,50 @@ export default class PlaceOrder extends Component {
                     toggle={this.onToggleFormDel}
                     >
                     <ModalHeader>
-                        Delete
+                        Xóa Phiếu Đặt
                     </ModalHeader>
                     <ModalBody>
                         <p>
-                        Are you sure?
+                        Bạn có chắc chắn muốn xóa?
                         </p>
                     </ModalBody>
                     <ModalFooter>
-                        <Button onClick={(e) => this.delPlaceOrder(e, this.state.id)} className="btn-danger">Delete</Button>
-                        <Button onClick={(e) => this.onCloseFormDel(e)}>Close</Button>
+                        <Button onClick={(e) => this.delPlaceOrder(e, this.state.id)} className="btn-danger">Xóa</Button>
+                        <Button onClick={(e) => this.onCloseFormDel(e)}>Hủy</Button>
                     </ModalFooter>
                 </Modal>
                 <Breadcrumb icon='right angle' sections={sections} size='large'/>
                 <br/>
                 <button type="button" className="btn btn-primary" onClick={this.onToggleForm} style={{marginTop: '30px'}}>
                     <FontAwesomeIcon icon={faPlus} className="mr-2"/>{' '}
-                    Creat New Place Order
+                    Tạo Phiết Đặt
                 </button>
                 <table id="table">
                     <thead>
                         <tr>
-                            <th><b>ID</b></th>
-                            <th><b>Total</b></th>
-                            <th><b>Created Date</b></th>
-                            <th><b>Employee</b></th>
-                            <th><b>Supplier</b></th>
-                            <th><b>Status</b></th>
-                            <th>Update</th>
-                            <th>Delete</th>
-                            <th>Details</th>
+                            <th><b>Mã Phiếu Đặt</b>{' '}<FontAwesomeIcon icon={faArrowCircleUp} className="sort-icon" onClick={(e) => this.handleSortInc(e)}/><FontAwesomeIcon icon={faArrowCircleDown} className="sort-icon" onClick={(e) => this.handleSortDes(e)}/></th>
+                            <th><b>Tổng Tiền</b></th>
+                            <th><b>Thời Gian Lập</b></th>
+                            <th><b>Nhân Viên</b></th>
+                            <th><b>Nhà Cung Cấp</b></th>
+                            <th><b>Trạng Thái</b></th>
+                            <th>Cập Nhật</th>
+                            <th>Xóa</th>
+                            <th>Chi Tiết</th>
                         </tr>
                     </thead>
                     <tbody>
                         {
                             this.state.placeorders.map((po) => (
+                                po.status !== 'Cancel' &&
                                 <tr key={po.id}>
                                     <td>{po.id}</td>
                                     <td>{formatCurrency(po.total)}</td>
                                     <td>{po.createddate}</td>
                                     <td>{po.user.name}</td>
                                     <td>{po.supplier.name}</td>
-                                    {po.status === 'Done' && (<td><Label color="teal">{po.status}</Label></td>)}
-                                    {po.status === 'Waiting' && (<td><Label color="grey">{po.status}</Label></td>)}
+                                    {po.status === 'Done' && (<td><Label color="teal">Hoàn Tất</Label></td>)}
+                                    {po.status === 'Waiting' && (<td><Label color="grey">Chờ Xử Lý</Label></td>)}
                                     <td>
                                         {po.status !=='Done' ? 
                                         <Link to={`/admin/placeorder/update/${po.id}`}>
@@ -250,7 +272,7 @@ export default class PlaceOrder extends Component {
 
                 <div className="container">
                     <Modal isOpen={this.state.isDisplayForm} toggle={this.onToggleForm}>
-                        <ModalHeader toggle={this.onToggleForm}>Create New Place Order</ModalHeader>
+                        <ModalHeader toggle={this.onToggleForm}>Tạo Phiếu Đặt</ModalHeader>
                         <ModalBody>
                             <Add onAdd={this.onAdd} onCloseForm={this.onCloseForm}/>
                         </ModalBody>
@@ -258,6 +280,15 @@ export default class PlaceOrder extends Component {
                         </ModalFooter>
                     </Modal>
                 </div>
+                <ToastContainer position="top-center"
+                    autoClose={2000}
+                    hideProgressBar
+                    newestOnTop={false}
+                    closeOnClick={false}
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover/>
             </div>
         )
     }

@@ -65,12 +65,12 @@ export default class Add extends Component {
             <div>
                 <Form onSubmit={(event) => this.handleCreate(event)}>
                 <FormGroup>
-                    <Label htmlFor="total">Total</Label>
+                    <Label htmlFor="total">Tổng Tiền</Label>
                     <Input type="number" name="total" id="total" placeholder="VND" onChange={(e) => this.changeValue(e)} value = {this.state.total} disabled/>
                     {this.state.key === 'total' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
                 </FormGroup>
                 <FormGroup className="mb-2">
-                    <Label htmlFor="placeorder">Place Order</Label>
+                    <Label htmlFor="placeorder">Phiếu Đặt</Label>
                     <Input type="select" name="placeorder_id" id="placeorder" onChange={(e) => this.changeValue(e)}>
                         {
                             this.state.placeorders.map((po) => (
@@ -80,8 +80,8 @@ export default class Add extends Component {
                     </Input>
                 </FormGroup>
                 <div className="mb-5">
-                    <Button type="submit" outline color="warning" >Add</Button>{' '}
-                    <Button outline color="danger" onClick={this.handleClear.bind(this)}>Cancel</Button>
+                    <Button type="submit" outline color="warning" >Tạo</Button>{' '}
+                    <Button outline color="danger" onClick={this.handleClear.bind(this)}>Hủy</Button>
                 </div>
                 </Form>
             </div>

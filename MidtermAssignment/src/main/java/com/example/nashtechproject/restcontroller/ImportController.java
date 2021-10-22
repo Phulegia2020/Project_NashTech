@@ -268,12 +268,17 @@ public class ImportController {
         {
             throw new InvalidDataException("The Import is checked out. Can not delete!");
         }
-        List<PlaceOrderDetails> list = placeOrderDetailsService.getPlaceOrderDetailsByPlaceOrder(imp.getPlaceOrder().getId());
-        for (int i = 0; i < list.size(); i++)
-        {
-            placeOrderDetailsService.deletePlaceOrderDetails(list.get(i).getKey().getPlaceOrder().getId(), list.get(i).getKey().getProduct().getId());
-        }
-        importService.deleteImport(importId);
+//        List<PlaceOrderDetails> list = placeOrderDetailsService.getPlaceOrderDetailsByPlaceOrder(imp.getPlaceOrder().getId());
+//        for (int i = 0; i < list.size(); i++)
+//        {
+//            placeOrderDetailsService.deletePlaceOrderDetails(list.get(i).getKey().getPlaceOrder().getId(), list.get(i).getKey().getProduct().getId());
+//        }
+//        importService.deleteImport(importId);
+        PlaceOrder placeOrder = placeOrderService.getPlaceOrder(imp.getPlaceOrder().getId());
+        placeOrder.setStatus(STATE.CANCEL);
+        placeOrderService.updatePlaceOrder(placeOrder);
+        imp.setStatus(STATE.CANCEL);
+        importService.updateImport(imp);
         return ResponseEntity.ok(new MessageResponse("Delete Successfully"));
     }
 

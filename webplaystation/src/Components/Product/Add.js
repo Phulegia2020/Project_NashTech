@@ -101,7 +101,7 @@ export default class Add extends Component {
                 key: 'quantity'
             })
             this.setState({
-                Error: "Quantity is not less than 1!"
+                Error: "Số lượng không nhỏ hơn 1!"
             });
             return;
         }
@@ -111,7 +111,7 @@ export default class Add extends Component {
                 key: 'price'
             })
             this.setState({
-                Error: "Price is not less than 1!"
+                Error: "Giá không nhỏ hơn 1!"
             });
             return;
         }
@@ -123,7 +123,7 @@ export default class Add extends Component {
                     key: 'name'
                 })
                 this.setState({
-                    Error: "This name is existed!"
+                    Error: "Tên máy này đã được sử dụng!"
                 });
                 return;
             }
@@ -163,32 +163,32 @@ export default class Add extends Component {
             <div>
                 <Form onSubmit={(event) => this.handleCreate(event)}>
                 <FormGroup>
-                    <Label htmlFor="name">Name</Label>
+                    <Label htmlFor="name">Tên Máy</Label>
                     <Input type="text" name="name" id="name" placeholder="PlayStation 4" onChange={(e) => this.changeValue(e)} value = {this.state.name} required="required"/>
                     {this.state.key === 'name' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
                 </FormGroup>
                 <FormGroup>
-                    <Label htmlFor="description">Description</Label>
+                    <Label htmlFor="description">Thông Tin</Label>
                     <textarea style={{resize: 'none', width: '470px'}} rows="3" type="text" name="description" id="description" placeholder="PlayStation 4 Pro" onChange={(e) => this.changeValue(e)} value = {this.state.description} required="required"/>
                 </FormGroup>
                 <FormGroup>
-                    <Label htmlFor="quantity">Quantity</Label>
+                    <Label htmlFor="quantity">Số Lượng</Label>
                     <Input type="number" name="quantity" id="quantity" placeholder="1000" onChange={(e) => this.changeValue(e)} value = {this.state.quantity} required="required"/>
                     {this.state.key === 'quantity' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
                 </FormGroup>
                 <FormGroup>
-                    <Label htmlFor="price">Price</Label>
+                    <Label htmlFor="price">Đơn Giá</Label>
                     <Input type="number" name="price" id="price" placeholder="1.000.000 VNĐ" onChange={(e) => this.changeValue(e)} value = {this.state.price} required="required"/>
                     {this.state.key === 'price' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
                 </FormGroup>
                 <FormGroup>
-                    <Label htmlFor="image">Image</Label>
+                    <Label htmlFor="image">Hình Ảnh</Label>
                     <br></br>
                     <Input type="file" name="image" id="image" accept=".jpeg, .png, .jpg" onChange={(e) => {this.uploadImage(e);}} required="required"/>
                 </FormGroup>
                 <FormGroup className="mb-2">
                     
-                    <Label htmlFor="category">Category</Label>
+                    <Label htmlFor="category">Loại Máy</Label>
                     <Input type="select" name="category_id" id="category" onChange={(e) => this.changeValue(e)} multiple required>
                         {
                             this.state.categories.map((c) => (
@@ -199,7 +199,7 @@ export default class Add extends Component {
                     
                 </FormGroup>
                 <FormGroup className="mb-5">
-                    <Label htmlFor="supplier">Supplier</Label>
+                    <Label htmlFor="supplier">Nhà Cung Cấp</Label>
                     <Input type="select" name="supplier_id" id="supplier" onChange={(e) => this.changeValue(e)} multiple required>
                         {
                             this.state.suppliers.map((s) => (
@@ -209,8 +209,8 @@ export default class Add extends Component {
                     </Input>
                 </FormGroup>
                 <div className="mb-5">
-                    <Button type="submit" outline color="warning" >Add</Button>{' '}
-                    <Button outline color="danger" onClick={this.handleClear.bind(this)}>Cancel</Button>
+                    <Button type="submit" outline color="warning" >Thêm</Button>{' '}
+                    <Button outline color="danger" onClick={this.handleClear.bind(this)}>Hủy</Button>
                 </div>
                 </Form>
             </div>

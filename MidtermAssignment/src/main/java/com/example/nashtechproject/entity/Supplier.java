@@ -26,6 +26,9 @@ public class Supplier {
     @Size(max = 10)
     private String phone;
 
+    @Column(name = "status")
+    private String status;
+
     @OneToMany(mappedBy = "supplier", fetch = FetchType.EAGER)
     @JsonIgnore
     private Set<Product> products;
@@ -60,5 +63,13 @@ public class Supplier {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

@@ -97,7 +97,7 @@ class BillDetailsByBill extends Component {
                 })
             }
         })
-        .catch((error) => alert('This bill had include this product. Choose another product!'));
+        .catch((error) => alert('Hóa Đơn đã có sản phẩm này!'));
     }
 
     onToggleForm = () => {
@@ -176,21 +176,21 @@ class BillDetailsByBill extends Component {
                     toggle={this.onToggleFormDel}
                     >
                     <ModalHeader>
-                        Delete
+                        Xóa Chi Tiết
                     </ModalHeader>
                     <ModalBody>
                         <p>
-                        Are you sure?
+                        Bạn có chắc chắn muốn xóa?
                         </p>
                     </ModalBody>
                     <ModalFooter>
-                        <Button onClick={(e) => this.delBillDetail(e, this.state.iddel)} className="btn-danger">Delete</Button>
-                        <Button onClick={(e) => this.onCloseFormDel(e)}>Close</Button>
+                        <Button onClick={(e) => this.delBillDetail(e, this.state.iddel)} className="btn-danger">Xóa</Button>
+                        <Button onClick={(e) => this.onCloseFormDel(e)}>Hủy</Button>
                     </ModalFooter>
                 </Modal>
                 <button type="button" className="btn btn-primary" onClick={this.onToggleForm}>
                     <FontAwesomeIcon icon={faPlus} className="mr-2"/>{' '}
-                    Creat New Bill Detail
+                    Tạo chi tiết mới
                 </button>
 
                 <div className='info-user-bill'>
@@ -206,12 +206,12 @@ class BillDetailsByBill extends Component {
                     <thead>
                         <tr>
                             <th><b>No.</b></th>
-                            <th><b>Image</b></th>
-                            <th><b>Product Name</b></th>
-                            <th><b>Quantity</b></th>
-                            <th><b>Price</b></th>
-                            <th>Update</th>
-                            <th>Delete</th>
+                            <th><b>Hình Ảnh</b></th>
+                            <th><b>Máy</b></th>
+                            <th><b>Số Lượng</b></th>
+                            <th><b>Giá</b></th>
+                            <th>Cập Nhật</th>
+                            <th>Xóa</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -266,7 +266,7 @@ class BillDetailsByBill extends Component {
                 </Pagination>
                 <div className="container">
                     <Modal isOpen={this.state.isDisplayForm} toggle={this.onToggleForm}>
-                        <ModalHeader toggle={this.onToggleForm}>Create New Bill Detail</ModalHeader>
+                        <ModalHeader toggle={this.onToggleForm}>Tạo chi tiết mới</ModalHeader>
                         <ModalBody>
                             <Add onAdd={this.onAdd} onCloseForm={this.onCloseForm} bill={this.state.id} billDet={this.state.billdetails}/>
                         </ModalBody>

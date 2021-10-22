@@ -8,6 +8,9 @@ import {
 import { postLogin } from '../../Utils/httpHelper';
 import { withRouter } from "react-router";
 import {Link} from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import "./Login.css";
 
 class Login extends Component {
 	constructor(props) {
@@ -63,7 +66,8 @@ class Login extends Component {
             }
             
         })
-        .catch(error => alert('Username or Password is wrong!'));
+		// .catch(error => alert('Username or Password is wrong!'));
+		.catch(error => toast.error('Tài khoản hoặc mật khẩu không hợp lệ!'));
 	}
 
 	render() {
@@ -71,40 +75,51 @@ class Login extends Component {
 			<Segment style={{ padding: '8em 0em', marginTop: '4rem' }} placeholder>
 				<Grid columns={2} relaxed='very' stackable>
 				<Grid.Column width={8}>
-					<h2 style={{ marginLeft: '355px', marginBottom: '25px', fontWeight: '900' }}>Sign In</h2>
+					<h2  className="login-title">ĐĂNG NHẬP</h2>
+					{/* style={{ marginLeft: '355px', marginBottom: '25px', fontWeight: '900' }} */}
 					<Form onSubmit={(event) => this.handleSubmit(event)}>
 					<Form.Input
 						icon='user'
 						iconPosition='left'
-						label='Username'
-						placeholder='Enter Username '
+						label='Tài Khoản'
+						placeholder='Tên Tài Khoản... '
 						name='username' value={this.state.username} onChange={this.handleChange}
 						required
 					/>
 					<Form.Input
 						icon='lock'
 						iconPosition='left'
-						label='Password'
+						label='Mật Khẩu'
 						type='password'
-						placeholder='Enter Password '
+						placeholder='Mật Khẩu... '
 						type={this.state.show === false ? 'password' : 'text'}
 						name='password' value={this.state.password} onChange={this.handleChange}
 						required
 					/>
 					<Form.Field>
-						<Checkbox label='Show password' onChange={(e) => this.handleShowPassword(e)}/>
+						<Checkbox label='Hiển thị' onChange={(e) => this.handleShowPassword(e)}/>
 					</Form.Field>
-					<Button type='submit' content='Login' primary/>
+					<Button type='submit' content='Đăng nhập' primary/>
 					</Form>
 				</Grid.Column>
 
 				
 				<Grid.Column verticalAlign='middle'>
-					<Button as={Link} to="/WebPlayStation/signup" content='Sign up' icon='signup' size='big' />
+					<Button as={Link} to="/WebPlayStation/signup" content='ĐĂNG KÝ' icon='signup' size='big' />
 				</Grid.Column>
 				</Grid>
 
-				<Divider vertical>If you do not have an acount. Register?</Divider>
+				<Divider vertical>Nếu Bạn Chưa Có Tài Khoản. Đăng Ký Ở Đây?</Divider>
+				<ToastContainer position="top-center"
+                    autoClose={2000}
+                    hideProgressBar
+                    newestOnTop={false}
+                    closeOnClick={false}
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover
+					style={{width: '350px'}}/>
 			</Segment>
 		);
 	}

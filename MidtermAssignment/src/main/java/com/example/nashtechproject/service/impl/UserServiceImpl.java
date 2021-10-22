@@ -3,6 +3,7 @@ package com.example.nashtechproject.service.impl;
 import com.example.nashtechproject.entity.User;
 import com.example.nashtechproject.dto.UserDTO;
 import com.example.nashtechproject.page.ProductPage;
+import com.example.nashtechproject.page.STATE;
 import com.example.nashtechproject.page.UserPage;
 import com.example.nashtechproject.repository.UserRepository;
 import com.example.nashtechproject.service.UserService;
@@ -34,19 +35,19 @@ public class UserServiceImpl implements UserService {
 
     public List<User> getUsersActive()
     {
-        List<User> users = userRepository.findByActivestatus("Active");
+        List<User> users = userRepository.findByActivestatus(STATE.ACTIVE);
         return users;
     }
 
     public List<User> getUsers()
     {
-        List<User> users = userRepository.findAllByRoleIdAndActivestatus(3L, "Active");
+        List<User> users = userRepository.findAllByRoleIdAndActivestatus(3L, STATE.ACTIVE);
         return users;
     }
 
     public List<User> getEmployee()
     {
-        List<User> users = userRepository.findAllByRoleIdNotAndActivestatus(3L, "Active");
+        List<User> users = userRepository.findAllByRoleIdNotAndActivestatus(3L, STATE.ACTIVE);
         return users;
     }
 
@@ -66,7 +67,8 @@ public class UserServiceImpl implements UserService {
     {
         Sort sort = Sort.by(userPage.getSortDirection(), userPage.getSortBy());
         Pageable pageable = PageRequest.of(userPage.getPageNumber(), userPage.getPageSize(), sort);
-        Page<User> page = userRepository.findByActivestatus("Active", pageable);
+//        Page<User> page = userRepository.findByActivestatus(STATE.ACTIVE, pageable);
+        Page<User> page = userRepository.findAll(pageable);
         List<User> list = page.getContent();
         return list;
     }

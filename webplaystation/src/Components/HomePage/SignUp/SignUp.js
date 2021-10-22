@@ -9,6 +9,8 @@ import { withRouter } from "react-router";
 import {get} from '../../../Utils/httpHelper';
 import { checkPhoneNumber } from '../../../Utils/Utils';
 import "./SignUp.css";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 class SignUp extends Component {
     constructor(props) {
@@ -122,7 +124,8 @@ class SignUp extends Component {
         .then((response) => {
             if (response.status === 200)
             {
-                alert('Register Successfully!')
+                // alert('Register Successfully!')
+                toast.success('Đăng ký thành công!')
                 postLogin('/auth/signin', {username: this.state.username, password: this.state.password})
                 .then((response) => {
                     if (response.status === 200)
@@ -231,7 +234,7 @@ class SignUp extends Component {
                         <div className="container">
                             <div className="row">
                                 <div className="col-md-12">
-                                    <h2 className="h3 mb-3 text-black">Đăng kí tài khoản</h2>
+                                    <h2 className="h3 mb-3 text-black title-profile">Đăng kí tài khoản</h2>
                                 </div>
                                 <div className="col-md-6" >
                                 <Form onSubmit={(event) => this.handleSubmit(event)}>
@@ -361,6 +364,15 @@ class SignUp extends Component {
                             </div>
                         </div>
                     </div>
+                    <ToastContainer position="top-center"
+                    autoClose={2000}
+                    hideProgressBar
+                    newestOnTop={false}
+                    closeOnClick={false}
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover/>
             </div>
         )
     }

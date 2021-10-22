@@ -9,6 +9,8 @@ import java.util.List;
 public interface SupplierService {
     public List<Supplier> retrieveSuppliers();
 
+    public List<Supplier> getSupplierByStatus();
+
     public Supplier getSupplier(Long supplierId);
 
     public List<Supplier> getSuppliersPage(ProductPage productPage);

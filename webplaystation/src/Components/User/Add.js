@@ -72,7 +72,7 @@ export default class Add extends Component {
                     key: 'username'
                 })
                 this.setState({
-                    blankError: "This username is existed!"
+                    blankError: "Tên tài khoản này đã được sử dụng!"
                 });
                 return;
             }
@@ -82,7 +82,7 @@ export default class Add extends Component {
                     key: 'email'
                 })
                 this.setState({
-                    blankError: "This email is existed!"
+                    blankError: "Email này đã được sử dụng!"
                 });
                 return;
             }
@@ -92,7 +92,7 @@ export default class Add extends Component {
                     key: 'phone'
                 })
                 this.setState({
-                    blankError: "This phone number is existed!"
+                    blankError: "Số điện thoại này đã được sử dụng!"
                 });
                 return;
             }
@@ -103,7 +103,7 @@ export default class Add extends Component {
 				key: 'password'
 			})
 			this.setState({
-				blankError: "Password is at least 6 characters!"
+				blankError: "Mật khẩu có tối thiểu 6 ký tự!"
 			});
 			return;
         }
@@ -113,7 +113,7 @@ export default class Add extends Component {
 				key: 'phone'
 			})
 			this.setState({
-				blankError: "Phone must have 10 numbers!"
+				blankError: "Số điện thoại phải có 10 số!"
 			});
 			return;
         }
@@ -123,7 +123,7 @@ export default class Add extends Component {
 				key: 'phone'
 			})
 			this.setState({
-				blankError: "Phone must start with number 0!"
+				blankError: "Số điện thoại phải bắt đầu bắng số 0!"
 			});
 			return;
         }
@@ -175,23 +175,23 @@ export default class Add extends Component {
             <div>
                 <Form onSubmit={(event) => this.handleCreate(event)}>
                     <FormGroup>
-                        <Label htmlFor="name">Name</Label>
+                        <Label htmlFor="name">Họ Tên</Label>
                         <Input type="text" name="fullname" id="name" placeholder="Phu Le Gia" onChange={(e) => this.changeValue(e)} value = {this.state.fullname} required/>
                     </FormGroup>
                     <FormGroup tag="fieldset" row>
-                        <legend className="col-form-label col-sm-2">Gender</legend>
+                        <legend className="col-form-label col-sm-2">Giới Tính</legend>
                         <Form inline>
                             <FormGroup check>
                                 <Label check>
                                 <Input type="radio" name="gender" defaultChecked value = "Male" onChange={(e) => this.changeValue(e)}/>{' '}
-                                Male
+                                Nam
                                 </Label>
                             </FormGroup>
 
                             <FormGroup check>
                                 <Label check>
                                 <Input type="radio" name="gender" value = "Female" onChange={(e) => this.changeValue(e)} />{' '}
-                                Female
+                                Nữ
                                 </Label>
                             </FormGroup>
                         </Form>
@@ -199,14 +199,14 @@ export default class Add extends Component {
                     <Row form>
                         <Col md={6}>
                             <FormGroup>
-                                <Label htmlFor="username">Username</Label>
+                                <Label htmlFor="username">Tài Khoản</Label>
                                 <Input type="text" name="username" id="username" placeholder="Football" onChange={(e) => this.changeValue(e)} value = {this.state.username} required/>
                                 {this.state.key === 'username' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.blankError}</span> : '' }
                             </FormGroup>
                         </Col>
                         <Col md={6}>
                             <FormGroup>
-                                <Label htmlFor="password">Password</Label>
+                                <Label htmlFor="password">Mật Khẩu</Label>
                                 <Input type={this.state.show === false? 'password' : 'text'} minLength="6" name="password" id="password" placeholder="******" onChange={(e) => this.changeValue(e)} value = {this.state.password} required/>
                                 {this.state.key === 'password' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.blankError}</span> : '' }
                                 <Checkbox label='Show password' onChange={(e) => this.handleShowPassword(e)}/>
@@ -219,16 +219,16 @@ export default class Add extends Component {
                         {this.state.key === 'email' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.blankError}</span> : '' }
                     </FormGroup>
                     <FormGroup>
-                        <Label htmlFor="address">Address</Label>
-                        <Input type="text" name="address" id="address" placeholder="1234 Main St, HCM City" onChange={(e) => this.changeValue(e)} value = {this.state.address} required/>
+                        <Label htmlFor="address">Địa Chỉ</Label>
+                        <Input type="text" name="address" id="address" placeholder="1 Đường, Phường 2, Quận 3, Thành phố Hồ Chí Minh" onChange={(e) => this.changeValue(e)} value = {this.state.address} required/>
                     </FormGroup>
                     <FormGroup>
-                        <Label htmlFor="phone">Phone</Label>
+                        <Label htmlFor="phone">Số Điện Thoại</Label>
                         <Input type="number" minLength="10" maxLength="10" name="phone" id="phone" placeholder="0987654321" onChange={(e) => this.changeValue(e)} value = {this.state.phone} required/>
                         {this.state.key === 'phone' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.blankError}</span> : '' }
                     </FormGroup>
                     <FormGroup className="mb-2">
-                        <Label htmlFor="role">Role</Label>
+                        <Label htmlFor="role">Vai Trò</Label>
                         <Input type="select" name="role" id="role" onChange={(e) => this.changeValue(e)} required>
                             <option defaultValue="ADMIN">ADMIN</option>
                             <option value="STAFF">STAFF</option>
@@ -236,8 +236,8 @@ export default class Add extends Component {
                         </Input>
                     </FormGroup>
                     <div className="mb-5">
-                        <Button type="submit" outline color="warning" >Add</Button>{' '}
-                        <Button outline color="danger" onClick={this.handleClear.bind(this)}>Cancel</Button>
+                        <Button type="submit" outline color="warning" >Thêm</Button>{' '}
+                        <Button outline color="danger" onClick={this.handleClear.bind(this)}>Hủy</Button>
                     </div>
                     </Form>
             </div>

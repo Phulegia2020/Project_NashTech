@@ -5,8 +5,10 @@ import { Link } from 'react-router-dom';
 import Add from "./Add"
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Pagination, PaginationItem, PaginationLink } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
-import { Breadcrumb, Input } from 'semantic-ui-react'
+import { faArrowCircleDown, faArrowCircleUp, faEdit, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { Breadcrumb, Input } from 'semantic-ui-react';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default class Category extends Component {
     state = {
@@ -65,7 +67,8 @@ export default class Category extends Component {
                 })
             }
         })
-        .catch(error => {alert('This category had products. Can not delete!')})
+        // .catch(error => {alert('This category had products. Can not delete!')})
+        .catch(error => toast.error('Không thể xóa loại máy vẫn đang được kinh doanh!'))
     }
 
     createCategory(newCategory){
@@ -208,13 +211,22 @@ export default class Category extends Component {
         }
     }
 
-    handleSort = (e) => {
+    handleSortInc = (e) => {
         e.preventDefault();
         //this.state.categories.sort((e1, e2) => (e1.id > e2.id ? 1 : -1));
         this.setState({
             categories: this.state.categories.sort((e1, e2) => (e1.id > e2.id ? 1 : -1))
         })
-        console.log('sort');
+        // console.log('sort');
+    }
+
+    handleSortDes = (e) => {
+        e.preventDefault();
+        //this.state.categories.sort((e1, e2) => (e1.id > e2.id ? 1 : -1));
+        this.setState({
+            categories: this.state.categories.sort((e1, e2) => (e2.id > e1.id ? 1 : -1))
+        })
+        // console.log('sort');
     }
 
     componentWillUnmount() {
@@ -238,23 +250,23 @@ export default class Category extends Component {
                     toggle={this.onToggleFormDel}
                     >
                     <ModalHeader>
-                        Delete
+                        Xóa Loại Máy
                     </ModalHeader>
                     <ModalBody>
                         <p>
-                        Are you sure?
+                        Bạn có chắc chắn muốn xóa?
                         </p>
                     </ModalBody>
                     <ModalFooter>
-                        <Button onClick={(e) => this.delCategory(e, this.state.iddel)} className="btn-danger">Delete</Button>
-                        <Button onClick={(e) => this.onCloseFormDel(e)}>Close</Button>
+                        <Button onClick={(e) => this.delCategory(e, this.state.iddel)} className="btn-danger">Xóa</Button>
+                        <Button onClick={(e) => this.onCloseFormDel(e)}>Hủy</Button>
                     </ModalFooter>
                 </Modal>
                 <Breadcrumb icon='right angle' sections={sections} size='large'/>
                 <br/>
                 <button type="button" className="btn btn-primary" onClick={this.onToggleForm} style={{marginTop: '30px'}}>
                     <FontAwesomeIcon icon={faPlus} className="mr-2"/>{' '}
-                    Creat New Category
+                    Thêm Loại Mới
                 </button>
                 <Input
                     style={{marginLeft: '100rem'}}
@@ -266,11 +278,11 @@ export default class Category extends Component {
                 <table id="table">
                     <thead>
                         <tr>
-                            <th><span onClick={(e) => this.handleSort(e)}><b>ID</b></span></th>
-                            <th><b>Name</b></th>
-                            <th><b>Description</b></th>
-                            <th>Update</th>
-                            <th>Delete</th>
+                            <th><b>Mã Loại</b>{' '}<FontAwesomeIcon icon={faArrowCircleUp} className="sort-icon" onClick={(e) => this.handleSortInc(e)}/><FontAwesomeIcon icon={faArrowCircleDown} className="sort-icon" onClick={(e) => this.handleSortDes(e)}/></th>
+                            <th><b>Tên</b></th>
+                            <th><b>Mô Tả</b></th>
+                            <th>Cập Nhập</th>
+                            <th>Xóa</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -323,7 +335,7 @@ export default class Category extends Component {
 
                 <div className="container">
                     <Modal isOpen={this.state.isDisplayForm} toggle={this.onToggleForm}>
-                        <ModalHeader toggle={this.onToggleForm}>Create New Category</ModalHeader>
+                        <ModalHeader toggle={this.onToggleForm}>Thêm Loại Mới</ModalHeader>
                         <ModalBody>
                             <Add onAdd={this.onAdd} onCloseForm={this.onCloseForm}/>
                         </ModalBody>
@@ -331,6 +343,15 @@ export default class Category extends Component {
                         </ModalFooter>
                     </Modal>
                 </div>
+                <ToastContainer position="top-center"
+                    autoClose={2000}
+                    hideProgressBar
+                    newestOnTop={false}
+                    closeOnClick={false}
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover/>
             </div>
         )
     }

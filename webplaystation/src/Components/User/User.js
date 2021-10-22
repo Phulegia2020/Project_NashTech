@@ -1,12 +1,14 @@
 import React, { Component } from 'react'
 import "./../Category/Category.css";
-import {del, get, post} from "./../../Utils/httpHelper";
+import {del, get, post, put} from "./../../Utils/httpHelper";
 import { Link } from 'react-router-dom';
 import Add from "./Add"
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Pagination, PaginationItem, PaginationLink } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
-import { Breadcrumb, Input } from 'semantic-ui-react';
+import { faEdit, faPlus, faTrash, faUnlock, faUserLock, faArrowCircleDown, faArrowCircleUp } from '@fortawesome/free-solid-svg-icons';
+import { Breadcrumb, Input, Label } from 'semantic-ui-react';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default class User extends Component {
     constructor (props){
@@ -20,7 +22,9 @@ export default class User extends Component {
             pageNumber: 0,
             pageToTal: 0,
             id: "",
-            search: ""
+            search: "",
+            title: "",
+            notice: ""
         }
 
         this.onPage = this.onPage.bind(this);
@@ -28,18 +32,18 @@ export default class User extends Component {
     
 
     componentDidMount(){
-        get("/users/active")
+        get("/users")
         .then((response) => {
             if (response.status === 200)
             {
                 this.setState({
-                    pageToTal: Math.ceil(response.data / 5)
+                    pageToTal: Math.ceil(response.data.length / 7)
                 });
             }
         })
         .catch(error => {console.log(error)})
 
-        get(`/users/page?pageNumber=0&pageSize=5&sortBy=id`)
+        get(`/users/page?pageNumber=0&pageSize=7&sortBy=id`)
         .then((response) => {
             this.setState({
                 users: response.data,
@@ -64,15 +68,61 @@ export default class User extends Component {
         })
     }
 
-    delUser = (e, id) =>
+    async delUser(e, id)
     {
         e.preventDefault();
-        del(`/users/${id}`)
-        .then((response) => {
-            this.setState({users: this.state.users.filter(u => u.id !== id)})
-            this.setState({isDisplayFormDel: false})
-        })
-        .catch(error => {alert('The user had bill. Can not delete!')})
+        if (this.state.title === 'Khóa Tài Khoản')
+        {
+            await del(`/users/${id}`)
+            .then((response) => {
+                if (response.status === 200)
+                {
+                    // this.setState({users: this.state.users.filter(u => u.id !== id)})
+                    this.setState({isDisplayFormDel: false})
+                }
+            })
+            // .catch(error => {alert('The user had bill. Can not delete!')})
+            .catch(error => {toast.error('Khách hàng đã có hóa đơn tại cửa hàng!')})
+        }
+        else
+        {
+            var u = {};
+            await get(`/users/${id}`)
+            .then((response) => {
+                if (response.status === 200)
+                {
+                    u = response.data
+                }
+            })
+            await put(`/users/${id}`, {name: u.name, gender: u.gender, address: u.address, email: u.email,
+                                        phone: u.phone, account: u.account, active_status: 'Active', role_id: u.role_id})
+                .then((response) => {
+                    if (response.status === 200)
+                    {
+                        this.setState({isDisplayFormDel: false})
+                    }
+                })
+        }
+        if (this.state.search === '')
+        {
+            get(`/users/page?pageNumber=${this.state.pageNumber}&pageSize=7&sortBy=id`)
+            .then((response) => {
+                this.setState({
+                    users: response.data,
+                });
+            })
+            .catch(error => console.log(error));
+        }
+        else
+        {
+            get(`/users/usernamePage?username=${this.state.search}&pageNumber=${this.state.pageNumber}&pageSize=7&sortBy=id`)
+            .then((response) => {
+                this.setState({
+                    users: response.data,
+                });
+            })
+            .catch(error => console.log(error));
+        }
     }
 
     createUser(newUser){
@@ -100,12 +150,26 @@ export default class User extends Component {
         });
     }
 
-    onToggleFormDel = (e, id) => {
+    onToggleFormDel = (e, id, key) => {
         e.preventDefault()
-        this.setState({
-            isDisplayFormDel: !this.state.isDisplayFormDel,
-            id: id
-        });
+        if (key === 'lock')
+        {
+            this.setState({
+                isDisplayFormDel: !this.state.isDisplayFormDel,
+                id: id,
+                title: 'Khóa Tài Khoản',
+                notice: 'Bạn có chắc chắn muốn khóa tài khoản người dùng này?'
+            });
+        }
+        else
+        {
+            this.setState({
+                isDisplayFormDel: !this.state.isDisplayFormDel,
+                id: id,
+                title: 'Kích Hoạt Tài Khoản',
+                notice: 'Bạn có chắc chắn muốn kích hoạt tài khoản người dùng này?'
+            });
+        }
     }
 
     onCloseFormDel = (e) => {
@@ -140,7 +204,7 @@ export default class User extends Component {
         
         if (this.state.search === '')
         {
-            get(`/users/page?pageNumber=${pageNumber}&pageSize=5&sortBy=id`)
+            get(`/users/page?pageNumber=${pageNumber}&pageSize=7&sortBy=id`)
             .then((response) => {
                 this.setState({
                     users: response.data,
@@ -150,7 +214,7 @@ export default class User extends Component {
         }
         else
         {
-            get(`/users/usernamePage?username=${this.state.search}&pageNumber=${pageNumber}&pageSize=5&sortBy=id`)
+            get(`/users/usernamePage?username=${this.state.search}&pageNumber=${pageNumber}&pageSize=7&sortBy=id`)
             .then((response) => {
                 this.setState({
                     users: response.data,
@@ -167,18 +231,18 @@ export default class User extends Component {
         })
         if (this.state.search === '')
         {
-            get("/users/active")
+            get("/users")
             .then((response) => {
                 if (response.status === 200)
                 {
                     this.setState({
-                        pageToTal: Math.ceil(response.data / 5)
+                        pageToTal: Math.ceil(response.data.length / 7)
                     });
                 }
             })
             .catch(error => {console.log(error)})
 
-            get(`/users/page?pageNumber=0&pageSize=5&sortBy=id`)
+            get(`/users/page?pageNumber=0&pageSize=7&sortBy=id`)
             .then((response) => {
                 this.setState({
                     users: response.data,
@@ -193,13 +257,13 @@ export default class User extends Component {
                 if (response.status === 200)
                 {
                     this.setState({
-                        pageToTal: Math.ceil(response.data / 5)
+                        pageToTal: Math.ceil(response.data / 7)
                     });
                 }
             })
             .catch(error => {console.log(error)})
 
-            get(`/users/usernamePage?username=${this.state.search}&pageNumber=0&pageSize=5&sortBy=id`)
+            get(`/users/usernamePage?username=${this.state.search}&pageNumber=0&pageSize=7&sortBy=id`)
             .then((response) => {
                 this.setState({
                     users: response.data,
@@ -207,6 +271,24 @@ export default class User extends Component {
             })
             .catch(error => console.log(error));
         }
+    }
+
+    handleSortInc = (e) => {
+        e.preventDefault();
+        //this.state.categories.sort((e1, e2) => (e1.id > e2.id ? 1 : -1));
+        this.setState({
+            users: this.state.users.sort((e1, e2) => (e1.id > e2.id ? 1 : -1))
+        })
+        // console.log('sort');
+    }
+
+    handleSortDes = (e) => {
+        e.preventDefault();
+        //this.state.categories.sort((e1, e2) => (e1.id > e2.id ? 1 : -1));
+        this.setState({
+            users: this.state.users.sort((e1, e2) => (e2.id > e1.id ? 1 : -1))
+        })
+        // console.log('sort');
     }
 
     componentWillUnmount() {
@@ -230,16 +312,18 @@ export default class User extends Component {
                     toggle={this.onToggleFormDel}
                     >
                     <ModalHeader>
-                        Delete
+                        {/* Xóa Người Dùng */}
+                        {this.state.title}
                     </ModalHeader>
                     <ModalBody>
                         <p>
-                        Do you want to disable this account?
+                        {/* Bạn có chắc chắn muốn xóa? */}
+                        {this.state.notice}
                         </p>
                     </ModalBody>
                     <ModalFooter>
-                        <Button onClick={(e) => this.delUser(e, this.state.id)} className="btn-danger">Delete</Button>
-                        <Button onClick={(e) => this.onCloseFormDel(e)}>Close</Button>
+                        <Button onClick={(e) => this.delUser(e, this.state.id)} className="btn-danger">Đồng Ý</Button>
+                        <Button onClick={(e) => this.onCloseFormDel(e)}>Hủy</Button>
                     </ModalFooter>
                 </Modal>
                 <Breadcrumb icon='right angle' sections={sections} size='large'/>
@@ -247,7 +331,7 @@ export default class User extends Component {
                 <div className="m-3">
                 <button type="button" className="btn btn-primary" onClick={this.onToggleForm} disabled={localStorage.getItem('role') === 'STAFF'}>
                     <FontAwesomeIcon icon={faPlus} className="mr-2"/>{' '}
-                    Creat New User
+                    Thêm Tài Khoản
                 </button>
                 <Input
                     style={{marginLeft: '100rem'}}
@@ -260,16 +344,18 @@ export default class User extends Component {
                 <table id="table">
                     <thead>
                         <tr>
-                            <th><b>ID</b></th>
-                            <th><b>Name</b></th>
-                            <th><b>Gender</b></th>
-                            <th><b>Address</b></th>
+                            <th><b>ID</b>{' '}<FontAwesomeIcon icon={faArrowCircleUp} className="sort-icon" onClick={(e) => this.handleSortInc(e)}/><FontAwesomeIcon icon={faArrowCircleDown} className="sort-icon" onClick={(e) => this.handleSortDes(e)}/></th>
+                            <th><b>Họ Tên</b></th>
+                            <th><b>Giới Tính</b></th>
+                            <th><b>Địa Chỉ</b></th>
                             <th><b>Email</b></th>
-                            <th><b>Phone</b></th>
-                            <th><b>Username</b></th>
-                            <th><b>Role</b></th>
-                            <th>Update</th>
-                            <th>Delete</th>
+                            <th><b>Số Điện Thoại</b></th>
+                            <th><b>Tài Khoản</b></th>
+                            <th><b>Vai Trò</b></th>
+                            <th><b>Trạng Thái</b></th>
+                            <th>Cập Nhập</th>
+                            {/* <th>Xóa</th> */}
+                            <th>Kích Hoạt/Khóa</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -278,12 +364,16 @@ export default class User extends Component {
                                 <tr key={u.id}>
                                     <td>{u.id}</td>
                                     <td>{u.name}</td>
-                                    <td>{u.gender}</td>
+                                    {/* <td>{u.gender}</td> */}
+                                    {u.gender === 'Male' && <td>Nam</td>}
+                                    {u.gender === 'Female' && <td>Nữ</td>}
                                     <td>{u.address}</td>
                                     <td>{u.email}</td>
                                     <td>{u.phone}</td>
                                     <td>{u.account}</td>
                                     <td>{u.role.name}</td>
+                                    {u.active_status === 'Active' && <td><Label color="green">Hoạt Động</Label></td>}
+                                    {u.active_status === 'Inactive' && <td><Label color="red">Không Hoạt Động</Label></td>}
                                     <td>
                                         <Link to={`/admin/user/update/${u.id}`} onClick={u.id == localStorage.getItem('user_id') && localStorage.getItem('role') === 'STAFF' || localStorage.getItem('role') === 'ADMIN' ? '' : (e) => e.preventDefault()}
                                             >
@@ -293,11 +383,22 @@ export default class User extends Component {
                                             </button>
                                         </Link>
                                     </td>
-                                    <td><button className="btn btn-danger" onClick={(e) => this.onToggleFormDel(e, u.id)} disabled={localStorage.getItem('role') === 'STAFF' || u.active_status === 'Inactive'}>
-                                        <FontAwesomeIcon icon={faTrash} className="mr-2"/>{' '}
-                                        
+                                    {u.active_status === 'Active' &&
+                                    <td>
+                                        <button className="btn btn-danger" onClick={(e) => this.onToggleFormDel(e, u.id, 'lock')} disabled={localStorage.getItem('role') === 'STAFF'}>
+                                        {/* || u.active_status === 'Inactive' */}
+                                        {/* <FontAwesomeIcon icon={faTrash} className="mr-2"/>{' '} */}
+                                        <FontAwesomeIcon icon={faUserLock} className="mr-2"/>{' '}
                                         </button>
-                                    </td>
+                                    </td>}
+                                    {u.active_status === 'Inactive' &&
+                                    <td>
+                                        <button className="btn btn-primary" onClick={(e) => this.onToggleFormDel(e, u.id, 'unlock')} disabled={localStorage.getItem('role') === 'STAFF'}>
+                                        {/* || u.active_status === 'Inactive' */}
+                                        {/* <FontAwesomeIcon icon={faTrash} className="mr-2"/>{' '} */}
+                                        <FontAwesomeIcon icon={faUnlock} className="mr-2"/>{' '}
+                                        </button>
+                                    </td>}
                                 </tr>
                             ))
                         }
@@ -328,7 +429,7 @@ export default class User extends Component {
 
                 <div className="container">
                     <Modal isOpen={this.state.isDisplayForm} toggle={this.onToggleForm}>
-                        <ModalHeader toggle={this.onToggleForm}>Create New User</ModalHeader>
+                        <ModalHeader toggle={this.onToggleForm}>Thêm Tài Khoản</ModalHeader>
                         <ModalBody>
                             <Add onAdd={this.onAdd} onCloseForm={this.onCloseForm}/>
                         </ModalBody>
@@ -336,6 +437,15 @@ export default class User extends Component {
                         </ModalFooter>
                     </Modal>
                 </div>
+                <ToastContainer position="top-center"
+                    autoClose={2000}
+                    hideProgressBar
+                    newestOnTop={false}
+                    closeOnClick={false}
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover/>
             </div>
         )
     }

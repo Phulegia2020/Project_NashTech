@@ -95,17 +95,17 @@ class UpdateImport extends Component {
     render() {
         return (
             <div className="update-form">
-                <h3>Update Import</h3>
+                <h3>Cập Nhật Phiếu Nhập</h3>
                 {/* <Row form>
                     <Col md={4}> */}
                         <Form onSubmit={(event) => this.handleUpdate(event)}>
                         <FormGroup>
-                            <Label htmlFor="total">Total</Label>
+                            <Label htmlFor="total">Tổng Tiền</Label>
                             <Input type="number" name="total" id="total" placeholder="VND" onChange={(e) => this.changeValue(e)} value = {this.state.total} disabled/>
                             {this.state.key === 'total' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
                         </FormGroup>
                         <FormGroup className="mb-2">
-                            <Label htmlFor="user">Employee</Label>
+                            <Label htmlFor="user">Nhân Viên Lập</Label>
                             <Input type="select" name="user_id" id="user" value = {this.state.user_id} onChange={(e) => this.changeValue(e)}>
                                 {
                                     this.state.users.map((u) => (
@@ -115,7 +115,7 @@ class UpdateImport extends Component {
                             </Input>
                         </FormGroup>
                         <FormGroup className="mb-2">
-                            <Label htmlFor="placeorder">Place Order</Label>
+                            <Label htmlFor="placeorder">Phiếu Đặt</Label>
                             <Input type="select" name="placeorder_id" id="placeorder" value = {this.state.placeorder_id} onChange={(e) => this.changeValue(e)} disabled>
                                 {
                                     this.state.placeorders.map((po) => (
@@ -125,8 +125,8 @@ class UpdateImport extends Component {
                             </Input>
                         </FormGroup>
                         <div className="mb-5">
-                            <Button type="submit" outline color="warning" >Update</Button>{' '}
-                            <Button outline color="danger" onClick={this.handleClear.bind(this)}>Cancel</Button>
+                            <Button type="submit" outline color="warning" >Cập Nhật</Button>{' '}
+                            <Button outline color="danger" onClick={this.handleClear.bind(this)}>Hủy</Button>
                         </div>
                         </Form>
                     {/* </Col>

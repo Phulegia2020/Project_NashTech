@@ -191,7 +191,7 @@ class Statistical extends Component {
         return (
             <div>
                 <div className='thang-quy-nam'>
-                    <h4>Chọn Tháng:</h4>
+                    <h4>THÁNG:</h4>
                     <Input type="select" name="monthValue" id="month" value={this.state.monthValue} onChange={(e) => this.changeValue(e)} style={{width: '150px', marginRight:'20px'}}>
                         {
                             this.state.month.map((m, index) => (
@@ -200,7 +200,7 @@ class Statistical extends Component {
                         }
                     </Input>
 
-                    <h4>Chọn Quý:</h4>
+                    <h4>QUÝ:</h4>
                     <Input type="select" name="quyValue" id="quy" value={this.state.quyValue} onChange={(e) => this.changeValue(e)} style={{width: '150px', marginRight:'20px'}}>
                         {
                             this.state.quy.map((q, index) => (
@@ -209,7 +209,7 @@ class Statistical extends Component {
                         }
                     </Input>
 
-                    <h4>Chọn Năm:</h4>
+                    <h4>NĂM:</h4>
                     <Input type="select" name="yearValue" id="year" value={this.state.yearValue} onChange={(e) => this.changeValue(e)} style={{width: '150px'}}>
                         {
                             this.state.year.map((y, index) => (
@@ -223,11 +223,11 @@ class Statistical extends Component {
                         <Statistic.Group size='small' id="income">
                             <Statistic>
                                 <Statistic.Value>{formatQuantity(this.state.bills.length)}</Statistic.Value>
-                                <Statistic.Label>BILLS DONE</Statistic.Label>
+                                <Statistic.Label>SỐ HÓA ĐƠN</Statistic.Label>
                             </Statistic>
                             <Statistic>
                                 <Statistic.Value>{formatCurrency(this.state.income)}</Statistic.Value>
-                                <Statistic.Label>TOTAL INCOME</Statistic.Label>
+                                <Statistic.Label>TỔNG DOANH THU</Statistic.Label>
                             </Statistic>
                         </Statistic.Group>
                         {/* <h3>BILLS DONE: {formatQuantity(this.state.bills.length)}</h3>
@@ -251,11 +251,11 @@ class Statistical extends Component {
                         <Statistic.Group size='small'>
                             <Statistic>
                                 <Statistic.Value>{formatQuantity(this.state.imports.length)}</Statistic.Value>
-                                <Statistic.Label>IMPORTS DONE</Statistic.Label>
+                                <Statistic.Label>PHIẾU ĐẶT HÀNG</Statistic.Label>
                             </Statistic>
                             <Statistic>
                                 <Statistic.Value>{formatCurrency(this.state.outcome)}</Statistic.Value>
-                                <Statistic.Label>TOTAL OUTCOME</Statistic.Label>
+                                <Statistic.Label>TỔNG CHI PHÍ</Statistic.Label>
                             </Statistic>
                         </Statistic.Group>
                         {/* <h3>IMPORTS DONE: {formatQuantity(this.state.imports.length)}</h3>
@@ -263,15 +263,15 @@ class Statistical extends Component {
                     </div>
                 </div>
                 <div className='top-best-sale'>
-                    <h2>TOP 5 BEST RATING POINT PRODUCTS</h2>
+                    <h2>TOP 5 MÁY CÓ ĐIỂM ĐÁNH GIÁ CAO NHẤT</h2>
                     <table id="table-tk">
                         <thead>
                             <tr>
-                                <th><b>ID</b></th>
-                                <th><b>Product</b></th>
-                                <th><b>Name</b></th>
-                                <th><b>Price</b></th>
-                                <th><b>Rated Point (Star)</b></th>
+                                <th><b>Mã Máy</b></th>
+                                <th><b>Hình Ảnh</b></th>
+                                <th><b>Tên</b></th>
+                                <th><b>Giá</b></th>
+                                <th><b>Điểm Đánh Giá</b></th>
                             </tr>
                         </thead>
                         <tbody>

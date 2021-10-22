@@ -10,7 +10,15 @@ import java.util.List;
 public interface CategoryRepository extends JpaRepository<Category, Long> {
     Boolean existsByName(String name);
 
-    List<Category> findByNameContains(String name);
+//    List<Category> findByNameContains(String name);
+//
+//    Page<Category> findByNameContains(String name, Pageable pageable);
 
-    Page<Category> findByNameContains(String name, Pageable pageable);
+    List<Category> findByStatus(String status);
+
+    Page<Category> findByStatus(String status, Pageable pageable);
+
+    List<Category> findByNameContainsAndStatus(String name, String status);
+
+    Page<Category> findByNameContainsAndStatus(String name, String status,Pageable pageable);
 }
