@@ -73,9 +73,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .antMatchers(HttpMethod.GET,"/api/products/**").permitAll()
             .antMatchers(HttpMethod.GET,"/api/categories/**").permitAll()
             .antMatchers(HttpMethod.GET,"/api/ratings/**").permitAll()
-//            .antMatchers(HttpMethod.GET,"/api/suppliers/**").permitAll()
+            .antMatchers(HttpMethod.GET,"/api/suppliers/**").permitAll()
             .antMatchers(HttpMethod.GET, "/api/roles/**").permitAll().and()
-            .authorizeRequests().antMatchers("/api/suppliers/**").hasAnyAuthority("ADMIN", "STAFF").and()
+//            .authorizeRequests().antMatchers("/api/suppliers/**").hasAnyAuthority("ADMIN", "STAFF").and()
             .authorizeRequests().antMatchers("/api/imports/**").hasAnyAuthority("ADMIN", "STAFF").and()
             .authorizeRequests().antMatchers("/api/importDetails/**").hasAnyAuthority("ADMIN", "STAFF").and()
             .authorizeRequests().antMatchers("/api/placeorders/**").hasAnyAuthority("ADMIN", "STAFF").and()
@@ -84,6 +84,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .antMatchers(HttpMethod.GET, "/api/users/**").permitAll()
             .antMatchers(HttpMethod.GET, "/api/comments/**").permitAll()
             .antMatchers(HttpMethod.GET, "/api/payment/**").permitAll()
+            .antMatchers( "/dialogflow-webhook").permitAll()
             .antMatchers("/swagger-ui.html").permitAll()
             .anyRequest().authenticated();
 

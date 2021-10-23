@@ -72,9 +72,12 @@ class Login extends Component {
 
 	render() {
 		return (
+			<div className="login-form">
 			<Segment style={{ padding: '8em 0em', marginTop: '4rem' }} placeholder>
 				<Grid columns={2} relaxed='very' stackable>
+				{/* <div className="login-form"> */}
 				<Grid.Column width={8}>
+				
 					<h2  className="login-title">ĐĂNG NHẬP</h2>
 					{/* style={{ marginLeft: '355px', marginBottom: '25px', fontWeight: '900' }} */}
 					<Form onSubmit={(event) => this.handleSubmit(event)}>
@@ -101,8 +104,9 @@ class Login extends Component {
 					</Form.Field>
 					<Button type='submit' content='Đăng nhập' primary/>
 					</Form>
+				
 				</Grid.Column>
-
+				{/* </div> */}
 				
 				<Grid.Column verticalAlign='middle'>
 					<Button as={Link} to="/WebPlayStation/signup" content='ĐĂNG KÝ' icon='signup' size='big' />
@@ -121,6 +125,7 @@ class Login extends Component {
                     pauseOnHover
 					style={{width: '350px'}}/>
 			</Segment>
+			</div>
 		);
 	}
 }

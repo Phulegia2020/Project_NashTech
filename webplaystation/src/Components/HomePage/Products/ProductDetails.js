@@ -29,6 +29,7 @@ class ProductDetails extends Component {
     }
 
     componentDidMount() {
+        window.scrollTo(0, 0);
         this.props.handleChatBot1(true);
         this.state.ShoppingCartItems = JSON.parse(localStorage.getItem('shopping-cart') || '[]');
         get(`/products/${this.props.match.params.id}`)
@@ -240,7 +241,7 @@ class ProductDetails extends Component {
                             <Message warning>
                             <Message.Header>CAM KẾT & CHÍNH SÁCH</Message.Header>
                                 <p>Giá áp dụng khi mua kèm game bất kỳ. 
-                                    Giao hàng miễn phí nội thành HCM (*)</p>
+                                    Giao hàng miễn phí trong vòng 1 - 2 ngày tại nội thành HCM (*)</p>
                             </Message>
                             <Header as="h4">
                                 <ButtonAddToCart product={product} notification={this.notification}/>
@@ -275,7 +276,7 @@ class ProductDetails extends Component {
                                 </Table.Row> */}
                                 <Table.Row>
                                     <Table.Cell>Số Lượng Còn Lại</Table.Cell>
-                                    <Table.Cell>{product.quantity === 0 ? 'Sold Out' : formatQuantity(product.quantity)} Máy</Table.Cell>
+                                    <Table.Cell>{product.quantity === 0 ? 'Hết Hàng' : `${formatQuantity(product.quantity)} Máy`}</Table.Cell>
                                 </Table.Row>
                             </Table.Body>
                         </Table>

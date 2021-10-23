@@ -101,6 +101,63 @@ public class ProductServiceImpl implements ProductService {
         return productDTOS;
     }
 
+    public List<ProductDTO> getProductChatBot(String name)
+    {
+        List<Product> pro = productRepository.findByNameAndStatus(name, STATE.SALE);
+        List<ProductDTO> productDTOS = new ArrayList<>();
+        pro.forEach(p -> {
+            ProductDTO productDTO = modelMapper.map(p, ProductDTO.class);
+            String cate_id = String.valueOf(p.getCategory().getId());
+            String sup_id = String.valueOf(p.getSupplier().getId());
+            productDTO.setCategory_id(cate_id);
+            productDTO.setSupplier_id(sup_id);
+            productDTOS.add(productDTO);
+        });
+        return productDTOS;
+    }
+
+    public List<Product> getProductPriceLess()
+    {
+        List<Product> list = productRepository.findByPriceLessThanAndStatus(STATE.PRICE_FILTER1, STATE.SALE);
+        return list;
+    }
+
+    public List<Product> getProductPriceLess(ProductPage productPage)
+    {
+        Sort sort = Sort.by(productPage.getSortDirection(), productPage.getSortBy());
+        Pageable pageable = PageRequest.of(productPage.getPageNumber(), productPage.getPageSize(), sort);
+        Page<Product> page = productRepository.findByPriceLessThanAndStatus(STATE.PRICE_FILTER1, STATE.SALE, pageable);
+        return page.getContent();
+    }
+
+    public List<Product> getProductPriceBetween()
+    {
+        List<Product> list = productRepository.findByPriceBetweenAndStatus(STATE.PRICE_FILTER1, STATE.PRICE_FILTER2, STATE.SALE);
+        return list;
+    }
+
+    public List<Product> getProductPriceBetween(ProductPage productPage)
+    {
+        Sort sort = Sort.by(productPage.getSortDirection(), productPage.getSortBy());
+        Pageable pageable = PageRequest.of(productPage.getPageNumber(), productPage.getPageSize(), sort);
+        Page<Product> page = productRepository.findByPriceBetweenAndStatus(STATE.PRICE_FILTER1, STATE.PRICE_FILTER2, STATE.SALE, pageable);
+        return page.getContent();
+    }
+
+    public List<Product> getProductPriceGreater()
+    {
+        List<Product> list = productRepository.findByPriceGreaterThanAndStatus(STATE.PRICE_FILTER2, STATE.SALE);
+        return list;
+    }
+
+    public List<Product> getProductPriceGreater(ProductPage productPage)
+    {
+        Sort sort = Sort.by(productPage.getSortDirection(), productPage.getSortBy());
+        Pageable pageable = PageRequest.of(productPage.getPageNumber(), productPage.getPageSize(), sort);
+        Page<Product> page = productRepository.findByPriceGreaterThanAndStatus(STATE.PRICE_FILTER2, STATE.SALE, pageable);
+        return page.getContent();
+    }
+
     @Override
     public Product saveProduct(Product pro) {
         return productRepository.save(pro);

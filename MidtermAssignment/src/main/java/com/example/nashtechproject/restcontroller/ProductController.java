@@ -239,6 +239,49 @@ public class ProductController {
         return topSale.stream().sorted(Comparator.comparingLong(StatisticalDTO::getTopSale).reversed()).collect(Collectors.toList());
     }
 
+    @GetMapping("/filter")
+    public int getProductFilter(@RequestParam String type)
+    {
+        if (type.equals("1"))
+        {
+            System.out.println();
+            return productService.getProductPriceLess().size();
+        }
+        else if (type.equals("2"))
+        {
+            return productService.getProductPriceBetween().size();
+        }
+        else if (type.equals("3"))
+        {
+            return productService.getProductPriceGreater().size();
+        }
+        else
+        {
+            return productService.getProductsByStatus().size();
+        }
+    }
+
+    @GetMapping("/pageFilter")
+    public ResponseEntity<List<ProductDTO>> getProductFilterPages(@RequestParam String type, ProductPage productPage)
+    {
+        if (type.equals("1"))
+        {
+            return new ResponseEntity<>(productService.getProductPriceLess(productPage).stream().map(this::convertToDTO).collect(Collectors.toList()), HttpStatus.OK);
+        }
+        else if (type.equals("2"))
+        {
+            return new ResponseEntity<>(productService.getProductPriceBetween(productPage).stream().map(this::convertToDTO).collect(Collectors.toList()), HttpStatus.OK);
+        }
+        else if (type.equals("3"))
+        {
+            return new ResponseEntity<>(productService.getProductPriceGreater(productPage).stream().map(this::convertToDTO).collect(Collectors.toList()), HttpStatus.OK);
+        }
+        else
+        {
+            return new ResponseEntity<>(productService.getProductsOnSalePage(productPage), HttpStatus.OK);
+        }
+    }
+
     @ApiOperation(value = "Create new Product")
     @ApiResponses(value = { @ApiResponse(code = 200, message = "Success"),
             @ApiResponse(code = 400, message = "Bad request"),

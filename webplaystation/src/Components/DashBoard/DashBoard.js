@@ -204,7 +204,8 @@ export default class AnalyticsDashboard1 extends Component {
                                     <CardHeader className="card-header-tab">
                                         <div className="card-header-title">
                                             <i className="header-icon lnr-rocket icon-gradient bg-tempting-azure"> </i>
-                                            Bandwidth Reports
+                                            {/* Bandwidth Reports */}
+                                            Kế Hoạch Dự Kiến
                                         </div>
                                         <div className="btn-actions-pane-right">
                                             <Button outline
@@ -485,7 +486,8 @@ export default class AnalyticsDashboard1 extends Component {
                                             17.2k
                                         </div>
                                         <div className="widget-subheading">
-                                            Profiles
+                                            {/* Profiles */}
+                                            Mục Tiếu Số Lượng Khách Hàng
                                         </div>
                                         <div className="widget-description text-warning">
                                             <span className="pr-1">175.5%</span>

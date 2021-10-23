@@ -18,7 +18,7 @@ class Products extends Component {
             activePage: 1,
             // search: this.props.match.params.search
             search: "",
-            price: ''
+            price: '0'
         };
         this.handlePaginationChange = this.handlePaginationChange.bind(this);
     }
@@ -51,13 +51,29 @@ class Products extends Component {
         await this.setState({ activePage });
         if (this.state.search === '')
         {
-            get(`/products/pageOnSale?pageNumber=${this.state.activePage-1}&pageSize=8&sortBy=id`)
-            .then((response) => {
-                this.setState({
-                    Products: response.data,
-                });
-            })
-            .catch(error => console.log(error))
+            if (this.state.price != 0)
+            {
+                get(`/products/pageFilter?type=${this.state.price}&pageNumber=${this.state.activePage-1}&pageSize=8&sortBy=id`)
+                .then((response) => {
+                    if (response.status === 200)
+                    {
+                        this.setState({
+                            Products: response.data,
+                        })
+                    }
+                })
+                .catch((error) => console.log(error));
+            }
+            else
+            {
+                get(`/products/pageOnSale?pageNumber=${this.state.activePage-1}&pageSize=8&sortBy=id`)
+                .then((response) => {
+                    this.setState({
+                        Products: response.data,
+                    });
+                })
+                .catch(error => console.log(error))
+            }
         }
         else
         {
@@ -126,6 +142,36 @@ class Products extends Component {
         this.setState({
             [e.target.name]: e.target.value
         });
+    }
+
+    async handleFilter(e) {
+        e.preventDefault();
+        //console.log(e.target.value);
+        await this.setState({
+            price: e.target.value
+        }, () => console.log(this.state.price))
+        get(`/products/filter?type=${this.state.price}`)
+        .then((response) => {
+            if (response.status === 200)
+            {
+                //console.log(response.data);
+                this.setState({
+                    pageToTal: Math.ceil(response.data / 8)
+                }, () => console.log(this.state.pageToTal))
+            }
+        })
+        .catch((error) => console.log(error));
+
+        get(`/products/pageFilter?type=${this.state.price}&pageNumber=0&pageSize=8&sortBy=id`)
+        .then((response) => {
+            if (response.status === 200)
+            {
+                this.setState({
+                    Products: response.data,
+                })
+            }
+        })
+        .catch((error) => console.log(error));
     }
 
     componentWillUnmount() {
@@ -211,7 +257,7 @@ class Products extends Component {
                         </div>
                     </div>
                 </div> */}
-            <Segment style={{ padding: '2em 0em' }} vertical>
+            <Segment style={this.state.Products.length > 0 ? { padding: '2em 0em' }:{ padding: '2em 0em', marginBottom: '181px' }} vertical>
                 <Jumbotron fluid className='jumb'>
                     <Container fluid>
                         <h3 style={{textAlign:'center'}}>Lọc Theo Giá</h3>
@@ -221,24 +267,24 @@ class Products extends Component {
                         <p className="lead">
                         <Button color="primary">Learn More</Button>
                         </p> */}
-                        <Label check>
-                            <Input type="radio" name="price" value = '1000000' onChange={(e) => this.changeValue(e)}/>{' '}
-                            Dưới 1 Triệu
+                        <Label>
+                            <input type="radio" name="price" value = '1' checked={this.state.price === '1'} onChange={(e) => this.handleFilter(e)}/>{' '}
+                            Dưới 10 Triệu
                         </Label>
                         <br></br>
-                        <Label check>
-                            <Input type="radio" name="price" value = '5000000' onChange={(e) => this.changeValue(e)}/>{' '}
-                            Từ 1 Triệu - 10 Triệu
+                        <Label>
+                            <input type="radio" name="price" value = '2' checked={this.state.price === '2'} onChange={(e) => this.handleFilter(e)}/>{' '}
+                            Từ 10 Triệu - 15 Triệu
                         </Label>
                         <br/>
-                        <Label check>
-                            <Input type="radio" name="price" value = '10000000' onChange={(e) => this.changeValue(e)}/>{' '}
-                            Trên 10 Triệu
+                        <Label>
+                            <input type="radio" name="price" value = '3' checked={this.state.price === '3'} onChange={(e) => this.handleFilter(e)}/>{' '}
+                            Trên 15 Triệu
                         </Label>
                         <br/>
-                        <Label check>
-                            <Input type="radio" name="price" value = '0' defaultChecked onChange={(e) => this.changeValue(e)}/>{' '}
-                            None
+                        <Label>
+                            <input type="radio" name="price" value = '0' checked={this.state.price === '0'} onChange={(e) => this.handleFilter(e)}/>{' '}
+                            Tất Cả
                         </Label>
                     </Container>
                 </Jumbotron>
@@ -283,7 +329,8 @@ class Products extends Component {
                 </Grid>
                 
             </Segment>
-            <div className={this.state.Products.length > 0 ? '' : 'fixed-bottom'}>
+            <div >
+            {/* className={this.state.Products.length > 0 ? '' : 'fixed-bottom'} */}
                     <Footer/>
             </div>
 

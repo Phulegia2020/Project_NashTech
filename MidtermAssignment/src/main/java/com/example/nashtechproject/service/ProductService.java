@@ -34,4 +34,18 @@ public interface ProductService {
     public List<Product> getProductsByTotalRating();
 
     public boolean existName(String name);
+
+    public List<ProductDTO> getProductChatBot(String name);
+
+    public List<Product> getProductPriceLess();
+
+    public List<Product> getProductPriceLess(ProductPage productPage);
+
+    public List<Product> getProductPriceBetween();
+
+    public List<Product> getProductPriceBetween(ProductPage productPage);
+
+    public List<Product> getProductPriceGreater();
+
+    public List<Product> getProductPriceGreater(ProductPage productPage);
 }

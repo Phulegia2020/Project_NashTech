@@ -10,4 +10,7 @@ public class STATE {
 
     public static final String SALE = "On Sale";
     public static final String STOP = "Stop";
+
+    public static final int PRICE_FILTER1 = 10000000;
+    public static final int PRICE_FILTER2 = 15000000;
 }

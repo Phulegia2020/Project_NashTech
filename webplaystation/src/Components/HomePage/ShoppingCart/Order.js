@@ -57,52 +57,52 @@ export default class Order extends Component {
             // await this.setState({
             //     loading: true
             // })
-            toast('Vui lòng chờ xử lý thanh toán');
+            toast('Vui lòng chờ xử lý hóa đơn!');
         }
         // if (this.state.type === 'cod')
         // {
-            // await post('/bills', {total: 0, user_id: localStorage.getItem('user_id'), status: 'Waiting'})
-            // .then((response) => {
-            //     if (response.status === 200)
-            //     {
-            //         this.setState({
-            //             bill: response.data
-            //         })
-            //     }
-            // })
-            // .catch(error => alert('Login to Purchase!'));
+            await post('/bills', {total: 0, user_id: localStorage.getItem('user_id'), status: 'Waiting'})
+            .then((response) => {
+                if (response.status === 200)
+                {
+                    this.setState({
+                        bill: response.data
+                    })
+                }
+            })
+            .catch(error => alert('Login to Purchase!'));
 
-            // for (let i = 0; i < shoppingCartItems.length; i++) {
-            //     await post('/billDetails', {bill_id: this.state.bill.id, product_id: shoppingCartItems[i].id, quantity: shoppingCartItems[i].quantity})
-            //     .then((res) => {
-            //         if (res.status === 200)
-            //         {
-            //         }
-            //     })
-            //     .catch(error => alert('Login to Purchase!'));
-            // }
+            for (let i = 0; i < shoppingCartItems.length; i++) {
+                await post('/billDetails', {bill_id: this.state.bill.id, product_id: shoppingCartItems[i].id, quantity: shoppingCartItems[i].quantity})
+                .then((res) => {
+                    if (res.status === 200)
+                    {
+                    }
+                })
+                .catch(error => alert('Login to Purchase!'));
+            }
 
-            // await get(`/bills/${this.state.bill.id}`)
-            // .then((response) => {
-            //     if (response.status === 200)
-            //     {
-            //         //console.log(response.data);
-            //         this.setState({
-            //             bill: response.data
-            //         })
-            //     }
-            // })
+            await get(`/bills/${this.state.bill.id}`)
+            .then((response) => {
+                if (response.status === 200)
+                {
+                    //console.log(response.data);
+                    this.setState({
+                        bill: response.data
+                    })
+                }
+            })
             //localStorage.setItem('shopping-cart', []);
 
-            //this.handleSendMail();
+            this.handleSendMail();
 
             // console.log('paypal');
         // }
         // else 
         if (this.state.type === 'paypal')
         {
-            //var pay = (this.state.bill.total) / 20000;
-            var pay = 5;
+            var pay = (this.state.bill.total) / 20000;
+            // var pay = 5;
             post(`/payment/pay?price=${pay}`)
             .then((response) => {
                 if (response.status === 200)
@@ -259,7 +259,7 @@ export default class Order extends Component {
                     <Footer/>
                 </div>
                 <ToastContainer position="bottom-center"
-                    autoClose={4500}
+                    autoClose={5000}
                     hideProgressBar={false}
                     newestOnTop={false}
                     closeOnClick={false}
