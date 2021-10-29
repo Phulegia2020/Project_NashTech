@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Pagination, PaginationItem, PaginationLink } from 'reactstrap';
 import Add from '../PlaceOrderDetails/Add';
 import { withRouter } from "react-router";
+import "../ImportCard/import.css";
 
 class PlaceOrderDetailsByPlaceOrder extends Component {
     state = {
@@ -148,7 +149,7 @@ class PlaceOrderDetailsByPlaceOrder extends Component {
 
     render() {
         return (
-            <div>
+            <div className="list-details">
                 <Modal
                     isOpen={this.state.isDisplayFormDel}
                     aria-labelledby="contained-modal-title-vcenter"
@@ -172,6 +173,7 @@ class PlaceOrderDetailsByPlaceOrder extends Component {
                     <FontAwesomeIcon icon={faPlus} className="mr-2"/>{' '}
                     Tạo Chi Tiết Mới
                 </button>
+                <h3 style={{ textAlign:'center', margin:'20px 0 20px 0' }}>Danh Sách Chi Tiết</h3>
                 <table id="table">
                     <thead>
                         <tr>
@@ -191,7 +193,8 @@ class PlaceOrderDetailsByPlaceOrder extends Component {
                                     <td>{index + 1}</td>
                                     <td>
                                         {/* <img src={`data:image/jpeg;base64,${po.key.product.imageurl}`} alt="" height="100px"></img> */}
-                                        <img src={`data:image/jpeg;base64,${po.productImg}`} alt="" height="100px"></img>
+                                        {/* <img src={`data:image/jpeg;base64,${po.productImg}`} alt="" height="100px"></img> */}
+                                        <img src={po.productImg || "http://via.placeholder.com/300"} alt="" height="100px"></img>
                                     </td>
                                     <td>{po.productName}</td>
                                     <td>{formatQuantity(po.quantity)}</td>

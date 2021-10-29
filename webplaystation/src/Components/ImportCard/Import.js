@@ -7,7 +7,7 @@ import Add from "./Add"
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Pagination, PaginationItem, PaginationLink } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faInfo, faPlus, faTrash, faCheck, faArrowCircleUp, faArrowCircleDown } from '@fortawesome/free-solid-svg-icons';
-import { Label, Breadcrumb } from 'semantic-ui-react';
+import { Label, Breadcrumb, Input } from 'semantic-ui-react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -20,22 +20,23 @@ export default class Import extends Component {
         pageToTal: 0,
         importConfirm: {},
         placeorderdetails: [],
-        id: ""
+        id: "",
+        search: ""
     }
 
     componentDidMount(){
-        get("/imports")
+        get("/imports/status")
         .then((response) => {
             if (response.status === 200)
             {
                 this.setState({
-                    pageToTal: Math.ceil(response.data.length / 9)
+                    pageToTal: Math.ceil(response.data / 8)
                 })
             }
         })
         .catch(error => {console.log(error)})
 
-        get(`/imports/page?pageNumber=0&pageSize=9&sortBy=id`)
+        get(`/imports/statusPage?pageNumber=0&pageSize=8&sortBy=id`)
         .then((response) => {
             this.setState({
                 imports: response.data,
@@ -142,13 +143,26 @@ export default class Import extends Component {
             }, () => console.log(this.state.pageNumber));
         }
         
-        get(`/imports/page?pageNumber=${pageNumber}&pageSize=9&sortBy=id`)
-        .then((response) => {
-            this.setState({
-                imports: response.data,
-            });
-        })
-        .catch(error => console.log(error));
+        if (this.state.search === '')
+        {
+            get(`/imports/statusPage?pageNumber=${pageNumber}&pageSize=8&sortBy=id`)
+            .then((response) => {
+                this.setState({
+                    imports: response.data,
+                });
+            })
+            .catch(error => console.log(error));
+        }
+        else
+        {
+            get(`/imports/searchPage?search=${this.state.search}&pageNumber=0&pageSize=8&sortBy=id`)
+            .then((response) => {
+                this.setState({
+                    imports: response.data,
+                });
+            })
+            .catch(error => console.log(error));
+        }
     }
 
     async handleConfirm(event, id){
@@ -171,7 +185,7 @@ export default class Import extends Component {
         })
         .catch((error)=> {})
 
-        get(`/imports/page?pageNumber=${this.state.pageNumber}&pageSize=9&sortBy=id`)
+        get(`/imports/statusPage?pageNumber=${this.state.pageNumber}&pageSize=8&sortBy=id`)
         .then((response) => {
             this.setState({
                 imports: response.data,
@@ -180,22 +194,113 @@ export default class Import extends Component {
         .catch(error => console.log(error));
     }
 
-    handleSortInc = (e) => {
+    handleSortInc = (e, key) => {
         e.preventDefault();
         //this.state.categories.sort((e1, e2) => (e1.id > e2.id ? 1 : -1));
-        this.setState({
-            imports: this.state.imports.sort((e1, e2) => (e1.id > e2.id ? 1 : -1))
-        })
+        if (key === 'id')
+        {
+            this.setState({
+                imports: this.state.imports.sort((e1, e2) => (e1.id > e2.id ? 1 : -1))
+            })
+        }
+        else if (key === 'total')
+        {
+            this.setState({
+                imports: this.state.imports.sort((e1, e2) => (e1.total > e2.total ? 1 : -1))
+            })
+        }
+        else if (key === 'time')
+        {
+            this.setState({
+                imports: this.state.imports.sort((e1, e2) => (e1.createddate > e2.createddate ? 1 : -1))
+            })
+        }
+        else if (key === 'poid')
+        {
+            this.setState({
+                imports: this.state.imports.sort((e1, e2) => (e1.placeOrder.id > e2.placeOrder.id ? 1 : -1))
+            })
+        }
         // console.log('sort');
     }
 
-    handleSortDes = (e) => {
+    handleSortDes = (e, key) => {
         e.preventDefault();
         //this.state.categories.sort((e1, e2) => (e1.id > e2.id ? 1 : -1));
-        this.setState({
-            imports: this.state.imports.sort((e1, e2) => (e2.id > e1.id ? 1 : -1))
-        })
+        if (key === 'id')
+        {
+            this.setState({
+                imports: this.state.imports.sort((e1, e2) => (e2.id > e1.id ? 1 : -1))
+            })
+        }
+        else if (key === 'total')
+        {
+            this.setState({
+                imports: this.state.imports.sort((e1, e2) => (e2.total > e1.total ? 1 : -1))
+            })
+        }
+        else if (key === 'time')
+        {
+            this.setState({
+                imports: this.state.imports.sort((e1, e2) => (e2.createddate > e1.createddate ? 1 : -1))
+            })
+        }
+        else if (key === 'poid')
+        {
+            this.setState({
+                imports: this.state.imports.sort((e1, e2) => (e2.placeOrder.id > e1.placeOrder.id ? 1 : -1))
+            })
+        }
         // console.log('sort');
+    }
+
+    async handleSearch(e){
+        e.preventDefault()
+        await this.setState({
+            search: e.target.value
+        })
+        if (this.state.search === '')
+        {
+            get("/imports/status")
+            .then((response) => {
+                if (response.status === 200)
+                {
+                    this.setState({
+                        pageToTal: Math.ceil(response.data / 8)
+                    })
+                }
+            })
+            .catch(error => {console.log(error)})
+
+            get(`/imports/statusPage?pageNumber=0&pageSize=8&sortBy=id`)
+            .then((response) => {
+                this.setState({
+                    imports: response.data,
+                });
+            })
+            .catch(error => console.log(error));
+        }
+        else
+        {
+            get(`/imports/search?search=${this.state.search}`)
+            .then((response) => {
+                if (response.status === 200)
+                {
+                    this.setState({
+                        pageToTal: Math.ceil(response.data / 8)
+                    })
+                }
+            })
+            .catch(error => {console.log(error)})
+
+            get(`/imports/searchPage?search=${this.state.search}&pageNumber=0&pageSize=8&sortBy=id`)
+            .then((response) => {
+                this.setState({
+                    imports: response.data,
+                });
+            })
+            .catch(error => console.log(error));
+        }
     }
 
     componentWillUnmount() {
@@ -237,13 +342,20 @@ export default class Import extends Component {
                     <FontAwesomeIcon icon={faPlus} className="mr-2"/>{' '}
                     Tạo Phiếu Nhập
                 </button>
+                <Input
+                    style={{marginLeft: '100rem'}}
+                    placeholder="Mã Phiếu Nhập..."
+                    value={this.state.search}
+                    onChange={(e) => this.handleSearch(e)}
+                    icon="search"
+                />
                 <table id="table">
                     <thead>
                         <tr>
-                            <th><b>Mã Phiếu Nhập</b>{' '}<FontAwesomeIcon icon={faArrowCircleUp} className="sort-icon" onClick={(e) => this.handleSortInc(e)}/><FontAwesomeIcon icon={faArrowCircleDown} className="sort-icon" onClick={(e) => this.handleSortDes(e)}/></th>
-                            <th><b>Tổng Tiền</b></th>
-                            <th><b>Thời Gian</b></th>
-                            <th><b>Phiếu Đặt</b></th>
+                            <th><b>Mã Phiếu Nhập</b>{' '}<FontAwesomeIcon icon={faArrowCircleUp} className="sort-icon" onClick={(e) => this.handleSortInc(e, 'id')}/><FontAwesomeIcon icon={faArrowCircleDown} className="sort-icon" onClick={(e) => this.handleSortDes(e, 'id')}/></th>
+                            <th><b>Tổng Tiền</b>{' '}<FontAwesomeIcon icon={faArrowCircleUp} className="sort-icon" onClick={(e) => this.handleSortInc(e, 'total')}/><FontAwesomeIcon icon={faArrowCircleDown} className="sort-icon" onClick={(e) => this.handleSortDes(e, 'total')}/></th>
+                            <th><b>Thời Gian</b>{' '}<FontAwesomeIcon icon={faArrowCircleUp} className="sort-icon" onClick={(e) => this.handleSortInc(e, 'time')}/><FontAwesomeIcon icon={faArrowCircleDown} className="sort-icon" onClick={(e) => this.handleSortDes(e, 'time')}/></th>
+                            <th><b>Phiếu Đặt</b>{' '}<FontAwesomeIcon icon={faArrowCircleUp} className="sort-icon" onClick={(e) => this.handleSortInc(e, 'poid')}/><FontAwesomeIcon icon={faArrowCircleDown} className="sort-icon" onClick={(e) => this.handleSortDes(e, 'poid')}/></th>
                             <th><b>Nhân Viên</b></th>
                             <th><b>Trạng Thái</b></th>
                             <th>Cập Nhật</th>

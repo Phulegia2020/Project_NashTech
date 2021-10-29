@@ -7,7 +7,7 @@ import Add from "./Add"
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Pagination, PaginationItem, PaginationLink } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faInfo, faPlus, faTrash, faArrowCircleDown, faArrowCircleUp } from '@fortawesome/free-solid-svg-icons';
-import { Label, Breadcrumb } from 'semantic-ui-react';
+import { Label, Breadcrumb, Input } from 'semantic-ui-react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -18,22 +18,23 @@ export default class PlaceOrder extends Component {
         isDisplayFormDel: false,
         pageNumber: 0,
         pageToTal: 0,
-        id: ""
+        id: "",
+        search: ""
     }
 
     componentDidMount(){
-        get("/placeorders")
+        get("/placeorders/status")
         .then((response) => {
             if (response.status === 200)
             {
                 this.setState({
-                    pageToTal: Math.ceil(response.data.length / 9)
+                    pageToTal: Math.ceil(response.data / 8)
                 })
             }
         })
         .catch(error => {console.log(error)})
 
-        get(`/placeorders/page?pageNumber=0&pageSize=9&sortBy=id`)
+        get(`/placeorders/statusPage?pageNumber=0&pageSize=8&sortBy=id`)
         .then((response) => {
             this.setState({
                 placeorders: response.data,
@@ -124,31 +125,135 @@ export default class PlaceOrder extends Component {
             }, () => console.log(this.state.pageNumber));
         }
         
-        get(`/placeorders/page?pageNumber=${pageNumber}&pageSize=9&sortBy=id`)
-        .then((response) => {
+        if (this.state.search === '')
+        {
+            get(`/placeorders/statusPage?pageNumber=${pageNumber}&pageSize=8&sortBy=id`)
+            .then((response) => {
+                this.setState({
+                    placeorders: response.data,
+                });
+            })
+            .catch(error => console.log(error));
+        }
+        else
+        {
+            get(`/placeorders/searchPage?search=${this.state.search}&pageNumber=0&pageSize=8&sortBy=id`)
+            .then((response) => {
+                this.setState({
+                    placeorders: response.data,
+                });
+            })
+            .catch(error => console.log(error));
+        }
+    }
+
+    handleSortInc = (e, key) => {
+        e.preventDefault();
+        //this.state.categories.sort((e1, e2) => (e1.id > e2.id ? 1 : -1));
+        if (key === 'id')
+        {
             this.setState({
-                placeorders: response.data,
-            });
-        })
-        .catch(error => console.log(error));
-    }
-
-    handleSortInc = (e) => {
-        e.preventDefault();
-        //this.state.categories.sort((e1, e2) => (e1.id > e2.id ? 1 : -1));
-        this.setState({
-            placeorders: this.state.placeorders.sort((e1, e2) => (e1.id > e2.id ? 1 : -1))
-        })
+                placeorders: this.state.placeorders.sort((e1, e2) => (e1.id > e2.id ? 1 : -1))
+            })
+        }
+        else if (key === 'total')
+        {
+            this.setState({
+                placeorders: this.state.placeorders.sort((e1, e2) => (e1.total > e2.total ? 1 : -1))
+            })
+        }
+        else if (key === 'time')
+        {
+            this.setState({
+                placeorders: this.state.placeorders.sort((e1, e2) => (e1.createddate > e2.createddate ? 1 : -1))
+            })
+        }
+        else if (key === 'sup')
+        {
+            this.setState({
+                placeorders: this.state.placeorders.sort((e1, e2) => (e1.supplier.name > e2.supplier.name ? 1 : -1))
+            })
+        }
         // console.log('sort');
     }
 
-    handleSortDes = (e) => {
+    handleSortDes = (e, key) => {
         e.preventDefault();
         //this.state.categories.sort((e1, e2) => (e1.id > e2.id ? 1 : -1));
-        this.setState({
-            placeorders: this.state.placeorders.sort((e1, e2) => (e2.id > e1.id ? 1 : -1))
-        })
+        if (key === 'id')
+        {
+            this.setState({
+                placeorders: this.state.placeorders.sort((e1, e2) => (e2.id > e1.id ? 1 : -1))
+            })
+        }
+        else if (key === 'total')
+        {
+            this.setState({
+                placeorders: this.state.placeorders.sort((e1, e2) => (e2.total > e1.total ? 1 : -1))
+            })
+        }
+        else if (key === 'time')
+        {
+            this.setState({
+                placeorders: this.state.placeorders.sort((e1, e2) => (e2.createddate > e1.createddate ? 1 : -1))
+            })
+        }
+        else if (key === 'sup')
+        {
+            this.setState({
+                placeorders: this.state.placeorders.sort((e1, e2) => (e2.supplier.name > e1.supplier.name ? 1 : -1))
+            })
+        }
         // console.log('sort');
+    }
+
+    async handleSearch(e){
+        e.preventDefault()
+        await this.setState({
+            search: e.target.value
+        })
+        if (this.state.search === '')
+        {
+            get("/placeorders/status")
+            .then((response) => {
+                if (response.status === 200)
+                {
+                    this.setState({
+                        pageToTal: Math.ceil(response.data / 8)
+                    })
+                }
+            })
+            .catch(error => {console.log(error)})
+
+            get(`/placeorders/statusPage?pageNumber=0&pageSize=8&sortBy=id`)
+            .then((response) => {
+                this.setState({
+                    placeorders: response.data,
+                });
+            })
+            .catch(error => console.log(error));
+        }
+        else
+        {
+            get(`/placeorders/search?search=${this.state.search}`)
+            .then((response) => {
+                if (response.status === 200)
+                {
+                    this.setState({
+                        pageToTal: Math.ceil(response.data / 8)
+                    })
+                }
+            })
+            .catch(error => {console.log(error)})
+
+            get(`/placeorders/searchPage?search=${this.state.search}&pageNumber=0&pageSize=8&sortBy=id`)
+            .then((response) => {
+                this.setState({
+                    placeorders: response.data,
+                });
+            })
+            .catch(error => console.log(error));
+        }
     }
 
     componentWillUnmount() {
@@ -190,14 +295,21 @@ export default class PlaceOrder extends Component {
                     <FontAwesomeIcon icon={faPlus} className="mr-2"/>{' '}
                     Tạo Phiết Đặt
                 </button>
+                <Input
+                    style={{marginLeft: '100rem'}}
+                    placeholder="Mã Phiếu Nhập..."
+                    value={this.state.search}
+                    onChange={(e) => this.handleSearch(e)}
+                    icon="search"
+                />
                 <table id="table">
                     <thead>
                         <tr>
-                            <th><b>Mã Phiếu Đặt</b>{' '}<FontAwesomeIcon icon={faArrowCircleUp} className="sort-icon" onClick={(e) => this.handleSortInc(e)}/><FontAwesomeIcon icon={faArrowCircleDown} className="sort-icon" onClick={(e) => this.handleSortDes(e)}/></th>
-                            <th><b>Tổng Tiền</b></th>
-                            <th><b>Thời Gian Lập</b></th>
+                            <th><b>Mã Phiếu Đặt</b>{' '}<FontAwesomeIcon icon={faArrowCircleUp} className="sort-icon" onClick={(e) => this.handleSortInc(e, 'id')}/><FontAwesomeIcon icon={faArrowCircleDown} className="sort-icon" onClick={(e) => this.handleSortDes(e, 'id')}/></th>
+                            <th><b>Tổng Tiền</b>{' '}<FontAwesomeIcon icon={faArrowCircleUp} className="sort-icon" onClick={(e) => this.handleSortInc(e, 'total')}/><FontAwesomeIcon icon={faArrowCircleDown} className="sort-icon" onClick={(e) => this.handleSortDes(e, 'total')}/></th>
+                            <th><b>Thời Gian Lập</b>{' '}<FontAwesomeIcon icon={faArrowCircleUp} className="sort-icon" onClick={(e) => this.handleSortInc(e, 'time')}/><FontAwesomeIcon icon={faArrowCircleDown} className="sort-icon" onClick={(e) => this.handleSortDes(e, 'time')}/></th>
                             <th><b>Nhân Viên</b></th>
-                            <th><b>Nhà Cung Cấp</b></th>
+                            <th><b>Nhà Cung Cấp</b>{' '}<FontAwesomeIcon icon={faArrowCircleUp} className="sort-icon" onClick={(e) => this.handleSortInc(e, 'sup')}/><FontAwesomeIcon icon={faArrowCircleDown} className="sort-icon" onClick={(e) => this.handleSortDes(e, 'sup')}/></th>
                             <th><b>Trạng Thái</b></th>
                             <th>Cập Nhật</th>
                             <th>Xóa</th>

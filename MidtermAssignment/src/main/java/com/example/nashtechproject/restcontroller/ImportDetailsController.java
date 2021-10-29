@@ -156,7 +156,7 @@ public class ImportDetailsController {
         ImportDetailsDTO importDetailsDTO = modelMapper.map(importDetails, ImportDetailsDTO.class);
         importDetailsDTO.setProduct_id(String.valueOf(importDetails.getKey().getProduct().getId()));
         importDetailsDTO.setImp_id(String.valueOf(importDetails.getKey().getImp().getId()));
-        importDetailsDTO.setProductImg(importDetails.getKey().getProduct().getImageurl());
+        importDetailsDTO.setProductImg(importDetails.getKey().getProduct().getUrl_image());
         importDetailsDTO.setProductName(importDetails.getKey().getProduct().getName());
         return importDetailsDTO;
     }

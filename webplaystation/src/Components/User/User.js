@@ -273,21 +273,99 @@ export default class User extends Component {
         }
     }
 
-    handleSortInc = (e) => {
+    handleSortInc = (e, key) => {
         e.preventDefault();
         //this.state.categories.sort((e1, e2) => (e1.id > e2.id ? 1 : -1));
-        this.setState({
-            users: this.state.users.sort((e1, e2) => (e1.id > e2.id ? 1 : -1))
-        })
+        if (key === 'id')
+        {
+            this.setState({
+                users: this.state.users.sort((e1, e2) => (e1.id > e2.id ? 1 : -1))
+            })
+        }
+        else if (key === 'name')
+        {
+            this.setState({
+                users: this.state.users.sort((e1, e2) => (e1.name > e2.name ? 1 : -1))
+            })
+        }
+        else if (key === 'gender')
+        {
+            this.setState({
+                users: this.state.users.sort((e1, e2) => (e1.gender > e2.gender ? 1 : -1))
+            })
+        }
+        else if (key === 'address')
+        {
+            this.setState({
+                users: this.state.users.sort((e1, e2) => (e1.address > e2.address ? 1 : -1))
+            })
+        }
+        else if (key === 'email')
+        {
+            this.setState({
+                users: this.state.users.sort((e1, e2) => (e1.email > e2.email ? 1 : -1))
+            })
+        }
+        else if (key === 'phone')
+        {
+            this.setState({
+                users: this.state.users.sort((e1, e2) => (e1.phone > e2.phone ? 1 : -1))
+            })
+        }
+        else if (key === 'username')
+        {
+            this.setState({
+                users: this.state.users.sort((e1, e2) => (e1.account > e2.account ? 1 : -1))
+            })
+        }
         // console.log('sort');
     }
 
-    handleSortDes = (e) => {
+    handleSortDes = (e, key) => {
         e.preventDefault();
         //this.state.categories.sort((e1, e2) => (e1.id > e2.id ? 1 : -1));
-        this.setState({
-            users: this.state.users.sort((e1, e2) => (e2.id > e1.id ? 1 : -1))
-        })
+        if (key === 'id')
+        {
+            this.setState({
+                users: this.state.users.sort((e1, e2) => (e2.id > e1.id ? 1 : -1))
+            })
+        }
+        else if (key === 'name')
+        {
+            this.setState({
+                users: this.state.users.sort((e1, e2) => (e2.name > e1.name ? 1 : -1))
+            })
+        }
+        else if (key === 'gender')
+        {
+            this.setState({
+                users: this.state.users.sort((e1, e2) => (e2.gender > e1.gender ? 1 : -1))
+            })
+        }
+        else if (key === 'address')
+        {
+            this.setState({
+                users: this.state.users.sort((e1, e2) => (e2.address > e1.address ? 1 : -1))
+            })
+        }
+        else if (key === 'email')
+        {
+            this.setState({
+                users: this.state.users.sort((e1, e2) => (e2.email > e1.email ? 1 : -1))
+            })
+        }
+        else if (key === 'phone')
+        {
+            this.setState({
+                users: this.state.users.sort((e1, e2) => (e2.phone > e1.phone ? 1 : -1))
+            })
+        }
+        else if (key === 'username')
+        {
+            this.setState({
+                users: this.state.users.sort((e1, e2) => (e2.account > e1.account ? 1 : -1))
+            })
+        }
         // console.log('sort');
     }
 
@@ -344,13 +422,13 @@ export default class User extends Component {
                 <table id="table">
                     <thead>
                         <tr>
-                            <th><b>ID</b>{' '}<FontAwesomeIcon icon={faArrowCircleUp} className="sort-icon" onClick={(e) => this.handleSortInc(e)}/><FontAwesomeIcon icon={faArrowCircleDown} className="sort-icon" onClick={(e) => this.handleSortDes(e)}/></th>
-                            <th><b>Họ Tên</b></th>
-                            <th><b>Giới Tính</b></th>
-                            <th><b>Địa Chỉ</b></th>
-                            <th><b>Email</b></th>
-                            <th><b>Số Điện Thoại</b></th>
-                            <th><b>Tài Khoản</b></th>
+                            <th><b>ID</b>{' '}<FontAwesomeIcon icon={faArrowCircleUp} className="sort-icon" onClick={(e) => this.handleSortInc(e, 'id')}/><FontAwesomeIcon icon={faArrowCircleDown} className="sort-icon" onClick={(e) => this.handleSortDes(e, 'id')}/></th>
+                            <th><b>Họ Tên</b>{' '}<FontAwesomeIcon icon={faArrowCircleUp} className="sort-icon" onClick={(e) => this.handleSortInc(e, 'name')}/><FontAwesomeIcon icon={faArrowCircleDown} className="sort-icon" onClick={(e) => this.handleSortDes(e, 'name')}/></th>
+                            <th><b>Giới Tính</b>{' '}<FontAwesomeIcon icon={faArrowCircleUp} className="sort-icon" onClick={(e) => this.handleSortInc(e, 'gender')}/><FontAwesomeIcon icon={faArrowCircleDown} className="sort-icon" onClick={(e) => this.handleSortDes(e, 'gender')}/></th>
+                            <th><b>Địa Chỉ</b>{' '}<FontAwesomeIcon icon={faArrowCircleUp} className="sort-icon" onClick={(e) => this.handleSortInc(e, 'address')}/><FontAwesomeIcon icon={faArrowCircleDown} className="sort-icon" onClick={(e) => this.handleSortDes(e, 'address')}/></th>
+                            <th><b>Email</b>{' '}<FontAwesomeIcon icon={faArrowCircleUp} className="sort-icon" onClick={(e) => this.handleSortInc(e, 'email')}/><FontAwesomeIcon icon={faArrowCircleDown} className="sort-icon" onClick={(e) => this.handleSortDes(e, 'email')}/></th>
+                            <th><b>Số Điện Thoại</b>{' '}<FontAwesomeIcon icon={faArrowCircleUp} className="sort-icon" onClick={(e) => this.handleSortInc(e, 'phone')}/><FontAwesomeIcon icon={faArrowCircleDown} className="sort-icon" onClick={(e) => this.handleSortDes(e, 'phone')}/></th>
+                            <th><b>Tài Khoản</b>{' '}<FontAwesomeIcon icon={faArrowCircleUp} className="sort-icon" onClick={(e) => this.handleSortInc(e, 'username')}/><FontAwesomeIcon icon={faArrowCircleDown} className="sort-icon" onClick={(e) => this.handleSortDes(e, 'username')}/></th>
                             <th><b>Vai Trò</b></th>
                             <th><b>Trạng Thái</b></th>
                             <th>Cập Nhập</th>

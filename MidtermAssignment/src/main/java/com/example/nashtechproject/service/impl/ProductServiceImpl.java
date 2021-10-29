@@ -101,19 +101,15 @@ public class ProductServiceImpl implements ProductService {
         return productDTOS;
     }
 
-    public List<ProductDTO> getProductChatBot(String name)
+    public ProductDTO getProductChatBot(String name)
     {
-        List<Product> pro = productRepository.findByNameAndStatus(name, STATE.SALE);
-        List<ProductDTO> productDTOS = new ArrayList<>();
-        pro.forEach(p -> {
-            ProductDTO productDTO = modelMapper.map(p, ProductDTO.class);
-            String cate_id = String.valueOf(p.getCategory().getId());
-            String sup_id = String.valueOf(p.getSupplier().getId());
-            productDTO.setCategory_id(cate_id);
-            productDTO.setSupplier_id(sup_id);
-            productDTOS.add(productDTO);
-        });
-        return productDTOS;
+        Product pro = productRepository.findByNameAndStatus(name, STATE.SALE);
+        ProductDTO productDTO = modelMapper.map(pro, ProductDTO.class);
+        String cate_id = String.valueOf(pro.getCategory().getId());
+        String sup_id = String.valueOf(pro.getSupplier().getId());
+        productDTO.setCategory_id(cate_id);
+        productDTO.setSupplier_id(sup_id);
+        return productDTO;
     }
 
     public List<Product> getProductPriceLess()

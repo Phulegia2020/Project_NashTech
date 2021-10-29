@@ -13,6 +13,14 @@ public interface PlaceOrderService {
 
     public PlaceOrder getPlaceOrder(Long placeOrderId);
 
+    public List<PlaceOrder> getPlaceOrderSearch(String id);
+
+    public List<PlaceOrder> getPlaceOrderSearchPage(String id, ProductPage productPage);
+
+    public List<PlaceOrder> getPlaceOrderStatus();
+
+    public List<PlaceOrder> getPlaceOrderStatusPage(ProductPage productPage);
+
     public PlaceOrder savePlaceOrder(PlaceOrder placeOrder);
 
     public void deletePlaceOrder(Long placeOrderId);

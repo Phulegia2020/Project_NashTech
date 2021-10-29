@@ -51,7 +51,8 @@ public class DialogflowController {
 //        List<GoogleCloudDialogflowV2IntentMessage> messages = new ArrayList<>();
         GoogleCloudDialogflowV2IntentMessage msg = new GoogleCloudDialogflowV2IntentMessage();
         GoogleCloudDialogflowV2IntentMessageText text = new GoogleCloudDialogflowV2IntentMessageText();
-        List<ProductDTO> products = new ArrayList<>();
+//        List<ProductDTO> products = new ArrayList<>();
+        ProductDTO products;
         List<String> chat = new ArrayList<>();
 //        String chat = "";
 //        Map<String, Object> map = new HashMap<>();
@@ -61,19 +62,42 @@ public class DialogflowController {
         {
             case "Info-Intent":
             {
-                //System.out.println("chatbot info");
-                products = productService.getProductChatBot(request.getQueryResult().getParameters().get("product").toString());
-                for (int i = 0; i < products.size(); i++)
-                {
-                    if (products.get(i).getQuantity() == 0)
+//                System.out.println("chatbot info");
+//                if (request.getQueryResult().getParameters().get("product").toString().equals("PS"))
+//                {
+//                    chat.add("Hiện tại cửa hàng chưa kinh doanh máy này. Bạn có thể tham khảo về máy Playstation 4 và Playstation 5 tại shop !");
+//                }
+//                else
+//                {
+                    products = productService.getProductChatBot(request.getQueryResult().getParameters().get("product").toString());
+                    if (products == null)
                     {
-                        chat.add("Hiện tại máy " + products.get(i).getName() + " đã hết hàng! Bạn có thể tham khảo thêm một số loại máy khác nhé.");
+                        //System.out.println("null");
+                        chat.add("Hiện tại cửa hàng chưa kinh doanh máy này. Bạn có thể tham khảo về máy Playstation 4 và Playstation 5 tại shop !");
                     }
                     else
                     {
-                        chat.add("Hiện tại máy " + products.get(i).getName() + " vẫn còn hàng bạn nhé!");
+                        if (products.getQuantity() > 0)
+                        {
+                            chat.add("Hiện tại máy " + products.getName() + " vẫn còn hàng bạn nhé!");
+                        }
+                        else
+                        {
+                            chat.add("Hiện tại máy " + products.getName() + " đã hết hàng! Bạn có thể tham khảo thêm một số loại máy khác nhé.");
+                        }
                     }
-                }
+//                }
+//                for (int i = 0; i < products.size(); i++)
+//                {
+//                    if (products.get(i).getQuantity() == 0)
+//                    {
+//                        chat.add("Hiện tại máy " + products.get(i).getName() + " đã hết hàng! Bạn có thể tham khảo thêm một số loại máy khác nhé.");
+//                    }
+//                    else
+//                    {
+//                        chat.add("Hiện tại máy " + products.get(i).getName() + " vẫn còn hàng bạn nhé!");
+//                    }
+//                }
                 break;
             }
             case "Price-PS-Intent":
@@ -81,14 +105,25 @@ public class DialogflowController {
                 //System.out.println("chatbot-price");
                 //System.out.println(request.getQueryResult().getParameters().get("product").toString());
 //                for (int j = 0; j < request.getQueryResult().getParameters().get("product"))
-                products = productService.getProductChatBot(request.getQueryResult().getParameters().get("product").toString());
-                System.out.println(products);
-                for (int i = 0; i < products.size(); i++)
-                {
-                    chat.add("Máy " + products.get(i).getName() + " có giá " + String.format("%,d", products.get(i).getPrice()) + " VNĐ. Nếu bạn là một người đam mê playstation thì máy " + products.get(i).getName() + " là bộ máy hợp lý trong thời điểm hiện tại và cung cấp trải nghiệm chơi game hiệu quả cho nhiều người dùng");
-                    //chat = chat + "Máy " + products.get(i).getName() + " có giá " + String.format("%,d", products.get(i).getPrice()) + ", ";
-                }
-                //System.out.println(chat);
+//                if (request.getQueryResult().getParameters().get("product").toString().equals("PS"))
+//                {
+//                    chat.add("Hiện tại cửa hàng chưa kinh doanh máy này. Bạn có thể tham khảo về máy Playstation 4 và Playstation 5 tại shop !");
+//                }
+//                else {
+                    products = productService.getProductChatBot(request.getQueryResult().getParameters().get("product").toString());
+                    //System.out.println(products);
+//                for (int i = 0; i < products.size(); i++)
+//                {
+//                    chat.add("Máy " + products.get(i).getName() + " có giá " + String.format("%,d", products.get(i).getPrice()) + " VNĐ. Nếu bạn là một người đam mê playstation thì máy " + products.get(i).getName() + " là bộ máy hợp lý trong thời điểm hiện tại và cung cấp trải nghiệm chơi game hiệu quả cho nhiều người dùng");
+//                    //chat = chat + "Máy " + products.get(i).getName() + " có giá " + String.format("%,d", products.get(i).getPrice()) + ", ";
+//                }
+                    //System.out.println(chat);
+                    if (products == null) {
+                        chat.add("Hiện tại cửa hàng chưa kinh doanh máy này. Bạn có thể tham khảo về máy Playstation 4 và Playstation 5 tại shop !");
+                    } else {
+                        chat.add("Máy " + products.getName() + " có giá " + String.format("%,d", products.getPrice()) + " VNĐ. Nếu bạn là một người đam mê playstation thì máy " + products.getName() + " là bộ máy hợp lý trong thời điểm hiện tại và cung cấp trải nghiệm chơi game hiệu quả cho nhiều người dùng");
+                    }
+//                }
                 break;
             }
         }

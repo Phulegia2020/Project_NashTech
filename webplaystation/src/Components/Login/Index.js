@@ -104,16 +104,23 @@ class Login extends Component {
 					</Form.Field>
 					<Button type='submit' content='Đăng nhập' primary/>
 					</Form>
-				
+					<Link to={`/WebPlayStation/forgetPassword`} style={{ textDecoration: 'none' }} className="forget-password">Quên Mật Khẩu?</Link>
 				</Grid.Column>
 				{/* </div> */}
 				
 				<Grid.Column verticalAlign='middle'>
-					<Button as={Link} to="/WebPlayStation/signup" content='ĐĂNG KÝ' icon='signup' size='big' />
+					<Button as={Link} to="/WebPlayStation/signup" content='ĐĂNG KÝ' icon='signup' size='big' id="btn-signup"/>
+					
 				</Grid.Column>
+				
 				</Grid>
 
 				<Divider vertical>Nếu Bạn Chưa Có Tài Khoản. Đăng Ký Ở Đây?</Divider>
+
+				{/* <Button animated='fade' as={Link} to="/WebPlayStation/signup" icon='signup' size='big'>
+					<Button.Content visible className="btn-signup">ĐĂNG KÝ</Button.Content>
+					<Button.Content hidden className="btn-signup">$12.99 a month</Button.Content>
+					</Button> */}
 				<ToastContainer position="top-center"
                     autoClose={2000}
                     hideProgressBar

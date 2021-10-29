@@ -92,7 +92,7 @@ class UpdateComment extends Component {
         // this.state.users.map((u) => userArr.push({key: `${u.id}`, value: `${u.id}`, text: `${u.account}`}))
         return (
             <div className="update-form">
-                <h3>Update Bình Luận</h3>
+                <h3>Cập Nhật Bình Luận</h3>
                 {/* <Row form>
                     <Col md={4}> */}
                         <Form onSubmit={(event) => this.handleUpdate(event)}>

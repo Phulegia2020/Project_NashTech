@@ -16,6 +16,8 @@ import Info from './Components/HomePage/Profile/Info';
 import Order from './Components/HomePage/ShoppingCart/Order';
 import Success from './Components/HomePage/Pages/Success';
 import NotFound from './Components/HomePage/Pages/NotFound';
+import ForgetPassword from './Components/Login/ForgetPassword';
+import OTP from './Components/Login/OTP';
 
 class App extends React.Component{
     state = {
@@ -85,6 +87,20 @@ class App extends React.Component{
                   <Route exact path="/WebPlayStation/changpassword">
                       <MainMenu/>
                       <ChangePassword/>
+                      <div className="fixed-bottom">
+                        <Footer/>
+                      </div>
+                  </Route>
+                  <Route exact path="/WebPlayStation/forgetPassword">
+                      <MainMenu/>
+                      <ForgetPassword/>
+                      <div className="fixed-bottom">
+                        <Footer/>
+                      </div>
+                  </Route>
+                  <Route exact path="/WebPlayStation/confirm">
+                      <MainMenu/>
+                      <OTP/>
                       <div className="fixed-bottom">
                         <Footer/>
                       </div>

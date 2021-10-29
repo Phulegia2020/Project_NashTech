@@ -16,3 +16,80 @@
     /* width: 100px;
     height: 100px; */
 }
+
+.forget-password
+{
+    margin-left: 410px;
+}
+
+#btn-signup
+{
+    font-family: 'Merriweather', serif;
+}
+
+.forget-form
+{
+    position: absolute;
+    top: 30%;
+    left: 35%;
+    text-align: center;
+    align-content: center;
+    justify-content: center;
+    /* transform: translate(120%, 50%); */
+    border: 2px solid #bdc3c7;
+    width: fit-content;
+    height: 230px;
+    padding: 15px;
+    background: rgba(240, 242, 245, 1);
+}
+
+.forget-form input, .otp-form input
+{
+    margin-bottom: 10px;
+    width: 50%;
+    height: 30px;
+    border-radius: 20px;
+    padding-left: 10px;
+}
+
+.btn-otp
+{
+    /* background: rgba(0, 0, 0, 0.5); */
+    background: #00ccff;
+    /* transition: 1s; */
+    font-size: medium;
+    color: white;
+    border-color: #00ccff;
+    width: 100px;
+    height: 40px;
+}
+
+/* .btn-otp:hover
+{
+    background: #00ccff;
+    box-shadow: 0 0 10px #00ccff, 0 0 30px #00ccff, 0 0 60px #00ccff, 0 0 100px #00ccff;
+    color: white;
+    
+} */
+
+.otp-form
+{
+    position: absolute;
+    top: 27%;
+    left: 30%;
+    text-align: center;
+    align-content: center;
+    justify-content: center;
+    /* transform: translate(120%, 50%); */
+    border: 2px solid #bdc3c7;
+    width: 40%;
+    height: 200px;
+    padding: 15px;
+    background: rgba(240, 242, 245, 1);
+}
+
+.otp-form input::-webkit-outer-spin-button,
+.otp-form input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }

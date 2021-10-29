@@ -1,14 +1,17 @@
 package com.example.nashtechproject.restcontroller;
 
+import com.example.nashtechproject.dto.MailRequestDTO;
 import com.example.nashtechproject.dto.UserDTO;
 import com.example.nashtechproject.entity.Role;
 import com.example.nashtechproject.entity.RoleName;
 import com.example.nashtechproject.entity.User;
+import com.example.nashtechproject.exception.ObjectNotFoundException;
 import com.example.nashtechproject.exception.UserException;
 import com.example.nashtechproject.page.STATE;
 import com.example.nashtechproject.page.UserPage;
 import com.example.nashtechproject.payload.response.MessageResponse;
 import com.example.nashtechproject.repository.RoleRepository;
+import com.example.nashtechproject.service.BillService;
 import com.example.nashtechproject.service.RoleService;
 import com.example.nashtechproject.service.UserService;
 import com.fasterxml.jackson.databind.util.JSONPObject;
@@ -40,6 +43,9 @@ public class UserController {
 
     @Autowired
     private RoleService roleService;
+
+    @Autowired
+    private BillService billService;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -90,6 +96,43 @@ public class UserController {
             throw new UserException(userId);
         }
         return convertToDTO(userService.getUser(userId));
+    }
+
+    @GetMapping("/email/{email}")
+    @ApiOperation(value = "Get User By Email")
+    @ApiResponses(value = { @ApiResponse(code = 200, message = "Success"),
+            @ApiResponse(code = 400, message = "Bad request"),
+            @ApiResponse(code = 500, message = "Internal server error") })
+    public UserDTO getUserEmail(@PathVariable String email)
+    {
+        User us = userService.getUserEmail(email.trim());
+        if (us == null)
+        {
+            throw new ObjectNotFoundException("The email does not exist!");
+        }
+        return convertToDTO(us);
+    }
+
+    @GetMapping("/forgetPassword")
+    @ApiOperation(value = "Forget Password")
+    @ApiResponses(value = { @ApiResponse(code = 200, message = "Success"),
+            @ApiResponse(code = 400, message = "Bad request"),
+            @ApiResponse(code = 500, message = "Internal server error") })
+    public int forgetPassword (@RequestParam String email)
+    {
+        if (!userService.existEmail(email))
+        {
+            throw new ObjectNotFoundException("The email is not correct.");
+        }
+        Random rnd = new Random();
+        int otp = 100000 + rnd.nextInt(900000);
+        MailRequestDTO mailRequestDTO = new MailRequestDTO();
+        mailRequestDTO.setFrom("ps4gamemachine@gmail.com");
+        mailRequestDTO.setTo(email.trim());
+        mailRequestDTO.setSubject("THE PLAYSTATION SHOP - Quên Mật Khẩu");
+        mailRequestDTO.setContent("Mã OTP xác nhận: <b>" + otp + "</b>");
+        billService.sendEmail(mailRequestDTO);
+        return otp;
     }
 
     @GetMapping("/page")

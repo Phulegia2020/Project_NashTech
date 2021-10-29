@@ -77,6 +77,32 @@ public class PlaceOrderController {
                 .collect(Collectors.toList());
     }
 
+    @GetMapping("/search")
+    public int getAllPlaceOrderSearch(@RequestParam String search)
+    {
+        List<PlaceOrder> list = placeOrderService.getPlaceOrderSearch(search);
+        return list.size();
+    }
+
+    @GetMapping("/searchPage")
+    public ResponseEntity<List<PlaceOrder>> getPlaceOrderSearchPages(@RequestParam String search, ProductPage productPage)
+    {
+        return new ResponseEntity<>(placeOrderService.getPlaceOrderSearchPage(search, productPage), HttpStatus.OK);
+    }
+
+    @GetMapping("/status")
+    public int getAllPlaceOrder()
+    {
+        List<PlaceOrder> list = placeOrderService.getPlaceOrderStatus();
+        return list.size();
+    }
+
+    @GetMapping("/statusPage")
+    public ResponseEntity<List<PlaceOrder>> getPlaceOrderPages(ProductPage productPage)
+    {
+        return new ResponseEntity<>(placeOrderService.getPlaceOrderStatusPage(productPage), HttpStatus.OK);
+    }
+
     @PostMapping()
     public PlaceOrder savePlaceOrder(@RequestBody PlaceOrderDTO placeOrder)
     {

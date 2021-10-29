@@ -356,18 +356,25 @@ public class BillController {
     @PostMapping("/sendmail/{bill}")
     public ResponseEntity<String> sendMail(@PathVariable(name = "bill") Long bill, @RequestBody MailRequestDTO mailRequest) {
         String content = mailRequest.getContent();
-        content = content + "<table width='600px' style='border:2px solid black; border-collapse: collapse;'>"
+        Bill b = billService.getBill(bill);
+
+        content = content + "<b>Thông tin khách hàng</b><br/>Người nhận: " + b.getUser().getName() + "<br/>"
+                            + "Địa chỉ nhận hàng: " + b.getUser().getAddress() + "<br/>"
+                            + "Số điện thoại: " + b.getUser().getPhone() + "<br/>"
+                            + "<b>Chi tiết đơn hàng</b>"
+                            + "<table width='600px' style='border:2px solid black; border-collapse: collapse;'>"
                             + "<tr align='center'>"
-                            + "<td><b>Máy <b></td>"
-                            + "<td><b>Số Lượng<b></td>"
-                            + "<td><b>Giá<b></td>"
-                            + "</tr>";;
+                            + "<td><b>Máy </b></td>"
+                            + "<td><b>Số Lượng</b></td>"
+                            + "<td><b>Giá</b></td>"
+                            + "</tr>";
         List<BillDetails> list = billDetailsService.getBillDetailsByBill(bill);
         for (int i = 0; i < list.size(); i++)
         {
             //content = content + "<br><br><b>Product:</b> " + list.get(i).getKey().getProduct().getName() + " <br><b>Quantity:</b> " + String.format("%,d", list.get(i).getQuantity()) + " <br><b>Price:</b> " + String.format("%,d", list.get(i).getKey().getProduct().getPrice())  + " VND";
             content = content + "<tr align='center' style='border-top: 1px solid #ddd'> "+"<td>"  + list.get(i).getKey().getProduct().getName()+ "</td>"+ "<td>"  + String.format("%,d", list.get(i).getQuantity()) + "</td>"+ "<td>" + String.format("%,d", list.get(i).getKey().getProduct().getPrice())  + " VND"+ "</td>"+"</tr>";
         }
+//        content = content + "</table> <p>Tổng giá trị đơn hàng: </p><b>" + String.format("%,f", b.getTotal()) + " VNĐ</b>";
         content = content + "</table>";
         mailRequest.setContent(content);
         billService.sendEmail(mailRequest);

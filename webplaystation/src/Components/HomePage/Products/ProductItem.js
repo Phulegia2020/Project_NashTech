@@ -87,7 +87,8 @@ class ProductItem extends Component {
                 {/* <Label as='a' color='orange' ribbon>
                 Specs
                 </Label> */}
-                <Image style={{width: '100%'}} src={`data:image/jpeg;base64,${this.props.product.imageurl}`} label={{ color: 'red', corner: 'right', icon: 'certificate'}}/>
+                {/* <Image style={{width: '100%'}} src={this.props.product.url_image || `data:image/jpeg;base64,${this.props.product.imageurl}`} label={{ color: 'red', corner: 'right', icon: 'certificate'}}/> */}
+                <Image style={{width: '100%'}} src={this.props.product.url_image || "http://via.placeholder.com/300"} label={{ color: 'red', corner: 'right', icon: 'certificate'}}/>
                 <Card.Content>
                     <Card.Header>
                         {this.props.product.name}

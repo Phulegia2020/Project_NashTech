@@ -45,14 +45,14 @@ public class CommentController {
     private ModelMapper modelMapper;
 
     @GetMapping
-    public List<CommentDTO> getAllComments() throws RatingPointException
+    public List<CommentDTO> getAllComments()
     {
         List<Comment> comments = commentService.retrieveComments();
         return comments.stream().map(this::convertToDTO).sorted(Comparator.comparing(CommentDTO::getId).reversed()).collect(Collectors.toList());
     }
 
     @GetMapping("/{commentId}")
-    public CommentDTO findComment(@PathVariable(name = "commentId") Long commentId) throws RatingPointException
+    public CommentDTO findComment(@PathVariable(name = "commentId") Long commentId)
     {
         if (commentService.getComment(commentId) == null)
         {
@@ -142,7 +142,7 @@ public class CommentController {
         commentDTO.setProduct_id(String.valueOf(comment.getProduct().getId()));
         commentDTO.setUser_id(String.valueOf(comment.getUser().getId()));
         commentDTO.setUsername(comment.getUser().getAccount());
-        commentDTO.setProductImg(comment.getProduct().getImageurl());
+        commentDTO.setProductImg(comment.getProduct().getUrl_image());
         commentDTO.setProductName(comment.getProduct().getName());
         return commentDTO;
     }

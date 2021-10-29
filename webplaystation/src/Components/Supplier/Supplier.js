@@ -202,21 +202,63 @@ export default class Supplier extends Component {
         }
     }
 
-    handleSortInc = (e) => {
+    handleSortInc = (e, key) => {
         e.preventDefault();
         //this.state.categories.sort((e1, e2) => (e1.id > e2.id ? 1 : -1));
-        this.setState({
-            suppliers: this.state.suppliers.sort((e1, e2) => (e1.id > e2.id ? 1 : -1))
-        })
+        if (key === 'id')
+        {
+            this.setState({
+                suppliers: this.state.suppliers.sort((e1, e2) => (e1.id > e2.id ? 1 : -1))
+            })
+        }
+        else if (key === 'name')
+        {
+            this.setState({
+                suppliers: this.state.suppliers.sort((e1, e2) => (e1.name > e2.name ? 1 : -1))
+            })
+        }
+        else if (key === 'address')
+        {
+            this.setState({
+                suppliers: this.state.suppliers.sort((e1, e2) => (e1.address > e2.address ? 1 : -1))
+            })
+        }
+        else if (key === 'phone')
+        {
+            this.setState({
+                suppliers: this.state.suppliers.sort((e1, e2) => (e1.phone > e2.phone ? 1 : -1))
+            })
+        }
         // console.log('sort');
     }
 
-    handleSortDes = (e) => {
+    handleSortDes = (e, key) => {
         e.preventDefault();
         //this.state.categories.sort((e1, e2) => (e1.id > e2.id ? 1 : -1));
-        this.setState({
-            suppliers: this.state.suppliers.sort((e1, e2) => (e2.id > e1.id ? 1 : -1))
-        })
+        if (key === 'id')
+        {
+            this.setState({
+                suppliers: this.state.suppliers.sort((e1, e2) => (e2.id > e1.id ? 1 : -1))
+            })
+        }
+        else if (key === 'name')
+        {
+            this.setState({
+                suppliers: this.state.suppliers.sort((e1, e2) => (e2.name > e1.name ? 1 : -1))
+            })
+        }
+        else if (key === 'address')
+        {
+            this.setState({
+                suppliers: this.state.suppliers.sort((e1, e2) => (e2.address > e1.address ? 1 : -1))
+            })
+        }
+        else if (key === 'phone')
+        {
+            this.setState({
+                suppliers: this.state.suppliers.sort((e1, e2) => (e2.phone > e1.phone ? 1 : -1))
+            })
+        }
         // console.log('sort');
     }
 
@@ -269,10 +311,10 @@ export default class Supplier extends Component {
                 <table id="table">
                     <thead>
                         <tr>
-                            <th><b>ID</b>{' '}<FontAwesomeIcon icon={faArrowCircleUp} className="sort-icon" onClick={(e) => this.handleSortInc(e)}/><FontAwesomeIcon icon={faArrowCircleDown} className="sort-icon" onClick={(e) => this.handleSortDes(e)}/></th>
-                            <th><b>Tên</b></th>
-                            <th><b>Địa Chỉ</b></th>
-                            <th><b>Số Điện Thoại</b></th>
+                            <th><b>ID</b>{' '}<FontAwesomeIcon icon={faArrowCircleUp} className="sort-icon" onClick={(e) => this.handleSortInc(e, 'id')}/><FontAwesomeIcon icon={faArrowCircleDown} className="sort-icon" onClick={(e) => this.handleSortDes(e, 'id')}/></th>
+                            <th><b>Tên</b>{' '}<FontAwesomeIcon icon={faArrowCircleUp} className="sort-icon" onClick={(e) => this.handleSortInc(e, 'name')}/><FontAwesomeIcon icon={faArrowCircleDown} className="sort-icon" onClick={(e) => this.handleSortDes(e, 'name')}/></th>
+                            <th><b>Địa Chỉ</b>{' '}<FontAwesomeIcon icon={faArrowCircleUp} className="sort-icon" onClick={(e) => this.handleSortInc(e, 'address')}/><FontAwesomeIcon icon={faArrowCircleDown} className="sort-icon" onClick={(e) => this.handleSortDes(e, 'address')}/></th>
+                            <th><b>Số Điện Thoại</b>{' '}<FontAwesomeIcon icon={faArrowCircleUp} className="sort-icon" onClick={(e) => this.handleSortInc(e, 'phone')}/><FontAwesomeIcon icon={faArrowCircleDown} className="sort-icon" onClick={(e) => this.handleSortDes(e, 'phone')}/></th>
                             <th>Cập Nhật</th>
                             <th>Xóa</th>
                         </tr>

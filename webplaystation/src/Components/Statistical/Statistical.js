@@ -280,7 +280,8 @@ class Statistical extends Component {
                                     <tr key={p.id}>
                                         <td>{p.id}</td>
                                         <td>
-                                            <img src={`data:image/jpeg;base64,${p.imageurl}`} alt="" height="75px"></img>
+                                            {/* <img src={`data:image/jpeg;base64,${p.imageurl}`} alt="" height="75px"></img> */}
+                                            <img src={p.url_image || "http://via.placeholder.com/300"} alt="" height="75px"/>
                                         </td>
                                         <td>{p.name}</td>
                                         <td>{formatCurrency(p.price)}</td>

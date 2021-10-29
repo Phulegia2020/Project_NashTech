@@ -2,10 +2,14 @@ import React, { Component } from 'react';
 import { Header, Segment, Grid, Pagination, Divider, Input, Advertisement, Image } from 'semantic-ui-react';
 import { get } from '../../../Utils/httpHelper';
 import ProductList from './ProductList';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import { UncontrolledCarousel, Jumbotron, Container, Label } from 'reactstrap';
 import Footer from '../Footer/Footer';
 import './style.css';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faPhoneAlt, faThumbsUp, faTruckMoving,
+} from "@fortawesome/free-solid-svg-icons";
 
 class Products extends Component {
     constructor(props) {
@@ -24,6 +28,7 @@ class Products extends Component {
     }
 
     componentDidMount() {
+        window.scrollTo(0, 0);
         this.state.ShoppingCartItems = JSON.parse(localStorage.getItem('shopping-cart') || '[]');
 
         get("/products/onSale")
@@ -307,12 +312,13 @@ class Products extends Component {
                                 </Header>
                             </Divider>
                             <Input
-                                label='Tìm Kiếm:'
+                                label={{content: 'Tìm Kiếm:', color: 'blue'}}
                                 style={{marginBottom: '1rem'}}
                                 placeholder="Tên Sản Phẩm..."
                                 value={this.state.search}
                                 onChange={(e) => this.handleSearch(e)}
                                 icon="search"
+                                id="input-search"
                             />
                             <ProductList products={this.state.Products}
                             />
@@ -329,6 +335,65 @@ class Products extends Component {
                 </Grid>
                 
             </Segment>
+
+            <div className="section-4 bg-dark">
+                <div className="container">
+                    <div className="row">
+                        <div className="col-md-7 p-3">
+                            <img
+                                src="https://hoanghamobile.com/tin-tuc/wp-content/uploads/2020/06/gia-playstation-5-1.jpg"
+                                alt="" height = "300px" width="590px"/>
+                        </div>
+                        <div className="col-md-5 pt-5">
+                            {/* <h1 className="text-white">Khám phá về PlayStation tại cửa hàng chúng tôi</h1> */}
+                            <h1 className="text-white">Khám phá chi tiết về tại cửa hàng chúng tôi</h1>
+                            {/* <a href="about.html" class="btn btn-success text-light">Tìm hiểu ngay</a> */}
+                            <Link to={`/WebPlayStation/about`} style={{ textDecoration: 'none' }} className="btn btn-success text-light">Tìm hiểu ngay</Link>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div className="section-3">
+                <div className="container">
+                    <div className="row pb-3">
+                        <div className="col-md-4 mt-3">
+                            <div className="d-flex flex-row">
+                                {/* <i class="fas fa-phone-alt fa-3x m-2"></i> */}
+                                <FontAwesomeIcon icon={faPhoneAlt} className="fas fa-phone-alt fa-3x m-2"/>
+                                <div className="d-flex flex-column">
+                                    <h3 className="m-2">Tư vấn tận tâm</h3>
+                                    {/* <p class="m-2">Gọi ngay: 18009543</p> */}
+                                    <p className="m-2">Gọi ngay: (028) 38.295.258</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="col-md-4 mt-3">
+                            <div className="d-flex flex-row">
+                                {/* <i class="fas fa-truck fa-3x m-2"></i> */}
+                                <FontAwesomeIcon icon={faTruckMoving} className="fas fa-truck fa-3x m-2"/>
+                                <div className="d-flex flex-column">
+                                    <h3 className="m-2">Giao hàng tận nơi</h3>
+                                    <p className="m-2">Giao hàng miễn phí giao hàng nội thành tại
+                                        TPHCM, Hà Nội, Đà Nẵng</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="col-md-4 mt-3">
+                            <div className="d-flex flex-row pl-5">
+                                {/* <i class="fas fa-thumbs-up fa-3x m-2"></i> */}
+                                <FontAwesomeIcon icon={faThumbsUp} className="fas fa-thumbs-up fa-3x m-2"/>
+                                <div className="d-flex flex-column">
+                                    <h3 className="m-2">Sản phẩm</h3>
+                                    <p className="m-2">Cam kết hàng chính hãng</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div >
             {/* className={this.state.Products.length > 0 ? '' : 'fixed-bottom'} */}
                     <Footer/>

@@ -1,8 +1,12 @@
 import React, { Component } from 'react'
 import { withRouter } from "react-router";
-import { put, get } from '../../Utils/httpHelper';
+import { put, get, del, post } from '../../Utils/httpHelper';
 import { Col, Row, Button, Form, FormGroup, Label, Input } from 'reactstrap';
 import "../Category/Category.css";
+import { storage } from "../../Utils/Firebase";
+import "./Product.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {faExclamationCircle, faTimesCircle} from "@fortawesome/free-solid-svg-icons";
 
 class UpdateProduct extends Component {
     state = {
@@ -13,6 +17,10 @@ class UpdateProduct extends Component {
         price: '',
         totalrating: 0,
         imageurl: null,
+        image: null,
+        url: "",
+        image_sub: [],
+        pictures: [],
         category_id: "",
         supplier_id: "",
         status:"",
@@ -22,10 +30,11 @@ class UpdateProduct extends Component {
         products: [],
         Error: "",
         key: "",
+        type_img: ""
     }
 
     componentDidMount(){
-        get("/products")
+        get("/products/onSale")
         .then((response) => {
             if (response.status === 200)
             {
@@ -44,7 +53,8 @@ class UpdateProduct extends Component {
                     quantity: response.data.quantity,
                     price: response.data.price,
                     totalrating: response.data.totalrating,
-                    imageurl: response.data.imageurl,
+                    // imageurl: response.data.imageurl,
+                    url: response.data.url_image,
                     category_id: response.data.category.id,
                     supplier_id: response.data.supplier.id,
                     status: response.data.status
@@ -70,6 +80,17 @@ class UpdateProduct extends Component {
                 });
             }
         })
+
+        get(`/productImages/product/${this.state.id}`)
+        .then((response) => {
+            if (response.status === 200)
+            {
+                this.setState({
+                    pictures: response.data
+                }, () => console.log(this.state.pictures));
+            }
+        })
+        .catch((error) => console.log(error));
     }
 
     convertBase64 = (file) => {
@@ -98,6 +119,80 @@ class UpdateProduct extends Component {
         });
     };
     
+    handleChange = (e, key) => {
+        if (key === 'main')
+        {
+            if (e.target.files[0]) {
+                if (e.target.files[0].size > 10485760)
+                {
+                    this.setState({
+                        key: 'image'
+                    })
+                    this.setState({
+                        Error: "Vui lòng chọn ảnh có dung lượng nhỏ hơn 10MB!"
+                    });
+                    return;
+                }
+                //setImage(e.target.files[0]);
+                this.setState({
+                    image: e.target.files[0]
+                }, () => console.log(this.state.image));
+                this.uploadImage(e);
+            }
+        }
+        else if (key === 'list')
+        {
+            // console.log(e.target.files);
+            if (e.target.files.length > 0)
+            {
+                for (let i = 0; i < e.target.files.length; i++)
+                {
+                    if (e.target.files[i].size > 10485760)
+                    {
+                        this.setState({
+                            key: 'image-sub'
+                        })
+                        this.setState({
+                            Error: "Vui lòng chọn ảnh có dung lượng nhỏ hơn 10MB!"
+                        });
+                        return;
+                    }
+                }
+                this.setState({
+                    image_sub: e.target.files
+                }, () => console.log(this.state.image_sub));
+            }
+        }
+    };
+
+    // handleUpload(){
+    //     const uploadTask = storage.ref(`images/${this.state.image.name}`).put(this.state.image);
+    //     uploadTask.on(
+    //         "state_changed",
+    //         snapshot => {
+    //         // const progress = Math.round(
+    //         //   (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+    //         // );
+    //         // setProgress(progress);
+    //         },
+    //         error => {
+    //         console.log(error);
+    //         },
+    //         () => {
+    //         storage
+    //             .ref("images")
+    //             .child(this.state.image.name)
+    //             .getDownloadURL()
+    //             .then(url => {
+    //                 // setUrl(url);
+    //                 this.setState({
+    //                     url: url
+    //                 }, () => console.log(this.state.url));
+    //             });
+    //         }
+    //     );
+    // };
+
     changeValue(e){
         this.setState({
             [e.target.name]: e.target.value
@@ -144,16 +239,174 @@ class UpdateProduct extends Component {
                 }
             }
         }
-        put(`/products/${this.state.id}`, {name: this.state.name.trim(), description:this.state.description.trim(), quantity: this.state.quantity, price: this.state.price,
-                                           totalrating:this.state.totalrating ,imageurl: this.state.imageurl, category_id: this.state.category_id, supplier_id: this.state.supplier_id,
-                                           status: this.state.status})
+
+        // this.handleUpload();
+        // console.log(this.state.url);
+
+        if (this.state.image_sub.length > 0)
+        {
+            // if (this.state.type_img !== '')
+            // {
+            //     if (this.state.type_img === 'replace')
+            //     {
+            //         this.state.pictures.map((pic) => {
+            //             del(`/productImages/${pic.id}`)
+            //             .then((response) => {
+            //                 if (response.status === 200)
+            //                 {}
+            //             })
+            //             .catch((error) => console.log(error));
+            //         })
+            //     }
+                // this.state.image_sub.map((img) => {
+                //     const uploadTask = storage.ref(`images/${img.name}`).put(img);
+                //     uploadTask.on(
+                //         "state_changed",
+                //         snapshot => {
+                //         // const progress = Math.round(
+                //         //   (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+                //         // );
+                //         // setProgress(progress);
+                //         },
+                //         error => {
+                //         console.log(error);
+                //         },
+                //         () => {
+                //         storage
+                //             .ref("images")
+                //             .child(img.name)
+                //             .getDownloadURL()
+                //             .then(url => {
+                //                 // setUrl(url);
+                //                 post(`/productImages`, {imagePath: url, product_id: this.state.id})
+                //                 .then((response) => {
+                //                     if (response.status === 200)
+                //                     {}
+                //                 })
+                //                 .catch((error) => console.log(error));
+                //             });
+                //         }
+                //     );
+                // })
+
+                for (let i = 0; i < this.state.image_sub.length; i++)
+                {
+                    const uploadTask = storage.ref(`images/${this.state.image_sub[i].name}`).put(this.state.image_sub[i]);
+                    uploadTask.on(
+                        "state_changed",
+                        snapshot => {
+                        // const progress = Math.round(
+                        //   (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+                        // );
+                        // setProgress(progress);
+                        },
+                        error => {
+                        console.log(error);
+                        },
+                        () => {
+                        storage
+                            .ref("images")
+                            .child(this.state.image_sub[i].name)
+                            .getDownloadURL()
+                            .then(url => {
+                                // setUrl(url);
+                                post(`/productImages`, {imagePath: url, product_id: this.state.id})
+                                .then((response) => {
+                                    if (response.status === 200)
+                                    {}
+                                })
+                                .catch((error) => console.log(error));
+                            });
+                        }
+                    );
+                }
+            // }
+        }
+
+        if (this.state.image !== null)
+        {
+            const uploadTask = storage.ref(`images/${this.state.image.name}`).put(this.state.image);
+            uploadTask.on(
+                "state_changed",
+                snapshot => {
+                // const progress = Math.round(
+                //   (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+                // );
+                // setProgress(progress);
+                },
+                error => {
+                console.log(error);
+                },
+                () => {
+                storage
+                    .ref("images")
+                    .child(this.state.image.name)
+                    .getDownloadURL()
+                    .then(url => {
+                        // setUrl(url);
+                        this.setState({
+                            url: url
+                        }, () => {
+                            put(`/products/${this.state.id}`, {name: this.state.name.trim(), description:this.state.description.trim(), quantity: this.state.quantity, price: this.state.price,
+                                totalrating:this.state.totalrating , url_image: this.state.url, category_id: this.state.category_id, supplier_id: this.state.supplier_id,
+                                status: this.state.status})
+                            .then((response) => {
+                                if (response.status === 200)
+                                {
+                                    // console.log(this.state.url)
+                                    this.props.history.push("/admin/product");
+                                }
+                            })
+                            .catch((error) => {})
+                        });
+                    });
+                }
+            );
+        }
+        else
+        {
+            put(`/products/${this.state.id}`, {name: this.state.name.trim(), description:this.state.description.trim(), quantity: this.state.quantity, price: this.state.price,
+                totalrating:this.state.totalrating , url_image: this.state.url, category_id: this.state.category_id, supplier_id: this.state.supplier_id, status: this.state.status})
+            .then((response) => {
+                if (response.status === 200)
+                {
+                    // console.log(this.state.url)
+                    this.props.history.push("/admin/product");
+                }
+            })
+            .catch((error) => {})
+        }
+        //console.log(this.state.url);
+        // console.log(this.state.type_img);
+        // console.log(this.state.image_sub);
+        // console.log(this.state.pictures);
+
+        // put(`/products/${this.state.id}`, {name: this.state.name.trim(), description:this.state.description.trim(), quantity: this.state.quantity, price: this.state.price,
+        //                                    totalrating:this.state.totalrating ,imageurl: this.state.imageurl, category_id: this.state.category_id, supplier_id: this.state.supplier_id,
+        //                                    status: this.state.status})
+        // put(`/products/${this.state.id}`, {name: this.state.name.trim(), description:this.state.description.trim(), quantity: this.state.quantity, price: this.state.price,
+        //     totalrating:this.state.totalrating , imageurl: this.state.imageurl, url_image: this.state.url, category_id: this.state.category_id, supplier_id: this.state.supplier_id,
+        //     status: this.state.status})
+        // .then((response) => {
+        //     if (response.status === 200)
+        //     {
+        //         console.log(this.state.url)
+        //         this.props.history.push("/admin/product");
+        //     }
+        // })
+        // .catch((error) => {})
+    }
+
+    handleDeleleImage = (e, id) => {
+        e.preventDefault();
+        del(`/productImages/${id}`)
         .then((response) => {
             if (response.status === 200)
             {
-                this.props.history.push("/admin/product");
+                this.setState({pictures: this.state.pictures.filter(p => p.id !== id)});
             }
         })
-        .catch((error) => {})
+        .catch((error) => console.log(error));
     }
 
     handleClear = () => {
@@ -199,12 +452,46 @@ class UpdateProduct extends Component {
                             <Input type="number" name="price" id="price" placeholder="1.000.000 VNĐ" onChange={(e) => this.changeValue(e)} value = {this.state.price} required="required" disabled={this.state.status === 'Stop'}/>
                             {this.state.key === 'price' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
                         </FormGroup>
+                        <FormGroup inline className="display-imges">
                         <FormGroup>
-                            <Label htmlFor="image">Hình Ảnh</Label>
+                            <Label htmlFor="image">Hình Ảnh Chính</Label>
                             <br></br>
-                            <Input type="file" name="image" id="image" accept=".jpeg, .png, .jpg" onChange={(e) => {this.uploadImage(e)}} disabled={this.state.status === 'Stop'}/>
+                            {/* <Input type="file" name="image" id="image" accept=".jpeg, .png, .jpg" onChange={(e) => {this.uploadImage(e)}} disabled={this.state.status === 'Stop'}/> */}
+                            <Input type="file" name="image" id="image" accept=".jpeg, .png, .jpg" onChange={(e) => {this.handleChange(e, 'main')}}/>
+                            {this.state.key === 'image' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
                             <br></br>
-                            <img src={`data:image/jpeg;base64,${this.state.imageurl}`} alt="" height="150px"></img>
+                            {/* <img src={`data:image/jpeg;base64,${this.state.imageurl}`} alt="" height="150px"></img> */}
+                            {this.state.imageurl !== null ? <img src={`data:image/jpeg;base64,${this.state.imageurl}`} alt="" height="150px"></img> : <img src={this.state.url || "http://via.placeholder.com/300"} alt="" height="150px"/>}
+                            {/* <img src={this.state.url || "http://via.placeholder.com/300"} alt="" height="150px"/> */}
+                        </FormGroup>
+                        <FormGroup className="images-sub">
+                            <Label htmlFor="image-sub">Các Hình Ảnh Kèm Theo (Tùy Chọn)</Label>
+                            <br></br>
+                            {/* <Input type="file" name="image" id="image" accept=".jpeg, .png, .jpg" onChange={(e) => {this.uploadImage(e);}} required="required"/> */}
+                            <Input type="file" name="image-sub" id="image-sub" accept=".jpeg, .png, .jpg" onChange={(e) => {this.handleChange(e, 'list')}} multiple/>
+                            {this.state.key === 'image-sub' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
+                            {/* <FormGroup inline>
+                                <Label>
+                                    <Input type="radio" name="type_img" value="replace" checked={this.state.type_img === "replace"} onChange={(e) => this.changeValue(e)}/>
+                                    Thay Thế Tất Cả Ảnh
+                                </Label>{' '}
+                                <Label>
+                                    <Input type="radio" name="type_img" value="new" checked={this.state.type_img === "new"} onChange={(e) => this.changeValue(e)}/>
+                                    Thêm Mới
+                                </Label>
+                            </FormGroup> */}
+                            <div className={this.state.pictures.length > 5 ? "sub-picture-more" : 'sub-picture'}>
+                                {this.state.pictures.map((picture, index) => (
+                                    <div className="delete-picture">
+                                        <span>
+                                            {/* Xóa */}
+                                            <FontAwesomeIcon className="icon-delete" icon={faTimesCircle} onClick={(e) => this.handleDeleleImage(e, picture.id)}/>
+                                        </span>
+                                        <img src={picture.imagePath} alt='PlayStation' key={index}/>
+                                    </div>
+                                ))}
+                            </div>
+                        </FormGroup>
                         </FormGroup>
                         <FormGroup className="mb-2">
                             <Label htmlFor="category">Loại Máy</Label>
@@ -228,7 +515,7 @@ class UpdateProduct extends Component {
                         </FormGroup>
                         <div className="mt-3">
                             <Button type="submit" outline color="warning" >Cập Nhật</Button>{' '}
-                            <Button outline color="danger" onClick={this.handleClear.bind(this)}>Hủy</Button>
+                            <Button outline color="danger" onClick={this.handleClear.bind(this)}>Quay Lại</Button>
                         </div>
                         </Form>
                     {/* </Col>

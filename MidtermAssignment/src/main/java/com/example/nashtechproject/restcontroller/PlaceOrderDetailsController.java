@@ -149,7 +149,7 @@ public class PlaceOrderDetailsController {
         placeOrderDetailsDTO.setProduct_id(String.valueOf(placeOrderDetails.getKey().getProduct().getId()));
         placeOrderDetailsDTO.setPlaceorder_id(String.valueOf(placeOrderDetails.getKey().getPlaceOrder().getId()));
         placeOrderDetailsDTO.setProductName(placeOrderDetails.getKey().getProduct().getName());
-        placeOrderDetailsDTO.setProductImg(placeOrderDetails.getKey().getProduct().getImageurl());
+        placeOrderDetailsDTO.setProductImg(placeOrderDetails.getKey().getProduct().getUrl_image());
         return placeOrderDetailsDTO;
     }
 

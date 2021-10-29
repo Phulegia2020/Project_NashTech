@@ -40,4 +40,6 @@ public interface UserService {
     public List<User> getUserAccount(String account);
 
     public List<User> getUserAccountPage(UserPage userPage, String account);
+
+    public User getUserEmail(String email);
 }

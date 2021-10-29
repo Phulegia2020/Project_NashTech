@@ -211,21 +211,39 @@ export default class Category extends Component {
         }
     }
 
-    handleSortInc = (e) => {
+    handleSortInc = (e, key) => {
         e.preventDefault();
         //this.state.categories.sort((e1, e2) => (e1.id > e2.id ? 1 : -1));
-        this.setState({
-            categories: this.state.categories.sort((e1, e2) => (e1.id > e2.id ? 1 : -1))
-        })
+        if (key === 'id')
+        {
+            this.setState({
+                categories: this.state.categories.sort((e1, e2) => (e1.id > e2.id ? 1 : -1))
+            })
+        }
+        else if (key === 'name')
+        {
+            this.setState({
+                categories: this.state.categories.sort((e1, e2) => (e1.name > e2.name ? 1 : -1))
+            })
+        }
         // console.log('sort');
     }
 
-    handleSortDes = (e) => {
+    handleSortDes = (e, key) => {
         e.preventDefault();
         //this.state.categories.sort((e1, e2) => (e1.id > e2.id ? 1 : -1));
-        this.setState({
-            categories: this.state.categories.sort((e1, e2) => (e2.id > e1.id ? 1 : -1))
-        })
+        if (key === 'id')
+        {
+            this.setState({
+                categories: this.state.categories.sort((e1, e2) => (e2.id > e1.id ? 1 : -1))
+            })
+        }
+        else if (key === 'name')
+        {
+            this.setState({
+                categories: this.state.categories.sort((e1, e2) => (e2.name > e1.name ? 1 : -1))
+            })
+        }
         // console.log('sort');
     }
 
@@ -278,8 +296,8 @@ export default class Category extends Component {
                 <table id="table">
                     <thead>
                         <tr>
-                            <th><b>Mã Loại</b>{' '}<FontAwesomeIcon icon={faArrowCircleUp} className="sort-icon" onClick={(e) => this.handleSortInc(e)}/><FontAwesomeIcon icon={faArrowCircleDown} className="sort-icon" onClick={(e) => this.handleSortDes(e)}/></th>
-                            <th><b>Tên</b></th>
+                            <th><b>Mã Loại</b>{' '}<FontAwesomeIcon icon={faArrowCircleUp} className="sort-icon" onClick={(e) => this.handleSortInc(e, 'id')}/><FontAwesomeIcon icon={faArrowCircleDown} className="sort-icon" onClick={(e) => this.handleSortDes(e, 'id')}/></th>
+                            <th><b>Tên</b>{' '}<FontAwesomeIcon icon={faArrowCircleUp} className="sort-icon" onClick={(e) => this.handleSortInc(e, 'name')}/><FontAwesomeIcon icon={faArrowCircleDown} className="sort-icon" onClick={(e) => this.handleSortDes(e, 'name')}/></th>
                             <th><b>Mô Tả</b></th>
                             <th>Cập Nhập</th>
                             <th>Xóa</th>

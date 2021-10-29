@@ -219,7 +219,10 @@ class BillDetailsByBill extends Component {
                             this.state.billdetails.map((b, index) => (
                                 <tr key={index}>
                                     <td>{index + 1}</td>
-                                    <td><img src={`data:image/jpeg;base64,${b.key.product.imageurl}`} alt="" height="75px"></img></td>
+                                    <td>
+                                        {/* <img src={`data:image/jpeg;base64,${b.key.product.imageurl}`} alt="" height="75px"></img> */}
+                                        <img src={b.key.product.url_image || "http://via.placeholder.com/300"} alt="" height="75px"></img>
+                                    </td>
                                     <td>{b.key.product.name}</td>
                                     <td>{b.quantity}</td>
                                     <td>{formatCurrency(b.key.product.price)}</td>

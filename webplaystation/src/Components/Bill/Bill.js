@@ -286,21 +286,63 @@ class Bill extends Component {
         }
     }
 
-    handleSortInc = (e) => {
+    handleSortInc = (e, key) => {
         e.preventDefault();
         //this.state.categories.sort((e1, e2) => (e1.id > e2.id ? 1 : -1));
-        this.setState({
-            bills: this.state.bills.sort((e1, e2) => (e1.id > e2.id ? 1 : -1))
-        })
+        if (key === 'id')
+        {
+            this.setState({
+                bills: this.state.bills.sort((e1, e2) => (e1.id > e2.id ? 1 : -1))
+            })
+        }
+        else if (key === 'total')
+        {
+            this.setState({
+                bills: this.state.bills.sort((e1, e2) => (e1.total > e2.total ? 1 : -1))
+            })
+        }
+        else if (key === 'create')
+        {
+            this.setState({
+                bills: this.state.bills.sort((e1, e2) => (e1.createddate > e2.createddate ? 1 : -1))
+            })
+        }
+        else if (key === 'confirm')
+        {
+            this.setState({
+                bills: this.state.bills.sort((e1, e2) => (e1.checkout_date > e2.checkout_date ? 1 : -1))
+            })
+        }
         // console.log('sort');
     }
 
-    handleSortDes = (e) => {
+    handleSortDes = (e, key) => {
         e.preventDefault();
         //this.state.categories.sort((e1, e2) => (e1.id > e2.id ? 1 : -1));
-        this.setState({
-            bills: this.state.bills.sort((e1, e2) => (e2.id > e1.id ? 1 : -1))
-        })
+        if (key === 'id')
+        {
+            this.setState({
+                bills: this.state.bills.sort((e1, e2) => (e2.id > e1.id ? 1 : -1))
+            })
+        }
+        else if (key === 'total')
+        {
+            this.setState({
+                bills: this.state.bills.sort((e1, e2) => (e2.total > e1.total ? 1 : -1))
+            })
+        }
+        else if (key === 'create')
+        {
+            this.setState({
+                bills: this.state.bills.sort((e1, e2) => (e2.createddate > e1.createddate ? 1 : -1))
+            })
+        }
+        else if (key === 'confirm')
+        {
+            this.setState({
+                bills: this.state.bills.sort((e1, e2) => (e2.checkout_date > e1.checkout_date ? 1 : -1))
+            })
+        }
         // console.log('sort');
     }
 
@@ -353,10 +395,10 @@ class Bill extends Component {
                 <table id="table">
                     <thead>
                         <tr>
-                            <th><b>Mã Hóa Đơn</b>{' '}<FontAwesomeIcon icon={faArrowCircleUp} className="sort-icon" onClick={(e) => this.handleSortInc(e)}/><FontAwesomeIcon icon={faArrowCircleDown} className="sort-icon" onClick={(e) => this.handleSortDes(e)}/></th>
-                            <th><b>Tổn Tiền</b></th>
-                            <th><b>Thời Gian Lập</b></th>
-                            <th><b>Thời Gian Xác Nhận</b></th>
+                            <th><b>Mã Hóa Đơn</b>{' '}<FontAwesomeIcon icon={faArrowCircleUp} className="sort-icon" onClick={(e) => this.handleSortInc(e, 'id')}/><FontAwesomeIcon icon={faArrowCircleDown} className="sort-icon" onClick={(e) => this.handleSortDes(e, 'id')}/></th>
+                            <th><b>Tổng Tiền</b>{' '}<FontAwesomeIcon icon={faArrowCircleUp} className="sort-icon" onClick={(e) => this.handleSortInc(e, 'total')}/><FontAwesomeIcon icon={faArrowCircleDown} className="sort-icon" onClick={(e) => this.handleSortDes(e, 'total')}/></th>
+                            <th><b>Thời Gian Lập</b>{' '}<FontAwesomeIcon icon={faArrowCircleUp} className="sort-icon" onClick={(e) => this.handleSortInc(e, 'create')}/><FontAwesomeIcon icon={faArrowCircleDown} className="sort-icon" onClick={(e) => this.handleSortDes(e, 'create')}/></th>
+                            <th><b>Thời Gian Xác Nhận</b>{' '}<FontAwesomeIcon icon={faArrowCircleUp} className="sort-icon" onClick={(e) => this.handleSortInc(e, 'confirm')}/><FontAwesomeIcon icon={faArrowCircleDown} className="sort-icon" onClick={(e) => this.handleSortDes(e, 'confirm')}/></th>
                             <th><b>Khách Hàng</b></th>
                             <th><b>Trạng Thái</b></th>
                             <th>Cập Nhập</th>

@@ -97,12 +97,12 @@ class UpdateCategory extends React.Component {
                     <Col md={4}> */}
                         <Form onSubmit={(event) => this.handleUpdate(event)}>
                             <FormGroup>
-                                <Label htmlFor="name"><b>Tên</b></Label>
+                                <Label htmlFor="name">Tên</Label>
                                 <Input type="text" name="name" id="name" placeholder="PS5" onChange={(e) => this.changeValue(e)} value = {this.state.name} required="required"/>
                                 {this.state.key === 'name' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
                             </FormGroup>
                             <FormGroup>
-                                <Label htmlFor="description"><b>Mô Tả</b></Label>
+                                <Label htmlFor="description">Mô Tả</Label>
                                 <Input type="text" name="description" id="description" placeholder="PlayStation 5" onChange={(e) => this.changeValue(e)} value = {this.state.description} required="required"/>
                             </FormGroup>
                             

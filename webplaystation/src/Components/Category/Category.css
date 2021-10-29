@@ -85,6 +85,7 @@
 .update-form Label, .update-form-product label
 {
   font-family: 'Merriweather';
+  font-weight: bold;
 }
 
 .update-form Input
@@ -109,4 +110,11 @@
 .sort-icon:hover
 {
   cursor: pointer;
+}
+
+.update-form h3, .update-form-product h3
+{
+  text-align: center;
+  /* border-bottom: 2px solid black;
+  padding-bottom: 10px; */
 }

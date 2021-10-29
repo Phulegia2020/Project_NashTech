@@ -230,12 +230,13 @@ export default class AnalyticsDashboard1 extends Component {
                                                                 <div className="widget-content-wrapper">
                                                                     <div className="widget-content-left mr-3">
                                                                         <div className="widget-numbers fsize-3 text-muted">
-                                                                            63%
+                                                                            63%{' '}
                                                                         </div>
                                                                     </div>
                                                                     <div className="widget-content-right">
                                                                         <div className="text-muted opacity-6">
-                                                                            Generated Leads
+                                                                            {/* Generated Leads */}
+                                                                            &nbsp;Mẫu Mã
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -254,12 +255,13 @@ export default class AnalyticsDashboard1 extends Component {
                                                                 <div className="widget-content-wrapper">
                                                                     <div className="widget-content-left mr-3">
                                                                         <div className="widget-numbers fsize-3 text-muted">
-                                                                            32%
+                                                                            32%{' '}
                                                                         </div>
                                                                     </div>
                                                                     <div className="widget-content-right">
                                                                         <div className="text-muted opacity-6">
-                                                                            Submitted Tickers
+                                                                            {/* Submitted Tickers */}
+                                                                            &nbsp;Giá Cả
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -281,12 +283,13 @@ export default class AnalyticsDashboard1 extends Component {
                                                                 <div className="widget-content-wrapper">
                                                                     <div className="widget-content-left mr-3">
                                                                         <div className="widget-numbers fsize-3 text-muted">
-                                                                            71%
+                                                                            71%{' '}
                                                                         </div>
                                                                     </div>
                                                                     <div className="widget-content-right">
                                                                         <div className="text-muted opacity-6">
-                                                                            Server Allocation
+                                                                            {/* Server Allocation */}
+                                                                            &nbsp;Chất Lượng
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -305,12 +308,13 @@ export default class AnalyticsDashboard1 extends Component {
                                                                 <div className="widget-content-wrapper">
                                                                     <div className="widget-content-left mr-3">
                                                                         <div className="widget-numbers fsize-3 text-muted">
-                                                                            41%
+                                                                            41%{' '}
                                                                         </div>
                                                                     </div>
                                                                     <div className="widget-content-right">
                                                                         <div className="text-muted opacity-6">
-                                                                            Generated Leads
+                                                                            {/* Generated Leads */}
+                                                                            &nbsp;Bảo Hàng & Khuyến Mãi
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -330,7 +334,8 @@ export default class AnalyticsDashboard1 extends Component {
                                                     <div className="widget-description mt-0 text-warning">
                                                         <FontAwesomeIcon icon={faArrowLeft}/>
                                                         <span className="pl-1">175.5%</span>
-                                                        <span className="text-muted opacity-8 pl-1">increased server resources</span>
+                                                        {/* <span className="text-muted opacity-8 pl-1">increased server resources</span> */}
+                                                        <span className="text-muted opacity-8 pl-1">Mục Tiêu Nâng Cao Sản Phẩm</span>
                                                     </div>
                                                 </div>
                                                 <ResponsiveContainer height={187}>
@@ -364,7 +369,7 @@ export default class AnalyticsDashboard1 extends Component {
                                                     <div className="widget-description mt-0 text-success">
                                                         <FontAwesomeIcon icon={faArrowUp}/>
                                                         <span className="pl-2 pr-2">37.2%</span>
-                                                        <span className="text-muted opacity-8">performance increase</span>
+                                                        <span className="text-muted opacity-8">Mục Tiêu Tăng Trưởng</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -657,15 +662,18 @@ export default class AnalyticsDashboard1 extends Component {
                                             4517.82
                                         </div>
                                         <div className="widget-subheading">
-                                            Active Social Profiles
+                                            {/* Active Social Profiles */}
+                                            Hoạt Động Thương Mại
                                         </div>
                                         <div className="widget-description">
-                                            Down by
+                                            {/* Down by */}
+                                            Giảm khoảng{' '}
                                             <span className="text-danger pl-1 pr-1">
                                                 <FontAwesomeIcon icon={faAngleDown}/>
                                                 <span className="pl-1">54.1%</span>
                                             </span>
-                                            from 30 days ago
+                                            {/* from 30 days ago */}
+                                            {' '}trong 30 ngày vừa qua
                                         </div>
                                     </div>
                                     <div className="widget-chart-wrapper chart-wrapper-relative">
@@ -719,7 +727,8 @@ export default class AnalyticsDashboard1 extends Component {
                                                     5.82k
                                                 </div>
                                                 <div className="widget-subheading">
-                                                    Reports Submitted
+                                                    {/* Reports Submitted */}
+                                                    Mục Tiêu Hạn Chê Rủi Ro
                                                 </div>
                                                 <div className="widget-description text-danger">
                                                     <FontAwesomeIcon icon={faAngleDown}/>

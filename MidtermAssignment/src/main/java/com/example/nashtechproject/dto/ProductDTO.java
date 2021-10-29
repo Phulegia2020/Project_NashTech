@@ -19,9 +19,11 @@ public class ProductDTO {
 
     private String status;
 
-    @Lob
-    @Type(type="org.hibernate.type.BinaryType")
-    private byte[] imageurl;
+//    @Lob
+//    @Type(type="org.hibernate.type.BinaryType")
+//    private byte[] imageurl;
+
+    private String url_image;
 
     private String category_id;
 
@@ -75,12 +77,20 @@ public class ProductDTO {
         this.totalrating = totalrating;
     }
 
-    public byte[] getImageurl() {
-        return imageurl;
+//    public byte[] getImageurl() {
+//        return imageurl;
+//    }
+//
+//    public void setImageurl(byte[] imageurl) {
+//        this.imageurl = imageurl;
+//    }
+
+    public String getUrl_image() {
+        return url_image;
     }
 
-    public void setImageurl(byte[] imageurl) {
-        this.imageurl = imageurl;
+    public void setUrl_image(String url_image) {
+        this.url_image = url_image;
     }
 
     public String getCategory_id() {

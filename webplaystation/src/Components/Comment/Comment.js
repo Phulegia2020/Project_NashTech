@@ -199,21 +199,63 @@ class Comment extends React.Component {
         }
     }
 
-    handleSortInc = (e) => {
+    handleSortInc = (e, key) => {
         e.preventDefault();
         //this.state.categories.sort((e1, e2) => (e1.id > e2.id ? 1 : -1));
-        this.setState({
-            comments: this.state.comments.sort((e1, e2) => (e1.id > e2.id ? 1 : -1))
-        })
+        if (key === 'id')
+        {
+            this.setState({
+                comments: this.state.comments.sort((e1, e2) => (e1.id > e2.id ? 1 : -1))
+            })
+        }
+        else if (key === 'product')
+        {
+            this.setState({
+                comments: this.state.comments.sort((e1, e2) => (e1.productName > e2.productName ? 1 : -1))
+            })
+        }
+        else if (key === 'time')
+        {
+            this.setState({
+                comments: this.state.comments.sort((e1, e2) => (e1.date_comment > e2.date_comment ? 1 : -1))
+            })
+        }
+        else if (key === 'account')
+        {
+            this.setState({
+                comments: this.state.comments.sort((e1, e2) => (e1.username > e2.username ? 1 : -1))
+            })
+        }
         // console.log('sort');
     }
 
-    handleSortDes = (e) => {
+    handleSortDes = (e, key) => {
         e.preventDefault();
         //this.state.categories.sort((e1, e2) => (e1.id > e2.id ? 1 : -1));
-        this.setState({
-            comments: this.state.comments.sort((e1, e2) => (e2.id > e1.id ? 1 : -1))
-        })
+        if (key === 'id')
+        {
+            this.setState({
+                comments: this.state.comments.sort((e1, e2) => (e2.id > e1.id ? 1 : -1))
+            })
+        }
+        else if (key === 'product')
+        {
+            this.setState({
+                comments: this.state.comments.sort((e1, e2) => (e2.productName > e1.productName ? 1 : -1))
+            })
+        }
+        else if (key === 'time')
+        {
+            this.setState({
+                comments: this.state.comments.sort((e1, e2) => (e2.date_comment > e1.date_comment ? 1 : -1))
+            })
+        }
+        else if (key === 'account')
+        {
+            this.setState({
+                comments: this.state.comments.sort((e1, e2) => (e2.username > e1.username ? 1 : -1))
+            })
+        }
         // console.log('sort');
     }
 
@@ -268,12 +310,12 @@ class Comment extends React.Component {
                 <table id="table">
                     <thead>
                         <tr>
-                            <th><b>Mã</b>{' '}<FontAwesomeIcon icon={faArrowCircleUp} className="sort-icon" onClick={(e) => this.handleSortInc(e)}/><FontAwesomeIcon icon={faArrowCircleDown} className="sort-icon" onClick={(e) => this.handleSortDes(e)}/></th>
+                            <th><b>Mã</b>{' '}<FontAwesomeIcon icon={faArrowCircleUp} className="sort-icon" onClick={(e) => this.handleSortInc(e, 'id')}/><FontAwesomeIcon icon={faArrowCircleDown} className="sort-icon" onClick={(e) => this.handleSortDes(e, 'id')}/></th>
                             <th><b>Sản Phẩm</b></th>
-                            <th><b>Tên Sản Phẩm</b></th>
-                            <th><b>Thời Gian</b></th>
+                            <th><b>Tên Sản Phẩm</b>{' '}<FontAwesomeIcon icon={faArrowCircleUp} className="sort-icon" onClick={(e) => this.handleSortInc(e, 'product')}/><FontAwesomeIcon icon={faArrowCircleDown} className="sort-icon" onClick={(e) => this.handleSortDes(e, 'product')}/></th>
+                            <th><b>Thời Gian</b>{' '}<FontAwesomeIcon icon={faArrowCircleUp} className="sort-icon" onClick={(e) => this.handleSortInc(e, 'time')}/><FontAwesomeIcon icon={faArrowCircleDown} className="sort-icon" onClick={(e) => this.handleSortDes(e, 'time')}/></th>
                             <th><b>Bình Luận</b></th>
-                            <th><b>Tài Khoản</b></th>
+                            <th><b>Tài Khoản</b>{' '}<FontAwesomeIcon icon={faArrowCircleUp} className="sort-icon" onClick={(e) => this.handleSortInc(e, 'account')}/><FontAwesomeIcon icon={faArrowCircleDown} className="sort-icon" onClick={(e) => this.handleSortDes(e, 'account')}/></th>
                             <th>Cập Nhật</th>
                             <th>Xóa</th>
                         </tr>
@@ -284,7 +326,8 @@ class Comment extends React.Component {
                                 <tr key={c.id}>
                                     <td>{c.id}</td>
                                     <td>
-                                        <img src={`data:image/jpeg;base64,${c.productImg}`} alt="" height="50px"></img>
+                                        {/* <img src={`data:image/jpeg;base64,${c.productImg}`} alt="" height="50px"></img> */}
+                                        <img src={c.productImg} alt="" height="50px"></img>
                                     </td>
                                     <td>{c.productName}</td>
                                     <td>{c.date_comment}</td>

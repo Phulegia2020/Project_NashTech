@@ -7,3 +7,80 @@
 .txtdeco{
   text-decoration: none;
 }
+
+.display-imges
+{
+  display: flex;
+}
+
+.display-imges .images-sub
+{
+  border-left: 1px solid black;
+  margin-top: 10px;
+  padding-left: 20px;
+  margin-left: 70px;
+}
+
+.display-imges .images-sub Input, .display-imges .images-sub Label
+{
+  margin-bottom: 15px;
+  margin-right: 5px;
+}
+
+.display-imges .images-sub Label
+{
+  margin-right: 15px;
+}
+
+.display-imges .images-sub .sub-picture-more
+{
+  overflow: hidden;
+  overflow-x: scroll;
+  width: 79%;
+  display: flex;
+}
+
+.display-imges .images-sub .sub-picture img, .display-imges .images-sub .sub-picture-more img
+{
+  /* position: absolute;
+  top: 10px; */
+  height: 70px;
+  border: 1px solid black;
+  margin-right: 15px;
+  margin-top: 5px;
+  padding-top: 0;
+  cursor: default;
+}
+
+.display-imges .images-sub .sub-picture-more, .display-imges .images-sub .sub-picture
+{
+  display: flex;
+}
+
+.display-imges .images-sub .sub-picture-more .delete-picture, .display-imges .images-sub .sub-picture .delete-picture
+{
+  height: 100px;
+  position: relative;
+}
+
+.display-imges .images-sub .sub-picture-more .delete-picture span, .display-imges .images-sub .sub-picture .delete-picture span
+{
+  position: absolute;
+  bottom: 0;
+  padding-left: 25px;
+  /* margin-bottom: 10px; */
+}
+
+.display-imges .images-sub .sub-picture-more .delete-picture span:hover, .display-imges .images-sub .sub-picture .delete-picture span:hover
+{
+  color: red;
+  cursor: pointer;
+  /* margin-bottom: 10px; */
+}
+
+/* .display-imges .images-sub .sub-picture-more .delete-picture .icon-delete, .display-imges .images-sub .sub-picture .delete-picture .icon-delete
+{
+  position: absolute;
+  bottom: 0;
+  padding-left: 20px;
+} */

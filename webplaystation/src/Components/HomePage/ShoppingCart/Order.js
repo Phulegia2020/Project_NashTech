@@ -7,8 +7,9 @@ import { get, post } from '../../../Utils/httpHelper';
 import { Input, Label } from 'reactstrap';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { withRouter } from 'react-router-dom';
 
-export default class Order extends Component {
+class Order extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -58,43 +59,44 @@ export default class Order extends Component {
             //     loading: true
             // })
             toast('Vui lòng chờ xử lý hóa đơn!');
+            setTimeout(() => this.props.history.push("/WebPlayStation/success", {pttt: 'Thanh toán tiền mặt khi nhận hàng'}), 3000);
         }
         // if (this.state.type === 'cod')
         // {
-            await post('/bills', {total: 0, user_id: localStorage.getItem('user_id'), status: 'Waiting'})
-            .then((response) => {
-                if (response.status === 200)
-                {
-                    this.setState({
-                        bill: response.data
-                    })
-                }
-            })
-            .catch(error => alert('Login to Purchase!'));
+            // await post('/bills', {total: 0, user_id: localStorage.getItem('user_id'), status: 'Waiting'})
+            // .then((response) => {
+            //     if (response.status === 200)
+            //     {
+            //         this.setState({
+            //             bill: response.data
+            //         })
+            //     }
+            // })
+            // .catch(error => alert('Login to Purchase!'));
 
-            for (let i = 0; i < shoppingCartItems.length; i++) {
-                await post('/billDetails', {bill_id: this.state.bill.id, product_id: shoppingCartItems[i].id, quantity: shoppingCartItems[i].quantity})
-                .then((res) => {
-                    if (res.status === 200)
-                    {
-                    }
-                })
-                .catch(error => alert('Login to Purchase!'));
-            }
+            // for (let i = 0; i < shoppingCartItems.length; i++) {
+            //     await post('/billDetails', {bill_id: this.state.bill.id, product_id: shoppingCartItems[i].id, quantity: shoppingCartItems[i].quantity})
+            //     .then((res) => {
+            //         if (res.status === 200)
+            //         {
+            //         }
+            //     })
+            //     .catch(error => alert('Login to Purchase!'));
+            // }
 
-            await get(`/bills/${this.state.bill.id}`)
-            .then((response) => {
-                if (response.status === 200)
-                {
-                    //console.log(response.data);
-                    this.setState({
-                        bill: response.data
-                    })
-                }
-            })
+            // await get(`/bills/${this.state.bill.id}`)
+            // .then((response) => {
+            //     if (response.status === 200)
+            //     {
+            //         //console.log(response.data);
+            //         this.setState({
+            //             bill: response.data
+            //         })
+            //     }
+            // })
             //localStorage.setItem('shopping-cart', []);
 
-            this.handleSendMail();
+            //this.handleSendMail();
 
             // console.log('paypal');
         // }
@@ -128,11 +130,25 @@ export default class Order extends Component {
         //                `<p>Thanks for visiting and buying in our store. We are very happy that you found products you are looking for. Here is your Bill:</p>`+
         //                `<h3>BILL HD${this.state.bill.id}</h3><br>`+
         //                 `<b>TOTAL:</b> ${formatQuantity(this.state.bill.total)} VND`;
-        var contentmail = `<b>Chào, ${localStorage.getItem('username')}</b><br>`+
-                       `<p>Cám ơn quý khách đã ghé thăm và mua sản phẩm tại cửa hàng. Chúng tôi rất vui khi bạn đã mua được những sản phẩm mà bạn đang tìm kiếm. Đay là hóa đơn của bạn:</p>`+
-                       `Hóa Đơn <h3>HD${this.state.bill.id}</h3><br>`+
-                        `Tổng Cộng: <b>${formatQuantity(this.state.bill.total)} VND</b>`;
-        post(`/bills/sendmail/${this.state.bill.id}`, {from: 'ps4gamemachine@gmail.com', to: this.state.user.email, subject: "THE PLAYSTATION SHOP - CONFIRM BILL", content: contentmail})
+        var pttt = '';
+        if (this.state.type === 'cod')
+        {
+            pttt = 'Thanh toán tiền mặt khi nhận hàng'
+        }
+        else
+        {
+            pttt = 'Thanh toàn trực tuyến paypal';
+        }
+        var contentmail = `<b>Chào, ${localStorage.getItem('username')}</b><br/>`+
+                       `<p>Cám ơn quý khách đã ghé thăm và mua sản phẩm tại cửa hàng. Chúng tôi rất vui khi bạn đã mua được những sản phẩm mà bạn đang tìm kiếm. Đây là hóa đơn của bạn:</p>`+
+                       `Hóa Đơn <h3>#HD${this.state.bill.id}</h3>`+
+                       `Tổng giá trị đơn hàng: <b>${formatQuantity(this.state.bill.total)} VNĐ</b><br/>`+
+                    //    `Hóa Đơn <h3>#HD</h3>`+
+                       `Phương thức thanh toán: <b>${pttt}</b><br/>`;
+                        // `Tổng giá trị đơn hàng: <b>${formatQuantity(this.state.bill.total)} VNĐ</b>`;
+                        // `<b>Chi tiết đơn hàng</b>`;
+        post(`/bills/sendmail/${this.state.bill.id}`, {from: 'ps4gamemachine@gmail.com', to: this.state.user.email, subject: "THE PLAYSTATION SHOP - XÁC NHẬN HÓA ĐƠN", content: contentmail})
+        //post(`/bills/sendmail/141`, {from: 'ps4gamemachine@gmail.com', to: this.state.user.email, subject: "THE PLAYSTATION SHOP - XÁC NHẬN HÓA ĐƠN", content: contentmail})
         .then((response) => {
             if (response.status === 200)
             {
@@ -201,11 +217,11 @@ export default class Order extends Component {
                         <Table.Header>
                             <Table.Row>
                                 <Table.HeaderCell textAlign="center">No.</Table.HeaderCell>
-                                <Table.HeaderCell textAlign="center">Product</Table.HeaderCell>
-                                <Table.HeaderCell textAlign="center">Name</Table.HeaderCell>
-                                <Table.HeaderCell textAlign="center">Price</Table.HeaderCell>
-                                <Table.HeaderCell textAlign="center">Quantity</Table.HeaderCell>
-                                <Table.HeaderCell textAlign="center">Total</Table.HeaderCell>
+                                <Table.HeaderCell textAlign="center">Máy</Table.HeaderCell>
+                                <Table.HeaderCell textAlign="center">Tên</Table.HeaderCell>
+                                <Table.HeaderCell textAlign="center">Đơn Giá</Table.HeaderCell>
+                                <Table.HeaderCell textAlign="center">Số Lượng</Table.HeaderCell>
+                                <Table.HeaderCell textAlign="center">Tổng Giá</Table.HeaderCell>
                             </Table.Row>
                         </Table.Header>
                         <Table.Body>
@@ -214,7 +230,10 @@ export default class Order extends Component {
                                 this.state.ShoppingCartItems.map((item, index) =>
                                     <Table.Row key={item.id}>
                                         <Table.Cell textAlign="center" >{index + 1}</Table.Cell>
-                                        <Table.Cell textAlign="center" ><Image style={{height: '75px'}} src={`data:image/jpeg;base64,${item.url}`}/></Table.Cell>
+                                        <Table.Cell textAlign="center" >
+                                            {/* <Image style={{height: '75px'}} src={`data:image/jpeg;base64,${item.url}`}/> */}
+                                            <Image style={{height: '75px'}} src={item.url}/>
+                                        </Table.Cell>
                                         <Table.Cell textAlign="center" >{item.name}</Table.Cell>
                                         <Table.Cell textAlign="center" >{formatCurrency(item.price)}</Table.Cell>
                                         <Table.Cell textAlign="center" >{item.quantity}</Table.Cell>
@@ -225,8 +244,8 @@ export default class Order extends Component {
                             {/* </div> */}
                         </Table.Body>
                     </Table>
-                    <Header style={{marginLeft: '75rem'}}>TOTAL: {formatCurrency(this.getTotal())}</Header>
-                    <Button positive icon='checkmark' labelPosition='right' content="Confirm" onClick={this.onCheckOut} style={{marginLeft: '75rem'}}/>
+                    <Header style={{marginLeft: '75rem'}}>Tổng Tiền: {formatCurrency(this.getTotal())}</Header>
+                    <Button positive icon='checkmark' labelPosition='right' content="Xác Nhận" onClick={this.onCheckOut} style={{marginLeft: '75rem'}}/>
                     {/* loading={this.state.loading} */}
                 </div>
 
@@ -259,7 +278,7 @@ export default class Order extends Component {
                     <Footer/>
                 </div>
                 <ToastContainer position="bottom-center"
-                    autoClose={5000}
+                    autoClose={3000}
                     hideProgressBar={false}
                     newestOnTop={false}
                     closeOnClick={false}
@@ -271,3 +290,4 @@ export default class Order extends Component {
         )
     }
 }
+export default withRouter(Order);

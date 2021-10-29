@@ -23,7 +23,9 @@ class ProductDetails extends Component {
             comments: [],
             content: '',
             proHint: [],
-            redirect : false
+            redirect : false,
+            image: '',
+            images: []
         };
         this.onRating = this.onRating.bind(this);
     }
@@ -38,7 +40,8 @@ class ProductDetails extends Component {
             {
                 this.setState({
                     Product: response.data,
-                    totalrating: response.data.totalrating
+                    totalrating: response.data.totalrating,
+                    image: response.data.url_image
                 });
                 // console.log(this.state.product_id)
                 get(`/products/search?categoryId=${this.state.Product.category.id}`)
@@ -88,6 +91,17 @@ class ProductDetails extends Component {
                 this.setState({
                     comments: response.data
                 })
+            }
+        })
+        .catch(error => console.log(error));
+
+        get(`/productImages/product/${this.props.match.params.id}`)
+        .then((response) => {
+            if (response.status === 200)
+            {
+                this.setState({
+                    images: response.data
+                }, () => console.log(this.state.images));
             }
         })
         .catch(error => console.log(error));
@@ -144,7 +158,7 @@ class ProductDetails extends Component {
 
     handleUpdateRating(id, data){
         put(`/products/${id}`, {name: data.name, description: data.description, quantity: data.quantity, price: data.price,
-                                imageurl: data.imageurl ,totalrating: this.state.totalrating ,category_id: data.category.id, supplier_id: data.supplier.id,
+                                url_image: data.url_image ,totalrating: this.state.totalrating ,category_id: data.category.id, supplier_id: data.supplier.id,
                                 status: data.status})
         .then((response) => {
             if (response.status === 200)
@@ -204,6 +218,12 @@ class ProductDetails extends Component {
         this.props.history.push(`/WebPlayStation/product/${id}`)
     }
 
+    handlePicture = (e, data) => {
+        this.setState({
+            image: data
+        });
+    }
+
     componentWillUnmount() {
         this.props.handleChatBot1(false);
         // fix Warning: Can't perform a React state update on an unmounted component
@@ -223,7 +243,15 @@ class ProductDetails extends Component {
                 <Grid container stackable verticalAlign='middle'>
                     <Grid.Row className="table-product">
                         <Grid.Column width={4}>
-                            <img src={`data:image/jpeg;base64,${product.imageurl}`} alt='PlayStation' className='img-border'/>
+                            {/* <img src={`data:image/jpeg;base64,${product.imageurl}`} alt='PlayStation' className='img-border'/> */}
+                            <img src={this.state.image} alt='PlayStation' className='img-border'/>
+                            <div className={this.state.images.length > 4 ? "sub-picture-more" : 'sub-picture'}>
+                                {this.state.images.length > 0 && <img src={product.url_image} alt='PlayStation' onClick={(e) => this.handlePicture(e, product.url_image)} className="image-main"/>}
+                                {this.state.images.map((picture, index) => (
+                                    <img src={picture.imagePath} alt='PlayStation' onClick={(e) => this.handlePicture(e, picture.imagePath)} key={index}/>
+                                ))}
+                                {/* <img src='https://firebasestorage.googleapis.com/v0/b/theplaystation-89769.appspot.com/o/images%2FPlaystation-4-Pro.jpg?alt=media&token=3faa70d0-6298-450f-b640-d76d9fb4b522' alt='PlayStation'/> */}
+                            </div>
                         </Grid.Column>
                         <Grid.Column width={12}>
                             <Header as="h1">{product.name}</Header>

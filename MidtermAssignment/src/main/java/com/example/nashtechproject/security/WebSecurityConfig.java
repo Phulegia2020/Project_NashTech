@@ -84,6 +84,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .antMatchers(HttpMethod.GET, "/api/users/**").permitAll()
             .antMatchers(HttpMethod.GET, "/api/comments/**").permitAll()
             .antMatchers(HttpMethod.GET, "/api/payment/**").permitAll()
+            .antMatchers(HttpMethod.GET, "/api/productImages/**").permitAll()
             .antMatchers( "/dialogflow-webhook").permitAll()
             .antMatchers("/swagger-ui.html").permitAll()
             .anyRequest().authenticated();

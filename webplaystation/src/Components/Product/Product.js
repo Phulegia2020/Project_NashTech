@@ -11,6 +11,7 @@ import { faEdit, faPlus, faTrash, faArrowCircleUp, faArrowCircleDown } from '@fo
 import { Input, Breadcrumb } from 'semantic-ui-react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { storage } from "../../Utils/Firebase";
 
 class Product extends Component {
     state = {
@@ -58,23 +59,70 @@ class Product extends Component {
         e.preventDefault();
         del(`/products/${id}`)
         .then((response) => {
-            this.setState({products: this.state.products.filter(p => p.id !== id)})
-            this.setState({isDisplayFormDel: false})
+            if (response.status === 200)
+            {
+                this.setState({products: this.state.products.filter(p => p.id !== id)})
+                this.setState({isDisplayFormDel: false})
+            }
         })
         // .catch(error => {alert('The product was ordered. Can not delete!')})
         .catch(error => {toast.error('Máy này đã bán!')})
     }
 
     createProduct(newProduct){
+        console.log(newProduct.image_sub);
+        // console.log(newProduct.url);
+        // post(`/products`, {name: newProduct.name.trim(), description: newProduct.description.trim(), quantity: newProduct.quantity,
+        //                 price: newProduct.price, totalrating: 0,imageurl: newProduct.imageurl, category_id: newProduct.category_id,
+        //                 supplier_id: newProduct.supplier_id})
         post(`/products`, {name: newProduct.name.trim(), description: newProduct.description.trim(), quantity: newProduct.quantity,
-                        price: newProduct.price, totalrating: 0,imageurl: newProduct.imageurl, category_id: newProduct.category_id,
-                        supplier_id: newProduct.supplier_id})
+            price: newProduct.price, totalrating: 0, url_image: newProduct.url, category_id: newProduct.category_id,
+            supplier_id: newProduct.supplier_id})
         .then((response) => {
-            //window.location.reload();
-            this.setState({
-                products: [response.data, ...this.state.products],
-                isDisplayForm: false,
-            });
+            if (response.status === 200)
+            {
+                //window.location.reload();
+                if (newProduct.image_sub.length > 0)
+                {
+                    for (let i = 0; i < newProduct.image_sub.length; i++)
+                    {
+                        const uploadTask = storage.ref(`images/${newProduct.image_sub[i].name}`).put(newProduct.image_sub[i]);
+                        uploadTask.on(
+                            "state_changed",
+                            snapshot => {
+                            // const progress = Math.round(
+                            //   (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+                            // );
+                            // setProgress(progress);
+                            },
+                            error => {
+                            console.log(error);
+                            },
+                            () => {
+                            storage
+                                .ref("images")
+                                .child(newProduct.image_sub[i].name)
+                                .getDownloadURL()
+                                .then(url => {
+                                    // setUrl(url);
+                                    post(`/productImages`, {imagePath: url, product_id: response.data.id})
+                                    .then((res) => {
+                                        if (res.status === 200)
+                                        {
+                                            console.log(res.data);
+                                        }
+                                    })
+                                    .catch((error) => console.log(error));
+                                });
+                            }
+                        );
+                    }
+                }
+                this.setState({
+                    products: [response.data, ...this.state.products],
+                    isDisplayForm: false,
+                });
+            }
         });
     }
 
@@ -200,21 +248,63 @@ class Product extends Component {
         }
     }
 
-    handleSortInc = (e) => {
+    handleSortInc = (e, key) => {
         e.preventDefault();
         //this.state.categories.sort((e1, e2) => (e1.id > e2.id ? 1 : -1));
-        this.setState({
-            products: this.state.products.sort((e1, e2) => (e1.price > e2.price ? 1 : -1))
-        })
+        if (key === 'id')
+        {
+            this.setState({
+                products: this.state.products.sort((e1, e2) => (e1.id > e2.id ? 1 : -1))
+            })
+        }
+        else if (key === 'name')
+        {
+            this.setState({
+                products: this.state.products.sort((e1, e2) => (e1.name > e2.name ? 1 : -1))
+            })
+        }
+        else if (key === 'quantity')
+        {
+            this.setState({
+                products: this.state.products.sort((e1, e2) => (e1.quantity > e2.quantity ? 1 : -1))
+            })
+        }
+        else if (key === 'price')
+        {
+            this.setState({
+                products: this.state.products.sort((e1, e2) => (e1.price > e2.price ? 1 : -1))
+            })
+        }
         // console.log('sort');
     }
 
-    handleSortDes = (e) => {
+    handleSortDes = (e, key) => {
         e.preventDefault();
         //this.state.categories.sort((e1, e2) => (e1.id > e2.id ? 1 : -1));
-        this.setState({
-            products: this.state.products.sort((e1, e2) => (e2.price > e1.price ? 1 : -1))
-        })
+        if (key === 'id')
+        {
+            this.setState({
+                products: this.state.products.sort((e1, e2) => (e2.id > e1.id ? 1 : -1))
+            })
+        }
+        else if (key === 'name')
+        {
+            this.setState({
+                products: this.state.products.sort((e1, e2) => (e2.name > e1.name ? 1 : -1))
+            })
+        }
+        else if (key === 'quantity')
+        {
+            this.setState({
+                products: this.state.products.sort((e1, e2) => (e2.quantity > e1.quantity ? 1 : -1))
+            })
+        }
+        else if (key === 'price')
+        {
+            this.setState({
+                products: this.state.products.sort((e1, e2) => (e2.price > e1.price ? 1 : -1))
+            })
+        }
         // console.log('sort');
     }
 
@@ -267,12 +357,12 @@ class Product extends Component {
                 <table id="table">
                     <thead>
                         <tr>
-                            <th><b>Mã Máy</b></th>
+                            <th><b>Mã Máy</b>{' '}<FontAwesomeIcon icon={faArrowCircleUp} className="sort-icon" onClick={(e) => this.handleSortInc(e, 'id')}/><FontAwesomeIcon icon={faArrowCircleDown} className="sort-icon" onClick={(e) => this.handleSortDes(e, 'id')}/></th>
                             <th><b>Hình Ảnh</b></th>
-                            <th><b>Tên</b></th>
+                            <th><b>Tên</b>{' '}<FontAwesomeIcon icon={faArrowCircleUp} className="sort-icon" onClick={(e) => this.handleSortInc(e, 'name')}/><FontAwesomeIcon icon={faArrowCircleDown} className="sort-icon" onClick={(e) => this.handleSortDes(e, 'name')}/></th>
                             <th><b>Thông Tin</b></th>
-                            <th><b>Số Lượng</b></th>
-                            <th><b>Đơn Giá</b>{' '}<FontAwesomeIcon icon={faArrowCircleUp} className="sort-icon" onClick={(e) => this.handleSortInc(e)}/><FontAwesomeIcon icon={faArrowCircleDown} className="sort-icon" onClick={(e) => this.handleSortDes(e)}/></th>
+                            <th><b>Số Lượng</b>{' '}<FontAwesomeIcon icon={faArrowCircleUp} className="sort-icon" onClick={(e) => this.handleSortInc(e, 'quantity')}/><FontAwesomeIcon icon={faArrowCircleDown} className="sort-icon" onClick={(e) => this.handleSortDes(e, 'quantity')}/></th>
+                            <th><b>Đơn Giá</b>{' '}<FontAwesomeIcon icon={faArrowCircleUp} className="sort-icon" onClick={(e) => this.handleSortInc(e, 'price')}/><FontAwesomeIcon icon={faArrowCircleDown} className="sort-icon" onClick={(e) => this.handleSortDes(e, 'price')}/></th>
                             <th>Cập Nhập</th>
                             <th>Xóa</th>
                         </tr>
@@ -283,7 +373,8 @@ class Product extends Component {
                                 <tr key={p.id}>
                                     <td>{p.id}</td>
                                     <td>
-                                        <img src={`data:image/jpeg;base64,${p.imageurl}`} alt="" height="100px"></img>
+                                        {/* <img src={`data:image/jpeg;base64,${p.imageurl}`} alt="" height="100px"></img> */}
+                                        <img src={p.url_image || "http://via.placeholder.com/300"} alt="" height="100px"/>
                                     </td>
                                     <td>{p.name}</td>
                                     <td className="descriptionTable">{p.description}</td>

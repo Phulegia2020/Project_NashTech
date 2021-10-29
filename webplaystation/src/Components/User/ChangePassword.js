@@ -59,7 +59,7 @@ export default class ChangePassword extends Component {
 				key: 'password'
 			})
 			this.setState({
-				Error: "Password is at least 6 characters!"
+				Error: "Mật khẩu có tối thiểu 6 ký tự."
 			});
 			return;
         }

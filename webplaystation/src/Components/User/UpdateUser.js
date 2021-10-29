@@ -212,7 +212,7 @@ class UpdateUser extends React.Component {
                             </Input>
                         </FormGroup>
                         <div className="mb-5">
-                            <Button outline color="warning" >Cập Nhật</Button>{' '}
+                            <Button outline color="warning" disabled={this.state.active_status === 'Inactive'}>Cập Nhật</Button>{' '}
                             <Button outline color="danger" onClick={this.handleClear.bind(this)}>Hủy</Button>
                         </div>
                         </Form>

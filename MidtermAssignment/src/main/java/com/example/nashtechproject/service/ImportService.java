@@ -14,6 +14,14 @@ public interface ImportService {
 
     public List<Import> getImportsDone();
 
+    public List<Import> getImportSearch(String id);
+
+    public List<Import> getImportSearchPage(String id, ProductPage productPage);
+
+    public List<Import> getImportStatus();
+
+    public List<Import> getImportStatusPage(ProductPage productPage);
+
     public Import saveImport(Import imp);
 
     public void deleteImport(Long importId);

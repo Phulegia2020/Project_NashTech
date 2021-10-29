@@ -386,7 +386,8 @@ public class ProductController {
         product.setDescription(productDetails.getDescription());
         product.setQuantity(productDetails.getQuantity());
         product.setPrice(productDetails.getPrice());
-        product.setImageurl(productDetails.getImageurl());
+//        product.setImageurl(productDetails.getImageurl());
+        product.setUrl_image(productDetails.getUrl_image());
         product.setTotalrating(productDetails.getTotalrating());
         product.setUpdateddate(LocalDateTime.now());
         product.setStatus(productDetails.getStatus());

@@ -19,7 +19,7 @@ export default class Add extends Component {
     }
     
     componentDidMount(){
-        get("/products")
+        get("/products/onSale")
         .then((response) => {
             if (response.status === 200)
             {

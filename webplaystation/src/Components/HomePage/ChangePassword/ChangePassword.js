@@ -6,30 +6,48 @@ import {
 	Form,
 	Checkbox
 } from 'semantic-ui-react';
-import {post} from './../../../Utils/httpHelper';
+import {get, post} from './../../../Utils/httpHelper';
 import "../SignUp/SignUp.css";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { withRouter } from 'react-router-dom';
 
-export default class ChangePassword extends Component {
+class ChangePassword extends Component {
     constructor(props) {
 		super(props);
 		this.state = { newpassword: '', confirmpassword: '', Error: "",
-		key: "", show: false};
+		key: "", show: false, email: "", otp: 0};
+	}
+
+	componentDidMount()
+	{
+		if (this.props.location.state != null)
+		{
+			// console.log(this.props.location.state.email);
+			// console.log(this.props.location.state.otp);
+			this.setState({
+				email: this.props.location.state.email,
+				otp: this.props.location.state.otp
+			})
+			window.onbeforeunload = function () {
+				window.history.replaceState(null, "");
+			}.bind(this);
+		}
+		
 	}
 
 	handleChange = (e, { name, value }) => {
 		this.setState({ [name]: value });
 	}
 
-    handleSubmit = (event) => {
+    async handleSubmit(event) {
 		if (event.target.newpassword.value.length < 6)
 		{
 			this.setState({
 				key: 'password'
 			})
 			this.setState({
-				Error: "Password is at least 6 characters!"
+				Error: "Mật khẩu có tối thiểu 6 ký tự."
 			});
 			return;
 		}
@@ -39,22 +57,48 @@ export default class ChangePassword extends Component {
 				key: 'confirmpassword'
 			})
 			this.setState({
-				Error: "Confirm Password is not correct!"
+				Error: "Xác nhận mật khẩu không chính xác."
 			});
 			return;
 		}
-		post('/auth/profile', {user_id: localStorage.getItem('user_id'), newpassword: this.state.newpassword,
+		var id;
+		if (localStorage.getItem('user_id') !== null)
+		{
+			id = localStorage.getItem('user_id');
+		}
+		else
+		{
+			if (this.state.email !== "")
+			{
+				await get(`/users/email/${this.state.email}`)
+				.then((response) => {
+					if (response.status === 200)
+					{
+						id = response.data.id;
+						// console.log(id);
+					}
+				})
+				.catch((error) => console.log(error));
+			}
+		}
+		console.log(id);
+		post('/auth/profile', {user_id: id, newpassword: this.state.newpassword,
                                             confirmpassword: this.state.confirmpassword})
         .then((response) => {
             if (response.status === 200)
             {
 				// alert(response.data.message);
+				
 				toast.success('Thay đổi mật khẩu thành công!')
 				this.setState({
 					newpassword: "",
 					confirmpassword: "",
 					Error: ""
 				});
+				if (localStorage.getItem('user_id') === null)
+				{
+					setTimeout(() => window.location.href="/WebPlayStation/login", 2000);
+				}
             }
             
         })
@@ -77,7 +121,7 @@ export default class ChangePassword extends Component {
 				<Grid container stackable verticalAlign='middle'>
 					<Grid.Row>
 						<Grid.Column width={8}>
-							<h2 className="title-profile">Thay Đổi Mật Khẩu</h2>
+							{localStorage.getItem('user_id') !== null ? <h2 className="title-profile">Thay Đổi Mật Khẩu</h2> : <h2 className="title-profile">Nhập Mật Khẩu Mới</h2>}
 							<Form onSubmit={(event) => this.handleSubmit(event)}>
 								<Form.Field>
 									<label>Mật Khẩu Mới</label>
@@ -110,3 +154,4 @@ export default class ChangePassword extends Component {
         )
     }
 }
+export default withRouter(ChangePassword);

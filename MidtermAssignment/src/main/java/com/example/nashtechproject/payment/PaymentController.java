@@ -71,7 +71,7 @@ public class PaymentController {
                 //return "success";
                 //RedirectUrls redirectUrls = new RedirectUrls();
                 //redirectUrls.setReturnUrl("http://localhost:3000/WebPlayStation");
-                System.out.println("success");
+                //System.out.println("success");
                 return ResponseEntity.status(HttpStatus.FOUND).location(URI.create("http://localhost:3000/WebPlayStation/success")).build();
             }
 

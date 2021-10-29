@@ -37,6 +37,10 @@ class ProductsByCategry extends Component {
             }
         })
         .catch(error => {console.log(error)})
+
+        // window.onbeforeunload = function () {
+        //     window.history.replaceState(null, "");
+        // }.bind(this);
     }
 
     componentDidUpdate(prevProps, prevState)

@@ -43,10 +43,13 @@ public class Product {
     @Column(name = "updateddate")
     private LocalDateTime updateddate;
 
-    @Lob
-    @Type(type="org.hibernate.type.BinaryType")
-    @Column(name = "imageURL")
-    private byte[] imageurl;
+//    @Lob
+//    @Type(type="org.hibernate.type.BinaryType")
+//    @Column(name = "imageURL")
+//    private byte[] imageurl;
+
+    @Column(name = "url_image")
+    private String url_image;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "category_id")
@@ -55,6 +58,9 @@ public class Product {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "supplier_id")
     private Supplier supplier;
+
+    @JoinColumn(name = "status")
+    private String status;
 
 //    @Transient
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -71,13 +77,14 @@ public class Product {
     @JsonIgnore
     private List<Comment> comments;
 
-    @JoinColumn(name = "status")
-    private String status;
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<ProductImage> productImages;
 
     public Product() {
     }
 
-    public Product(Long id, String name, String description, int quantity, int price, LocalDateTime createddate, LocalDateTime updateddate, byte[] imageurl, Category category, Supplier supplier, List<Rating> ratings, Collection<BillDetails> billDetails) {
+    public Product(Long id, String name, String description, int quantity, int price, LocalDateTime createddate, LocalDateTime updateddate, String url_image, Category category, Supplier supplier, List<Rating> ratings, Collection<BillDetails> billDetails) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -85,7 +92,8 @@ public class Product {
         this.price = price;
         this.createddate = createddate;
         this.updateddate = updateddate;
-        this.imageurl = imageurl;
+//        this.imageurl = imageurl;
+        this.url_image = url_image;
         this.category = category;
         this.supplier = supplier;
         //this.ratings = ratings;
@@ -156,12 +164,20 @@ public class Product {
         this.updateddate = updateddate;
     }
 
-    public byte[] getImageurl() {
-        return imageurl;
+//    public byte[] getImageurl() {
+//        return imageurl;
+//    }
+//
+//    public void setImageurl(byte[] imageurl) {
+//        this.imageurl = imageurl;
+//    }
+
+    public String getUrl_image() {
+        return url_image;
     }
 
-    public void setImageurl(byte[] imageurl) {
-        this.imageurl = imageurl;
+    public void setUrl_image(String url_image) {
+        this.url_image = url_image;
     }
 
     public Category getCategory() {

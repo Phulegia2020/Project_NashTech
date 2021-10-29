@@ -142,6 +142,32 @@ public class ImportController {
         return list.stream().map(this::convertToDTO).collect(Collectors.toList());
     }
 
+    @GetMapping("/search")
+    public int getAllImportSearch(@RequestParam String search)
+    {
+        List<Import> list = importService.getImportSearch(search);
+        return list.size();
+    }
+
+    @GetMapping("/searchPage")
+    public ResponseEntity<List<Import>> getImportSearchPages(@RequestParam String search, ProductPage productPage)
+    {
+        return new ResponseEntity<>(importService.getImportSearchPage(search, productPage), HttpStatus.OK);
+    }
+
+    @GetMapping("/status")
+    public int getAllImport()
+    {
+        List<Import> list = importService.getImportStatus();
+        return list.size();
+    }
+
+    @GetMapping("/statusPage")
+    public ResponseEntity<List<Import>> getImportPages(ProductPage productPage)
+    {
+        return new ResponseEntity<>(importService.getImportStatusPage(productPage), HttpStatus.OK);
+    }
+
     @PostMapping()
     public Import saveImport(@RequestBody ImportDTO imp)
     {

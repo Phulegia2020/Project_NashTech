@@ -15,9 +15,10 @@ public class ImportDetailsDTO {
 
     private String product_id;
 
-    @Lob
-    @Type(type="org.hibernate.type.BinaryType")
-    private byte[] productImg;
+//    @Lob
+//    @Type(type="org.hibernate.type.BinaryType")
+//    private byte[] productImg;
+    private String productImg;
 
     private String productName;
 
@@ -53,11 +54,20 @@ public class ImportDetailsDTO {
         this.product_id = product_id;
     }
 
-    public byte[] getProductImg() {
+//    public byte[] getProductImg() {
+//        return productImg;
+//    }
+//
+//    public void setProductImg(byte[] productImg) {
+//        this.productImg = productImg;
+//    }
+
+
+    public String getProductImg() {
         return productImg;
     }
 
-    public void setProductImg(byte[] productImg) {
+    public void setProductImg(String productImg) {
         this.productImg = productImg;
     }
 

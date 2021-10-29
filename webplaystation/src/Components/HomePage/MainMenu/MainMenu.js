@@ -61,6 +61,10 @@ class MainMenu extends Component {
     }
 
     // notificationCart = (data) => toast.error(data);
+    // handleCategory = (e, id) => {
+    //     e.preventDefault();
+    //     this.props.history.push(`/WebPlayStation/category/${id}`)
+    // }
 
     componentWillUnmount() {
         // fix Warning: Can't perform a React state update on an unmounted component
@@ -100,6 +104,7 @@ class MainMenu extends Component {
                                     {
                                         this.state.categories.map((c) => (
                                         <Dropdown.Item as={Link} to={`/WebPlayStation/category/${c.id}`} key={c.id}>{c.name}</Dropdown.Item>
+                                        // <Dropdown.Item key={c.id} onClick={(e) => this.handleCategory(e, c.id)}>{c.name}</Dropdown.Item>
                                         ))
                                     }
                                 </Dropdown.Menu>

@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
 import { get } from '../../Utils/httpHelper';
-import "./Product.css"
+import "./Product.css";
+import { storage } from "../../Utils/Firebase";
 
 export default class Add extends Component {
     constructor(props)
@@ -12,7 +13,10 @@ export default class Add extends Component {
             description: "",
             quantity: 0,
             price: 0,
-            imageurl: null,
+            // imageurl: null,
+            image: null,
+            url: "",
+            image_sub: [],
             category_id: "1",
             supplier_id: "1",
             categories: [],
@@ -25,7 +29,7 @@ export default class Add extends Component {
     }
     
     componentDidMount(){
-        get("/products")
+        get("/products/onSale")
         .then((response) => {
             if (response.status === 200)
             {
@@ -69,7 +73,7 @@ export default class Add extends Component {
     };
 
     uploadImage = async (e) => {
-        //console.log(e.target.files);
+        // console.log(e.target.files);
         const file = e.target.files[0];
         const base64 = await this.convertBase64(file);
         this.setState({
@@ -81,6 +85,79 @@ export default class Add extends Component {
             imageurl: photo
         });
     };
+
+    handleChange = (e, key) => {
+        if (key === 'main')
+        {
+            if (e.target.files[0]) {
+                if (e.target.files[0].size > 10485760)
+                {
+                    this.setState({
+                        key: 'image'
+                    })
+                    this.setState({
+                        Error: "Vui lòng chọn ảnh có dung lượng nhỏ hơn 10MB!"
+                    });
+                    return;
+                }
+                //setImage(e.target.files[0]);
+                this.setState({
+                    image: e.target.files[0]
+                });
+            }
+        }
+        else if (key === 'list')
+        {
+            // console.log(e.target.files);
+            if (e.target.files.length > 0)
+            {
+                for (let i = 0; i < e.target.files.length; i++)
+                {
+                    if (e.target.files[i].size > 10485760)
+                    {
+                        this.setState({
+                            key: 'image-sub'
+                        })
+                        this.setState({
+                            Error: "Vui lòng chọn ảnh có dung lượng nhỏ hơn 10MB!"
+                        });
+                        return;
+                    }
+                }
+                this.setState({
+                    image_sub: e.target.files
+                }, () => console.log(this.state.image_sub));
+            }
+        }
+    };
+
+    // async handleUpload(){
+    //     const uploadTask = storage.ref(`images/${this.state.image.name}`).put(this.state.image);
+    //     uploadTask.on(
+    //         "state_changed",
+    //         snapshot => {
+    //         // const progress = Math.round(
+    //         //   (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+    //         // );
+    //         // setProgress(progress);
+    //         },
+    //         error => {
+    //         console.log(error);
+    //         },
+    //         () => {
+    //         storage
+    //             .ref("images")
+    //             .child(this.state.image.name)
+    //             .getDownloadURL()
+    //             .then(url => {
+    //                 // setUrl(url);
+    //                 this.setState({
+    //                     url: url
+    //                 }, () => console.log(this.state.url));
+    //             });
+    //         }
+    //     );
+    // };
 
     changeValue(e){
         this.setState({
@@ -94,7 +171,8 @@ export default class Add extends Component {
             category_id: event.target.category_id.value,
             supplier_id: event.target.supplier_id.value
         })
-
+        // await this.handleUpload();
+        //console.log(this.state.url)
         if (event.target.quantity.value.trim() <= 0)
         {
             this.setState({
@@ -136,7 +214,33 @@ export default class Add extends Component {
             // quantity: 0,
             // price: 0,
         })
-        this.props.onAdd(this.state);
+        const uploadTask = storage.ref(`images/${this.state.image.name}`).put(this.state.image);
+        uploadTask.on(
+            "state_changed",
+            snapshot => {
+            // const progress = Math.round(
+            //   (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+            // );
+            // setProgress(progress);
+            },
+            error => {
+            console.log(error);
+            },
+            () => {
+            storage
+                .ref("images")
+                .child(this.state.image.name)
+                .getDownloadURL()
+                .then(url => {
+                    // setUrl(url);
+                    this.setState({
+                        url: url
+                    }, () => this.props.onAdd(this.state));
+                });
+            }
+        );
+        // this.props.onAdd(this.state);
+        // setTimeout(() => this.props.onAdd(this.state), 2000);
     }
 
     handleClear = () => {
@@ -182,9 +286,18 @@ export default class Add extends Component {
                     {this.state.key === 'price' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
                 </FormGroup>
                 <FormGroup>
-                    <Label htmlFor="image">Hình Ảnh</Label>
+                    <Label htmlFor="image">Hình Ảnh Chính</Label>
                     <br></br>
-                    <Input type="file" name="image" id="image" accept=".jpeg, .png, .jpg" onChange={(e) => {this.uploadImage(e);}} required="required"/>
+                    {/* <Input type="file" name="image" id="image" accept=".jpeg, .png, .jpg" onChange={(e) => {this.uploadImage(e);}} required="required"/> */}
+                    <Input type="file" name="image" id="image" accept=".jpeg, .png, .jpg" onChange={(e) => {this.handleChange(e, 'main')}} required="required"/>
+                    {this.state.key === 'image' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
+                </FormGroup>
+                <FormGroup>
+                    <Label htmlFor="image-sub">Các Hình Ảnh Kèm Theo (Tùy Chọn)</Label>
+                    <br></br>
+                    {/* <Input type="file" name="image" id="image" accept=".jpeg, .png, .jpg" onChange={(e) => {this.uploadImage(e);}} required="required"/> */}
+                    <Input type="file" name="image-sub" id="image-sub" accept=".jpeg, .png, .jpg" onChange={(e) => {this.handleChange(e, 'list')}} multiple/>
+                    {this.state.key === 'image-sub' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
                 </FormGroup>
                 <FormGroup className="mb-2">
                     

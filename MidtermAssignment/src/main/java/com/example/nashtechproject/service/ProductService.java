@@ -35,7 +35,7 @@ public interface ProductService {
 
     public boolean existName(String name);
 
-    public List<ProductDTO> getProductChatBot(String name);
+    public ProductDTO getProductChatBot(String name);
 
     public List<Product> getProductPriceLess();
 

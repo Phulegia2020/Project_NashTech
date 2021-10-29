@@ -106,7 +106,10 @@ class ShoppingCartDetails extends Component {
                             this.state.ShoppingCartItems.map((item, index) =>
                                 <Table.Row key={item.id}>
                                     <Table.Cell textAlign="right">{index + 1}</Table.Cell>
-                                    <Table.Cell textAlign="right"><Image style={{height: '75px'}} src={`data:image/jpeg;base64,${item.url}`}/></Table.Cell>
+                                    <Table.Cell textAlign="right">
+                                        {/* <Image style={{height: '75px'}} src={`data:image/jpeg;base64,${item.url}`}/> */}
+                                        <Image style={{height: '75px'}} src={item.url}/>
+                                    </Table.Cell>
                                     <Table.Cell textAlign="left">{item.name}</Table.Cell>
                                     <Table.Cell textAlign="right">{formatCurrency(item.price)}</Table.Cell>
                                     <Table.Cell textAlign="right">
