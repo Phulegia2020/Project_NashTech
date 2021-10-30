@@ -103,7 +103,7 @@ public class ProductServiceImpl implements ProductService {
 
     public ProductDTO getProductChatBot(String name)
     {
-        Product pro = productRepository.findByNameAndStatus(name, STATE.SALE);
+        Product pro = productRepository.findByNameAndStatus(name, STATE.SALE).orElse(null);
         ProductDTO productDTO = modelMapper.map(pro, ProductDTO.class);
         String cate_id = String.valueOf(pro.getCategory().getId());
         String sup_id = String.valueOf(pro.getSupplier().getId());

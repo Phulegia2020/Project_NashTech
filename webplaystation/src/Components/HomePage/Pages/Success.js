@@ -25,7 +25,7 @@ class Success extends Component {
         }
         else
         {
-            pttt = 'Thanh toàn trực tuyến paypal'
+            pttt = 'Thanh toán trực tuyến paypal'
         }
         
         const shoppingCartItems = JSON.parse(localStorage.getItem('shopping-cart') || '[]');

@@ -103,8 +103,9 @@ class Order extends Component {
         // else 
         if (this.state.type === 'paypal')
         {
-            var pay = (this.state.bill.total) / 20000;
+            // var pay = (this.state.bill.total) / 20000;
             // var pay = 5;
+            var pay = this.getTotal() / 20000;
             post(`/payment/pay?price=${pay}`)
             .then((response) => {
                 if (response.status === 200)

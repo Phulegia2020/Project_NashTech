@@ -168,7 +168,7 @@ public class ProductController {
     {
         List<ProductDTO> prosDTO = new ArrayList<>();
         List<Product> products = productService.getProductsByStatus();
-        ratingNow(products);
+        //ratingNow(products);
         for (int i = 0; i < products.size(); i++) {
             ProductDTO p = convertToDTO(products.get(i));
             prosDTO.add(p);

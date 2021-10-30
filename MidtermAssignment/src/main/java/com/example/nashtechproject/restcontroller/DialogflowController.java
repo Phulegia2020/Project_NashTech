@@ -20,10 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static java.util.Arrays.asList;
 
@@ -63,12 +60,12 @@ public class DialogflowController {
             case "Info-Intent":
             {
 //                System.out.println("chatbot info");
-//                if (request.getQueryResult().getParameters().get("product").toString().equals("PS"))
-//                {
-//                    chat.add("Hiện tại cửa hàng chưa kinh doanh máy này. Bạn có thể tham khảo về máy Playstation 4 và Playstation 5 tại shop !");
-//                }
-//                else
-//                {
+                if (request.getQueryResult().getParameters().get("product").toString().equals("PS"))
+                {
+                    chat.add("Hiện tại cửa hàng chưa kinh doanh máy này. Bạn có thể tham khảo về máy Playstation 4 và Playstation 5 tại shop !");
+                }
+                else
+                {
                     products = productService.getProductChatBot(request.getQueryResult().getParameters().get("product").toString());
                     if (products == null)
                     {
@@ -97,7 +94,7 @@ public class DialogflowController {
 //                    {
 //                        chat.add("Hiện tại máy " + products.get(i).getName() + " vẫn còn hàng bạn nhé!");
 //                    }
-//                }
+                }
                 break;
             }
             case "Price-PS-Intent":
@@ -105,25 +102,35 @@ public class DialogflowController {
                 //System.out.println("chatbot-price");
                 //System.out.println(request.getQueryResult().getParameters().get("product").toString());
 //                for (int j = 0; j < request.getQueryResult().getParameters().get("product"))
-//                if (request.getQueryResult().getParameters().get("product").toString().equals("PS"))
+                if (request.getQueryResult().getParameters().get("product").toString().equals("PS"))
+                {
+                    chat.add("Hiện tại cửa hàng chưa kinh doanh máy này. Bạn có thể tham khảo về máy Playstation 4 và Playstation 5 tại shop !");
+                }
+                else {
+//                try {
+//
+//
+//                    products = productService.getProductChatBot(request.getQueryResult().getParameters().get("product").toString());
+//                    System.out.println(products);
+//                    chat.add("Máy " + products.getName() + " có giá " + String.format("%,d", products.getPrice()) + " VNĐ. Nếu bạn là một người đam mê playstation thì máy " + products.getName() + " là bộ máy hợp lý trong thời điểm hiện tại và cung cấp trải nghiệm chơi game hiệu quả cho nhiều người dùng");
+//                }
+//                catch (NoSuchElementException ex)
 //                {
 //                    chat.add("Hiện tại cửa hàng chưa kinh doanh máy này. Bạn có thể tham khảo về máy Playstation 4 và Playstation 5 tại shop !");
 //                }
-//                else {
-                    products = productService.getProductChatBot(request.getQueryResult().getParameters().get("product").toString());
-                    //System.out.println(products);
 //                for (int i = 0; i < products.size(); i++)
 //                {
 //                    chat.add("Máy " + products.get(i).getName() + " có giá " + String.format("%,d", products.get(i).getPrice()) + " VNĐ. Nếu bạn là một người đam mê playstation thì máy " + products.get(i).getName() + " là bộ máy hợp lý trong thời điểm hiện tại và cung cấp trải nghiệm chơi game hiệu quả cho nhiều người dùng");
 //                    //chat = chat + "Máy " + products.get(i).getName() + " có giá " + String.format("%,d", products.get(i).getPrice()) + ", ";
 //                }
-                    //System.out.println(chat);
+                    products = productService.getProductChatBot(request.getQueryResult().getParameters().get("product").toString());
                     if (products == null) {
+                        //System.out.println("chat");
                         chat.add("Hiện tại cửa hàng chưa kinh doanh máy này. Bạn có thể tham khảo về máy Playstation 4 và Playstation 5 tại shop !");
                     } else {
                         chat.add("Máy " + products.getName() + " có giá " + String.format("%,d", products.getPrice()) + " VNĐ. Nếu bạn là một người đam mê playstation thì máy " + products.getName() + " là bộ máy hợp lý trong thời điểm hiện tại và cung cấp trải nghiệm chơi game hiệu quả cho nhiều người dùng");
                     }
-//                }
+                }
                 break;
             }
         }
