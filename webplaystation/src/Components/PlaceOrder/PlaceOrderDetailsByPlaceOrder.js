@@ -19,6 +19,7 @@ class PlaceOrderDetailsByPlaceOrder extends Component {
         iddel: {},
         pageNumber: 0,
         pageToTal: 0,
+        currentPage: 5
     }
 
     componentDidMount(){
@@ -28,12 +29,12 @@ class PlaceOrderDetailsByPlaceOrder extends Component {
             {
                 this.setState({
                     //placeorderdetails: response.data
-                    pageToTal: Math.ceil(response.data.length / 5)
+                    pageToTal: Math.ceil(response.data.length / this.state.currentPage)
                 })
             }
         })
 
-        get(`/placeorderDetails/placeOrderPage/${this.state.id}?pageNumber=0&pageSize=5&sortBy=id`)
+        get(`/placeorderDetails/placeOrderPage/${this.state.id}?pageNumber=0&pageSize=${this.state.currentPage}&sortBy=id`)
         .then((response) => {
             this.setState({
                 placeorderdetails: response.data
@@ -131,7 +132,7 @@ class PlaceOrderDetailsByPlaceOrder extends Component {
             }, () => console.log(this.state.pageNumber));
         }
         
-        get(`/placeorderDetails/placeOrderPage/${this.state.id}?pageNumber=${pageNumber}&pageSize=5&sortBy=id`)
+        get(`/placeorderDetails/placeOrderPage/${this.state.id}?pageNumber=${pageNumber}&pageSize=${this.state.currentPage}&sortBy=id`)
         .then((response) => {
             this.setState({
                 placeorderdetails: response.data,
@@ -169,11 +170,11 @@ class PlaceOrderDetailsByPlaceOrder extends Component {
                         <Button onClick={(e) => this.onCloseFormDel(e)}>Hủy</Button>
                     </ModalFooter>
                 </Modal>
-                <button type="button" className="btn btn-primary" onClick={this.onToggleForm}>
+                {this.state.placeorder.status === 'Waiting' && <button type="button" className="btn btn-primary" onClick={this.onToggleForm}>
                     <FontAwesomeIcon icon={faPlus} className="mr-2"/>{' '}
                     Tạo Chi Tiết Mới
-                </button>
-                <h3 style={{ textAlign:'center', margin:'20px 0 20px 0' }}>Danh Sách Chi Tiết</h3>
+                </button>}
+                <h3>Danh Sách Chi Tiết</h3>
                 <table id="table">
                     <thead>
                         <tr>
@@ -182,15 +183,15 @@ class PlaceOrderDetailsByPlaceOrder extends Component {
                             <th><b>Máy</b></th>
                             <th><b>Số Lượng</b></th>
                             <th><b>Giá</b></th>
-                            <th>Cập Nhật</th>
-                            <th>Xóa</th>
+                            {this.state.placeorder.status === 'Waiting' && <th>Cập Nhật</th>}
+                            {this.state.placeorder.status === 'Waiting' && <th>Xóa</th>}
                         </tr>
                     </thead>
                     <tbody>
                         {
                             this.state.placeorderdetails.map((po, index) => (
                                 <tr key={index}>
-                                    <td>{index + 1}</td>
+                                    <td>{this.state.pageNumber*this.state.currentPage + index + 1}</td>
                                     <td>
                                         {/* <img src={`data:image/jpeg;base64,${po.key.product.imageurl}`} alt="" height="100px"></img> */}
                                         {/* <img src={`data:image/jpeg;base64,${po.productImg}`} alt="" height="100px"></img> */}
@@ -199,19 +200,19 @@ class PlaceOrderDetailsByPlaceOrder extends Component {
                                     <td>{po.productName}</td>
                                     <td>{formatQuantity(po.quantity)}</td>
                                     <td>{formatCurrency(po.price)}</td>
-                                    <td>
+                                    {this.state.placeorder.status === 'Waiting' && <td>
                                         <Link to={`/admin/placeorderDetails/update/${po.placeorder_id}-${po.product_id}`} onClick={this.state.placeorder.status === 'Done' ? (e) => e.preventDefault() : ''} className={this.state.placeorder.status === 'Done' ? "disable-link" : ""}>
                                             <button className="btn btn-success" disabled={this.state.placeorder.status === 'Done'}>
                                             <FontAwesomeIcon icon={faEdit} className="mr-2"/>{' '}
                                                 
                                             </button>
                                         </Link>
-                                    </td>
-                                    <td><button onClick={(e) => this.onToggleFormDel(e, po)} className="btn btn-danger" disabled={this.state.placeorder.status === 'Done'}>
+                                    </td>}
+                                    {this.state.placeorder.status === 'Waiting' && <td><button onClick={(e) => this.onToggleFormDel(e, po)} className="btn btn-danger" disabled={this.state.placeorder.status === 'Done'}>
                                         <FontAwesomeIcon icon={faTrash} className="mr-2"/>{' '}
                                         
                                         </button>
-                                    </td>
+                                    </td>}
                                 </tr>
                             ))
                         }

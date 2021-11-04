@@ -18,6 +18,7 @@ class UpdateBill extends Component {
             // billStatus: [],
             Error: "",
             key: "",
+            destination: ''
         }
     }
     
@@ -39,7 +40,8 @@ class UpdateBill extends Component {
                     total: response.data.total,
                     user_id: response.data.user_id,
                     // billStatus_id: response.data.billStatus_id
-                    status: response.data.status
+                    status: response.data.status,
+                    destination: response.data.destination
                 })
             }
         });
@@ -74,7 +76,7 @@ class UpdateBill extends Component {
             return;
         }
         // put(`/bills/${this.state.id}`, {total: this.state.total, user_id: this.state.user_id, billStatus_id: this.state.billStatus_id})
-        put(`/bills/${this.state.id}`, {total: this.state.total, user_id: this.state.user_id, status: this.state.status})
+        put(`/bills/${this.state.id}`, {total: this.state.total, user_id: this.state.user_id, status: this.state.status, destination: this.state.destination})
         .then((response) => {
             if (response.status === 200)
             {
@@ -122,6 +124,11 @@ class UpdateBill extends Component {
                                     ))
                                 }
                             </Input>
+                        </FormGroup>
+                        <FormGroup>
+                            <Label htmlFor="destination">Địa điểm giao hàng</Label>
+                            <Input type="text" name="destination" id="destination" placeholder="Địa điểm giao hàng..." onChange={(e) => this.changeValue(e)} value = {this.state.destination} required="required"/>
+                            {this.state.key === 'total' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
                         </FormGroup>
                         <FormGroup className="mb-5">
                             <Label htmlFor="status">Trạng Thái</Label>

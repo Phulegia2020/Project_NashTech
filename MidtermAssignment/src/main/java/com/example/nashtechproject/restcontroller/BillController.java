@@ -81,6 +81,29 @@ public class BillController {
         return new ResponseEntity<>(billService.getBillsPage(productPage), HttpStatus.OK);
     }
 
+    @GetMapping("/status")
+    @ApiOperation(value = "Get all bill by status")
+    @ApiResponses(value = { @ApiResponse(code = 200, message = "Success"),
+            @ApiResponse(code = 400, message = "Bad request"),
+            @ApiResponse(code = 500, message = "Internal server error") })
+    public List<Bill> getAllBillStatus()
+    {
+        List<Bill> bills = billService.getBillByStatusPage();
+        return bills.stream()
+                .sorted(Comparator.comparing(Bill::getId).reversed())
+                .collect(Collectors.toList());
+    }
+
+    @GetMapping("/statusPage")
+    @ApiOperation(value = "Get all Bill By Page by status")
+    @ApiResponses(value = { @ApiResponse(code = 200, message = "Success"),
+            @ApiResponse(code = 400, message = "Bad request"),
+            @ApiResponse(code = 500, message = "Internal server error") })
+    public ResponseEntity<List<Bill>> getBillStatusPages(ProductPage productPage)
+    {
+        return new ResponseEntity<>(billService.getBillByStatusPage(productPage), HttpStatus.OK);
+    }
+
     @GetMapping("/{billId}")
     @ApiOperation(value = "Get all bill")
     @ApiResponses(value = { @ApiResponse(code = 200, message = "Success"),
@@ -286,6 +309,7 @@ public class BillController {
 //            }
             bill.setTotal(billDetails.getTotal());
             bill.setUser(u);
+            bill.setDestination(billDetails.getDestination());
 //            bill.setBillStatus(bs);
             billService.updateBill(bill);
         }
@@ -359,7 +383,7 @@ public class BillController {
         Bill b = billService.getBill(bill);
 
         content = content + "<b>Thông tin khách hàng</b><br/>Người nhận: " + b.getUser().getName() + "<br/>"
-                            + "Địa chỉ nhận hàng: " + b.getUser().getAddress() + "<br/>"
+                            + "Địa chỉ nhận hàng: " + b.getDestination() + "<br/>"
                             + "Số điện thoại: " + b.getUser().getPhone() + "<br/>"
                             + "<b>Chi tiết đơn hàng</b>"
                             + "<table width='600px' style='border:2px solid black; border-collapse: collapse;'>"

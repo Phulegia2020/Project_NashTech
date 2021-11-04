@@ -24,7 +24,7 @@ export default class About extends Component {
                     <Grid container stackable verticalAlign='middle'>
                         <Grid.Row>
                             <Grid.Column width={8}>
-                                <Header as='h3' style={{ fontSize: '2em' }}>Giới Thiệu</Header>
+                                <Header as='h3' style={{ fontSize: '2em' }} id="title-about">Giới Thiệu</Header>
                                 <p style={{ fontSize: '1.33em', textAlign: 'justify' }}>
                                     {/* We can give your company superpowers to do things that they never thought possible. Let us delight
                                     your customers and empower your needs... through pure data analytics. */}

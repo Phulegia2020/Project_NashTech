@@ -19,7 +19,8 @@ export default class PlaceOrder extends Component {
         pageNumber: 0,
         pageToTal: 0,
         id: "",
-        search: ""
+        search: "",
+        currentPage: 8
     }
 
     componentDidMount(){
@@ -28,13 +29,13 @@ export default class PlaceOrder extends Component {
             if (response.status === 200)
             {
                 this.setState({
-                    pageToTal: Math.ceil(response.data / 8)
+                    pageToTal: Math.ceil(response.data / this.state.currentPage)
                 })
             }
         })
         .catch(error => {console.log(error)})
 
-        get(`/placeorders/statusPage?pageNumber=0&pageSize=8&sortBy=id`)
+        get(`/placeorders/statusPage?pageNumber=0&pageSize=${this.state.currentPage}&sortBy=id`)
         .then((response) => {
             this.setState({
                 placeorders: response.data,
@@ -127,7 +128,7 @@ export default class PlaceOrder extends Component {
         
         if (this.state.search === '')
         {
-            get(`/placeorders/statusPage?pageNumber=${pageNumber}&pageSize=8&sortBy=id`)
+            get(`/placeorders/statusPage?pageNumber=${pageNumber}&pageSize=${this.state.currentPage}&sortBy=id`)
             .then((response) => {
                 this.setState({
                     placeorders: response.data,
@@ -137,7 +138,7 @@ export default class PlaceOrder extends Component {
         }
         else
         {
-            get(`/placeorders/searchPage?search=${this.state.search}&pageNumber=0&pageSize=8&sortBy=id`)
+            get(`/placeorders/searchPage?search=${this.state.search}&pageNumber=0&pageSize=${this.state.currentPage}&sortBy=id`)
             .then((response) => {
                 this.setState({
                     placeorders: response.data,
@@ -219,13 +220,13 @@ export default class PlaceOrder extends Component {
                 if (response.status === 200)
                 {
                     this.setState({
-                        pageToTal: Math.ceil(response.data / 8)
+                        pageToTal: Math.ceil(response.data / this.state.currentPage)
                     })
                 }
             })
             .catch(error => {console.log(error)})
 
-            get(`/placeorders/statusPage?pageNumber=0&pageSize=8&sortBy=id`)
+            get(`/placeorders/statusPage?pageNumber=0&pageSize=${this.state.currentPage}&sortBy=id`)
             .then((response) => {
                 this.setState({
                     placeorders: response.data,
@@ -240,13 +241,13 @@ export default class PlaceOrder extends Component {
                 if (response.status === 200)
                 {
                     this.setState({
-                        pageToTal: Math.ceil(response.data / 8)
+                        pageToTal: Math.ceil(response.data / this.state.currentPage)
                     })
                 }
             })
             .catch(error => {console.log(error)})
 
-            get(`/placeorders/searchPage?search=${this.state.search}&pageNumber=0&pageSize=8&sortBy=id`)
+            get(`/placeorders/searchPage?search=${this.state.search}&pageNumber=0&pageSize=${this.state.currentPage}&sortBy=id`)
             .then((response) => {
                 this.setState({
                     placeorders: response.data,

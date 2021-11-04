@@ -26,22 +26,23 @@ class Bill extends Component {
         usermail: '',
         username: "",
         id: "",
-        search: ""
+        search: "",
+        currentPage: 9
     }
 
     componentDidMount(){
-        get("/bills")
+        get("/bills/status")
         .then((response) => {
             if (response.status === 200)
             {
                 this.setState({
-                    pageToTal: Math.ceil(response.data.length / 9)
+                    pageToTal: Math.ceil(response.data.length / this.state.currentPage)
                 })
             }
         })
         .catch(error => {console.log(error)})
 
-        get(`/bills/page?pageNumber=0&pageSize=9&sortBy=id`)
+        get(`/bills/statusPage?pageNumber=0&pageSize=${this.state.currentPage}&sortBy=id`)
         .then((response) => {
             this.setState({
                 bills: response.data,
@@ -85,7 +86,7 @@ class Bill extends Component {
 
     createBill(newBill){
         // post(`/bills`, {total: 0, user_id: newBill.user_id, billStatus_id: newBill.billStatus_id})
-        post(`/bills`, {total: 0, user_id: newBill.user_id, status: newBill.status})
+        post(`/bills`, {total: 0, user_id: newBill.user_id, status: newBill.status, destination: newBill.destination})
         .then((response) => {
             //window.location.reload();
             this.setState({
@@ -146,7 +147,7 @@ class Bill extends Component {
         
         if (this.state.search === '')
         {
-            get(`/bills/page?pageNumber=${pageNumber}&pageSize=9&sortBy=id`)
+            get(`/bills/statusPage?pageNumber=${pageNumber}&pageSize=${this.state.currentPage}&sortBy=id`)
             .then((response) => {
                 this.setState({
                     bills: response.data,
@@ -156,7 +157,7 @@ class Bill extends Component {
         }
         else
         {
-            get(`/bills/fullNamePage?name=${this.state.search}&pageNumber=${pageNumber}&pageSize=9&sortBy=id`)
+            get(`/bills/fullNamePage?name=${this.state.search}&pageNumber=${pageNumber}&pageSize=${this.state.currentPage}&sortBy=id`)
             .then((response) => {
                 this.setState({
                     bills: response.data,
@@ -217,7 +218,7 @@ class Bill extends Component {
 
         if (this.state.search === '')
         {
-            get(`/bills/page?pageNumber=${this.state.pageNumber}&pageSize=9&sortBy=id`)
+            get(`/bills/statusPage?pageNumber=${this.state.pageNumber}&pageSize=${this.state.currentPage}&sortBy=id`)
             .then((response) => {
                 this.setState({
                     bills: response.data,
@@ -227,7 +228,7 @@ class Bill extends Component {
         }
         else
         {
-            get(`/bills/fullNamePage?name=${this.state.search}&pageNumber=${this.state.pageNumber}&pageSize=9&sortBy=id`)
+            get(`/bills/fullNamePage?name=${this.state.search}&pageNumber=${this.state.pageNumber}&pageSize=${this.state.currentPage}&sortBy=id`)
             .then((response) => {
                 this.setState({
                     bills: response.data,
@@ -244,18 +245,18 @@ class Bill extends Component {
         })
         if (this.state.search === '')
         {
-            get("/bills")
+            get("/bills/status")
             .then((response) => {
                 if (response.status === 200)
                 {
                     this.setState({
-                        pageToTal: Math.ceil(response.data.length / 9)
+                        pageToTal: Math.ceil(response.data.length / this.state.currentPage)
                     })
                 }
             })
             .catch(error => {console.log(error)})
 
-            get(`/bills/page?pageNumber=0&pageSize=9&sortBy=id`)
+            get(`/bills/statusPage?pageNumber=0&pageSize=${this.state.currentPage}&sortBy=id`)
             .then((response) => {
                 this.setState({
                     bills: response.data,
@@ -270,13 +271,13 @@ class Bill extends Component {
                 if (response.status === 200)
                 {
                     this.setState({
-                        pageToTal: Math.ceil(response.data / 9)
+                        pageToTal: Math.ceil(response.data / this.state.currentPage)
                     });
                 }
             })
             .catch(error => {console.log(error)})
 
-            get(`/bills/fullNamePage?name=${this.state.search}&pageNumber=0&pageSize=9&sortBy=id`)
+            get(`/bills/fullNamePage?name=${this.state.search}&pageNumber=0&pageSize=${this.state.currentPage}&sortBy=id`)
             .then((response) => {
                 this.setState({
                     bills: response.data,

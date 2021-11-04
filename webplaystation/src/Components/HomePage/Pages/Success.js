@@ -44,7 +44,7 @@ class Success extends Component {
             }
         })
 
-        await post('/bills', {total: 0, user_id: localStorage.getItem('user_id'), status: 'Waiting'})
+        await post('/bills', {total: 0, user_id: localStorage.getItem('user_id'), status: 'Waiting', destination: localStorage.getItem('destination')})
         .then((response) => {
             if (response.status === 200)
             {
@@ -52,6 +52,7 @@ class Success extends Component {
                 //     bill: response.data
                 // })
                 billId = response.data.id;
+                localStorage.removeItem('destination');
             }
         })
         .catch(error => {});

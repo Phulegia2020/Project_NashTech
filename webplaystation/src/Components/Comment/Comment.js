@@ -17,7 +17,8 @@ class Comment extends React.Component {
         pageNumber: 0,
         pageToTal: 0,
         id: "",
-        search: ""
+        search: "",
+        currentPage: 6
     }
 
     componentDidMount(){
@@ -26,13 +27,13 @@ class Comment extends React.Component {
             if (response.status === 200)
             {
                 this.setState({
-                    pageToTal: Math.ceil(response.data.length / 6)
+                    pageToTal: Math.ceil(response.data.length / this.state.currentPage)
                 })
             }
         })
         .catch(error => {console.log(error)})
 
-        get(`/comments/page?pageNumber=0&pageSize=6&sortBy=id`)
+        get(`/comments/page?pageNumber=0&pageSize=${this.state.currentPage}&sortBy=id`)
         .then((response) => {
             this.setState({
                 comments: response.data,
@@ -129,7 +130,7 @@ class Comment extends React.Component {
 
         if (this.state.search === '')
         {
-            get(`/comments/page?pageNumber=${pageNumber}&pageSize=6&sortBy=id`)
+            get(`/comments/page?pageNumber=${pageNumber}&pageSize=${this.state.currentPage}&sortBy=id`)
             .then((response) => {
                 this.setState({
                     comments: response.data,
@@ -139,7 +140,7 @@ class Comment extends React.Component {
         }
         else
         {
-            get(`/comments/namePage?name=${this.state.search}&pageNumber=${pageNumber}&pageSize=6&sortBy=id`)
+            get(`/comments/namePage?name=${this.state.search}&pageNumber=${pageNumber}&pageSize=${this.state.currentPage}&sortBy=id`)
             .then((response) => {
                 if (response.status === 200)
                 {
@@ -162,13 +163,13 @@ class Comment extends React.Component {
                 if (response.status === 200)
                 {
                     this.setState({
-                        pageToTal: Math.ceil(response.data.length / 6)
+                        pageToTal: Math.ceil(response.data.length / this.state.currentPage)
                     })
                 }
             })
             .catch(error => {console.log(error)})
 
-            get(`/comments/page?pageNumber=0&pageSize=6&sortBy=id`)
+            get(`/comments/page?pageNumber=0&pageSize=${this.state.currentPage}&sortBy=id`)
             .then((response) => {
                 this.setState({
                     comments: response.data,
@@ -183,13 +184,13 @@ class Comment extends React.Component {
                 if (response.status === 200)
                 {
                     this.setState({
-                        pageToTal: Math.ceil(response.data / 6)
+                        pageToTal: Math.ceil(response.data / this.state.currentPage)
                     });
                 }
             })
             .catch(error => {console.log(error)})
 
-            get(`/comments/namePage?name=${this.state.search}&pageNumber=0&pageSize=6&sortBy=id`)
+            get(`/comments/namePage?name=${this.state.search}&pageNumber=0&pageSize=${this.state.currentPage}&sortBy=id`)
             .then((response) => {
                 this.setState({
                     comments: response.data,

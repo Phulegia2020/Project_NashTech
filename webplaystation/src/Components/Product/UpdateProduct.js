@@ -202,6 +202,22 @@ class UpdateProduct extends Component {
     handleUpdate(event){
         event.preventDefault();
 
+        for (let i = 0; i < this.state.products.length; i++)
+        {
+            if (this.state.products[i].id != this.state.id)
+            {
+                if (this.state.products[i].name === event.target.name.value.trim())
+                {
+                    this.setState({
+                        key: 'name'
+                    })
+                    this.setState({
+                        Error: "Tên máy này đã được sử dụng!"
+                    });
+                    return;
+                }
+            }
+        }
         if (event.target.quantity.value.trim() <= 0)
         {
             this.setState({
@@ -223,22 +239,7 @@ class UpdateProduct extends Component {
             return;
         }
 
-        for (let i = 0; i < this.state.products.length; i++)
-        {
-            if (this.state.products[i].id != this.state.id)
-            {
-                if (this.state.products[i].name === event.target.name.value.trim())
-                {
-                    this.setState({
-                        key: 'name'
-                    })
-                    this.setState({
-                        Error: "Tên máy này đã được sử dụng!"
-                    });
-                    return;
-                }
-            }
-        }
+        
 
         // this.handleUpload();
         // console.log(this.state.url);

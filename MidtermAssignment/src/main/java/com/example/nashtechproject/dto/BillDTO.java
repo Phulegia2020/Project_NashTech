@@ -21,6 +21,8 @@ public class BillDTO {
 //    private String billStatus_id;
     private String status;
 
+    private String destination;
+
     public Long getId() {
         return id;
     }
@@ -75,5 +77,13 @@ public class BillDTO {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getDestination() {
+        return destination;
+    }
+
+    public void setDestination(String destination) {
+        this.destination = destination;
     }
 }

@@ -16,8 +16,8 @@ class ButtonAddToCart extends Component {
         let isExist = false;
         for (let i = 0; i < shoppingCartItems.length; i++) {
             if (shoppingCartItems[i].id === cartItem.id) {
-                console.log(shoppingCartItems[i].id);
-                console.log(cartItem.id);
+                // console.log(shoppingCartItems[i].id);
+                // console.log(cartItem.id);
                 shoppingCartItems[i].quantity++;
                 localStorage.setItem('shopping-cart', JSON.stringify(shoppingCartItems));
                 return false;
@@ -28,7 +28,14 @@ class ButtonAddToCart extends Component {
             shoppingCartItems.push(cartItem);
             localStorage.setItem('shopping-cart', JSON.stringify(shoppingCartItems));
         }
-        this.props.notification();
+        if (this.props.notification != null)
+        {
+            this.props.notification();
+        }
+        else
+        {
+            this.props.warning();
+        }
     }
 
     render() {

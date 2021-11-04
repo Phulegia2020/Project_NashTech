@@ -61,28 +61,19 @@ class SignUp extends Component {
 	}
 
     handleSubmit = (event) => {
-        if (event.target.password.value.length < 6)
-		{
-			this.setState({
-				key: 'password'
-			})
-			this.setState({
-				Error: "Password is at least 6 characters!"
-			});
-			return;
-		}
+        if (!checkPhoneNumber(event.target.phone.value.trim()))
+        {
+            console.log('error')
+            this.setState({
+                key: 'phone'
+            })
+            this.setState({
+                Error: "Phone must be numbers and start with 0!"
+            });
+            return;
+        }
         for (let i = 0; i < this.state.users.length; i++)
         {
-            if (this.state.users[i].account === event.target.username.value.trim())
-            {
-                this.setState({
-                    key: 'username'
-                })
-                this.setState({
-                    Error: "This username is existed!"
-                });
-                return;
-            }
             if (this.state.users[i].email === event.target.email.value.trim())
             {
                 this.setState({
@@ -103,18 +94,27 @@ class SignUp extends Component {
                 });
                 return;
             }
+            if (this.state.users[i].account === event.target.username.value.trim())
+            {
+                this.setState({
+                    key: 'username'
+                })
+                this.setState({
+                    Error: "This username is existed!"
+                });
+                return;
+            }
         }
-        if (!checkPhoneNumber(event.target.phone.value.trim()))
-        {
-            console.log('error')
-            this.setState({
-                key: 'phone'
-            })
-            this.setState({
-                Error: "Phone must be numbers and start with 0!"
-            });
-            return;
-        }
+        if (event.target.password.value.length < 6)
+		{
+			this.setState({
+				key: 'password'
+			})
+			this.setState({
+				Error: "Password is at least 6 characters!"
+			});
+			return;
+		}
         this.setState({
             gender: event.target.gender.value
         });
@@ -126,21 +126,22 @@ class SignUp extends Component {
             {
                 // alert('Register Successfully!')
                 toast.success('Đăng ký thành công!')
-                postLogin('/auth/signin', {username: this.state.username, password: this.state.password})
-                .then((response) => {
-                    if (response.status === 200)
-                    {
-                        localStorage.setItem('accessToken', response.data.accessToken);
-                        localStorage.setItem('user_id', response.data.id);
-				        localStorage.setItem('username', response.data.username);
-                        if (response.data.roles[0] === "USER")
-                        {
-                            this.props.history.push("/");
-                        }
-                    }
+                // postLogin('/auth/signin', {username: this.state.username, password: this.state.password})
+                // .then((response) => {
+                //     if (response.status === 200)
+                //     {
+                //         localStorage.setItem('accessToken', response.data.accessToken);
+                //         localStorage.setItem('user_id', response.data.id);
+				//         localStorage.setItem('username', response.data.username);
+                //         if (response.data.roles[0] === "USER")
+                //         {
+                //             this.props.history.push("/");
+                //         }
+                //     }
                     
-                })
-                .catch(error => console.log(error));
+                // })
+                // .catch(error => console.log(error));
+                setTimeout(() => this.props.history.push("/WebPlayStation/login"), 1500);
             }
         })
         .catch(error => console.log(error));
@@ -252,7 +253,7 @@ class SignUp extends Component {
                                             <div className="form-group row mt-3">
                                                 <div className="col-md-12">
                                                     <Form.Group inline>
-                                                    <label className="text-black">Gender</label>
+                                                    <label className="text-black">Giới Tính</label>
                                                         <Form.Field
                                                             label='Male'
                                                             control={Radio}
@@ -308,7 +309,7 @@ class SignUp extends Component {
                                                 <div className="col-md-12">
                                                     <label className="text-black">Tên tài khoản<span
                                                         className="text-danger">*</span></label>
-                                                    <Form.Input placeholder='Username' name='username' value={this.state.username} onChange={this.handleChange} required/>
+                                                    <Form.Input placeholder='Tài khoản' minLength="3" name='username' value={this.state.username} onChange={this.handleChange} required/>
                                                     {this.state.key === 'username' ? <Label basic color='red' pointing='left'>{this.state.Error}</Label> : '' }
                                                     {/* <input path="username" type="text" class="form-control"
                                                         placeholder="Vui lòng nhập tên tài khoản của Quý khách" />
@@ -319,9 +320,9 @@ class SignUp extends Component {
                                                 <div className="col-md-12">
                                                     <label className="text-black">Mật khẩu<span
                                                         className="text-danger">*</span></label>
-                                                    <Form.Input placeholder='123456' minLength="6" type={this.state.show === false? 'password' : 'text'} name='password' value={this.state.password} onChange={this.handleChange} required/>
+                                                    <Form.Input placeholder='Mật khẩu' minLength="6" type={this.state.show === false? 'password' : 'text'} name='password' value={this.state.password} onChange={this.handleChange} required/>
                                                     {this.state.key === 'password' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
-                                                    <Checkbox label='Show password' onChange={(e) => this.handleShowPassword(e)} className="cb"/>
+                                                    <Checkbox label='Hiển thị' onChange={(e) => this.handleShowPassword(e)} className="cb"/>
                                                     {/* <input path="password" type="password"
                                                         class="form-control"
                                                         placeholder="Vui lòng nhập password của Quý khách" />
@@ -365,7 +366,7 @@ class SignUp extends Component {
                         </div>
                     </div>
                     <ToastContainer position="top-center"
-                    autoClose={2000}
+                    autoClose={1500}
                     hideProgressBar
                     newestOnTop={false}
                     closeOnClick={false}

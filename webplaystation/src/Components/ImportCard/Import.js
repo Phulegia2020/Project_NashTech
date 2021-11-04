@@ -21,7 +21,8 @@ export default class Import extends Component {
         importConfirm: {},
         placeorderdetails: [],
         id: "",
-        search: ""
+        search: "",
+        currentPage: 8
     }
 
     componentDidMount(){
@@ -30,13 +31,13 @@ export default class Import extends Component {
             if (response.status === 200)
             {
                 this.setState({
-                    pageToTal: Math.ceil(response.data / 8)
+                    pageToTal: Math.ceil(response.data / this.state.currentPage)
                 })
             }
         })
         .catch(error => {console.log(error)})
 
-        get(`/imports/statusPage?pageNumber=0&pageSize=8&sortBy=id`)
+        get(`/imports/statusPage?pageNumber=0&pageSize=${this.state.currentPage}&sortBy=id`)
         .then((response) => {
             this.setState({
                 imports: response.data,
@@ -145,7 +146,7 @@ export default class Import extends Component {
         
         if (this.state.search === '')
         {
-            get(`/imports/statusPage?pageNumber=${pageNumber}&pageSize=8&sortBy=id`)
+            get(`/imports/statusPage?pageNumber=${pageNumber}&pageSize=${this.state.currentPage}&sortBy=id`)
             .then((response) => {
                 this.setState({
                     imports: response.data,
@@ -155,7 +156,7 @@ export default class Import extends Component {
         }
         else
         {
-            get(`/imports/searchPage?search=${this.state.search}&pageNumber=0&pageSize=8&sortBy=id`)
+            get(`/imports/searchPage?search=${this.state.search}&pageNumber=0&pageSize=${this.state.currentPage}&sortBy=id`)
             .then((response) => {
                 this.setState({
                     imports: response.data,
@@ -185,7 +186,7 @@ export default class Import extends Component {
         })
         .catch((error)=> {})
 
-        get(`/imports/statusPage?pageNumber=${this.state.pageNumber}&pageSize=8&sortBy=id`)
+        get(`/imports/statusPage?pageNumber=${this.state.pageNumber}&pageSize=${this.state.currentPage}&sortBy=id`)
         .then((response) => {
             this.setState({
                 imports: response.data,
@@ -266,13 +267,13 @@ export default class Import extends Component {
                 if (response.status === 200)
                 {
                     this.setState({
-                        pageToTal: Math.ceil(response.data / 8)
+                        pageToTal: Math.ceil(response.data / this.state.currentPage)
                     })
                 }
             })
             .catch(error => {console.log(error)})
 
-            get(`/imports/statusPage?pageNumber=0&pageSize=8&sortBy=id`)
+            get(`/imports/statusPage?pageNumber=0&pageSize=${this.state.currentPage}&sortBy=id`)
             .then((response) => {
                 this.setState({
                     imports: response.data,
@@ -287,13 +288,13 @@ export default class Import extends Component {
                 if (response.status === 200)
                 {
                     this.setState({
-                        pageToTal: Math.ceil(response.data / 8)
+                        pageToTal: Math.ceil(response.data / this.state.currentPage)
                     })
                 }
             })
             .catch(error => {console.log(error)})
 
-            get(`/imports/searchPage?search=${this.state.search}&pageNumber=0&pageSize=8&sortBy=id`)
+            get(`/imports/searchPage?search=${this.state.search}&pageNumber=0&pageSize=${this.state.currentPage}&sortBy=id`)
             .then((response) => {
                 this.setState({
                     imports: response.data,

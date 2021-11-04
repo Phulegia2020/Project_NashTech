@@ -154,7 +154,7 @@ class App extends React.Component{
                     chat-title="THE PLAYSTATION SHOP"
                     agent-id="3d2eb8db-0f5e-4a16-9c2a-3cea0cadb3a7"
                     language-code="en"
-                    // wait-open="false"
+                    wait-open
                     // chat-icon="https://media.comicbook.com/2019/02/playstation-logo-orange-1157594.jpeg"
                 ></df-messenger>}
           </Router>

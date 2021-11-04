@@ -9,6 +9,8 @@ import { withRouter } from "react-router";
 import {get} from '../../../Utils/httpHelper';
 import { checkPhoneNumber } from '../../../Utils/Utils';
 import "../SignUp/SignUp.css";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 class SignUp extends Component {
     constructor(props) {
@@ -116,8 +118,9 @@ class SignUp extends Component {
         .then((response) => {
             if (response.status === 200)
             {
-                alert('Update Profile Successfully!')
-                window.location.href="/WebPlayStation/profile";
+                // alert('Update Profile Successfully!')
+                toast.success('Cập nhật thông tin thành công!')
+                setTimeout(() => window.location.href="/WebPlayStation/profile", 1500);
             }
         })
         .catch(error => {alert('Update Profile Failed!')});
@@ -200,7 +203,7 @@ class SignUp extends Component {
                                 <div class="col-lg-2 col-md-3 col-sm-3"></div>
                                 <div class="col-md-8" >
                                     <div class="col-lg-12 col-md-12 col-sm-12 mt-3">
-                                        <h2 class="h3 mb-3 text-black">Thông tin tài khoản</h2>
+                                        <h2 class="h3 mb-3 text-black title-info">Thông tin tài khoản</h2>
                                     </div>
                                     <Form onSubmit={(event) => this.handleSubmit(event)}>
                                         <div class="p-3 p-lg-6 border" id="account-form">
@@ -329,7 +332,15 @@ class SignUp extends Component {
                             </div>
                         </div>
                     </div>
-
+                    <ToastContainer position="top-center"
+                    autoClose={1500}
+                    hideProgressBar
+                    newestOnTop={false}
+                    closeOnClick={false}
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover/>
             </div>
         )
     }

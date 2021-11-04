@@ -10,6 +10,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faPhoneAlt, faThumbsUp, faTruckMoving,
 } from "@fortawesome/free-solid-svg-icons";
+import OwlCarousel from 'react-owl-carousel';
+import 'owl.carousel/dist/assets/owl.carousel.css';
+import 'owl.carousel/dist/assets/owl.theme.default.css';
+import ProductItem from './ProductItem';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 class Products extends Component {
     constructor(props) {
@@ -22,7 +28,9 @@ class Products extends Component {
             activePage: 1,
             // search: this.props.match.params.search
             search: "",
-            price: '0'
+            price: '0',
+            currentPage: 8,
+            topRatePS: []
         };
         this.handlePaginationChange = this.handlePaginationChange.bind(this);
     }
@@ -36,13 +44,13 @@ class Products extends Component {
             if (response.status === 200)
             {
                 this.setState({
-                    pageToTal: Math.ceil(response.data.length / 8)
+                    pageToTal: Math.ceil(response.data.length / this.state.currentPage)
                 })
                 console.log(response.data)
             }
         })
         .catch(error => {console.log(error)})
-        get(`/products/pageOnSale?pageNumber=${this.state.activePage-1}&pageSize=8&sortBy=id`)
+        get(`/products/pageOnSale?pageNumber=${this.state.activePage-1}&pageSize=${this.state.currentPage}&sortBy=id`)
         .then((response) => {
             this.setState({
                 Products: response.data,
@@ -50,6 +58,17 @@ class Products extends Component {
             console.log(response.data)
         })
         .catch(error => console.log(error));
+
+        get("/products/totalrating")
+        .then((response) => {
+            if (response.status === 200)
+            {
+                this.setState({
+                    topRatePS: response.data.slice(0, 5),
+                }, () => console.log(this.state.topRatePS));
+            }
+        })
+        .catch(error => {console.log(error)})
     }
     
     async handlePaginationChange(e, {activePage}){
@@ -58,7 +77,7 @@ class Products extends Component {
         {
             if (this.state.price != 0)
             {
-                get(`/products/pageFilter?type=${this.state.price}&pageNumber=${this.state.activePage-1}&pageSize=8&sortBy=id`)
+                get(`/products/pageFilter?type=${this.state.price}&pageNumber=${this.state.activePage-1}&pageSize=${this.state.currentPage}&sortBy=id`)
                 .then((response) => {
                     if (response.status === 200)
                     {
@@ -71,7 +90,7 @@ class Products extends Component {
             }
             else
             {
-                get(`/products/pageOnSale?pageNumber=${this.state.activePage-1}&pageSize=8&sortBy=id`)
+                get(`/products/pageOnSale?pageNumber=${this.state.activePage-1}&pageSize=${this.state.currentPage}&sortBy=id`)
                 .then((response) => {
                     this.setState({
                         Products: response.data,
@@ -82,7 +101,7 @@ class Products extends Component {
         }
         else
         {
-            get(`/products/namePage?name=${this.state.search}&pageNumber=${this.state.activePage-1}&pageSize=8&sortBy=id`)
+            get(`/products/namePage?name=${this.state.search}&pageNumber=${this.state.activePage-1}&pageSize=${this.state.currentPage}&sortBy=id`)
             .then((response) => {
                 if (response.status === 200)
                 {
@@ -105,13 +124,13 @@ class Products extends Component {
                 if (response.status === 200)
                 {
                     this.setState({
-                        pageToTal: Math.ceil(response.data.length / 8)
+                        pageToTal: Math.ceil(response.data.length / this.state.currentPage)
                     })
                 }
             })
             .catch(error => {console.log(error)})
 
-            get(`/products/pageOnSale?pageNumber=0&pageSize=8&sortBy=id`)
+            get(`/products/pageOnSale?pageNumber=0&pageSize=${this.state.currentPage}&sortBy=id`)
             .then((response) => {
                 this.setState({
                     Products: response.data,
@@ -126,13 +145,13 @@ class Products extends Component {
                 if (response.status === 200)
                 {
                     this.setState({
-                        pageToTal: Math.ceil(response.data.length / 8)
+                        pageToTal: Math.ceil(response.data.length / this.state.currentPage)
                     })
                 }
             })
             .catch(error => {console.log(error)})
             
-            get(`/products/namePage?name=${this.state.search}&pageNumber=0&pageSize=8&sortBy=id`)
+            get(`/products/namePage?name=${this.state.search}&pageNumber=0&pageSize=${this.state.currentPage}&sortBy=id`)
             .then((response) => {
                 if (response.status === 200)
                 {
@@ -161,13 +180,13 @@ class Products extends Component {
             {
                 //console.log(response.data);
                 this.setState({
-                    pageToTal: Math.ceil(response.data / 8)
+                    pageToTal: Math.ceil(response.data / this.state.currentPage)
                 }, () => console.log(this.state.pageToTal))
             }
         })
         .catch((error) => console.log(error));
 
-        get(`/products/pageFilter?type=${this.state.price}&pageNumber=0&pageSize=8&sortBy=id`)
+        get(`/products/pageFilter?type=${this.state.price}&pageNumber=0&pageSize=${this.state.currentPage}&sortBy=id`)
         .then((response) => {
             if (response.status === 200)
             {
@@ -178,6 +197,9 @@ class Products extends Component {
         })
         .catch((error) => console.log(error));
     }
+
+    warning = () => toast.success("Đã thêm sản phẩm vào giỏ hàng");
+
 
     componentWillUnmount() {
         // fix Warning: Can't perform a React state update on an unmounted component
@@ -211,6 +233,31 @@ class Products extends Component {
               key: '3'
             }
           ];
+          const options = {
+            loop: true,
+            margin: 10,
+            autoplay: true,
+            autoplayTimeout: 2000,
+            autoplayHoverPause: true,
+            items: 4,
+            responsive: {
+              0: {
+                items: 1
+              },
+              400: {
+                items: 2
+              },
+              600: {
+                items: 3
+              },
+              800: {
+                items: 4
+              },
+            //   1000: {
+            //     items: 5
+            //   }
+            }
+          };
         return (
             <div>
                 {/* <div className="carousel slide carousel-multi-item mb-3" data-ride="carousel">
@@ -263,15 +310,10 @@ class Products extends Component {
                     </div>
                 </div> */}
             <Segment style={this.state.Products.length > 0 ? { padding: '2em 0em' }:{ padding: '2em 0em', marginBottom: '181px' }} vertical>
-                <Jumbotron fluid className='jumb'>
+                {/* <Jumbotron fluid className='jumb'>
                     <Container fluid>
                         <h3 style={{textAlign:'center'}}>Lọc Theo Giá</h3>
-                        {/* <p className="lead">This is a simple hero unit, a simple Jumbotron-style component for calling extra attention to featured content or information.</p> */}
                         <hr className="my-2" />
-                        {/* <p>It uses utility classes for typography and spacing to space content out within the larger container.</p>
-                        <p className="lead">
-                        <Button color="primary">Learn More</Button>
-                        </p> */}
                         <Label>
                             <input type="radio" name="price" value = '1' checked={this.state.price === '1'} onChange={(e) => this.handleFilter(e)}/>{' '}
                             Dưới 10 Triệu
@@ -292,12 +334,12 @@ class Products extends Component {
                             Tất Cả
                         </Label>
                     </Container>
-                </Jumbotron>
+                </Jumbotron> */}
                 <Grid container stackable verticalAlign='middle'>
-                <UncontrolledCarousel items={items} controls={false}/>
-                {/* <Advertisement unit='billboard' style={{marginLeft:'5em'}}>
-                    <Image src="https://game.haloshop.vn/image/cache/catalog/banners/game/categories/ps5-tang-mo-hinh-categories-1280x280.jpg" wrapped/>
-                </Advertisement> */}
+                    <UncontrolledCarousel items={items} controls={false}/>
+                    {/* <Advertisement unit='billboard' style={{marginLeft:'5em'}}>
+                        <Image src="https://game.haloshop.vn/image/cache/catalog/banners/game/categories/ps5-tang-mo-hinh-categories-1280x280.jpg" wrapped/>
+                    </Advertisement> */}
                 
                     <Grid.Row>
                         <Grid.Column textAlign='center'>
@@ -320,6 +362,15 @@ class Products extends Component {
                                 icon="search"
                                 id="input-search"
                             />
+                            <div className = "filter-price">
+                                <label>Lọc theo: </label>
+                                <select type="select" name="price" onChange={(e) => this.handleFilter(e)}>
+                                    <option value="0">Giá</option>
+                                    <option value="3">Trên 15 Triệu</option>
+                                    <option value="2">Từ 10 Triệu - 15 Triệu</option>
+                                    <option value="1">Dưới 10 Triệu</option>
+                                </select>
+                            </div>
                             <ProductList products={this.state.Products}
                             />
                         </Grid.Column>
@@ -333,8 +384,37 @@ class Products extends Component {
                         ellipsisItem={null}
                     />
                 </Grid>
-                
+                <Grid container stackable verticalAlign='middle' id="top-rate-ps">
+                    <Grid.Row>
+                        <Grid.Column textAlign='center'>
+                            <h4 className="header-home">TOP Máy Yêu Thích Nhất</h4>
+                            <hr className='hr-header'/>
+                            {/* <Grid columns={4}> */}
+                            {/* <OwlCarousel className="slider-items owl-carousel" loop margin={10} nav={false} autoplay autoplaySpeed={true} mergeFit={true} animateIn={true} animateOut={true} items={4}> */}
+                            <OwlCarousel
+                                className="slider-items owl-carousel"
+                                {...options}
+                                >
+                                {
+                                    this.state.topRatePS.map((p) =>
+                                        <Grid.Column key={p.id} className="item">
+                                            <ProductItem product={p} normal={'top-card'} warning={this.warning}/>
+                                        </Grid.Column>
+                                        // <div className="item"> 
+                                        //     <ProductItem product={p} normal={'top-card'}/>
+                                        // </div>
+                                    )
+                                }
+                            </OwlCarousel>
+                            {/* </Grid> */}
+                        </Grid.Column>
+                    </Grid.Row>
+                </Grid>
             </Segment>
+
+            <div>
+            
+            </div>
 
             <div className="section-4 bg-dark">
                 <div className="container">
@@ -346,7 +426,7 @@ class Products extends Component {
                         </div>
                         <div className="col-md-5 pt-5">
                             {/* <h1 className="text-white">Khám phá về PlayStation tại cửa hàng chúng tôi</h1> */}
-                            <h1 className="text-white">Khám phá chi tiết về tại cửa hàng chúng tôi</h1>
+                            <h1 className="text-white">Khám phá chi tiết về cửa hàng chúng tôi</h1>
                             {/* <a href="about.html" class="btn btn-success text-light">Tìm hiểu ngay</a> */}
                             <Link to={`/WebPlayStation/about`} style={{ textDecoration: 'none' }} className="btn btn-success text-light">Tìm hiểu ngay</Link>
                         </div>
@@ -405,7 +485,16 @@ class Products extends Component {
                 agent-id="3d2eb8db-0f5e-4a16-9c2a-3cea0cadb3a7"
                 language-code="en"
             ></df-messenger> */}
-
+            <ToastContainer position="top-right"
+                    autoClose={1500}
+                    hideProgressBar
+                    newestOnTop={false}
+                    closeOnClick
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover/>
+            
             </div>
         );
     }

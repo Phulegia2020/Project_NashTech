@@ -16,7 +16,8 @@ class ProductByCategory extends Component {
         isDisplayFormDel: false,
         pageNumber: 0,
         pageToTal: 0,
-        category: ''
+        category: '',
+        currentPage: 3
     }
 
     componentDidMount(){
@@ -26,12 +27,12 @@ class ProductByCategory extends Component {
             {
                 this.setState({
                     //products: response.data
-                    pageToTal: Math.ceil(response.data.length / 3)
+                    pageToTal: Math.ceil(response.data.length / this.state.currentPage)
                 });
             }
         })
 
-        get(`/products/searchPage?categoryId=${this.state.id}&pageNumber=0&pageSize=3&sortBy=id`)
+        get(`/products/searchPage?categoryId=${this.state.id}&pageNumber=0&pageSize=${this.state.currentPage}&sortBy=id`)
         .then((response) => {
             if (response.status === 200)
             {
@@ -94,7 +95,7 @@ class ProductByCategory extends Component {
             }, () => console.log(this.state.pageNumber));
         }
 
-        get(`/products/searchPage?categoryId=${this.state.id}&pageNumber=${pageNumber}&pageSize=3&sortBy=id`)
+        get(`/products/searchPage?categoryId=${this.state.id}&pageNumber=${pageNumber}&pageSize=${this.state.currentPage}&sortBy=id`)
         .then((response) => {
             if (response.status === 200)
             {
@@ -139,7 +140,7 @@ class ProductByCategory extends Component {
             { key: `${this.state.category}`, content: `${this.state.category}`, active: true }
           ]
         return (
-            <div>
+            <div  className="list-details">
                 <Modal
                     isOpen={this.state.isDisplayFormDel}
                     aria-labelledby="contained-modal-title-vcenter"
@@ -160,6 +161,7 @@ class ProductByCategory extends Component {
                     </ModalFooter>
                 </Modal>
                 <Breadcrumb icon='right angle' sections={sections} size='large'/>
+                <h3>Danh Sách Máy Loại {this.state.category}</h3>
                 <table id="table">
                     <thead>
                         <tr>
@@ -179,7 +181,8 @@ class ProductByCategory extends Component {
                                 <tr key={p.id}>
                                     <td>{p.id}</td>
                                     <td>
-                                        <img src={`data:image/jpeg;base64,${p.imageurl}`} alt="" height="100px"></img>
+                                        {/* <img src={`data:image/jpeg;base64,${p.imageurl}`} alt="" height="100px"></img> */}
+                                        <img src={p.url_image || "http://via.placeholder.com/300"} alt="" height="100px"/>
                                     </td>
                                     <td>{p.name}</td>
                                     <td className="descriptionTable">{p.description}</td>

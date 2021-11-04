@@ -19,7 +19,8 @@ export default class Supplier extends Component {
         pageToTal: 0,
         msgDel: false,
         id: "",
-        search: ""
+        search: "",
+        currentPage: 5
     }
 
     componentDidMount(){
@@ -28,13 +29,13 @@ export default class Supplier extends Component {
             if (response.status === 200)
             {
                 this.setState({
-                    pageToTal: Math.ceil(response.data.length / 5)
+                    pageToTal: Math.ceil(response.data.length / this.state.currentPage)
                 })
             }
         })
         .catch(error => {console.log(error)})
 
-        get(`/suppliers/page?pageNumber=0&pageSize=5&sortBy=id`)
+        get(`/suppliers/page?pageNumber=0&pageSize=${this.state.currentPage}&sortBy=id`)
         .then((response) => {
             this.setState({
                 suppliers: response.data
@@ -133,7 +134,7 @@ export default class Supplier extends Component {
         
         if (this.state.search === '')
         {
-            get(`/suppliers/page?pageNumber=${pageNumber}&pageSize=5&sortBy=id`)
+            get(`/suppliers/page?pageNumber=${pageNumber}&pageSize=${this.state.currentPage}&sortBy=id`)
             .then((response) => {
                 this.setState({
                     suppliers: response.data,
@@ -143,7 +144,7 @@ export default class Supplier extends Component {
         }
         else
         {
-            get(`/suppliers/namePage?name=${this.state.search}&pageNumber=${pageNumber}&pageSize=5&sortBy=id`)
+            get(`/suppliers/namePage?name=${this.state.search}&pageNumber=${pageNumber}&pageSize=${this.state.currentPage}&sortBy=id`)
             .then((response) => {
                 this.setState({
                     suppliers: response.data,
@@ -165,13 +166,13 @@ export default class Supplier extends Component {
                 if (response.status === 200)
                 {
                     this.setState({
-                        pageToTal: Math.ceil(response.data.length / 5)
+                        pageToTal: Math.ceil(response.data.length / this.state.currentPage)
                     })
                 }
             })
             .catch(error => {console.log(error)})
 
-            get(`/suppliers/page?pageNumber=0&pageSize=5&sortBy=id`)
+            get(`/suppliers/page?pageNumber=0&pageSize=${this.state.currentPage}&sortBy=id`)
             .then((response) => {
                 this.setState({
                     suppliers: response.data
@@ -186,13 +187,13 @@ export default class Supplier extends Component {
                 if (response.status === 200)
                 {
                     this.setState({
-                        pageToTal: Math.ceil(response.data / 10)
+                        pageToTal: Math.ceil(response.data / this.state.currentPage)
                     });
                 }
             })
             .catch(error => {console.log(error)})
 
-            get(`/suppliers/namePage?name=${this.state.search}&pageNumber=0&pageSize=5&sortBy=id`)
+            get(`/suppliers/namePage?name=${this.state.search}&pageNumber=0&pageSize=${this.state.currentPage}&sortBy=id`)
             .then((response) => {
                 this.setState({
                     suppliers: response.data,

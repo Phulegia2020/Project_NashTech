@@ -36,7 +36,7 @@ class Statistical extends Component {
             if (response.status === 200)
             {
                 this.setState({
-                    products: response.data,
+                    products: response.data.slice(0, 5),
                 });
             }
         })
@@ -142,7 +142,8 @@ class Statistical extends Component {
                 }
             })
             .catch(error => {console.log(error)})
-            get(`/imports/profit?month=${parseInt(this.state.monthValue)}&quy=${this.state.quyValue}&year=${parseInt(new Date().getFullYear())}`)
+            get(`/imports/profit?month=${parseInt(this.state.monthValue)}&quy=${this.state.quyValue}&year=${this.state.yearValue}`)
+            // parseInt(new Date().getFullYear())
             .then((response) => {
                 if (response.status === 200)
                 {

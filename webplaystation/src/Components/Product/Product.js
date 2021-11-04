@@ -21,7 +21,8 @@ class Product extends Component {
         pageNumber: 0,
         pageToTal: 0,
         id: "",
-        search: ""
+        search: "",
+        currentPage: 3
     }
 
     componentDidMount(){
@@ -30,13 +31,13 @@ class Product extends Component {
             if (response.status === 200)
             {
                 this.setState({
-                    pageToTal: Math.ceil(response.data.length / 3)
+                    pageToTal: Math.ceil(response.data.length / this.state.currentPage)
                 })
             }
         })
         .catch(error => {console.log(error)})
 
-        get(`/products/pageOnSale?pageNumber=0&pageSize=3&sortBy=id`)
+        get(`/products/pageOnSale?pageNumber=0&pageSize=${this.state.currentPage}&sortBy=id`)
         .then((response) => {
             this.setState({
                 products: response.data,
@@ -177,7 +178,7 @@ class Product extends Component {
 
         if (this.state.search === '')
         {
-            get(`/products/pageOnSale?pageNumber=${pageNumber}&pageSize=3&sortBy=id`)
+            get(`/products/pageOnSale?pageNumber=${pageNumber}&pageSize=${this.state.currentPage}&sortBy=id`)
             .then((response) => {
                 this.setState({
                     products: response.data,
@@ -187,7 +188,7 @@ class Product extends Component {
         }
         else
         {
-            get(`/products/namePage?name=${this.state.search}&pageNumber=${pageNumber}&pageSize=3&sortBy=id`)
+            get(`/products/namePage?name=${this.state.search}&pageNumber=${pageNumber}&pageSize=${this.state.currentPage}&sortBy=id`)
             .then((response) => {
                 if (response.status === 200)
                 {
@@ -210,13 +211,13 @@ class Product extends Component {
                 if (response.status === 200)
                 {
                     this.setState({
-                        pageToTal: Math.ceil(response.data.length / 3)
+                        pageToTal: Math.ceil(response.data.length / this.state.currentPage)
                     })
                 }
             })
             .catch(error => {console.log(error)})
 
-            get(`/products/pageOnSale?pageNumber=0&pageSize=3&sortBy=id`)
+            get(`/products/pageOnSale?pageNumber=0&pageSize=${this.state.currentPage}&sortBy=id`)
             .then((response) => {
                 this.setState({
                     products: response.data,
@@ -231,13 +232,13 @@ class Product extends Component {
                 if (response.status === 200)
                 {
                     this.setState({
-                        pageToTal: Math.ceil(response.data.length / 3)
+                        pageToTal: Math.ceil(response.data.length / this.state.currentPage)
                     })
                 }
             })
             .catch(error => {console.log(error)})
             
-            get(`/products/namePage?name=${this.state.search}&pageNumber=0&pageSize=3&sortBy=id`)
+            get(`/products/namePage?name=${this.state.search}&pageNumber=0&pageSize=${this.state.currentPage}&sortBy=id`)
             .then((response) => {
                 if (response.status === 200)
                 {
@@ -357,7 +358,7 @@ class Product extends Component {
                 <table id="table">
                     <thead>
                         <tr>
-                            <th><b>Mã Máy</b>{' '}<FontAwesomeIcon icon={faArrowCircleUp} className="sort-icon" onClick={(e) => this.handleSortInc(e, 'id')}/><FontAwesomeIcon icon={faArrowCircleDown} className="sort-icon" onClick={(e) => this.handleSortDes(e, 'id')}/></th>
+                            <th><b>Mã ID</b>{' '}<FontAwesomeIcon icon={faArrowCircleUp} className="sort-icon" onClick={(e) => this.handleSortInc(e, 'id')}/><FontAwesomeIcon icon={faArrowCircleDown} className="sort-icon" onClick={(e) => this.handleSortDes(e, 'id')}/></th>
                             <th><b>Hình Ảnh</b></th>
                             <th><b>Tên</b>{' '}<FontAwesomeIcon icon={faArrowCircleUp} className="sort-icon" onClick={(e) => this.handleSortInc(e, 'name')}/><FontAwesomeIcon icon={faArrowCircleDown} className="sort-icon" onClick={(e) => this.handleSortDes(e, 'name')}/></th>
                             <th><b>Thông Tin</b></th>

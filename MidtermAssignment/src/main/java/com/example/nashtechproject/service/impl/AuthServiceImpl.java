@@ -3,6 +3,7 @@ package com.example.nashtechproject.service.impl;
 import com.example.nashtechproject.entity.Role;
 import com.example.nashtechproject.entity.RoleName;
 import com.example.nashtechproject.entity.User;
+import com.example.nashtechproject.page.STATE;
 import com.example.nashtechproject.payload.request.ChangPasswordRequest;
 import com.example.nashtechproject.payload.request.LoginRequest;
 import com.example.nashtechproject.payload.request.SignupRequest;
@@ -13,6 +14,7 @@ import com.example.nashtechproject.repository.UserRepository;
 import com.example.nashtechproject.security.jwt.JwtUtils;
 import com.example.nashtechproject.security.services.UserDetailsImpl;
 import com.example.nashtechproject.service.AuthService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -105,7 +107,7 @@ public class AuthServiceImpl implements AuthService {
                     user.setRole(adminRole);
 
                     break;
-                case "pm":
+                case "staff":
                     Role modRole = roleRepository.findByName(RoleName.STAFF)
                             .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
                     user.setRole(modRole);
@@ -115,7 +117,7 @@ public class AuthServiceImpl implements AuthService {
                             .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
                     user.setRole(userRole);
             }
-            user.setActive_status("Active");
+            user.setActive_status(STATE.ACTIVE);
             userRepository.save(user);
         }
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));

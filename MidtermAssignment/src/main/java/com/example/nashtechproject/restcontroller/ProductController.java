@@ -191,9 +191,16 @@ public class ProductController {
     {
         List<ProductDTO> prosDTO = new ArrayList<>();
         List<Product> products = productService.getProductsByTotalRating();
-        for (int i = 0; i < 5; i++) {
-            ProductDTO p = convertToDTO(products.get(i));
-            prosDTO.add(p);
+//        for (int i = 0; i < 5; i++) {
+//            ProductDTO p = convertToDTO(products.get(i));
+//            prosDTO.add(p);
+//        }
+        for (int i = 0; i < products.size(); i++) {
+            if (products.get(i).getStatus().equals(STATE.SALE))
+            {
+                ProductDTO p = convertToDTO(products.get(i));
+                prosDTO.add(p);
+            }
         }
         return prosDTO;
     }
@@ -216,7 +223,8 @@ public class ProductController {
                 }
 //            }
         }
-        List<Product> products = productService.retrieveProducts();
+//        List<Product> products = productService.retrieveProducts();
+        List<Product> products = productService.getProductsByStatus();
         for (int i = 0; i < products.size(); i++)
         {
             int ts = 0;

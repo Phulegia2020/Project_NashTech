@@ -19,7 +19,8 @@ class BillDetailsByBill extends Component {
         isDisplayFormDel: false,
         pageNumber: 0,
         pageToTal: 0,
-        user: {}
+        user: {},
+        currentPage: 3
     }
 
     componentDidMount(){
@@ -29,12 +30,12 @@ class BillDetailsByBill extends Component {
             {
                 this.setState({
                     //billdetails: response.data
-                    pageToTal: Math.ceil(response.data.length / 3)
+                    pageToTal: Math.ceil(response.data.length / this.state.currentPage)
                 })
             }
         })
 
-        get(`/billDetails/billPage/${this.state.id}?pageNumber=0&pageSize=3&sortBy=id`)
+        get(`/billDetails/billPage/${this.state.id}?pageNumber=0&pageSize=${this.state.currentPage}&sortBy=id`)
         .then((response) => {
             this.setState({
                 billdetails: response.data
@@ -149,7 +150,7 @@ class BillDetailsByBill extends Component {
             }, () => console.log(this.state.pageNumber));
         }
         
-        get(`/billDetails/billPage/${this.state.id}?pageNumber=${pageNumber}&pageSize=3&sortBy=id`)
+        get(`/billDetails/billPage/${this.state.id}?pageNumber=${pageNumber}&pageSize=${this.state.currentPage}&sortBy=id`)
         .then((response) => {
             this.setState({
                 billdetails: response.data,
@@ -188,18 +189,19 @@ class BillDetailsByBill extends Component {
                         <Button onClick={(e) => this.onCloseFormDel(e)}>Hủy</Button>
                     </ModalFooter>
                 </Modal>
-                <button type="button" className="btn btn-primary" onClick={this.onToggleForm}>
+                {this.state.bill.status === 'Waiting' && <button type="button" className="btn btn-primary" onClick={this.onToggleForm}>
                     <FontAwesomeIcon icon={faPlus} className="mr-2"/>{' '}
                     Tạo chi tiết mới
-                </button>
+                </button>}
 
                 <div className='info-user-bill'>
                     <h4 style={{fontWeight:'bold'}}>Thông Tin Khách Hàng</h4>
                     <p><Icon name="user" size="large"/>{this.state.user.account}</p>
                     <p><Icon name="id card outline" size="large"/>{this.state.user.name}</p>
-                    <p><Icon name="home" size="large"/>{this.state.user.address}</p>
+                    {/* <p><Icon name="home" size="large"/>{this.state.user.address}</p> */}
                     <p><Icon name="mail outline" size="large"/>{this.state.user.email}</p>
                     <p><Icon name="phone" size="large"/>{this.state.user.phone}</p>
+                    <p><Icon name="map marker alternate" size="large"/>{this.state.bill.destination}</p>
                 </div>
 
                 <table id="table">
@@ -210,15 +212,15 @@ class BillDetailsByBill extends Component {
                             <th><b>Máy</b></th>
                             <th><b>Số Lượng</b></th>
                             <th><b>Giá</b></th>
-                            <th>Cập Nhật</th>
-                            <th>Xóa</th>
+                            {this.state.bill.status === 'Waiting' && <th>Cập Nhật</th>}
+                            {this.state.bill.status === 'Waiting' && <th>Xóa</th>}
                         </tr>
                     </thead>
                     <tbody>
                         {
                             this.state.billdetails.map((b, index) => (
                                 <tr key={index}>
-                                    <td>{index + 1}</td>
+                                    <td>{this.state.pageNumber*this.state.currentPage + index + 1}</td>
                                     <td>
                                         {/* <img src={`data:image/jpeg;base64,${b.key.product.imageurl}`} alt="" height="75px"></img> */}
                                         <img src={b.key.product.url_image || "http://via.placeholder.com/300"} alt="" height="75px"></img>
@@ -226,7 +228,7 @@ class BillDetailsByBill extends Component {
                                     <td>{b.key.product.name}</td>
                                     <td>{b.quantity}</td>
                                     <td>{formatCurrency(b.key.product.price)}</td>
-                                    <td>
+                                    {this.state.bill.status === 'Waiting' && <td>
                                         {/* <Link to={`/admin/billDetails/update/${b.key.bill.id}-${b.key.product.id}`} billId={this.state.id} onClick={this.state.bill.billStatus_id === '1' ? (e) => e.preventDefault() : ''}>
                                             <button className="btn btn-success" disabled={this.state.bill.billStatus_id === '1'}> */}
                                         <Link to={`/admin/billDetails/update/${b.key.bill.id}-${b.key.product.id}`} billId={this.state.id} onClick={this.state.bill.status === 'Done' ? (e) => e.preventDefault() : ''}>
@@ -234,13 +236,13 @@ class BillDetailsByBill extends Component {
                                                 <FontAwesomeIcon icon={faEdit} className="mr-2"/>{' '}
                                             </button>
                                         </Link>
-                                    </td>
-                                    <td>
+                                    </td>}
+                                    {this.state.bill.status === 'Waiting' && <td>
                                         {/* <button onClick={(e) => this.onToggleFormDel(e, b.key)} className="btn btn-danger" disabled={this.state.bill.billStatus_id === '1'}> */}
                                         <button onClick={(e) => this.onToggleFormDel(e, b.key)} className="btn btn-danger" disabled={this.state.bill.status === 'Done'}>
                                             <FontAwesomeIcon icon={faTrash} className="mr-2"/>{' '}
                                         </button>
-                                    </td>
+                                    </td>}
                                 </tr>
                             ))
                         }

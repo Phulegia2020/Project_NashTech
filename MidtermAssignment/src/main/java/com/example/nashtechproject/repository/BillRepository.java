@@ -13,6 +13,10 @@ public interface BillRepository extends JpaRepository<Bill, Long> {
 //    List<Bill> findAllByBillStatusId(Long id);
     List<Bill> findAllByStatus(String status);
 
+    List<Bill> findByStatusNot(String status);
+
+    Page<Bill> findByStatusNot(String status, Pageable pageable);
+
     List<Bill> findByUserNameContains(String name);
 
     Page<Bill> findByUserNameContains(String name, Pageable pageable);

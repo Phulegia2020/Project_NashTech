@@ -72,6 +72,20 @@ public class BillServiceImpl implements BillService {
         return bills;
     }
 
+    public List<Bill> getBillByStatusPage()
+    {
+        List<Bill> bills = billRepository.findByStatusNot(STATE.CANCEL);
+        return bills;
+    }
+
+    public List<Bill> getBillByStatusPage(ProductPage productPage)
+    {
+        Sort sort = Sort.by(Sort.Direction.DESC, productPage.getSortBy());
+        Pageable pageable = PageRequest.of(productPage.getPageNumber(), productPage.getPageSize(), sort);
+        List<Bill> bills = billRepository.findByStatusNot(STATE.CANCEL, pageable).getContent();
+        return bills;
+    }
+
     @Override
     public Bill saveBill(Bill bill) {
         return billRepository.save(bill);

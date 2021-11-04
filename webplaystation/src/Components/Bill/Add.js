@@ -15,6 +15,7 @@ export default class Add extends Component {
             billStatus: [],
             Error: "",
             key: "",
+            destination: ''
         }
     }
     
@@ -28,15 +29,15 @@ export default class Add extends Component {
         })
         .catch(error => {console.log(error)})
 
-        get("/billstatuses")
-        .then((response) => {
-            if (response.status === 200)
-            {
-                this.setState({
-                    billStatus: response.data
-                });
-            }
-        })
+        // get("/billstatuses")
+        // .then((response) => {
+        //     if (response.status === 200)
+        //     {
+        //         this.setState({
+        //             billStatus: response.data
+        //         });
+        //     }
+        // })
     }
 
     changeValue(e){
@@ -92,6 +93,11 @@ export default class Add extends Component {
                             ))
                         }
                     </Input>
+                </FormGroup>
+                <FormGroup>
+                    <Label htmlFor="destination">Địa điểm giao hàng</Label>
+                    <Input type="text" name="destination" id="destination" placeholder="Địa điểm giao hàng..." onChange={(e) => this.changeValue(e)} value = {this.state.destination} required="required"/>
+                    {this.state.key === 'total' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
                 </FormGroup>
                 <div className="mb-5">
                     <Button type="submit" outline color="warning" >Tạo</Button>{' '}

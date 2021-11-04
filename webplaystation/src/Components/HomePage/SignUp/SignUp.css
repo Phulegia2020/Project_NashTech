@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Kanit:wght@600&family=Play:wght@700&display=swap');
 
 /* .cb{
     padding-top: 1.5rem;
@@ -13,8 +14,11 @@
 {
     font-weight: 900;
     /* font-family: Verdana, Geneva, Tahoma, sans-serif; */
-    font-family: 'Merriweather', serif;
+    /* font-family: 'Merriweather', serif; */
     /* text-align: center; */
+    padding-left: 15%;
+    color: #287bff;
+    font-family: 'Play', sans-serif;
 }
 
 .info-profile label
@@ -68,4 +72,14 @@
     font-weight: 800;
     border: 1px solid black;
     font-size: 15px;
+}
+
+.title-info
+{
+    color: #287bff;
+    font-weight: 600;
+    text-align: center;
+    /* font-family: 'Merriweather', serif; */
+    /* font-family: 'Kanit', sans-serif; */
+    font-family: 'Play', sans-serif;
 }

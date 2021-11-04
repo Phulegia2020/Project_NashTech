@@ -19,7 +19,8 @@ export default class Category extends Component {
         pageNumber: 0,
         pageToTal: 0,
         msgDel: false,
-        search: ""
+        search: "",
+        currentPage: 5
     }
 
     componentDidMount(){
@@ -28,13 +29,13 @@ export default class Category extends Component {
             if (response.status === 200)
             {
                 this.setState({
-                    pageToTal: Math.ceil(response.data.length / 5)
+                    pageToTal: Math.ceil(response.data.length / this.state.currentPage)
                 })
             }
         })
         .catch(error => {console.log(error)})
 
-        get(`/categories/page?pageNumber=0&pageSize=5&sortBy=id`)
+        get(`/categories/page?pageNumber=0&pageSize=${this.state.currentPage}&sortBy=id`)
         .then((response) => {
             this.setState({
                 categories: response.data
@@ -135,7 +136,7 @@ export default class Category extends Component {
         
         if (this.state.search === '')
         {
-            get(`/categories/page?pageNumber=${pageNumber}&pageSize=5&sortBy=id`)
+            get(`/categories/page?pageNumber=${pageNumber}&pageSize=${this.state.currentPage}&sortBy=id`)
             .then((response) => {
                 this.setState({
                     categories: response.data,
@@ -145,7 +146,7 @@ export default class Category extends Component {
         }
         else
         {
-            get(`/categories/namePage?name=${this.state.search}&pageNumber=${pageNumber}&pageSize=5&sortBy=id`)
+            get(`/categories/namePage?name=${this.state.search}&pageNumber=${pageNumber}&pageSize=${this.state.currentPage}&sortBy=id`)
             .then((response) => {
                 this.setState({
                     categories: response.data,
@@ -174,13 +175,13 @@ export default class Category extends Component {
                 if (response.status === 200)
                 {
                     this.setState({
-                        pageToTal: Math.ceil(response.data.length / 5)
+                        pageToTal: Math.ceil(response.data.length / this.state.currentPage)
                     })
                 }
             })
             .catch(error => {console.log(error)})
 
-            get(`/categories/page?pageNumber=0&pageSize=5&sortBy=id`)
+            get(`/categories/page?pageNumber=0&pageSize=${this.state.currentPage}&sortBy=id`)
             .then((response) => {
                 this.setState({
                     categories: response.data
@@ -195,13 +196,13 @@ export default class Category extends Component {
                 if (response.status === 200)
                 {
                     this.setState({
-                        pageToTal: Math.ceil(response.data / 5)
+                        pageToTal: Math.ceil(response.data / this.state.currentPage)
                     });
                 }
             })
             .catch(error => {console.log(error)})
 
-            get(`/categories/namePage?name=${this.state.search}&pageNumber=0&pageSize=5&sortBy=id`)
+            get(`/categories/namePage?name=${this.state.search}&pageNumber=0&pageSize=${this.state.currentPage}&sortBy=id`)
             .then((response) => {
                 this.setState({
                     categories: response.data,

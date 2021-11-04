@@ -173,6 +173,19 @@ export default class Add extends Component {
         })
         // await this.handleUpload();
         //console.log(this.state.url)
+        for (let i = 0; i < this.state.products.length; i++)
+        {
+            if (this.state.products[i].name === event.target.name.value.trim())
+            {
+                this.setState({
+                    key: 'name'
+                })
+                this.setState({
+                    Error: "Tên máy này đã được sử dụng!"
+                });
+                return;
+            }
+        }
         if (event.target.quantity.value.trim() <= 0)
         {
             this.setState({
@@ -192,19 +205,6 @@ export default class Add extends Component {
                 Error: "Giá không nhỏ hơn 1!"
             });
             return;
-        }
-        for (let i = 0; i < this.state.products.length; i++)
-        {
-            if (this.state.products[i].name === event.target.name.value.trim())
-            {
-                this.setState({
-                    key: 'name'
-                })
-                this.setState({
-                    Error: "Tên máy này đã được sử dụng!"
-                });
-                return;
-            }
         }
         this.setState({
             key: '',

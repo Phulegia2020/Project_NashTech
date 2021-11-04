@@ -24,7 +24,8 @@ export default class User extends Component {
             id: "",
             search: "",
             title: "",
-            notice: ""
+            notice: "",
+            currentPage: 7
         }
 
         this.onPage = this.onPage.bind(this);
@@ -37,13 +38,13 @@ export default class User extends Component {
             if (response.status === 200)
             {
                 this.setState({
-                    pageToTal: Math.ceil(response.data.length / 7)
+                    pageToTal: Math.ceil(response.data.length / this.state.currentPage)
                 });
             }
         })
         .catch(error => {console.log(error)})
 
-        get(`/users/page?pageNumber=0&pageSize=7&sortBy=id`)
+        get(`/users/page?pageNumber=0&pageSize=${this.state.currentPage}&sortBy=id`)
         .then((response) => {
             this.setState({
                 users: response.data,
@@ -105,7 +106,7 @@ export default class User extends Component {
         }
         if (this.state.search === '')
         {
-            get(`/users/page?pageNumber=${this.state.pageNumber}&pageSize=7&sortBy=id`)
+            get(`/users/page?pageNumber=${this.state.pageNumber}&pageSize=${this.state.currentPage}&sortBy=id`)
             .then((response) => {
                 this.setState({
                     users: response.data,
@@ -115,7 +116,7 @@ export default class User extends Component {
         }
         else
         {
-            get(`/users/usernamePage?username=${this.state.search}&pageNumber=${this.state.pageNumber}&pageSize=7&sortBy=id`)
+            get(`/users/usernamePage?username=${this.state.search}&pageNumber=${this.state.pageNumber}&pageSize=${this.state.currentPage}&sortBy=id`)
             .then((response) => {
                 this.setState({
                     users: response.data,
@@ -126,11 +127,12 @@ export default class User extends Component {
     }
 
     createUser(newUser){
+        //console.log(newUser.role);
         post(`/auth/signup`, {name: newUser.fullname.trim(), gender: newUser.gender, address: newUser.address.trim(),
                         email: newUser.email.trim(), phone: newUser.phone.trim(), username: newUser.username,
                         password: newUser.password, role: newUser.role})
         .then((response) => {
-            //window.location.reload();
+            window.location.reload();
             this.setState({
                 users: [response.data, ...this.state.users],
                 isDisplayForm: false,
@@ -204,7 +206,7 @@ export default class User extends Component {
         
         if (this.state.search === '')
         {
-            get(`/users/page?pageNumber=${pageNumber}&pageSize=7&sortBy=id`)
+            get(`/users/page?pageNumber=${pageNumber}&pageSize=${this.state.currentPage}&sortBy=id`)
             .then((response) => {
                 this.setState({
                     users: response.data,
@@ -214,7 +216,7 @@ export default class User extends Component {
         }
         else
         {
-            get(`/users/usernamePage?username=${this.state.search}&pageNumber=${pageNumber}&pageSize=7&sortBy=id`)
+            get(`/users/usernamePage?username=${this.state.search}&pageNumber=${pageNumber}&pageSize=${this.state.currentPage}&sortBy=id`)
             .then((response) => {
                 this.setState({
                     users: response.data,
@@ -236,13 +238,13 @@ export default class User extends Component {
                 if (response.status === 200)
                 {
                     this.setState({
-                        pageToTal: Math.ceil(response.data.length / 7)
+                        pageToTal: Math.ceil(response.data.length / this.state.currentPage)
                     });
                 }
             })
             .catch(error => {console.log(error)})
 
-            get(`/users/page?pageNumber=0&pageSize=7&sortBy=id`)
+            get(`/users/page?pageNumber=0&pageSize=${this.state.currentPage}&sortBy=id`)
             .then((response) => {
                 this.setState({
                     users: response.data,
@@ -257,13 +259,13 @@ export default class User extends Component {
                 if (response.status === 200)
                 {
                     this.setState({
-                        pageToTal: Math.ceil(response.data / 7)
+                        pageToTal: Math.ceil(response.data / this.state.currentPage)
                     });
                 }
             })
             .catch(error => {console.log(error)})
 
-            get(`/users/usernamePage?username=${this.state.search}&pageNumber=0&pageSize=7&sortBy=id`)
+            get(`/users/usernamePage?username=${this.state.search}&pageNumber=0&pageSize=${this.state.currentPage}&sortBy=id`)
             .then((response) => {
                 this.setState({
                     users: response.data,

@@ -11,6 +11,7 @@
     border: 2px dashed #bdc3c7;
     padding: 20px;
     background: rgb(248, 248, 248);
+    min-height: 450px;
 }
 
 #info h4 {
@@ -66,4 +67,40 @@
     position: absolute;
     top: 7px;
     right: 5px;
+}
+
+.destination-form
+{
+    position: absolute;
+    top: 325px;
+    right: 10px;
+    background: rgba(240, 242, 245, 1);
+    padding: 15px;
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgba(221, 221, 221, 1);
+    margin-top: 25px;
+    width: 500px;
+    font-size: 15px;
+}
+
+.destination-form .input-destination
+{
+    width: 470px;
+}
+
+.destination-form .title-destination
+{
+    display: inline-flex;
+    text-align: center;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    margin-left: 27%;
+    margin-bottom: 5px;
+}
+
+.destination-form .title-destination h4
+{
+    margin-left: 10px;
 }

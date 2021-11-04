@@ -200,7 +200,7 @@ export default class Add extends Component {
                         <Col md={6}>
                             <FormGroup>
                                 <Label htmlFor="username">Tài Khoản</Label>
-                                <Input type="text" name="username" id="username" placeholder="Football" onChange={(e) => this.changeValue(e)} value = {this.state.username} required/>
+                                <Input type="text" minLength="3" name="username" id="username" placeholder="Football" onChange={(e) => this.changeValue(e)} value = {this.state.username} required/>
                                 {this.state.key === 'username' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.blankError}</span> : '' }
                             </FormGroup>
                         </Col>

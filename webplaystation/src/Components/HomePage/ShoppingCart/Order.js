@@ -8,6 +8,8 @@ import { Input, Label } from 'reactstrap';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { withRouter } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faMapMarked } from '@fortawesome/free-solid-svg-icons';
 
 class Order extends Component {
     constructor(props) {
@@ -18,6 +20,7 @@ class Order extends Component {
             billDetails: [],
             user: {},
             type: 'cod',
+            destination: ''
             //loading: false
         };
         this.onCheckOut = this.onCheckOut.bind(this);
@@ -32,10 +35,12 @@ class Order extends Component {
             if (response.status === 200)
             {
                 this.setState({
-                    user: response.data
+                    user: response.data,
+                    destination: response.data.address
                 })
             }
         })
+        .catch(error => console.log(error));
     }
 
     getTotal() {
@@ -53,6 +58,7 @@ class Order extends Component {
             alert('The Order is empty. Can not Confirm!');
             return;
         }
+        localStorage.setItem('destination', this.state.destination);
         if (this.state.type === 'cod')
         {
             // await this.setState({
@@ -271,6 +277,17 @@ class Order extends Component {
                         <Icon name="cc paypal" size="large"/>
                         Thanh toán trực tuyến PayPal ({formatQuantity(this.getTotal() / 20000) } USD)
                         {/* credit card alternative */}
+                    </Label>
+                </div>
+
+                <div className='destination-form'>
+                    <div className="title-destination">
+                        <FontAwesomeIcon icon={faMapMarked} size='lg'/>{' '}
+                        {/* <Icon name="map marker alternate" size="large"></Icon> */}
+                        <h4 style={{fontWeight:'bold', textAlign:'center'}}>Địa Điểm Nhận Hàng</h4>
+                    </div>
+                    <Label>
+                        <Input type="text" name="destination" placeholder="Địa điểm nhận hàng..." value={this.state.destination} onChange={(e) => this.changeValue(e)} required className="input-destination"/>
                     </Label>
                 </div>
                 {/* <Header style={{marginLeft: '100rem'}}>TOTAL: {this.getTotal()}</Header>
