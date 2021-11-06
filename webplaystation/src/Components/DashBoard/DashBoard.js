@@ -78,13 +78,15 @@ export default class AnalyticsDashboard1 extends Component {
         this.state = {
             dropdownOpen: false,
             activeTab1: '11',
-            products: [],
+            products: 0,
+            totalProducts: 0,
             // users: [],
             users: 0,
-            bills: [],
-            totalBills: [],
-            imports: [],
-            totalImports: []
+            totalUsers: 0,
+            bills: 0,
+            totalBills: 0,
+            imports: 0,
+            totalImports: 0
         };
         this.toggle = this.toggle.bind(this);
         this.toggle1 = this.toggle1.bind(this);
@@ -98,7 +100,18 @@ export default class AnalyticsDashboard1 extends Component {
             if (response.status === 200)
             {
                 this.setState({
-                    products: response.data
+                    products: response.data.length
+                })
+            }
+        })
+        .catch(error => {console.log(error)})
+
+        get("/products")
+        .then((response) => {
+            if (response.status === 200)
+            {
+                this.setState({
+                    totalProducts: response.data.length
                 })
             }
         })
@@ -115,12 +128,23 @@ export default class AnalyticsDashboard1 extends Component {
         })
         .catch(error => {console.log(error)})
 
+        get("/users")
+        .then((response) => {
+            if (response.status === 200)
+            {
+                this.setState({
+                    totalUsers: response.data.length
+                })
+            }
+        })
+        .catch(error => {console.log(error)})
+
         get("/bills/done")
         .then((response) => {
             if (response.status === 200)
             {
                 this.setState({
-                    bills: response.data
+                    bills: response.data.length
                 })
             }
         })
@@ -131,7 +155,7 @@ export default class AnalyticsDashboard1 extends Component {
             if (response.status === 200)
             {
                 this.setState({
-                    totalBills: response.data
+                    totalBills: response.data.length
                 })
             }
         })
@@ -142,7 +166,7 @@ export default class AnalyticsDashboard1 extends Component {
             if (response.status === 200)
             {
                 this.setState({
-                    imports: response.data
+                    imports: response.data.length
                 })
             }
         })
@@ -153,7 +177,7 @@ export default class AnalyticsDashboard1 extends Component {
             if (response.status === 200)
             {
                 this.setState({
-                    totalImports: response.data
+                    totalImports: response.data.length
                 })
             }
         })
@@ -755,11 +779,11 @@ export default class AnalyticsDashboard1 extends Component {
                                             <div className="widget-content-wrapper">
                                                 <div className="widget-content-left pr-2 fsize-1">
                                                     {/* <div className="widget-numbers mt-0 fsize-3 text-danger">71%</div> */}
-                                                    <div className="widget-numbers mt-0 fsize-3 text-danger">{this.state.products.length}</div>
+                                                    <div className="widget-numbers mt-0 fsize-3 text-danger">{this.state.products}</div>
                                                 </div>
                                                 <div className="widget-content-right w-100">
                                                     <div className="progress-bar-xs progress">
-                                                        <div className="progress-bar bg-danger" role="progressbar" aria-valuenow="71" aria-valuemin="0" aria-valuemax="100" style={{ width: '71%' }}></div>
+                                                        <div className="progress-bar bg-danger" role="progressbar" aria-valuenow={this.state.products} aria-valuemin="0" aria-valuemax={this.state.totalProducts} style={{ width: `${Math.round((this.state.products/this.state.totalProducts)*100)}%` }}></div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -782,7 +806,7 @@ export default class AnalyticsDashboard1 extends Component {
                                                 </div>
                                                 <div className="widget-content-right w-100">
                                                     <div className="progress-bar-xs progress">
-                                                        <div className="progress-bar bg-success" role="progressbar" aria-valuenow="54" aria-valuemin="0" aria-valuemax="100" style={{ width: '54%' }}></div>
+                                                        <div className="progress-bar bg-success" role="progressbar" aria-valuenow={this.state.users} aria-valuemin="0" aria-valuemax={this.state.totalUsers} style={{ width: `${Math.round((this.state.users/this.state.totalUsers)*100)}%` }}></div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -801,11 +825,11 @@ export default class AnalyticsDashboard1 extends Component {
                                             <div className="widget-content-wrapper">
                                                 <div className="widget-content-left pr-2 fsize-1">
                                                     {/* <div className="widget-numbers mt-0 fsize-3 text-warning">32%</div> */}
-                                                    <div className="widget-numbers mt-0 fsize-3 text-warning">{this.state.bills.length}</div>
+                                                    <div className="widget-numbers mt-0 fsize-3 text-warning">{this.state.bills}</div>
                                                 </div>
                                                 <div className="widget-content-right w-100">
                                                     <div className="progress-bar-xs progress">
-                                                        <div className="progress-bar bg-warning" role="progressbar" aria-valuenow={Math.round((this.state.bills/this.state.totalBills)*100)} aria-valuemin="0" aria-valuemax="100" style={{ width: '32%' }}></div>
+                                                        <div className="progress-bar bg-warning" role="progressbar" aria-valuenow={this.state.bills} aria-valuemin="0" aria-valuemax={this.state.totalBills} style={{ width: `${Math.round((this.state.bills/this.state.totalBills)*100)}%` }}></div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -824,11 +848,11 @@ export default class AnalyticsDashboard1 extends Component {
                                             <div className="widget-content-wrapper">
                                                 <div className="widget-content-left pr-2 fsize-1">
                                                     {/* <div className="widget-numbers mt-0 fsize-3 text-info">89%</div> */}
-                                                    <div className="widget-numbers mt-0 fsize-3 text-info">{this.state.imports.length}</div>
+                                                    <div className="widget-numbers mt-0 fsize-3 text-info">{this.state.imports}</div>
                                                 </div>
                                                 <div className="widget-content-right w-100">
                                                     <div className="progress-bar-xs progress">
-                                                        <div className="progress-bar bg-info" role="progressbar" aria-valuenow={Math.round((this.state.imports/this.state.totalImports))*100} aria-valuemin="0" aria-valuemax="100" style={{ width: '89%' }}></div>
+                                                        <div className="progress-bar bg-info" role="progressbar" aria-valuenow={this.state.imports} aria-valuemin="0" aria-valuemax={this.state.totalImports} style={{ width: `${Math.round((this.state.imports/this.state.totalImports)*100)}%` }}></div>
                                                     </div>
                                                 </div>
                                             </div>

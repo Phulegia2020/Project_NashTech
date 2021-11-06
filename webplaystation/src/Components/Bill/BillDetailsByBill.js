@@ -198,10 +198,10 @@ class BillDetailsByBill extends Component {
                     <h4 style={{fontWeight:'bold'}}>Thông Tin Khách Hàng</h4>
                     <p><Icon name="user" size="large"/>{this.state.user.account}</p>
                     <p><Icon name="id card outline" size="large"/>{this.state.user.name}</p>
-                    {/* <p><Icon name="home" size="large"/>{this.state.user.address}</p> */}
+                    <p><Icon name="home" size="large"/>{this.state.user.address}</p>
                     <p><Icon name="mail outline" size="large"/>{this.state.user.email}</p>
                     <p><Icon name="phone" size="large"/>{this.state.user.phone}</p>
-                    <p><Icon name="map marker alternate" size="large"/>{this.state.bill.destination}</p>
+                    <p><Icon name="map marker alternate" size="large"/>Địa điểm nhận hàng: {this.state.bill.destination}</p>
                 </div>
 
                 <table id="table">

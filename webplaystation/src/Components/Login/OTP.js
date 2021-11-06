@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
+import { get } from '../../Utils/httpHelper';
 import "./Login.css";
 
 class OTP extends Component {
@@ -19,8 +20,21 @@ class OTP extends Component {
         // console.log(this.props.location.state.otp);
         this.setState({
 			email: this.props.location.state.email,
-			otp: this.props.location.state.otp
-		})
+			// otp: this.props.location.state.otp
+        })
+        // console.log(this.setState.email)
+        // console.log(this.props.location.state.email)
+        get(`/users/forgetPassword?email=${this.props.location.state.email}`)
+        .then((response) => {
+            if (response.status === 200)
+            {
+                // this.props.history.push("/WebPlayStation/confirm", {otp: response.data, email: this.state.email});
+                this.setState({
+                    otp: response.data
+                })
+            }
+        })
+        .catch((error) => {});
 		window.onbeforeunload = function () {
 			window.history.replaceState(null, "");
 		  }.bind(this);
@@ -39,7 +53,7 @@ class OTP extends Component {
         // console.log(this.state.otp)
         if (parseInt(this.state.confirm) === this.state.otp)
         {
-            this.props.history.push("/WebPlayStation/changpassword", {otp: this.state.otp, email: this.state.email});
+            this.props.history.push("/WebPlayStation/changpassword", {email: this.state.email});
         }
         else
         {

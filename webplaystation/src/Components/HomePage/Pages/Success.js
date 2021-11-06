@@ -112,8 +112,10 @@ class Success extends Component {
                         {/* <i className="fas fa-check-circle fa-5x text-success"></i> */}
                         <FontAwesomeIcon icon={faCheckCircle} className="fas fa-check-circle fa-5x text-success"/>
                         <h2 className="display-3 text-black">Cám ơn!</h2>
-                        <p className="lead mb-5">Bạn đã thanh toán thành công.</p>
-                        <p><a href="/" className="btn btn-lg btn-primary">Quay về cửa hàng</a></p>
+                        {/* <p className="lead mb-5">Bạn đã thanh toán thành công.</p> */}
+                        <p className="lead mb-5">Quý khách đã thanh toán mua máy thành công.</p>
+                        {/* <p><a href="/" className="btn btn-lg btn-primary">Quay về cửa hàng</a></p> */}
+                        <p><a href="/" className="btn btn-lg btn-primary">Quay về trang chủ</a></p>
                     </div>
                 </div>
             </div>

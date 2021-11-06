@@ -25,23 +25,38 @@ class ForgetPassword extends Component {
     {
         e.preventDefault();
         // toast("Vui lòng chờ mã gửi về email!");
-        get(`/users/forgetPassword?email=${this.state.email}`)
+        // get(`/users/forgetPassword?email=${this.state.email}`)
+        // .then((response) => {
+        //     if (response.status === 200)
+        //     {
+        //         this.props.history.push("/WebPlayStation/confirm", {otp: response.data, email: this.state.email});
+        //     }
+        // })
+        // .catch((error) => {
+        //     this.setState({
+		// 		key: 'email'
+		// 	})
+		// 	this.setState({
+		// 		Error: "Email không hợp lệ."
+		// 	});
+		// 	// return;
+        // });
+        get(`/users/email/${this.state.email}`)
         .then((response) => {
             if (response.status === 200)
             {
-                this.props.history.push("/WebPlayStation/confirm", {otp: response.data, email: this.state.email});
+                this.props.history.push("/WebPlayStation/confirm", {email: this.state.email});
             }
         })
         .catch((error) => {
             this.setState({
-				key: 'email'
-			})
-			this.setState({
-				Error: "Email không hợp lệ."
-			});
-			// return;
+                key: 'email'
+            })
+            this.setState({
+                Error: "Email không hợp lệ."
+            });
         });
-        //this.props.history.push("/WebPlayStation/confirm", {otp: 123456, email: this.state.email});
+        
     }
 
     render() {

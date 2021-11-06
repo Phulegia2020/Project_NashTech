@@ -16,7 +16,7 @@ class ChangePassword extends Component {
     constructor(props) {
 		super(props);
 		this.state = { newpassword: '', confirmpassword: '', Error: "",
-		key: "", show: false, email: "", otp: 0};
+		key: "", show: false, email: ""};
 	}
 
 	componentDidMount()
@@ -27,7 +27,7 @@ class ChangePassword extends Component {
 			// console.log(this.props.location.state.otp);
 			this.setState({
 				email: this.props.location.state.email,
-				otp: this.props.location.state.otp
+				// otp: this.props.location.state.otp , otp: 0
 			})
 			window.onbeforeunload = function () {
 				window.history.replaceState(null, "");

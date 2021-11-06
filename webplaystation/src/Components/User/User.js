@@ -132,7 +132,7 @@ export default class User extends Component {
                         email: newUser.email.trim(), phone: newUser.phone.trim(), username: newUser.username,
                         password: newUser.password, role: newUser.role})
         .then((response) => {
-            window.location.reload();
+            // window.location.reload();
             this.setState({
                 users: [response.data, ...this.state.users],
                 isDisplayForm: false,
