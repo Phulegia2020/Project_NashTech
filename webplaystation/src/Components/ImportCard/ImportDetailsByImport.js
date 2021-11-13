@@ -171,7 +171,7 @@ class ImportDetailsByImport extends Component {
                     Tạo Chi Tiết Mới
                 </button>} */}
                 {/* <h3 style={{ textAlign:'center', margin:'20px 0 20px 0' }}>Danh Sách Chi Tiết</h3> */}
-                <h3>Danh Sách Chi Tiết</h3>
+                <h3>Danh Sách Chi Tiết Phiếu Nhập {this.state.id}</h3>
                 <table id="table">
                     <thead>
                         <tr>

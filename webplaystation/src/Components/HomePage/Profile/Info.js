@@ -217,7 +217,7 @@ class SignUp extends Component {
                                                     <label class="text-black">Họ tên</label>
                                                 </div>
                                                 <div class="col-md-10">
-                                                    <Form.Input placeholder='Full Name' name='name' value={this.state.name} onChange={this.handleChange} required/>
+                                                    <Form.Input placeholder='Họ tên' name='name' value={this.state.name} onChange={this.handleChange} required/>
                                                     {/* <input value="${sessionScope.usersession.displayName}"
                                                         type="text" class="form-control" readonly /> */}
                                                 </div>
@@ -250,7 +250,7 @@ class SignUp extends Component {
                                                 <label>Tài Khoản</label>
                                                 </div>
                                                 <div class="col-md-10">
-                                                    <Form.Input placeholder='Username' name='username' value={this.state.username} onChange={this.handleChange} required disabled id="input-username"/>
+                                                    <Form.Input placeholder='Tên tài khoản' name='username' value={this.state.username} onChange={this.handleChange} required disabled id="input-username"/>
                                                     {this.state.key === 'username' ? <Label basic color='red' pointing='left'>{this.state.Error}</Label> : '' }
                                                 </div>
                                             </div>
@@ -259,7 +259,7 @@ class SignUp extends Component {
                                                     <label class="text-black">Email</label>
                                                 </div>
                                                 <div class="col-md-10">
-                                                    <Form.Input type="email" placeholder='abc@gmail.com' name='email' value={this.state.email} onChange={this.handleChange} required/>
+                                                    <Form.Input type="email" placeholder='Email' name='email' value={this.state.email} onChange={this.handleChange} required/>
                                                     {this.state.key === 'email' ? <Label basic color='red' pointing='left'>{this.state.Error}</Label> : '' }
                                                     {/* <input value="${sessionScope.usersession.email}" type="email"
                                                         class="form-control" readonly /> */}
@@ -270,7 +270,7 @@ class SignUp extends Component {
                                                     <label>Địa chỉ</label>
                                                 </div>
                                                 <div class="col-md-10">
-                                                    <Form.Input placeholder='123 Main st, Ward, District, Ho Chi Minh City' name='address' value={this.state.address} onChange={this.handleChange} required/>
+                                                    <Form.Input placeholder='Địa chỉ' name='address' value={this.state.address} onChange={this.handleChange} required/>
                                                 </div>
                                             </div>
                                             <div class="form-group row mt-5">
@@ -278,7 +278,7 @@ class SignUp extends Component {
                                                     <label class="text-black">Số điện thoại</label>
                                                 </div>
                                                 <div class="col-md-10">
-                                                    <Form.Input placeholder='0123456789' type="text" name='phone' maxLength={10} minLength={10} value={this.state.phone} onChange={this.handleChange} required/>
+                                                    <Form.Input placeholder='Số điện thoại' type="text" name='phone' maxLength={10} minLength={10} value={this.state.phone} onChange={this.handleChange} required/>
                                                     {this.state.key === 'phone' ? <Label basic color='red' pointing='left'>{this.state.Error}</Label> : '' }
                                                     {/* <input value="${sessionScope.usersession.phone}" type="number"
                                                         class="form-control" readonly /> */}

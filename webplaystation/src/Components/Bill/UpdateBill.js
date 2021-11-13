@@ -18,7 +18,8 @@ class UpdateBill extends Component {
             // billStatus: [],
             Error: "",
             key: "",
-            destination: ''
+            destination: '',
+            payment: ''
         }
     }
     
@@ -41,7 +42,8 @@ class UpdateBill extends Component {
                     user_id: response.data.user_id,
                     // billStatus_id: response.data.billStatus_id
                     status: response.data.status,
-                    destination: response.data.destination
+                    destination: response.data.destination,
+                    payment: response.data.payment
                 })
             }
         });
@@ -76,7 +78,7 @@ class UpdateBill extends Component {
             return;
         }
         // put(`/bills/${this.state.id}`, {total: this.state.total, user_id: this.state.user_id, billStatus_id: this.state.billStatus_id})
-        put(`/bills/${this.state.id}`, {total: this.state.total, user_id: this.state.user_id, status: this.state.status, destination: this.state.destination})
+        put(`/bills/${this.state.id}`, {total: this.state.total, user_id: this.state.user_id, status: this.state.status, destination: this.state.destination, payment: this.state.payment})
         .then((response) => {
             if (response.status === 200)
             {
@@ -128,9 +130,16 @@ class UpdateBill extends Component {
                         <FormGroup>
                             <Label htmlFor="destination">Địa điểm giao hàng</Label>
                             <Input type="text" name="destination" id="destination" placeholder="Địa điểm giao hàng..." onChange={(e) => this.changeValue(e)} value = {this.state.destination} required="required"/>
-                            {this.state.key === 'total' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
                         </FormGroup>
-                        <FormGroup className="mb-5">
+                        <FormGroup>
+                            <Label htmlFor="payment">Thanh Toán</Label>
+                            {/* <Input type="text" name="payment" id="payment" placeholder="Hình thức thanh toán" onChange={(e) => this.changeValue(e)} value = {this.state.payment} disabled/>    */}
+                            <Input type="select" name="payment" id="payment" value = {this.state.payment} onChange={(e) => this.changeValue(e)} disabled>
+                                <option value="Cod">Tiền Mặt</option>
+                                <option value="PayPal">PayPal</option>
+                            </Input>
+                        </FormGroup>
+                        <FormGroup className="mb-2">
                             <Label htmlFor="status">Trạng Thái</Label>
                             {/* <Input type="select" name="billStatus_id" id="status" value = {this.state.billStatus_id} onChange={(e) => this.changeValue(e)} disabled>
                                 {
@@ -144,6 +153,7 @@ class UpdateBill extends Component {
                                 <option value="Waiting">Chờ Xác Nhận</option>
                             </Input>
                         </FormGroup>
+                        
                         <div className="mb-5">
                             <Button type="submit" outline color="warning" >Cập Nhật</Button>{' '}
                             <Button outline color="danger" onClick={this.handleClear.bind(this)}>Hủy</Button>

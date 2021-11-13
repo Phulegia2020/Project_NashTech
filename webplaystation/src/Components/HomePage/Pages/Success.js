@@ -19,17 +19,21 @@ class Success extends Component {
     async componentDidMount()
     {
         var pttt = "";
+        var payment = "";
         if (this.props.location.state != null)
         {
             pttt = this.props.location.state.pttt;
+            payment = "Cod";
         }
         else
         {
             pttt = 'Thanh toán trực tuyến paypal'
+            payment = "PayPal";
         }
         
         const shoppingCartItems = JSON.parse(localStorage.getItem('shopping-cart') || '[]');
         localStorage.setItem('shopping-cart', []);
+        this.props.handleNumberCart(0);
         var billId = "";
         // console.log(pttt);
         // console.log(shoppingCartItems);
@@ -44,7 +48,7 @@ class Success extends Component {
             }
         })
 
-        await post('/bills', {total: 0, user_id: localStorage.getItem('user_id'), status: 'Waiting', destination: localStorage.getItem('destination')})
+        await post('/bills', {total: 0, user_id: localStorage.getItem('user_id'), status: 'Waiting', destination: localStorage.getItem('destination'), payment: payment})
         .then((response) => {
             if (response.status === 200)
             {
@@ -92,6 +96,7 @@ class Success extends Component {
         })
         .catch((error) => console.log(error));
 
+        // this.props.handleNumberCart(0);
         window.onbeforeunload = function () {
             window.history.replaceState(null, "");
         }.bind(this);

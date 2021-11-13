@@ -15,7 +15,8 @@ export default class Add extends Component {
             billStatus: [],
             Error: "",
             key: "",
-            destination: ''
+            destination: '',
+            payment: 'Cod'
         }
     }
     
@@ -86,20 +87,45 @@ export default class Add extends Component {
                 
                 <FormGroup className="mb-2">
                     <Label htmlFor="user">Khách Hàng</Label>
-                    <Input type="select" name="user_id" id="user" onChange={(e) => this.changeValue(e)} multiple required>
+                    {/* <Input type="select" name="user_id" id="user" onChange={(e) => this.changeValue(e)} multiple required>
                         {
                             this.state.users.map((u) => (
                                 <option key={u.id} value={u.id}>{u.name}</option>
                             ))
                         }
-                    </Input>
+                    </Input> */}
+                    <select name="user_id" id="user" className="form-control" size="5" onChange={(e) => this.changeValue(e)} required>
+                        {
+                            this.state.users.map((u) => (
+                                <option key={u.id} value={u.id}>{u.name}</option>
+                            ))
+                        }
+                    </select>
                 </FormGroup>
                 <FormGroup>
                     <Label htmlFor="destination">Địa điểm giao hàng</Label>
                     <Input type="text" name="destination" id="destination" placeholder="Địa điểm giao hàng..." onChange={(e) => this.changeValue(e)} value = {this.state.destination} required="required"/>
-                    {this.state.key === 'total' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
+                    
                 </FormGroup>
-                <div className="mb-5">
+                <FormGroup tag="fieldset" row>
+                    <Label htmlFor="payment">Thanh Toán</Label>
+                    <Form inline>
+                        <FormGroup check>
+                            <Label check>
+                            <Input type="radio" name="payment" defaultChecked value = "Cod" onChange={(e) => this.changeValue(e)}/>{' '}
+                            Tiền Mặt
+                            </Label>
+                        </FormGroup>
+
+                        <FormGroup check>
+                            <Label check>
+                            <Input type="radio" name="payment" value = "PayPal" onChange={(e) => this.changeValue(e)} />{' '}
+                            PayPal
+                            </Label>
+                        </FormGroup>
+                    </Form>
+                </FormGroup>
+                <div className="mt-3">
                     <Button type="submit" outline color="warning" >Tạo</Button>{' '}
                     <Button outline color="danger" onClick={this.handleClear.bind(this)}>Hủy</Button>
                 </div>

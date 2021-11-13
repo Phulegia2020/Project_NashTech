@@ -128,7 +128,7 @@ public class DialogflowController {
                         //System.out.println("chat");
                         chat.add("Hiện tại cửa hàng chưa kinh doanh máy này. Bạn có thể tham khảo về máy Playstation 4 và Playstation 5 tại shop !");
                     } else {
-                        chat.add("Máy " + products.getName() + " có giá " + String.format("%,d", products.getPrice()) + " VNĐ. Nếu bạn là một người đam mê playstation thì máy " + products.getName() + " là bộ máy hợp lý trong thời điểm hiện tại và cung cấp trải nghiệm chơi game hiệu quả cho nhiều người dùng");
+                        chat.add("Máy " + products.getName() + " có giá " + String.format("%,d", products.getPrice()) + " VNĐ \uD83D\uDCB8. Nếu bạn là một người đam mê playstation thì máy " + products.getName() + " là bộ máy hợp lý trong thời điểm hiện tại và cung cấp trải nghiệm chơi game hiệu quả cho nhiều người dùng");
                     }
                 }
                 break;

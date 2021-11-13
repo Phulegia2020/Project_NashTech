@@ -40,6 +40,9 @@ public class Bill {
     @Column(name = "destination")
     private String destination;
 
+    @Column(name = "payment")
+    private String payment;
+
     @Transient
     @OneToMany(mappedBy = "bill", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JsonIgnore
@@ -107,5 +110,13 @@ public class Bill {
 
     public void setDestination(String destination) {
         this.destination = destination;
+    }
+
+    public String getPayment() {
+        return payment;
+    }
+
+    public void setPayment(String payment) {
+        this.payment = payment;
     }
 }

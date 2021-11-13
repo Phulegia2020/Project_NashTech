@@ -71,13 +71,20 @@ export default class Add extends Component {
                 </FormGroup>
                 <FormGroup className="mb-2">
                     <Label htmlFor="placeorder">Phiếu Đặt</Label>
-                    <Input type="select" name="placeorder_id" id="placeorder" onChange={(e) => this.changeValue(e)}>
+                    {/* <Input type="select" name="placeorder_id" id="placeorder" onChange={(e) => this.changeValue(e)}>
                         {
                             this.state.placeorders.map((po) => (
                                 <option key={po.id} value={po.id}>{po.id}</option>
                             ))
                         }
-                    </Input>
+                    </Input> */}
+                    <select name="placeorder_id" id="placeorder" className="form-control" size="3" onChange={(e) => this.changeValue(e)} required>
+                        {
+                            this.state.placeorders.map((po) => (
+                                <option key={po.id} value={po.id}>{po.id}</option>
+                            ))
+                        }
+                    </select>
                 </FormGroup>
                 <div className="mb-5">
                     <Button type="submit" outline color="warning" >Tạo</Button>{' '}

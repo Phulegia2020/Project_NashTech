@@ -23,6 +23,8 @@ public class BillDTO {
 
     private String destination;
 
+    private String payment;
+
     public Long getId() {
         return id;
     }
@@ -85,5 +87,13 @@ public class BillDTO {
 
     public void setDestination(String destination) {
         this.destination = destination;
+    }
+
+    public String getPayment() {
+        return payment;
+    }
+
+    public void setPayment(String payment) {
+        this.payment = payment;
     }
 }

@@ -37,9 +37,11 @@ class ShoppingCartDetails extends Component {
                 items.splice(i, 1);
                 this.setState({ShoppingCartItems: items});
                 localStorage.setItem('shopping-cart', JSON.stringify(this.state.ShoppingCartItems));
+                this.props.handleNumberCart(this.state.ShoppingCartItems.length);
                 return false;
             }
         }
+        // this.props.handleNumberCart(this.state.ShoppingCartItems.length);
     }
 
     onIncreaseQuantity(item) {

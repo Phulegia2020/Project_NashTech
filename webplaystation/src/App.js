@@ -20,11 +20,41 @@ import ForgetPassword from './Components/Login/ForgetPassword';
 import OTP from './Components/Login/OTP';
 
 class App extends React.Component{
-    state = {
-        sidebarIsOpen: true,
-        chatbot: true,
-        isOpen: false
+    constructor(props){
+        super(props);
+        this.state = {
+            sidebarIsOpen: true,
+            chatbot: true,
+            isOpen: false,
+            numberCart: 0
+        }
+        this.handleNumberCart = this.handleNumberCart.bind(this);
+        this.handleChatBot = this.handleChatBot.bind(this);
     }
+
+    componentDidMount()
+    {
+        const shoppingCartItems = JSON.parse(localStorage.getItem('shopping-cart') || '[]');
+        this.setState({
+            numberCart: shoppingCartItems.length
+        })
+    }
+
+    // componentDidUpdate(prevProps, prevState)
+    // {
+    //     if (prevState.numberCart !== this.state.numberCart)
+    //     {
+    //         return;
+    //     }
+        
+    //     // if (prevState.numberCart !== localStorage.getItem('shopping-cart').length)
+    //     // {
+    //     //     console.log(localStorage.getItem('shopping-cart').length);
+    //     //     this.setState({
+    //     //         numberCart: localStorage.getItem('shopping-cart').length
+    //     //     });
+    //     // }
+    // }
 
     toggleSidebar = () => {
         this.setState({
@@ -39,11 +69,20 @@ class App extends React.Component{
         })
     }
 
-    handleChatBot1 = (data) => {
-        console.log(data);
+    // handleChatBot1 = (data) => {
+    //     console.log(data);
+    //     this.setState({
+    //         isOpen: data
+    //     })
+    // }
+
+    handleNumberCart(data)
+    {
+        // console.log(data);
+        // var amount = data;
         this.setState({
-            isOpen: data
-        })
+            numberCart: data
+        });
     }
 
   render()
@@ -58,79 +97,80 @@ class App extends React.Component{
                   )}>
                   </Route>
                   <Route exact path="/WebPlayStation">
-                      <MainMenu/>
-                      <Products/>
+                      <MainMenu numberCart={this.state.numberCart} handleNumberCart={this.handleNumberCart}/>
+                      <Products handleNumberCart={this.handleNumberCart}/>
                       {/* <Footer/> */}
                   </Route>
                   <Route exact path="/WebPlayStation/about">
-                      <MainMenu/>
+                      <MainMenu numberCart={this.state.numberCart} handleNumberCart={this.handleNumberCart}/>
                       <About/>
                       <Footer/>
                   </Route>
                   <Route exact path="/WebPlayStation/login">
-                      <MainMenu/>
-                      <Login handleChatBot={this.handleChatBot}/>
+                      <MainMenu numberCart={this.state.numberCart} handleNumberCart={this.handleNumberCart}/>
+                      <Login/>
                       <div className="fixed-bottom">
                         <Footer/>
                       </div>
                   </Route>
                   <Route exact path="/WebPlayStation/signup">
-                      <MainMenu/>
-                      <SignUp handleChatBot={this.handleChatBot}/>
+                      <MainMenu numberCart={this.state.numberCart} handleNumberCart={this.handleNumberCart}/>
+                      <SignUp/>
                       <Footer/>
                   </Route>
                   <Route exact path="/WebPlayStation/profile">
-                      <MainMenu/>
+                      <MainMenu numberCart={this.state.numberCart} handleNumberCart={this.handleNumberCart}/>
                       <Info/>
                       <Footer/>
                   </Route>
                   <Route exact path="/WebPlayStation/changpassword">
-                      <MainMenu/>
+                      <MainMenu numberCart={this.state.numberCart} handleNumberCart={this.handleNumberCart}/>
                       <ChangePassword/>
                       <div className="fixed-bottom">
                         <Footer/>
                       </div>
                   </Route>
                   <Route exact path="/WebPlayStation/forgetPassword">
-                      <MainMenu/>
+                      <MainMenu numberCart={this.state.numberCart} handleNumberCart={this.handleNumberCart}/>
                       <ForgetPassword/>
                       <div className="fixed-bottom">
                         <Footer/>
                       </div>
                   </Route>
                   <Route exact path="/WebPlayStation/confirm">
-                      <MainMenu/>
+                      <MainMenu numberCart={this.state.numberCart} handleNumberCart={this.handleNumberCart}/>
                       <OTP/>
                       <div className="fixed-bottom">
                         <Footer/>
                       </div>
                   </Route>
                   <Route exact path="/WebPlayStation/product/:id">
-                      <MainMenu/>
-                      <ProductDetails handleChatBot1={this.handleChatBot1}/>
+                      <MainMenu numberCart={this.state.numberCart} handleNumberCart={this.handleNumberCart}/>
+                      <ProductDetails handleNumberCart={this.handleNumberCart}/>
                       <Footer/>
+                      {/* handleChatBot1={this.handleChatBot1} */}
                   </Route>
                   <Route exact path="/WebPlayStation/category/:id">
-                      <MainMenu/>
-                      <ProductsByCategory/>
+                      <MainMenu numberCart={this.state.numberCart} handleNumberCart={this.handleNumberCart}/>
+                      <ProductsByCategory handleNumberCart={this.handleNumberCart}/>
                       {/* <div className="fixed-bottom">
                         
                       </div> */}
                       <Footer/>
                   </Route>
                   <Route exact path="/WebPlayStation/order">
-                      <MainMenu/>
+                      <MainMenu numberCart={this.state.numberCart} handleNumberCart={this.handleNumberCart}/>
                       <Order/>
                   </Route>
                   <Route exact path="/WebPlayStation/success">
-                      <MainMenu/>
-                      <Success/>
+                      <MainMenu numberCart={this.state.numberCart} handleNumberCart={this.handleNumberCart}/>
+                      <Success handleNumberCart={this.handleNumberCart}/>
                       <div className="fixed-bottom">
                         <Footer/>
                       </div>
                   </Route>
                   <Route exact path="/WebPlayStation/404">
-                      <MainMenu/>
+                      <MainMenu numberCart={this.state.numberCart} handleNumberCart={this.handleNumberCart}/>
                       <NotFound/>
                       <div className="fixed-bottom">
                         <Footer/>
@@ -151,11 +191,14 @@ class App extends React.Component{
               </Switch>
               {this.state.chatbot === true && <df-messenger
                     intent="WELCOME"
-                    chat-title="THE PLAYSTATION SHOP"
+                    chat-title="THE PLAYSTATION SHOP 🎮"
                     agent-id="3d2eb8db-0f5e-4a16-9c2a-3cea0cadb3a7"
                     language-code="en"
-                    wait-open
+                    // wait-open
+                    // chat-icon="https://e7.pngegg.com/pngimages/568/919/png-clipart-playstation-2-logo-playstation-4-scalable-graphics-playstation-logo-game-angle.png"
+                    chat-icon="https://image.flaticon.com/icons/png/512/588/588258.png"
                     // chat-icon="https://media.comicbook.com/2019/02/playstation-logo-orange-1157594.jpeg"
+                    // chat-icon="https://cdn-icons-png.flaticon.com/512/134/134914.png"
                 ></df-messenger>}
           </Router>
       );

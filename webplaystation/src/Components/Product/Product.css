@@ -84,3 +84,21 @@
   bottom: 0;
   padding-left: 20px;
 } */
+
+.input-select
+{
+  width: 100%;
+  /* height: 50px; */
+  /* border: 1px solid;
+  overflow-y: scroll; */
+}
+
+.input-select .input-item:hover
+{
+  cursor: pointer;
+}
+
+.input-select .input-item::selection
+{
+  background-color: blue;
+}

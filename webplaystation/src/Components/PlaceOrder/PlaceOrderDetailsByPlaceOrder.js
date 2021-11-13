@@ -174,7 +174,7 @@ class PlaceOrderDetailsByPlaceOrder extends Component {
                     <FontAwesomeIcon icon={faPlus} className="mr-2"/>{' '}
                     Tạo Chi Tiết Mới
                 </button>}
-                <h3>Danh Sách Chi Tiết</h3>
+                <h3>Danh Sách Chi Tiết Phiếu Đặt {this.state.id}</h3>
                 <table id="table">
                     <thead>
                         <tr>

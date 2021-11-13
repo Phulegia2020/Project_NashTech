@@ -46,7 +46,7 @@ class Products extends Component {
                 this.setState({
                     pageToTal: Math.ceil(response.data.length / this.state.currentPage)
                 })
-                console.log(response.data)
+                // console.log(response.data)
             }
         })
         .catch(error => {console.log(error)})
@@ -55,7 +55,7 @@ class Products extends Component {
             this.setState({
                 Products: response.data,
             });
-            console.log(response.data)
+            // console.log(response.data)
         })
         .catch(error => console.log(error));
 
@@ -200,6 +200,10 @@ class Products extends Component {
 
     warning = () => toast.success("Đã thêm sản phẩm vào giỏ hàng");
 
+    handleNumberCart(data)
+    {
+        this.props.handleNumberCart(data);
+    }
 
     componentWillUnmount() {
         // fix Warning: Can't perform a React state update on an unmounted component
@@ -371,7 +375,7 @@ class Products extends Component {
                                     <option value="1">Dưới 10 Triệu</option>
                                 </select>
                             </div>
-                            <ProductList products={this.state.Products}
+                            <ProductList products={this.state.Products} handleNumberCart={this.props.handleNumberCart}
                             />
                         </Grid.Column>
                     </Grid.Row>
@@ -387,7 +391,8 @@ class Products extends Component {
                 <Grid container stackable verticalAlign='middle' id="top-rate-ps">
                     <Grid.Row>
                         <Grid.Column textAlign='center'>
-                            <h4 className="header-home">TOP Máy Yêu Thích Nhất</h4>
+                            {/* <h4 className="header-home">TOP Máy Yêu Thích Nhất</h4> */}
+                            <h4 className="header-home">TOP Máy Thịnh Hành</h4>
                             <hr className='hr-header'/>
                             {/* <Grid columns={4}> */}
                             {/* <OwlCarousel className="slider-items owl-carousel" loop margin={10} nav={false} autoplay autoplaySpeed={true} mergeFit={true} animateIn={true} animateOut={true} items={4}> */}
@@ -398,7 +403,7 @@ class Products extends Component {
                                 {
                                     this.state.topRatePS.map((p) =>
                                         <Grid.Column key={p.id} className="item">
-                                            <ProductItem product={p} normal={'top-card'} warning={this.warning}/>
+                                            <ProductItem product={p} normal={'top-card'} warning={this.warning} handleNumberCart={this.props.handleNumberCart}/>
                                         </Grid.Column>
                                         // <div className="item"> 
                                         //     <ProductItem product={p} normal={'top-card'}/>

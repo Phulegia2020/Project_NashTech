@@ -75,31 +75,43 @@ export default class Add extends Component {
             <div>
                 <Form onSubmit={(event) => this.handleCreate(event)}>
                 <FormGroup>
-                    <Label htmlFor="content">Content</Label>
-                    <textarea style={{resize: 'none', width: '470px'}} rows="3" type="text" name="content" id="content" placeholder="Content..." onChange={(e) => this.changeValue(e)} value = {this.state.content} required="required"/>
+                    <Label htmlFor="content">Nội Dung</Label>
+                    <textarea style={{resize: 'none', width: '470px'}} rows="3" type="text" name="content" id="content" placeholder="Bình luận..." onChange={(e) => this.changeValue(e)} value = {this.state.content} required="required"/>
                 </FormGroup>
-                
-                    
                 <FormGroup className="mb-2">
-                    <Label htmlFor="user">Customer</Label>
-                    <Input type="select" name="user_id" id="user" onChange={(e) => this.changeValue(e)} multiple required>
+                    <Label htmlFor="user">Người Dùng</Label>
+                    {/* <Input type="select" name="user_id" id="user" onChange={(e) => this.changeValue(e)} multiple required>
                         {
                             this.state.users.map((u) => (
                                 <option key={u.id} value={u.id}>{u.name}</option>
                             ))
                         }
-                    </Input>
+                    </Input> */}
+                    <select name="user_id" id="user" className="form-control" size="5" onChange={(e) => this.changeValue(e)} required>
+                        {
+                            this.state.users.map((u) => (
+                                <option key={u.id} value={u.id}>{u.name}</option>
+                            ))
+                        }
+                    </select>
                 </FormGroup>
                     
                 <FormGroup className="mb-2">
-                    <Label htmlFor="product">Product</Label>
-                    <Input type="select" name="product_id" id="product" onChange={(e) => this.changeValue(e)} required multiple>
+                    <Label htmlFor="product">Sản Phẩm</Label>
+                    {/* <Input type="select" name="product_id" id="product" onChange={(e) => this.changeValue(e)} required multiple>
                         {
                             this.state.products.map((p) => (
                                 <option key={p.id} value={p.id}>{p.name}</option>
                             ))
                         }
-                    </Input>
+                    </Input> */}
+                    <select name="product_id" id="product" className="form-control" size="5" onChange={(e) => this.changeValue(e)} required>
+                        {
+                            this.state.products.map((p) => (
+                                <option key={p.id} value={p.id}>{p.name}</option>
+                            ))
+                        }
+                    </select>
                 </FormGroup>
                 <div className="mb-5">
                     <Button type="submit" outline color="warning" >Thêm</Button>{' '}

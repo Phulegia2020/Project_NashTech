@@ -66,6 +66,11 @@ class MainMenu extends Component {
     //     this.props.history.push(`/WebPlayStation/category/${id}`)
     // }
 
+    handleNumberCart(data)
+    {
+        this.props.handleNumberCart(data);
+    }
+
     componentWillUnmount() {
         // fix Warning: Can't perform a React state update on an unmounted component
         this.setState = (state,callback)=>{
@@ -112,7 +117,7 @@ class MainMenu extends Component {
                                                    
                             <Menu.Item as={Link} to="/WebPlayStation/about" name="about" active={activeItem === "WebPlayStation/about"} onClick={this.onMenuItemClick}>Giới Thiệu</Menu.Item>
                             <Menu.Item position='right'>
-                                <ShoppingCart/>
+                                <ShoppingCart numberCart={this.props.numberCart} handleNumberCart={this.props.handleNumberCart}/>
                                 {localStorage.getItem('accessToken') !== null ? <Profile onLogOut={this.onLogOut}/>
                                          : <Button as={Link} to="/WebPlayStation/login" active={activeItem === "WebPlayStation/login"} onClick={this.onMenuItemClick} inverted >Đăng Nhập</Button>}
                             </Menu.Item>

@@ -513,6 +513,13 @@ class UpdateProduct extends Component {
                                     ))
                                 }
                             </Input>
+                            {/* <select name="supplier_id" id="supplier" className="form-control" size="2" onChange={(e) => this.changeValue(e)} value = {this.state.supplier_id} disabled={this.state.status === 'Stop'}>
+                                {
+                                    this.state.suppliers.map((s) => (
+                                        <option key={s.id} value={s.id}>{s.name}</option>
+                                    ))
+                                }
+                            </select> */}
                         </FormGroup>
                         <div className="mt-3">
                             <Button type="submit" outline color="warning" >Cập Nhật</Button>{' '}

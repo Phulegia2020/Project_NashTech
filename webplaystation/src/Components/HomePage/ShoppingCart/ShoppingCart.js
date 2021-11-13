@@ -66,6 +66,11 @@ class ShoppingCart extends Component {
         window.location.href='/WebPlayStation/order';
     }
 
+    handleNumberCart(data)
+    {
+        this.props.handleNumberCart(data);
+    }
+
     componentWillUnmount() {
         // fix Warning: Can't perform a React state update on an unmounted component
         this.setState = (state,callback)=>{
@@ -78,9 +83,9 @@ class ShoppingCart extends Component {
         return (
             <div>
                 <Modal trigger={<Button animated='vertical' inverted style={{marginRight: '0.5em'}} className="shopping-cart">
-                    {/* <i
+                    <i
 					class="fas fa-shopping-cart fa-x text-white"></i><span
-                    class="cart-number">0</span> */}
+                    class="cart-number">{this.props.numberCart}</span>
                                     <Button.Content visible>Giỏ Hàng</Button.Content>
                                     <Button.Content hidden>
                                         <Icon name='shop' />
@@ -93,7 +98,7 @@ class ShoppingCart extends Component {
                             <Header>Chi Tiết</Header>
                             <Grid.Row>
                                 <Grid.Column>
-                                    <ShoppingCartDetails />
+                                    <ShoppingCartDetails handleNumberCart={this.props.handleNumberCart}/>
                                 </Grid.Column>
                             </Grid.Row>
                         </Modal.Description>

@@ -50,7 +50,7 @@ class UpdateImportDetails extends Component {
                 key: 'quantity'
             })
             this.setState({
-                Error: "Quantity is not less than 1!"
+                Error: "Số lượng không nhỏ hơn 1!"
             });
             return;
         }
@@ -60,7 +60,7 @@ class UpdateImportDetails extends Component {
                 key: 'price'
             })
             this.setState({
-                Error: "Price is not less than 1!"
+                Error: "Giá không nhỏ hơn 1!"
             });
             return;
         }

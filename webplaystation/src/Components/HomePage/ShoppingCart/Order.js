@@ -296,7 +296,7 @@ class Order extends Component {
                     <Footer/>
                 </div>
                 <ToastContainer position="bottom-center"
-                    autoClose={3000}
+                    autoClose={1000}
                     hideProgressBar={false}
                     newestOnTop={false}
                     closeOnClick={false}

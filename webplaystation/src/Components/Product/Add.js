@@ -239,8 +239,11 @@ export default class Add extends Component {
                 });
             }
         );
+
         // this.props.onAdd(this.state);
         // setTimeout(() => this.props.onAdd(this.state), 2000);
+        // console.log(this.state.category_id);
+        // console.log(this.state.supplier_id);
     }
 
     handleClear = () => {
@@ -254,6 +257,14 @@ export default class Add extends Component {
         });
         this.props.onCloseForm();
     }
+
+    // handleInputSelect(e, id)
+    // {
+    //     e.preventDefault();
+    //     this.setState({
+    //         category_id: id
+    //     });
+    // }
 
     componentWillUnmount() {
         // fix Warning: Can't perform a React state update on an unmounted component
@@ -302,24 +313,54 @@ export default class Add extends Component {
                 <FormGroup className="mb-2">
                     
                     <Label htmlFor="category">Loại Máy</Label>
-                    <Input type="select" name="category_id" id="category" onChange={(e) => this.changeValue(e)} multiple required>
+                    {/* <Input type="select" name="category_id" id="category" onChange={(e) => this.changeValue(e)} multiple required>
                         {
                             this.state.categories.map((c) => (
                                 <option key={c.id} value={c.id}>{c.name}</option>
                             ))
                         }
-                    </Input>
-                    
+                    </Input> */}
+                    {/* <div className="input-select">
+                        {
+                            this.state.categories.map((c) => (
+                                <div key={c.id} className="input-item" onClick={(e) => this.handleInputSelect(e, c.id)}>{c.name}</div>
+                            ))
+                        }
+                    </div> */}
+                    <select name="category_id" id="category" className="form-control" size="5" onChange={(e) => this.changeValue(e)} required>
+                        {
+                            this.state.categories.map((c) => (
+                                <option key={c.id} value={c.id}>{c.name}</option>
+                            ))
+                        }
+                        {/* <option value="">One</option>
+                        <option value="">Two</option>
+                        <option value="">Three</option>
+                        <option value="">Four</option>
+                        <option value="">Five</option>
+                        <option value="">Six</option>
+                        <option value="">Seven</option>
+                        <option value="">Eight</option>
+                        <option value="">Nine</option>
+                        <option value="">Ten</option> */}
+                    </select>
                 </FormGroup>
                 <FormGroup className="mb-5">
                     <Label htmlFor="supplier">Nhà Cung Cấp</Label>
-                    <Input type="select" name="supplier_id" id="supplier" onChange={(e) => this.changeValue(e)} multiple required>
+                    {/* <Input type="select" name="supplier_id" id="supplier" onChange={(e) => this.changeValue(e)} multiple required>
                         {
                             this.state.suppliers.map((s) => (
                                 <option key={s.id} value={s.id}>{s.name}</option>
                             ))
                         }
-                    </Input>
+                    </Input> */}
+                    <select name="supplier_id" id="supplier" className="form-control" size="5" onChange={(e) => this.changeValue(e)} required>
+                        {
+                            this.state.suppliers.map((s) => (
+                                <option key={s.id} value={s.id}>{s.name}</option>
+                            ))
+                        }
+                    </select>
                 </FormGroup>
                 <div className="mb-5">
                     <Button type="submit" outline color="warning" >Thêm</Button>{' '}

@@ -7,7 +7,7 @@ import { withRouter } from "react-router";
 import Add from "./Add"
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Pagination, PaginationItem, PaginationLink } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheck, faEdit, faInfo, faPlus, faTrash, faArrowCircleUp, faArrowCircleDown } from '@fortawesome/free-solid-svg-icons';
+import { faCheck, faEdit, faInfo, faPlus, faTrash, faArrowCircleUp, faArrowCircleDown, faInfoCircle, faReceipt } from '@fortawesome/free-solid-svg-icons';
 import { Label, Breadcrumb, Input } from 'semantic-ui-react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -86,7 +86,7 @@ class Bill extends Component {
 
     createBill(newBill){
         // post(`/bills`, {total: 0, user_id: newBill.user_id, billStatus_id: newBill.billStatus_id})
-        post(`/bills`, {total: 0, user_id: newBill.user_id, status: newBill.status, destination: newBill.destination})
+        post(`/bills`, {total: 0, user_id: newBill.user_id, status: newBill.status, destination: newBill.destination, payment: newBill.payment})
         .then((response) => {
             //window.location.reload();
             this.setState({
@@ -382,10 +382,10 @@ class Bill extends Component {
                 </Modal>
                 <Breadcrumb icon='right angle' sections={sections} size='large'/>
                 <br/>
-                <button type="button" className="btn btn-primary" onClick={this.onToggleForm} style={{marginTop: '15px', marginBottom: '5px'}}>
+                {/* <button type="button" className="btn btn-primary" onClick={this.onToggleForm} style={{marginTop: '15px', marginBottom: '5px'}}>
                     <FontAwesomeIcon icon={faPlus} className="mr-2"/>{' '}
                     Tạo Hóa Đơn
-                </button>
+                </button> */}
                 <Input
                     style={{marginLeft: '100rem'}}
                     placeholder="Tên khách hàng..."
@@ -401,8 +401,9 @@ class Bill extends Component {
                             <th><b>Thời Gian Lập</b>{' '}<FontAwesomeIcon icon={faArrowCircleUp} className="sort-icon" onClick={(e) => this.handleSortInc(e, 'create')}/><FontAwesomeIcon icon={faArrowCircleDown} className="sort-icon" onClick={(e) => this.handleSortDes(e, 'create')}/></th>
                             <th><b>Thời Gian Xác Nhận</b>{' '}<FontAwesomeIcon icon={faArrowCircleUp} className="sort-icon" onClick={(e) => this.handleSortInc(e, 'confirm')}/><FontAwesomeIcon icon={faArrowCircleDown} className="sort-icon" onClick={(e) => this.handleSortDes(e, 'confirm')}/></th>
                             <th><b>Khách Hàng</b></th>
+                            <th><b>Thanh Toán</b></th>
                             <th><b>Trạng Thái</b></th>
-                            <th>Cập Nhập</th>
+                            {/* <th>Cập Nhập</th> */}
                             <th>Xóa</th>
                             <th>Chi Tiết</th>
                             <th>Xác Nhận</th>
@@ -418,9 +419,11 @@ class Bill extends Component {
                                     <td>{b.createddate}</td>
                                     <td>{b.checkout_date}</td>
                                     <td>{b.user.name}</td>
+                                    {b.payment === 'Cod' && <td>Tiền Mặt</td>}
+                                    {b.payment === 'PayPal' && <td>PayPal</td>}
                                     {/* <td>{b.billStatus.id === 1 ? <Label color="teal">Done</Label> : <Label color="grey">Waiting CheckOut</Label>}</td> */}
                                     <td>{b.status === 'Done' ? <Label color="teal">Hoàn Tất</Label> : <Label color="grey">Chờ Xác Nhận</Label>}</td>
-                                    <td>
+                                    {/* <td> */}
                                         {/* {b.billStatus.id != 1 ? 
                                         <Link to={`/admin/bill/update/${b.id}`}>
                                             <button className="btn btn-success" disabled={b.billStatus.id == 1}>
@@ -431,7 +434,7 @@ class Bill extends Component {
                                         <FontAwesomeIcon icon={faEdit} className="mr-2"/>{' '}
                                         </button>
                                         } */}
-                                        {b.status !== 'Done' ? 
+                                        {/* {b.status !== 'Done' ? 
                                         <Link to={`/admin/bill/update/${b.id}`}>
                                             <button className="btn btn-success" disabled={b.status === 'Done'}>
                                                 <FontAwesomeIcon icon={faEdit} className="mr-2"/>{' '}
@@ -441,7 +444,7 @@ class Bill extends Component {
                                             <FontAwesomeIcon icon={faEdit} className="mr-2"/>{' '}
                                         </button>
                                         }
-                                    </td>
+                                    </td> */}
                                     <td>
                                         {/* <button onClick={(e) => this.onToggleFormDel(e, b.id)} className="btn btn-danger" disabled={b.billStatus.id == 1}> */}
                                         <button onClick={(e) => this.onToggleFormDel(e, b.id)} className="btn btn-danger" disabled={b.status === 'Done'}>
@@ -451,7 +454,7 @@ class Bill extends Component {
                                     <td>
                                         <Link to={`/admin/bill/${b.id}`}>
                                             <button className="btn btn-info">
-                                                <FontAwesomeIcon icon={faInfo} className="mr-2"/>{' '}
+                                                <FontAwesomeIcon icon={faReceipt} className="mr-2"/>{' '}
                                             </button>
                                         </Link>
                                     </td>

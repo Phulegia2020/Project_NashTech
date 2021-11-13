@@ -3,8 +3,9 @@ import { PieChart, Pie, Cell, LineChart, Line, CartesianGrid, XAxis, YAxis, Tool
 import {get} from "../../Utils/httpHelper";
 import { Input } from 'reactstrap';
 import "./Statistical.css";
-import {formatQuantity} from "./../../Utils/Utils";
+import {formatQuantity, formatCurrency} from "./../../Utils/Utils";
 import ReactExport from "react-data-export";
+import { Statistic } from 'semantic-ui-react';
 
 const CustomTooltip = ({ active, payload, label }) => {
     if (active && payload && payload.length) {
@@ -21,27 +22,6 @@ const CustomTooltip = ({ active, payload, label }) => {
     return null;
 };
 
-const CustomizedLabel = ({ active, payload, label }) => {
-    // const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
-    // const x = cx + radius * Math.cos(-midAngle * RADIAN);
-    // const y = cy + radius * Math.sin(-midAngle * RADIAN);
-  
-    // return (
-    //   <text x={x} y={y} fill="white" textAnchor={x > cx ? 'start' : 'end'} dominantBaseline="central">
-    //     {`${(percent * 100).toFixed(0)}%`}
-    //   </text>
-    // );
-    if (active && payload && payload.length) {
-        return (
-          <div className="custom-tooltip">
-            <p className="label">{`${payload[0].value} máy`}</p>
-            <p className="desc">Số lượng máy đã bán</p>
-          </div>
-        );
-      }
-      return null;
-};
-
 // const ReactExport = require("react-data-export");
 const ExcelFile = ReactExport.ExcelFile;
 const ExcelSheet = ExcelFile.ExcelSheet;
@@ -51,23 +31,99 @@ export default class Chart extends Component {
         super(props);
 
         this.state = {
-            data: [],
-            COLORS: ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#FF2C4F'],
-            month: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
-            monthValue: new Date().getMonth() + 1,
             revenue: [],
-            
+            income: 0,
+            bills: [],
+            imports: [],
+            outcome: 0,
+            month: ['', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
+            monthValue: new Date().getMonth() + 1,
+            quy: ['', '1', '2', '3', '4'],
+            quyValue: '',
+            year: ['2021'],
+            yearValue: new Date().getFullYear(),
+            dateFrom: this.convertToday(),
+            dateTo: this.convertToday(),
         }
     }
 
     componentDidMount(){
-        get(`/products/topSale?month=${parseInt(this.state.monthValue)}`)
+        // get(`/bills/profit?month=${parseInt(new Date().getMonth() + 1)}&quy=${this.state.quyValue}&year=${parseInt(new Date().getFullYear())}`)
+        // .then((response) => {
+        //     if (response.status === 200)
+        //     {
+        //         var doanhthu = 0;
+        //         this.setState({
+        //             bills: response.data,
+        //         }, () => console.log(response.data));
+        //         for (var i = 0; i < response.data.length; i++)
+        //         {
+        //             doanhthu = doanhthu + response.data[i].total
+                    
+        //         }
+        //         this.setState({
+        //             income: doanhthu
+        //         })
+        //     }
+        // })
+        // .catch(error => {console.log(error)})
+
+        // get(`/imports/profit?month=${parseInt(new Date().getMonth() + 1)}&quy=${this.state.quyValue}&year=${parseInt(new Date().getFullYear())}`)
+        // .then((response) => {
+        //     if (response.status === 200)
+        //     {
+        //         var doanhthu = 0;
+        //         this.setState({
+        //             imports: response.data,
+        //         }, () => console.log(response.data));
+        //         for (var i = 0; i < response.data.length; i++)
+        //         {
+        //             doanhthu = doanhthu + response.data[i].total
+                    
+        //         }
+        //         this.setState({
+        //             outcome: doanhthu
+        //         })
+        //     }
+        // })
+        // .catch(error => {console.log(error)})
+
+        get(`/bills/profitDate?dateFrom=${this.state.dateFrom}&dateTo=${this.state.dateTo}`)
         .then((response) => {
             if (response.status === 200)
             {
+                var doanhthu = 0;
                 this.setState({
-                    data: response.data.slice(0, 5),
-                }, () => console.log(this.state.data));
+                    bills: response.data,
+                }, () => console.log(response.data));
+                for (var i = 0; i < response.data.length; i++)
+                {
+                    doanhthu = doanhthu + response.data[i].total
+                    
+                }
+                this.setState({
+                    income: doanhthu
+                })
+            }
+        })
+        .catch(error => {console.log(error)})
+
+        get(`/imports/profitDate?dateFrom=${this.state.dateFrom}&dateTo=${this.state.dateTo}`)
+        .then((response) => {
+            if (response.status === 200)
+            {
+                var doanhthu = 0;
+                this.setState({
+                    imports: response.data,
+                }, () => console.log(response.data));
+                for (var i = 0; i < response.data.length; i++)
+                {
+                    doanhthu = doanhthu + response.data[i].total
+                    
+                }
+                this.setState({
+                    outcome: doanhthu
+                })
             }
         })
         .catch(error => {console.log(error)})
@@ -85,15 +141,92 @@ export default class Chart extends Component {
     }
 
     componentDidUpdate(prevProps, prevState){
-        if (prevState.monthValue !== this.state.monthValue)
+        // if (prevState.monthValue !== this.state.monthValue || prevState.quyValue !== this.state.quyValue || prevState.yearValue !== this.state.yearValue) 
+        // {
+        //     if (this.state.monthValue === '')
+        //     {
+        //         this.setState({
+        //             monthValue: '0'
+        //         })
+        //     }
+        //     get(`/bills/profit?month=${parseInt(this.state.monthValue)}&quy=${this.state.quyValue}&year=${this.state.yearValue}`)
+        //     .then((response) => {
+        //         if (response.status === 200)
+        //         {
+        //             var doanhthu = 0;
+        //             this.setState({
+        //                 bills: response.data,
+        //             }, () => console.log(response.data));
+        //             for (var i = 0; i < response.data.length; i++)
+        //             {
+        //                 doanhthu = doanhthu + response.data[i].total
+                        
+        //             }
+        //             this.setState({
+        //                 income: doanhthu
+        //             })
+        //         }
+        //     })
+        //     .catch(error => {console.log(error)})
+        //     get(`/imports/profit?month=${parseInt(this.state.monthValue)}&quy=${this.state.quyValue}&year=${this.state.yearValue}`)
+        //     // parseInt(new Date().getFullYear())
+        //     .then((response) => {
+        //         if (response.status === 200)
+        //         {
+        //             var doanhthu = 0;
+        //             this.setState({
+        //                 imports: response.data,
+        //             }, () => console.log(response.data));
+        //             for (var i = 0; i < response.data.length; i++)
+        //             {
+        //                 doanhthu = doanhthu + response.data[i].total
+                        
+        //             }
+        //             this.setState({
+        //                 outcome: doanhthu
+        //             })
+        //         }
+        //     })
+        //     .catch(error => {console.log(error)})
+        // }
+        if (prevState.dateFrom !== this.state.dateFrom || prevState.dateTo !== this.state.dateTo)
         {
-            get(`/products/topSale?month=${parseInt(this.state.monthValue)}`)
+            get(`/bills/profitDate?dateFrom=${this.state.dateFrom}&dateTo=${this.state.dateTo}`)
             .then((response) => {
                 if (response.status === 200)
                 {
+                    var doanhthu = 0;
                     this.setState({
-                        data: response.data.slice(0, 5),
-                    }, () => console.log(this.state.data));
+                        bills: response.data,
+                    }, () => console.log(response.data));
+                    for (var i = 0; i < response.data.length; i++)
+                    {
+                        doanhthu = doanhthu + response.data[i].total
+                        
+                    }
+                    this.setState({
+                        income: doanhthu
+                    })
+                }
+            })
+            .catch(error => {console.log(error)})
+
+            get(`/imports/profitDate?dateFrom=${this.state.dateFrom}&dateTo=${this.state.dateTo}`)
+            .then((response) => {
+                if (response.status === 200)
+                {
+                    var doanhthu = 0;
+                    this.setState({
+                        imports: response.data,
+                    }, () => console.log(response.data));
+                    for (var i = 0; i < response.data.length; i++)
+                    {
+                        doanhthu = doanhthu + response.data[i].total
+                        
+                    }
+                    this.setState({
+                        outcome: doanhthu
+                    })
                 }
             })
             .catch(error => {console.log(error)})
@@ -101,9 +234,42 @@ export default class Chart extends Component {
     }
 
     changeValue(e){
-        this.setState({
-            monthValue: e.target.value
-        }, () => console.log(this.state.monthValue))
+        if (e.target.value === '')
+        {
+            this.setState({
+                [e.target.name]: '0'
+            })
+        }
+        else
+        {
+            this.setState({
+                [e.target.name]: e.target.value
+            }, () => console.log(e.target.value))
+        }
+        
+    }
+
+    convertToday() {
+        let today = new Date();
+        let dd = today.getDate();
+        let mm = today.getMonth() + 1; //January is 0!
+        let yyyy = today.getFullYear();
+        if (dd < 10) {
+          dd = "0" + dd;
+        }
+        if (mm < 10) {
+          mm = "0" + mm;
+        }
+      
+        today = yyyy + "-" + mm + "-" + dd;
+        return today;
+      }
+
+    componentWillUnmount() {
+        // fix Warning: Can't perform a React state update on an unmounted component
+        this.setState = (state,callback)=>{
+            return;
+        };
     }
 
     render() {
@@ -125,62 +291,100 @@ export default class Chart extends Component {
         ];
         return (
             <div className="charts">
-                <div className="pie-chart">
-                    <h4>THÁNG:</h4>
-                    <Input type="select" name="month" id="month" value={this.state.monthValue} onChange={(e) => this.changeValue(e)} style={{width: '150px'}}>
+                <h3 className="title-report">THỐNG KÊ BÁO CÁO DOANH THU</h3>
+                <div className='thang-quy-nam'>
+                    {/* <h4>THÁNG:</h4>
+                    <Input type="select" name="monthValue" id="month" value={this.state.monthValue} onChange={(e) => this.changeValue(e)} style={{width: '150px', marginRight:'20px'}}>
                         {
                             this.state.month.map((m, index) => (
                                 <option key={index} value={this.state.month[index]}>{this.state.month[index]}</option>
                             ))
                         }
                     </Input>
-                    <h4 style={{textAlign: 'center'}}>TOP 5 MÁY BÁN CHẠY NHẤT TRONG {this.state.monthValue}/{new Date().getFullYear()}</h4>
-                    <PieChart width={1000} height={400} onMouseEnter={this.onPieEnter}>
-                        <Pie
-                        data={this.state.data}
-                        // cx={800}
-                        // cy={160}
-                        cx={370}
-                        cy={170}
-                        innerRadius={90}
-                        outerRadius={150}
-                        fill="#8884d8"
-                        paddingAngle={5}
-                        dataKey="topSale"
-                        label
-                        >
-                        {this.state.data.map((entry, index) => (
-                            <Cell key={`cell-${index}`} fill={this.state.COLORS[index % this.state.COLORS.length]} />
-                        ))}
-                        </Pie>
-                        <Tooltip content={<CustomizedLabel/>}/>
-                    </PieChart>
-                    <div className="txtexplain">
-                        {this.state.data.map((d, index) => (
-                            d.topSale > 0 &&
-                            <div key={index} className="explain-note">
-                                <div className="explain-color" style={{backgroundColor: this.state.COLORS[index % this.state.COLORS.length]}}>
-                                </div>
-                                {d.product}
-                            </div>
-                        ))}
+                    <h4>QUÝ:</h4>
+                    <Input type="select" name="quyValue" id="quy" value={this.state.quyValue} onChange={(e) => this.changeValue(e)} style={{width: '150px', marginRight:'20px'}}>
+                        {
+                            this.state.quy.map((q, index) => (
+                                <option key={index} value={this.state.quy[index]}>{this.state.quy[index]}</option>
+                            ))
+                        }
+                    </Input>
+
+                    <h4>NĂM:</h4>
+                    <Input type="select" name="yearValue" id="year" value={this.state.yearValue} onChange={(e) => this.changeValue(e)} style={{width: '150px'}}>
+                        {
+                            this.state.year.map((y, index) => (
+                                <option key={index} value={this.state.year[index]}>{this.state.year[index]}</option>
+                            ))
+                        }
+                    </Input> */}
+                    
+                    <h4>TỪ: </h4>
+                    <input type="date" name="dateFrom" onChange={(e) => this.changeValue(e)} defaultValue={this.state.dateFrom} className="input-from"></input>
+                    
+                    
+                    <h4>ĐẾN: </h4>
+                    <input type="date" name="dateTo" onChange={(e) => this.changeValue(e)} defaultValue={this.state.dateTo}></input>
+                    
+                </div>
+                <div className="bao-cao">
+                    <div className="rp">
+                        <Statistic.Group size='small' id="income">
+                            <Statistic>
+                                <Statistic.Value>{formatQuantity(this.state.bills.length)}</Statistic.Value>
+                                <Statistic.Label>SỐ HÓA ĐƠN</Statistic.Label>
+                            </Statistic>
+                            <Statistic>
+                                <Statistic.Value>{formatCurrency(this.state.income)}</Statistic.Value>
+                                <Statistic.Label>TỔNG DOANH THU</Statistic.Label>
+                            </Statistic>
+                        </Statistic.Group>
+                        {/* <h3>BILLS DONE: {formatQuantity(this.state.bills.length)}</h3>
+                        <h3>TOTAL INCOME: {formatCurrency(this.state.income)}</h3> */}
+                    </div>
+                    <div className="rp">
+                        <Statistic.Group size='small' id="doanhthu">
+                            {/* <Statistic>
+                                <Statistic.Value>{formatQuantity(this.state.bills.length)}</Statistic.Value>
+                                <Statistic.Label>BILLS DONE</Statistic.Label>
+                            </Statistic> */}
+                            <Statistic>
+                                <Statistic.Value>{formatCurrency(this.state.income - this.state.outcome)}</Statistic.Value>
+                                <Statistic.Label>LỢI NHUẬN</Statistic.Label>
+                            </Statistic>
+                        </Statistic.Group>
+                        {/* <h3>BILLS DONE: {formatQuantity(this.state.bills.length)}</h3>
+                        <h3>TOTAL INCOME: {formatCurrency(this.state.income)}</h3> */}
+                    </div>
+                    <div className="rp" id="outcome">
+                        <Statistic.Group size='small'>
+                            <Statistic>
+                                <Statistic.Value>{formatQuantity(this.state.imports.length)}</Statistic.Value>
+                                <Statistic.Label>PHIẾU ĐẶT HÀNG</Statistic.Label>
+                            </Statistic>
+                            <Statistic>
+                                <Statistic.Value>{formatCurrency(this.state.outcome)}</Statistic.Value>
+                                <Statistic.Label>TỔNG CHI PHÍ</Statistic.Label>
+                            </Statistic>
+                        </Statistic.Group>
+                        {/* <h3>IMPORTS DONE: {formatQuantity(this.state.imports.length)}</h3>
+                        <h3>TOTAL OUTCOME: {formatCurrency(this.state.outcome)}</h3> */}
                     </div>
                 </div>
 
                 <div className="line-chart">
-                
-                <h4>DOANH THU THEO TỪNG THÁNG TRONG NĂM {new Date().getFullYear()}</h4>
-                <LineChart width={600} height={550} data={this.state.revenue} margin={{ top: 5, right: 20, bottom: 5, left: 0 }}>
-                    <Line type="monotone" dataKey="revenue" stroke="#82ca9d" />
-                    {/* #8884d8   #e74c3c*/}
-                    <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
-                    <XAxis dataKey="name" />
-                    <YAxis />
-                    <Tooltip content={<CustomTooltip/>}/>
-                </LineChart>
-                <ExcelFile filename={`Report_Doanh_Thu_${new Date().getFullYear()}`} element={<button className="btn-exportReport">IN BÁO CÁO</button>}>
-                    <ExcelSheet dataSet={dataSet} name="Report_Sheet"/>
-                </ExcelFile>
+                    <h4>DOANH THU THEO TỪNG THÁNG TRONG NĂM {new Date().getFullYear()}</h4>
+                    <LineChart width={900} height={550} data={this.state.revenue} margin={{ top: 5, right: 20, bottom: 5, left: 0 }}>
+                        <Line type="monotone" dataKey="revenue" stroke="#82ca9d" />
+                        {/* #8884d8   #e74c3c*/}
+                        <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
+                        <XAxis dataKey="name" />
+                        <YAxis />
+                        <Tooltip content={<CustomTooltip/>}/>
+                    </LineChart>
+                    <ExcelFile filename={`Report_Doanh_Thu_${new Date().getFullYear()}`} element={<button className="btn-exportReport">IN BÁO CÁO</button>}>
+                        <ExcelSheet dataSet={dataSet} name="Report_Sheet"/>
+                    </ExcelFile>
                 </div>
             </div>
         )

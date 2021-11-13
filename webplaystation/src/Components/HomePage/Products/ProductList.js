@@ -11,6 +11,11 @@ class ProductList extends Component {
           }
     }
 
+    handleNumberCart(data)
+    {
+        this.props.handleNumberCart(data);
+    }
+
     render() {
         
         return (
@@ -18,7 +23,7 @@ class ProductList extends Component {
                 {
                     this.props.products.map((p) =>
                         <Grid.Column key={p.id}>
-                            <ProductItem product={p} />
+                            <ProductItem product={p} handleNumberCart={this.props.handleNumberCart}/>
                         </Grid.Column>
                     )
                 }

@@ -23,7 +23,7 @@ import { withRouter } from "react-router";
 class SideBar extends Component {
     state = {
         categories: [],
-        statistical: [{id: 'chart', name: 'Biều Đồ'}],
+        statistical: [{id: 'chart', name: 'Báo cáo'}],
         info: [{id: 'info', name: 'Change Password'}],
         isDisplayForm: false,
         redirect: false

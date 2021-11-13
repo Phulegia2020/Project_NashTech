@@ -77,6 +77,11 @@ class ProductsByCategry extends Component {
         .catch(error => console.log(error))
     }
 
+    handleNumberCart(data)
+    {
+        this.props.handleNumberCart(data);
+    }
+
     componentWillUnmount() {
         // fix Warning: Can't perform a React state update on an unmounted component
         this.setState = (state,callback)=>{
@@ -101,7 +106,7 @@ class ProductsByCategry extends Component {
                                     <h3 className="header-home">Máy PS</h3>
                                 </Header>
                             </Divider>
-                            <ProductList products={this.state.Products}
+                            <ProductList products={this.state.Products} handleNumberCart={this.props.handleNumberCart}
                             />
                         </Grid.Column>
                     </Grid.Row>

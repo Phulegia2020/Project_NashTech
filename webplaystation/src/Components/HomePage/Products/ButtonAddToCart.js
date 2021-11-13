@@ -28,6 +28,7 @@ class ButtonAddToCart extends Component {
             shoppingCartItems.push(cartItem);
             localStorage.setItem('shopping-cart', JSON.stringify(shoppingCartItems));
         }
+        this.props.handleNumberCart(shoppingCartItems.length);
         if (this.props.notification != null)
         {
             this.props.notification();

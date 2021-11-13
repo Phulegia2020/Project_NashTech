@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -166,6 +167,25 @@ public class ImportController {
     public ResponseEntity<List<Import>> getImportPages(ProductPage productPage)
     {
         return new ResponseEntity<>(importService.getImportStatusPage(productPage), HttpStatus.OK);
+    }
+
+    @GetMapping("/profitDate")
+    public List<ImportDTO> getAllImportsProfitDate(@RequestParam String dateFrom, @RequestParam String dateTo)
+    {
+        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime from = LocalDateTime.parse(dateFrom + " 00:00:00", dateFormat);
+//        from = LocalDateTime.parse(dateFormat.format(from), dateFormat);
+        LocalDateTime to = LocalDateTime.parse(dateTo + " 23:59:59", dateFormat);
+        List<Import> imports = importService.getImportsDone();
+        List<Import> list = new ArrayList<>();
+        for (int i = 0; i < imports.size(); i++)
+        {
+            if (imports.get(i).getCreateddate().isAfter(from) && imports.get(i).getCreateddate().isBefore(to))
+            {
+                list.add(imports.get(i));
+            }
+        }
+        return list.stream().map(this::convertToDTO).collect(Collectors.toList());
     }
 
     @PostMapping()

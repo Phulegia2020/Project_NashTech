@@ -109,7 +109,7 @@ export default class ChangePassword extends Component {
                                     <Label htmlFor="newPassword">Mật Khẩu Mới</Label>
                                     <Input type={this.state.show === false? 'password' : 'text'} minLength="6" name="newpassword" id="newPassword" placeholder="Nhập mật khẩu mới..." onChange={(e) => this.changeValue(e)} value = {this.state.newpassword} required/>
                                     {this.state.key === 'password' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
-                                    <Checkbox label='Show password' onChange={(e) => this.handleShowPassword(e)}/>
+                                    <Checkbox label='Hiển thị' onChange={(e) => this.handleShowPassword(e)}/>
                                 </FormGroup>
                                 <FormGroup style={{marginBottom: '10px', marginLeft: '50px'}}>
                                     <Label htmlFor="confirmpassword">Nhập Lại Mật Khẩu</Label>

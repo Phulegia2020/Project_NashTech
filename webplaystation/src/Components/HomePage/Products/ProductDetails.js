@@ -32,7 +32,7 @@ class ProductDetails extends Component {
 
     componentDidMount() {
         window.scrollTo(0, 0);
-        this.props.handleChatBot1(true);
+        // this.props.handleChatBot1(true);
         this.state.ShoppingCartItems = JSON.parse(localStorage.getItem('shopping-cart') || '[]');
         get(`/products/${this.props.match.params.id}`)
         .then((response) => {
@@ -224,8 +224,13 @@ class ProductDetails extends Component {
         });
     }
 
+    handleNumberCart(data)
+    {
+        this.props.handleNumberCart(data);
+    }
+
     componentWillUnmount() {
-        this.props.handleChatBot1(false);
+        // this.props.handleChatBot1(false);
         // fix Warning: Can't perform a React state update on an unmounted component
         this.setState = (state,callback)=>{
             return;
@@ -272,7 +277,7 @@ class ProductDetails extends Component {
                                     Giao hàng miễn phí trong vòng 1 - 2 ngày tại nội thành HCM (*)</p>
                             </Message>
                             <Header as="h4">
-                                <ButtonAddToCart product={product} notification={this.notification}/>
+                                <ButtonAddToCart product={product} notification={this.notification} handleNumberCart={this.props.handleNumberCart}/>
                             </Header>
                         </Grid.Column>
                     </Grid.Row>

@@ -115,7 +115,7 @@ export default class Add extends Component {
                 
                 <FormGroup className="mb-2">
                     <Label htmlFor="product">Máy</Label>
-                    <Input type="select" name="product_id" id="product" onChange={(e) => this.changeValue(e)} multiple required>
+                    {/* <Input type="select" name="product_id" id="product" onChange={(e) => this.changeValue(e)} multiple required>
                         {
                             this.state.products.map((p) => (
                                 <option key={p.id} value={p.id}>
@@ -123,7 +123,16 @@ export default class Add extends Component {
                                 </option>
                             ))
                         }
-                    </Input>
+                    </Input> */}
+                    <select name="product_id" id="product" className="form-control" size="5" onChange={(e) => this.changeValue(e)} required>
+                        {
+                            this.state.products.map((p) => (
+                                <option key={p.id} value={p.id}>
+                                    {p.name}
+                                </option>
+                            ))
+                        }
+                    </select>
                     {this.state.key === 'product' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
                 </FormGroup>
                 <div className="mb-5">

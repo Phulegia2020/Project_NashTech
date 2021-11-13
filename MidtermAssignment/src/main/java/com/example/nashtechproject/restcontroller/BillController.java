@@ -25,7 +25,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.text.DecimalFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -223,6 +225,25 @@ public class BillController {
         return list.stream().map(this::convertToDTO).collect(Collectors.toList());
     }
 
+    @GetMapping("/profitDate")
+    public List<BillDTO> getAllBillsProfitDate(@RequestParam String dateFrom, @RequestParam String dateTo)
+    {
+        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime from = LocalDateTime.parse(dateFrom + " 00:00:00", dateFormat);
+//        from = LocalDateTime.parse(dateFormat.format(from), dateFormat);
+        LocalDateTime to = LocalDateTime.parse(dateTo + " 23:59:59", dateFormat);
+        List<Bill> bills = billService.getBillsDone();
+        List<Bill> list = new ArrayList<>();
+        for (int i = 0; i < bills.size(); i++)
+        {
+            if (bills.get(i).getCheckout_date().isAfter(from) && bills.get(i).getCheckout_date().isBefore(to))
+            {
+                list.add(bills.get(i));
+            }
+        }
+        return list.stream().map(this::convertToDTO).collect(Collectors.toList());
+    }
+
     @GetMapping("/revenue")
     public List<RevenueDTO> getRevenue()
     {
@@ -342,13 +363,13 @@ public class BillController {
 //            }
             bill.setCheckout_date(LocalDateTime.now());
 //            bill.setBillStatus(bs);
-            List<BillDetails> list = billDetailsService.getBillDetailsByBill(billId);
-            for (int i = 0; i < list.size(); i++)
-            {
-                Product pro = productService.getProduct(list.get(i).getKey().getProduct().getId());
-                pro.setQuantity(pro.getQuantity() - list.get(i).getQuantity());
-                productService.updateProduct(pro);
-            }
+//            List<BillDetails> list = billDetailsService.getBillDetailsByBill(billId);
+//            for (int i = 0; i < list.size(); i++)
+//            {
+//                Product pro = productService.getProduct(list.get(i).getKey().getProduct().getId());
+//                pro.setQuantity(pro.getQuantity() - list.get(i).getQuantity());
+//                productService.updateProduct(pro);
+//            }
             bill.setStatus(STATE.DONE);
             billService.updateBill(bill);
         }
@@ -372,6 +393,13 @@ public class BillController {
             throw new InvalidDataException("The bill is checked out. Can not delete!");
         }
 //        billService.deleteBill(billId);
+        List<BillDetails> list = billDetailsService.getBillDetailsByBill(billId);
+        for (int i = 0; i < list.size(); i++)
+        {
+            Product pro = productService.getProduct(list.get(i).getKey().getProduct().getId());
+            pro.setQuantity(pro.getQuantity() + list.get(i).getQuantity());
+            productService.updateProduct(pro);
+        }
         bill.setStatus(STATE.CANCEL);
         billService.updateBill(bill);
         return ResponseEntity.ok(new MessageResponse("Delete Successfully"));

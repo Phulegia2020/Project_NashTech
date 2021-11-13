@@ -77,6 +77,11 @@ class ProductItem extends Component {
         this.props.warning();
     }
 
+    handleNumberCart(data)
+    {
+        this.props.handleNumberCart(data);
+    }
+
     componentWillUnmount() {
         // fix Warning: Can't perform a React state update on an unmounted component
         this.setState = (state,callback)=>{
@@ -104,7 +109,7 @@ class ProductItem extends Component {
                     </Card.Meta>
 
                     <Card.Description>
-                        <ButtonAddToCart product={this.props.product} notification={this.props.normal !== 'top-card' ? this.notification : this.warning}/>
+                        <ButtonAddToCart product={this.props.product} notification={this.props.normal !== 'top-card' ? this.notification : this.warning} handleNumberCart={this.props.handleNumberCart}/>
                         <Button color='orange' animated='vertical' className="txtdeco">
                             <Button.Content visible>
                                 <Icon name='browser'/> Chi Tiết

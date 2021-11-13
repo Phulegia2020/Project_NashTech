@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import Add from "./Add"
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Pagination, PaginationItem, PaginationLink } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faInfo, faPlus, faTrash, faArrowCircleDown, faArrowCircleUp } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faInfo, faPlus, faTrash, faArrowCircleDown, faArrowCircleUp, faReceipt } from '@fortawesome/free-solid-svg-icons';
 import { Label, Breadcrumb, Input } from 'semantic-ui-react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -350,7 +350,7 @@ export default class PlaceOrder extends Component {
                                     <td>
                                         <Link to={`/admin/placeorder/${po.id}`}>
                                             <button className="btn btn-info">
-                                            <FontAwesomeIcon icon={faInfo} className="mr-2"/>{' '}
+                                            <FontAwesomeIcon icon={faReceipt} className="mr-2"/>{' '}
                                                 
                                             </button>
                                         </Link>

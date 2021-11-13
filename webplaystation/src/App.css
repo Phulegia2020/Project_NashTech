@@ -182,7 +182,8 @@ df-messenger {
   --df-messenger-bot-message: #636e72;
   --df-messenger-font-color: white;
   --df-messenger-user-message: #479b3d;
-  z-index: 10;
+  /* --df-messenger-button-titlebar-color: #5bb75b; */
+  /* z-index: 10; */
 }
 
 /* #footer-client
