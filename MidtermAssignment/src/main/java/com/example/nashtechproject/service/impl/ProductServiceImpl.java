@@ -208,7 +208,7 @@ public class ProductServiceImpl implements ProductService {
 
     public boolean existName(String name)
     {
-        if (productRepository.existsByName(name))
+        if (productRepository.existsByNameAndStatus(name, STATE.SALE))
         {
             return true;
         }

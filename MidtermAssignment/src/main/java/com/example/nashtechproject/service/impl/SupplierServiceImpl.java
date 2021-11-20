@@ -68,7 +68,7 @@ public class SupplierServiceImpl implements SupplierService {
 
     public boolean existPhone(String phone)
     {
-        if (supplierRepository.existsByPhone(phone))
+        if (supplierRepository.existsByPhoneAndStatus(phone, STATE.ACTIVE))
         {
             return true;
         }
@@ -77,7 +77,7 @@ public class SupplierServiceImpl implements SupplierService {
 
     public boolean existName(String name)
     {
-        if (supplierRepository.existsByName(name))
+        if (supplierRepository.existsByNameAndStatus(name, STATE.ACTIVE))
         {
             return true;
         }

@@ -106,7 +106,7 @@ class UpdateImport extends Component {
                         </FormGroup>
                         <FormGroup className="mb-2">
                             <Label htmlFor="user">Nhân Viên Lập</Label>
-                            <Input type="select" name="user_id" id="user" value = {this.state.user_id} onChange={(e) => this.changeValue(e)}>
+                            <Input type="select" name="user_id" id="user" value = {this.state.user_id} onChange={(e) => this.changeValue(e)} disabled>
                                 {
                                     this.state.users.map((u) => (
                                         <option key={u.id} value={u.id}>{u.name}</option>

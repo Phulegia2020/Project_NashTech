@@ -61,17 +61,6 @@ class SignUp extends Component {
 	}
 
     handleSubmit = (event) => {
-        if (!checkPhoneNumber(event.target.phone.value.trim()))
-        {
-            console.log('error')
-            this.setState({
-                key: 'phone'
-            })
-            this.setState({
-                Error: "Phone must be numbers and start with 0!"
-            });
-            return;
-        }
         for (let i = 0; i < this.state.users.length; i++)
         {
             if (this.state.users[i].email === event.target.email.value.trim())
@@ -80,7 +69,7 @@ class SignUp extends Component {
                     key: 'email'
                 })
                 this.setState({
-                    Error: "This email is used already!"
+                    Error: "Email này đã được sử dụng!"
                 });
                 return;
             }
@@ -90,7 +79,7 @@ class SignUp extends Component {
                     key: 'phone'
                 })
                 this.setState({
-                    Error: "This phone number is existed!"
+                    Error: "Số điện thoại này đẫ được sử dụng!"
                 });
                 return;
             }
@@ -100,10 +89,21 @@ class SignUp extends Component {
                     key: 'username'
                 })
                 this.setState({
-                    Error: "This username is existed!"
+                    Error: "Tên tài khoản này đã được sử dụng!"
                 });
                 return;
             }
+        }
+        if (!checkPhoneNumber(event.target.phone.value.trim()))
+        {
+            console.log('error')
+            this.setState({
+                key: 'phone'
+            })
+            this.setState({
+                Error: "Số điện thoại phải có 10 chữ số và bắt đầu bằng số 0!"
+            });
+            return;
         }
         if (event.target.password.value.length < 6)
 		{
@@ -111,7 +111,7 @@ class SignUp extends Component {
 				key: 'password'
 			})
 			this.setState({
-				Error: "Password is at least 6 characters!"
+				Error: "Mật khẩu phải có ít nhất 6 ký tự!"
 			});
 			return;
 		}

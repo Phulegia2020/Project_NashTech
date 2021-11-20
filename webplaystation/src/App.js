@@ -109,9 +109,7 @@ class App extends React.Component{
                   <Route exact path="/WebPlayStation/login">
                       <MainMenu numberCart={this.state.numberCart} handleNumberCart={this.handleNumberCart}/>
                       <Login/>
-                      <div className="fixed-bottom">
-                        <Footer/>
-                      </div>
+                      <Footer/>
                   </Route>
                   <Route exact path="/WebPlayStation/signup">
                       <MainMenu numberCart={this.state.numberCart} handleNumberCart={this.handleNumberCart}/>
@@ -195,10 +193,10 @@ class App extends React.Component{
                     agent-id="3d2eb8db-0f5e-4a16-9c2a-3cea0cadb3a7"
                     language-code="en"
                     // wait-open
-                    // chat-icon="https://e7.pngegg.com/pngimages/568/919/png-clipart-playstation-2-logo-playstation-4-scalable-graphics-playstation-logo-game-angle.png"
-                    chat-icon="https://image.flaticon.com/icons/png/512/588/588258.png"
+                    // chat-icon="https://image.flaticon.com/icons/png/512/588/588258.png"
                     // chat-icon="https://media.comicbook.com/2019/02/playstation-logo-orange-1157594.jpeg"
-                    // chat-icon="https://cdn-icons-png.flaticon.com/512/134/134914.png"
+                    // chat-icon="https://upload.wikimedia.org/wikipedia/vi/3/37/Mortal_Kombat_Logo.png"
+                    // chat-icon="https://cdn3.iconfinder.com/data/icons/black-easy/512/538309-game_512x512.png"
                 ></df-messenger>}
           </Router>
       );

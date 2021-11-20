@@ -178,11 +178,14 @@ public class ImportController {
         LocalDateTime to = LocalDateTime.parse(dateTo + " 23:59:59", dateFormat);
         List<Import> imports = importService.getImportsDone();
         List<Import> list = new ArrayList<>();
-        for (int i = 0; i < imports.size(); i++)
+        if (from.isBefore(to) || from.isEqual(to))
         {
-            if (imports.get(i).getCreateddate().isAfter(from) && imports.get(i).getCreateddate().isBefore(to))
+            for (int i = 0; i < imports.size(); i++)
             {
-                list.add(imports.get(i));
+                if (imports.get(i).getCreateddate().isAfter(from) && imports.get(i).getCreateddate().isBefore(to) || imports.get(i).getCreateddate().isEqual(from) || imports.get(i).getCreateddate().isEqual(to))
+                {
+                    list.add(imports.get(i));
+                }
             }
         }
         return list.stream().map(this::convertToDTO).collect(Collectors.toList());

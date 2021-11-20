@@ -234,11 +234,14 @@ public class BillController {
         LocalDateTime to = LocalDateTime.parse(dateTo + " 23:59:59", dateFormat);
         List<Bill> bills = billService.getBillsDone();
         List<Bill> list = new ArrayList<>();
-        for (int i = 0; i < bills.size(); i++)
+        if (from.isBefore(to) || from.isEqual(to))
         {
-            if (bills.get(i).getCheckout_date().isAfter(from) && bills.get(i).getCheckout_date().isBefore(to))
+            for (int i = 0; i < bills.size(); i++)
             {
-                list.add(bills.get(i));
+                if (bills.get(i).getCheckout_date().isAfter(from) && bills.get(i).getCheckout_date().isBefore(to) || bills.get(i).getCheckout_date().isEqual(from) || bills.get(i).getCheckout_date().isEqual(to))
+                {
+                    list.add(bills.get(i));
+                }
             }
         }
         return list.stream().map(this::convertToDTO).collect(Collectors.toList());

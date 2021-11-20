@@ -197,36 +197,36 @@ class SignUp extends Component {
                     language-code="en"
                 ></df-messenger> */}
 
-                <div class="site-section mt-3 mb-4">
-                        <div class="container">
-                            <div class="row">
-                                <div class="col-lg-2 col-md-3 col-sm-3"></div>
-                                <div class="col-md-8" >
-                                    <div class="col-lg-12 col-md-12 col-sm-12 mt-3">
-                                        <h2 class="h3 mb-3 text-black title-info">Thông tin tài khoản</h2>
+                <div className="site-section mt-3 mb-4">
+                        <div className="container">
+                            <div className="row">
+                                <div className="col-lg-2 col-md-3 col-sm-3"></div>
+                                <div className="col-md-8" >
+                                    <div className="col-lg-12 col-md-12 col-sm-12 mt-3">
+                                        <h2 className="h3 mb-3 text-black title-info">Thông tin tài khoản</h2>
                                     </div>
                                     <Form onSubmit={(event) => this.handleSubmit(event)}>
-                                        <div class="p-3 p-lg-6 border" id="account-form">
+                                        <div className="p-3 p-lg-6 border" id="account-form">
                                             {/* <div class="form-group row">
                                                 <div class="col-md-12">
                                                     <p class="text-danger">${message}</p>
                                                 </div>
                                             </div> */}
-                                            <div class="form-group row">
-                                                <div class="col-md-2">
-                                                    <label class="text-black">Họ tên</label>
+                                            <div className="form-group row">
+                                                <div className="col-md-2">
+                                                    <label className="text-black">Họ tên</label>
                                                 </div>
-                                                <div class="col-md-10">
+                                                <div className="col-md-10">
                                                     <Form.Input placeholder='Họ tên' name='name' value={this.state.name} onChange={this.handleChange} required/>
                                                     {/* <input value="${sessionScope.usersession.displayName}"
                                                         type="text" class="form-control" readonly /> */}
                                                 </div>
                                             </div>
-                                            <div class="form-group row mt-5">
-                                                <div class="col-md-2">
+                                            <div className="form-group row mt-5">
+                                                <div className="col-md-2">
                                                     <label>Giới Tính</label>
                                                 </div>
-                                                <div class="col-md-10">
+                                                <div className="col-md-10">
                                                     <Form.Group inline>
                                                         <Form.Radio
                                                             label='Nam'
@@ -245,39 +245,39 @@ class SignUp extends Component {
                                                     </Form.Group>
                                                 </div>
                                             </div>
-                                            <div class="form-group row mt-5">
-                                                <div class="col-md-2">
+                                            <div className="form-group row mt-5">
+                                                <div className="col-md-2">
                                                 <label>Tài Khoản</label>
                                                 </div>
-                                                <div class="col-md-10">
+                                                <div className="col-md-10">
                                                     <Form.Input placeholder='Tên tài khoản' name='username' value={this.state.username} onChange={this.handleChange} required disabled id="input-username"/>
                                                     {this.state.key === 'username' ? <Label basic color='red' pointing='left'>{this.state.Error}</Label> : '' }
                                                 </div>
                                             </div>
-                                            <div class="form-group row mt-5">
-                                                <div class="col-md-2">
-                                                    <label class="text-black">Email</label>
+                                            <div className="form-group row mt-5">
+                                                <div className="col-md-2">
+                                                    <label className="text-black">Email</label>
                                                 </div>
-                                                <div class="col-md-10">
+                                                <div className="col-md-10">
                                                     <Form.Input type="email" placeholder='Email' name='email' value={this.state.email} onChange={this.handleChange} required/>
                                                     {this.state.key === 'email' ? <Label basic color='red' pointing='left'>{this.state.Error}</Label> : '' }
                                                     {/* <input value="${sessionScope.usersession.email}" type="email"
                                                         class="form-control" readonly /> */}
                                                 </div>
                                             </div>
-                                            <div class="form-group row mt-5">
-                                                <div class="col-md-2">
+                                            <div className="form-group row mt-5">
+                                                <div className="col-md-2">
                                                     <label>Địa chỉ</label>
                                                 </div>
-                                                <div class="col-md-10">
+                                                <div className="col-md-10">
                                                     <Form.Input placeholder='Địa chỉ' name='address' value={this.state.address} onChange={this.handleChange} required/>
                                                 </div>
                                             </div>
-                                            <div class="form-group row mt-5">
-                                                <div class="col-md-2">
-                                                    <label class="text-black">Số điện thoại</label>
+                                            <div className="form-group row mt-5">
+                                                <div className="col-md-2">
+                                                    <label className="text-black">Số điện thoại</label>
                                                 </div>
-                                                <div class="col-md-10">
+                                                <div className="col-md-10">
                                                     <Form.Input placeholder='Số điện thoại' type="text" name='phone' maxLength={10} minLength={10} value={this.state.phone} onChange={this.handleChange} required/>
                                                     {this.state.key === 'phone' ? <Label basic color='red' pointing='left'>{this.state.Error}</Label> : '' }
                                                     {/* <input value="${sessionScope.usersession.phone}" type="number"
@@ -320,10 +320,10 @@ class SignUp extends Component {
                                                 </div>
                                             </div> */}
                                             <br/>
-                                            <div class="form-group row">
-                                                <div class="col-lg-5"></div>
-                                                <div class="col-lg-4">
-                                                    <button type="submit" class="btn btn-danger btn-lg btn-block" disabled={this.state.btndis}>Cập nhật</button>
+                                            <div className="form-group row">
+                                                <div className="col-lg-5"></div>
+                                                <div className="col-lg-4">
+                                                    <button type="submit" className="btn btn-danger btn-lg btn-block" disabled={this.state.btndis}>Cập nhật</button>
                                                 </div>
                                             </div>
                                         </div>

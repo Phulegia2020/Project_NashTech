@@ -359,7 +359,7 @@ export default class Import extends Component {
                             <th><b>Phiếu Đặt</b>{' '}<FontAwesomeIcon icon={faArrowCircleUp} className="sort-icon" onClick={(e) => this.handleSortInc(e, 'poid')}/><FontAwesomeIcon icon={faArrowCircleDown} className="sort-icon" onClick={(e) => this.handleSortDes(e, 'poid')}/></th>
                             <th><b>Nhân Viên</b></th>
                             <th><b>Trạng Thái</b></th>
-                            <th>Cập Nhật</th>
+                            {/* <th>Cập Nhật</th> */}
                             <th>Xóa</th>
                             <th>Chi Tiết</th>
                             <th>Xác Nhận</th>
@@ -377,14 +377,14 @@ export default class Import extends Component {
                                     <td>{imp.user.name}</td>
                                     {imp.status === 'Done' && (<td><Label color="teal">Hoàn Tất</Label></td>)}
                                     {imp.status === 'Waiting' && (<td><Label color="grey">Chờ Xác Nhận</Label></td>)}
-                                    <td>
+                                    {/* <td>
                                         <Link to={`/admin/import/update/${imp.id}`} onClick={imp.status !== 'Waiting' ? (e) => e.preventDefault() : ''} className={imp.status !== 'Waiting' ? "disable-link" : ""}>
                                             <button className="btn btn-success" disabled={imp.status !== 'Waiting'}>
                                             <FontAwesomeIcon icon={faEdit} className="mr-2"/>{' '}
                                                 
                                             </button>
                                         </Link>
-                                    </td>
+                                    </td> */}
                                     <td><button onClick={(e) => this.onToggleFormDel(e, imp.id)} className="btn btn-danger" disabled={imp.status !== 'Waiting'}>
                                         <FontAwesomeIcon icon={faTrash} className="mr-2"/>{' '}
                                         

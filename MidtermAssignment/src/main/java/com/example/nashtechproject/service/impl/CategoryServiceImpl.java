@@ -66,7 +66,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     public boolean existByName(String name)
     {
-        if (categoryRepository.existsByName(name))
+        if (categoryRepository.existsByNameAndStatus(name, STATE.SALE))
         {
             return true;
         }

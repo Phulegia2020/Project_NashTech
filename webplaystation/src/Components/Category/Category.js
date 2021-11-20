@@ -81,7 +81,8 @@ export default class Category extends Component {
                 isDisplayForm: false,
                 //pageToTal: Math.ceil(this.state.categories.length / 5)
             });
-        });
+        })
+        .catch(error => toast.error('Loại máy này đã tồn tại!'))
     }
 
     onAdd = (data) => {

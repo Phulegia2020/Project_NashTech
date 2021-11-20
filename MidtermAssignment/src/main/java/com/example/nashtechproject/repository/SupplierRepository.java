@@ -8,9 +8,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface SupplierRepository extends JpaRepository<Supplier, Long> {
-    Boolean existsByName(String name);
+    Boolean existsByNameAndStatus(String name, String status);
 
-    Boolean existsByPhone(String phone);
+    Boolean existsByPhoneAndStatus(String phone, String status);
 
 //    List<Supplier> findByNameContains(String name);
 //

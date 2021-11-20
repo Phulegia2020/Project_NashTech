@@ -445,7 +445,7 @@ class UpdateProduct extends Component {
                         </FormGroup>
                         <FormGroup>
                             <Label htmlFor="quantity">Số Lượng</Label>
-                            <Input type="number" name="quantity" id="quantity" placeholder="1000" onChange={(e) => this.changeValue(e)} value = {this.state.quantity} required="required" disabled={this.state.status === 'Stop'}/>
+                            <Input type="number" name="quantity" id="quantity" placeholder="1000" onChange={(e) => this.changeValue(e)} value = {this.state.quantity} disabled/>
                             {this.state.key === 'quantity' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
                         </FormGroup>
                         <FormGroup>

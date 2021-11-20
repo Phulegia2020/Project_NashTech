@@ -372,7 +372,7 @@ class Bill extends Component {
                     </ModalHeader>
                     <ModalBody>
                         <p>
-                        Bạn có chắc chắn muỗn xóa?
+                        Bạn có chắc chắn muốn xóa?
                         </p>
                     </ModalBody>
                     <ModalFooter>

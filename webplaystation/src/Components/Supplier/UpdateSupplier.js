@@ -100,7 +100,8 @@ class UpdateSupplier extends Component {
         .then((response) => {
             if (response.status === 200)
             {
-                window.location.href="/admin/supplier";
+                // window.location.href="/admin/supplier";
+                this.props.history.push("/admin/supplier");
             }
         })
         .catch((error) => {console.log(error)});

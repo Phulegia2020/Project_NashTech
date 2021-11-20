@@ -10,7 +10,7 @@
 
 .explain-note{
     /* display: inline-block; */
-    font-size: 1.5rem;
+    font-size: 1.25rem;
     margin-left: 5rem;
     /* white-space: nowrap;
     overflow: hidden;
@@ -48,7 +48,7 @@
     margin-top: 7rem;
     /* padding-right: 10rem; */
     border: 1px solid #fff;
-    width: 400px;
+    width: 450px;
     /* box-shadow: 0 0 25px #aaa; */
     padding: 20px;
     border-radius: 20px;
@@ -58,7 +58,7 @@
 
 #income{
     border: 1px solid #fff;
-    width: 400px;
+    width: 450px;
     /* box-shadow: 0 0 25px #aaa; */
     padding: 10px;
     margin-left: 10px;
@@ -129,7 +129,7 @@
 
 #doanhthu{
     border: 1px solid #fff;
-    width: 400px;
+    width: 450px;
     /* box-shadow: 0 0 25px #aaa; */
     padding: 10px;
     /* margin-left: 300px; */

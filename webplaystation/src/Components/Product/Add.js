@@ -186,16 +186,16 @@ export default class Add extends Component {
                 return;
             }
         }
-        if (event.target.quantity.value.trim() <= 0)
-        {
-            this.setState({
-                key: 'quantity'
-            })
-            this.setState({
-                Error: "Số lượng không nhỏ hơn 1!"
-            });
-            return;
-        }
+        // if (event.target.quantity.value.trim() <= 0)
+        // {
+        //     this.setState({
+        //         key: 'quantity'
+        //     })
+        //     this.setState({
+        //         Error: "Số lượng không nhỏ hơn 1!"
+        //     });
+        //     return;
+        // }
         if (event.target.price.value.trim() <= 0)
         {
             this.setState({
@@ -288,7 +288,7 @@ export default class Add extends Component {
                 </FormGroup>
                 <FormGroup>
                     <Label htmlFor="quantity">Số Lượng</Label>
-                    <Input type="number" name="quantity" id="quantity" placeholder="1000" onChange={(e) => this.changeValue(e)} value = {this.state.quantity} required="required"/>
+                    <Input type="number" name="quantity" id="quantity" placeholder="1000" onChange={(e) => this.changeValue(e)} value = {this.state.quantity} disabled/>
                     {this.state.key === 'quantity' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
                 </FormGroup>
                 <FormGroup>
@@ -345,7 +345,7 @@ export default class Add extends Component {
                         <option value="">Ten</option> */}
                     </select>
                 </FormGroup>
-                <FormGroup className="mb-5">
+                <FormGroup className="mb-3">
                     <Label htmlFor="supplier">Nhà Cung Cấp</Label>
                     {/* <Input type="select" name="supplier_id" id="supplier" onChange={(e) => this.changeValue(e)} multiple required>
                         {
@@ -362,7 +362,7 @@ export default class Add extends Component {
                         }
                     </select>
                 </FormGroup>
-                <div className="mb-5">
+                <div className="mb-1">
                     <Button type="submit" outline color="warning" >Thêm</Button>{' '}
                     <Button outline color="danger" onClick={this.handleClear.bind(this)}>Hủy</Button>
                 </div>

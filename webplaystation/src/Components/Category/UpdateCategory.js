@@ -69,7 +69,7 @@ class UpdateCategory extends React.Component {
             if (response.status === 200)
             {
                 this.props.history.push("/admin/category");
-                window.location.reload();
+                // window.location.reload();
             }
         })
     }

@@ -357,7 +357,7 @@ export default class AnalyticsDashboard1 extends Component {
                                                 <div className="widget-chart-content">
                                                     <div className="widget-description mt-0 text-warning">
                                                         <FontAwesomeIcon icon={faArrowLeft}/>
-                                                        <span className="pl-1">175.5%</span>
+                                                        <span className="pl-1">80%</span>
                                                         {/* <span className="text-muted opacity-8 pl-1">increased server resources</span> */}
                                                         <span className="text-muted opacity-8 pl-1">Mục Tiêu Nâng Cao Sản Phẩm</span>
                                                     </div>
@@ -512,14 +512,14 @@ export default class AnalyticsDashboard1 extends Component {
                                             <i className="lnr-screen text-success"/>
                                         </div>
                                         <div className="widget-numbers">
-                                            17.2k
+                                            1000
                                         </div>
                                         <div className="widget-subheading">
                                             {/* Profiles */}
                                             Mục Tiếu Số Lượng Khách Hàng
                                         </div>
                                         <div className="widget-description text-warning">
-                                            <span className="pr-1">175.5%</span>
+                                            <span className="pr-1">75.5%</span>
                                             <FontAwesomeIcon icon={faArrowLeft}/>
                                         </div>
                                     </div>
@@ -683,7 +683,8 @@ export default class AnalyticsDashboard1 extends Component {
                                             <i className="lnr-heart icon-gradient bg-premium-dark"> </i>
                                         </div>
                                         <div className="widget-numbers">
-                                            4517.82
+                                            {/* 4517.82 */}
+                                            50 Đơn Hàng/ Tháng
                                         </div>
                                         <div className="widget-subheading">
                                             {/* Active Social Profiles */}
@@ -726,7 +727,7 @@ export default class AnalyticsDashboard1 extends Component {
                                                 </div>
                                                 <div className="widget-description text-success">
                                                     <FontAwesomeIcon icon={faAngleUp}/>
-                                                    <span className="pl-1">175.5%</span>
+                                                    <span className="pl-1">75%</span>
                                                 </div>
                                             </div>
                                             <div className="widget-chart-wrapper chart-wrapper-relative">
@@ -748,7 +749,8 @@ export default class AnalyticsDashboard1 extends Component {
                                                     <i className="lnr-laptop-phone text-danger"/>
                                                 </div>
                                                 <div className="widget-numbers">
-                                                    5.82k
+                                                    {/* 5.82k */}
+                                                    1 Triệu/ Máy
                                                 </div>
                                                 <div className="widget-subheading">
                                                     {/* Reports Submitted */}

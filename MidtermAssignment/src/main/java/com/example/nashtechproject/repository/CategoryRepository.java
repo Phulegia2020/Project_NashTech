@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface CategoryRepository extends JpaRepository<Category, Long> {
-    Boolean existsByName(String name);
+    Boolean existsByNameAndStatus(String name, String status);
 
 //    List<Category> findByNameContains(String name);
 //

@@ -20,7 +20,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     Optional<Product> findByNameAndStatus(String name, String status);
 
-    Boolean existsByName(String name);
+    Boolean existsByNameAndStatus(String name, String status);
 
     List<Product> findByStatus(String status);
 

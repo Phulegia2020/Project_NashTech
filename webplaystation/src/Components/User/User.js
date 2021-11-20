@@ -408,7 +408,7 @@ export default class User extends Component {
                 </Modal>
                 <Breadcrumb icon='right angle' sections={sections} size='large'/>
                 <br/>
-                <div className="m-3">
+                <div className="mt-3">
                 <button type="button" className="btn btn-primary" onClick={this.onToggleForm} disabled={localStorage.getItem('role') === 'STAFF'}>
                     <FontAwesomeIcon icon={faPlus} className="mr-2"/>{' '}
                     Thêm Tài Khoản
@@ -447,7 +447,7 @@ export default class User extends Component {
                                     {/* <td>{u.gender}</td> */}
                                     {u.gender === 'Male' && <td>Nam</td>}
                                     {u.gender === 'Female' && <td>Nữ</td>}
-                                    <td>{u.address}</td>
+                                    <td style={{width: '400px'}}>{u.address}</td>
                                     <td>{u.email}</td>
                                     <td>{u.phone}</td>
                                     <td>{u.account}</td>
