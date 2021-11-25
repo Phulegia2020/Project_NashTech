@@ -1,10 +1,8 @@
 package com.example.nashtechproject.restcontroller;
 
 import com.example.nashtechproject.dto.BillDetailsDTO;
-import com.example.nashtechproject.dto.ProductDTO;
 import com.example.nashtechproject.entity.Bill;
 import com.example.nashtechproject.entity.BillDetails;
-import com.example.nashtechproject.entity.Category;
 import com.example.nashtechproject.entity.Product;
 import com.example.nashtechproject.entity.embedded.BillDetailsKey;
 import com.example.nashtechproject.exception.*;
@@ -20,10 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController

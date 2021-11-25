@@ -16,8 +16,6 @@ class ButtonAddToCart extends Component {
         let isExist = false;
         for (let i = 0; i < shoppingCartItems.length; i++) {
             if (shoppingCartItems[i].id === cartItem.id) {
-                // console.log(shoppingCartItems[i].id);
-                // console.log(cartItem.id);
                 shoppingCartItems[i].quantity++;
                 localStorage.setItem('shopping-cart', JSON.stringify(shoppingCartItems));
                 return false;

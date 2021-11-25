@@ -6,10 +6,7 @@ import com.example.nashtechproject.service.ProductService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.api.client.json.JsonGenerator;
 import com.google.api.client.json.jackson2.JacksonFactory;
-import com.google.api.services.dialogflow.v2beta1.model.GoogleCloudDialogflowV2IntentMessage;
-import com.google.api.services.dialogflow.v2beta1.model.GoogleCloudDialogflowV2IntentMessageText;
-import com.google.api.services.dialogflow.v2beta1.model.GoogleCloudDialogflowV2WebhookRequest;
-import com.google.api.services.dialogflow.v2beta1.model.GoogleCloudDialogflowV2WebhookResponse;
+import com.google.api.services.dialogflow.v2beta1.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -48,6 +45,7 @@ public class DialogflowController {
 //        List<GoogleCloudDialogflowV2IntentMessage> messages = new ArrayList<>();
         GoogleCloudDialogflowV2IntentMessage msg = new GoogleCloudDialogflowV2IntentMessage();
         GoogleCloudDialogflowV2IntentMessageText text = new GoogleCloudDialogflowV2IntentMessageText();
+//        GoogleCloudDialogflowV2IntentMessageImage img = new GoogleCloudDialogflowV2IntentMessageImage();
 //        List<ProductDTO> products = new ArrayList<>();
         ProductDTO products;
         List<String> chat = new ArrayList<>();
@@ -59,7 +57,6 @@ public class DialogflowController {
         {
             case "Info-Intent":
             {
-//                System.out.println("chatbot info");
                 if (request.getQueryResult().getParameters().get("product").toString().equals("PS"))
                 {
                     chat.add("Hiện tại cửa hàng chưa kinh doanh máy này. Bạn có thể tham khảo về máy Playstation 4 và Playstation 5 tại shop !");
@@ -69,7 +66,6 @@ public class DialogflowController {
                     products = productService.getProductChatBot(request.getQueryResult().getParameters().get("product").toString());
                     if (products == null)
                     {
-                        //System.out.println("null");
                         chat.add("Hiện tại cửa hàng chưa kinh doanh máy này. Bạn có thể tham khảo về máy Playstation 4 và Playstation 5 tại shop !");
                     }
                     else
@@ -83,67 +79,40 @@ public class DialogflowController {
                             chat.add("Hiện tại máy " + products.getName() + " đã hết hàng! Bạn có thể tham khảo thêm một số loại máy khác nhé.");
                         }
                     }
-//                }
-//                for (int i = 0; i < products.size(); i++)
-//                {
-//                    if (products.get(i).getQuantity() == 0)
-//                    {
-//                        chat.add("Hiện tại máy " + products.get(i).getName() + " đã hết hàng! Bạn có thể tham khảo thêm một số loại máy khác nhé.");
-//                    }
-//                    else
-//                    {
-//                        chat.add("Hiện tại máy " + products.get(i).getName() + " vẫn còn hàng bạn nhé!");
-//                    }
                 }
                 break;
             }
             case "Price-PS-Intent":
             {
-                //System.out.println("chatbot-price");
-                //System.out.println(request.getQueryResult().getParameters().get("product").toString());
-//                for (int j = 0; j < request.getQueryResult().getParameters().get("product"))
                 if (request.getQueryResult().getParameters().get("product").toString().equals("PS"))
                 {
                     chat.add("Hiện tại cửa hàng chưa kinh doanh máy này. Bạn có thể tham khảo về máy Playstation 4 và Playstation 5 tại shop !");
                 }
                 else {
-//                try {
-//
-//
-//                    products = productService.getProductChatBot(request.getQueryResult().getParameters().get("product").toString());
-//                    System.out.println(products);
-//                    chat.add("Máy " + products.getName() + " có giá " + String.format("%,d", products.getPrice()) + " VNĐ. Nếu bạn là một người đam mê playstation thì máy " + products.getName() + " là bộ máy hợp lý trong thời điểm hiện tại và cung cấp trải nghiệm chơi game hiệu quả cho nhiều người dùng");
-//                }
-//                catch (NoSuchElementException ex)
-//                {
-//                    chat.add("Hiện tại cửa hàng chưa kinh doanh máy này. Bạn có thể tham khảo về máy Playstation 4 và Playstation 5 tại shop !");
-//                }
-//                for (int i = 0; i < products.size(); i++)
-//                {
-//                    chat.add("Máy " + products.get(i).getName() + " có giá " + String.format("%,d", products.get(i).getPrice()) + " VNĐ. Nếu bạn là một người đam mê playstation thì máy " + products.get(i).getName() + " là bộ máy hợp lý trong thời điểm hiện tại và cung cấp trải nghiệm chơi game hiệu quả cho nhiều người dùng");
-//                    //chat = chat + "Máy " + products.get(i).getName() + " có giá " + String.format("%,d", products.get(i).getPrice()) + ", ";
-//                }
                     products = productService.getProductChatBot(request.getQueryResult().getParameters().get("product").toString());
                     if (products == null) {
-                        //System.out.println("chat");
                         chat.add("Hiện tại cửa hàng chưa kinh doanh máy này. Bạn có thể tham khảo về máy Playstation 4 và Playstation 5 tại shop !");
                     } else {
                         chat.add("Máy " + products.getName() + " có giá " + String.format("%,d", products.getPrice()) + " VNĐ \uD83D\uDCB8. Nếu bạn là một người đam mê playstation thì máy " + products.getName() + " là bộ máy hợp lý trong thời điểm hiện tại và cung cấp trải nghiệm chơi game hiệu quả cho nhiều người dùng");
+//                        img.setImageUri(products.getUrl_image());
                     }
                 }
                 break;
             }
         }
 
-        //System.out.println(chat);
         text.setText(chat);
         msg.setText(text);
+//        msg.setImage(img);
 
 //        map = oMapper.convertValue(chat, Map.class);
+//        map.put(msg.getImage().getImageUri(), chat.get(0));
 //        messages.add(new GoogleCloudDialogflowV2IntentMessage().setPayload(map));
+
         GoogleCloudDialogflowV2WebhookResponse response = new GoogleCloudDialogflowV2WebhookResponse();
 //        response.setFulfillmentMessages(messages);
         response.setFulfillmentMessages(asList(msg));
+//        response.setPayload(map);
 
         StringWriter stringWriter = new StringWriter();
         JsonGenerator jsonGenerator = jacksonFactory.createJsonGenerator(stringWriter);

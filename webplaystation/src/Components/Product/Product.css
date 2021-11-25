@@ -42,8 +42,6 @@
 
 .display-imges .images-sub .sub-picture img, .display-imges .images-sub .sub-picture-more img
 {
-  /* position: absolute;
-  top: 10px; */
   height: 70px;
   border: 1px solid black;
   margin-right: 15px;
@@ -68,29 +66,17 @@
   position: absolute;
   bottom: 0;
   padding-left: 25px;
-  /* margin-bottom: 10px; */
 }
 
 .display-imges .images-sub .sub-picture-more .delete-picture span:hover, .display-imges .images-sub .sub-picture .delete-picture span:hover
 {
   color: red;
   cursor: pointer;
-  /* margin-bottom: 10px; */
 }
-
-/* .display-imges .images-sub .sub-picture-more .delete-picture .icon-delete, .display-imges .images-sub .sub-picture .delete-picture .icon-delete
-{
-  position: absolute;
-  bottom: 0;
-  padding-left: 20px;
-} */
 
 .input-select
 {
   width: 100%;
-  /* height: 50px; */
-  /* border: 1px solid;
-  overflow-y: scroll; */
 }
 
 .input-select .input-item:hover

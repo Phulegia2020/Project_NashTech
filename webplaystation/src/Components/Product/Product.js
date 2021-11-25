@@ -66,23 +66,16 @@ class Product extends Component {
                 this.setState({isDisplayFormDel: false})
             }
         })
-        // .catch(error => {alert('The product was ordered. Can not delete!')})
         .catch(error => {toast.error('Máy này đã bán!')})
     }
 
     createProduct(newProduct){
-        console.log(newProduct.image_sub);
-        // console.log(newProduct.url);
-        // post(`/products`, {name: newProduct.name.trim(), description: newProduct.description.trim(), quantity: newProduct.quantity,
-        //                 price: newProduct.price, totalrating: 0,imageurl: newProduct.imageurl, category_id: newProduct.category_id,
-        //                 supplier_id: newProduct.supplier_id})
         post(`/products`, {name: newProduct.name.trim(), description: newProduct.description.trim(), quantity: newProduct.quantity,
             price: newProduct.price, totalrating: 0, url_image: newProduct.url, category_id: newProduct.category_id,
             supplier_id: newProduct.supplier_id})
         .then((response) => {
             if (response.status === 200)
             {
-                //window.location.reload();
                 if (newProduct.image_sub.length > 0)
                 {
                     for (let i = 0; i < newProduct.image_sub.length; i++)
@@ -90,12 +83,7 @@ class Product extends Component {
                         const uploadTask = storage.ref(`images/${newProduct.image_sub[i].name}`).put(newProduct.image_sub[i]);
                         uploadTask.on(
                             "state_changed",
-                            snapshot => {
-                            // const progress = Math.round(
-                            //   (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-                            // );
-                            // setProgress(progress);
-                            },
+                            snapshot => {},
                             error => {
                             console.log(error);
                             },
@@ -105,12 +93,10 @@ class Product extends Component {
                                 .child(newProduct.image_sub[i].name)
                                 .getDownloadURL()
                                 .then(url => {
-                                    // setUrl(url);
                                     post(`/productImages`, {imagePath: url, product_id: response.data.id})
                                     .then((res) => {
                                         if (res.status === 200)
                                         {
-                                            console.log(res.data);
                                         }
                                     })
                                     .catch((error) => console.log(error));
@@ -251,7 +237,6 @@ class Product extends Component {
 
     handleSortInc = (e, key) => {
         e.preventDefault();
-        //this.state.categories.sort((e1, e2) => (e1.id > e2.id ? 1 : -1));
         if (key === 'id')
         {
             this.setState({
@@ -276,12 +261,10 @@ class Product extends Component {
                 products: this.state.products.sort((e1, e2) => (e1.price > e2.price ? 1 : -1))
             })
         }
-        // console.log('sort');
     }
 
     handleSortDes = (e, key) => {
         e.preventDefault();
-        //this.state.categories.sort((e1, e2) => (e1.id > e2.id ? 1 : -1));
         if (key === 'id')
         {
             this.setState({
@@ -306,7 +289,6 @@ class Product extends Component {
                 products: this.state.products.sort((e1, e2) => (e2.price > e1.price ? 1 : -1))
             })
         }
-        // console.log('sort');
     }
 
     componentWillUnmount() {
@@ -319,7 +301,7 @@ class Product extends Component {
     render() {
         const sections = [
             { key: 'Quản Lý', content: 'Quản Lý', link: false },
-            { key: 'Sản Phẩm', content: 'Sản Phẩm', active: true }
+            { key: 'Sản Phẩm', content: 'Danh Sách Sản Phẩm', active: true }
           ]
         return (
             <div>
@@ -374,7 +356,6 @@ class Product extends Component {
                                 <tr key={p.id}>
                                     <td>{p.id}</td>
                                     <td>
-                                        {/* <img src={`data:image/jpeg;base64,${p.imageurl}`} alt="" height="100px"></img> */}
                                         <img src={p.url_image || "http://via.placeholder.com/300"} alt="" height="100px"/>
                                     </td>
                                     <td>{p.name}</td>

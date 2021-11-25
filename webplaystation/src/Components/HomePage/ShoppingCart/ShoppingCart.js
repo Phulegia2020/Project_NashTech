@@ -14,15 +14,11 @@ class ShoppingCart extends Component {
             bill: {},
             billDetails: [],
             user: {},
-            // shoppingCartItems: []
         }
         this.onCheckOut = this.onCheckOut.bind(this);
     }
 
     componentDidMount(){
-        // this.setState({
-        //     shoppingCartItems: JSON.parse(localStorage.getItem('shopping-cart') || '[]')
-        // })
         if (localStorage.getItem('user_id') !== null)
         {
             get(`/users/${localStorage.getItem('user_id')}`)
@@ -37,29 +33,15 @@ class ShoppingCart extends Component {
         }
     }
 
-    // componentDidUpdate(prevProps, prevState)
-    // {
-    //     if (prevState.shoppingCartItems.length !== this.state.shoppingCartItems.length)
-    //     {
-    //         this.setState({
-    //             shoppingCartItems: JSON.parse(localStorage.getItem('shopping-cart') || '[]')
-    //         })
-    //     }
-    // }
-
     onCheckOut(){
         const shoppingCartItems = JSON.parse(localStorage.getItem('shopping-cart') || '[]');
         if (shoppingCartItems.length == 0)
         {
-            // alert('Cart is empty. Can not check out!');
-            //this.props.notificationCart('Giỏ hàng trống!');
             toast.warning('Giỏ hàng trống!');
             return;
         }
         if (localStorage.getItem('user_id') === null)
         {
-            // alert('Please, Login to Purchase');
-            //this.props.notificationCart('Hãy đăng nhập tài khoản để thanh toán giỏ hàng!');
             toast.error('Hãy đăng nhập tài khoản để thanh toán giỏ hàng!');
             return;
         }
@@ -79,7 +61,6 @@ class ShoppingCart extends Component {
     }
 
     render() {
-        // const shoppingCartItems = JSON.parse(localStorage.getItem('shopping-cart') || '[]');
         return (
             <div>
                 <Modal trigger={<Button animated='vertical' inverted style={{marginRight: '0.5em'}} className="shopping-cart">
@@ -107,15 +88,6 @@ class ShoppingCart extends Component {
                         <Button positive icon='checkmark' labelPosition='right' content="Thanh Toán" onClick={this.onCheckOut}/>
                     </Modal.Actions>
                 </Modal>
-                {/* <ToastContainer position="bottom-center"
-                        autoClose={2000}
-                        hideProgressBar
-                        newestOnTop={false}
-                        closeOnClick
-                        rtl={false}
-                        pauseOnFocusLoss
-                        draggable
-                        pauseOnHover/> */}
             </div>
         );
     }

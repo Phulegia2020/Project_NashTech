@@ -1,10 +1,7 @@
 package com.example.nashtechproject.dto;
 
-import com.example.nashtechproject.entity.PlaceOrder;
-import com.example.nashtechproject.entity.User;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import javax.persistence.*;
 import java.time.LocalDateTime;
 
 public class ImportDTO {

@@ -48,7 +48,6 @@ class Content extends Component {
                 <Topbar toggleSidebar={this.props.toggleSidebar} />
                 <Switch>
                     <Route exact path="/admin">
-                        {/* <Category/> */}
                         <AnalyticsDashboard1/>
                     </Route>
                     <Route exact path="/admin/category">

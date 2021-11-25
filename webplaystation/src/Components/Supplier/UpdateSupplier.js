@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom'
-import { Col, Row, Button, Form, FormGroup, Label, Input } from 'reactstrap';
+import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
 import { checkPhoneNumber } from '../../Utils/Utils';
 import { get, put } from '../../Utils/httpHelper';
 import "../Category/Category.css";
@@ -100,7 +100,6 @@ class UpdateSupplier extends Component {
         .then((response) => {
             if (response.status === 200)
             {
-                // window.location.href="/admin/supplier";
                 this.props.history.push("/admin/supplier");
             }
         })
@@ -127,31 +126,27 @@ class UpdateSupplier extends Component {
         return (
             <div className="update-form">
                 <h3>Cập Nhật Nhà Cung Cấp</h3>
-                {/* <Row form>
-                    <Col md={4}> */}
-                        <Form onSubmit={(event) => this.handleUpdate(event)}>
-                            <FormGroup>
-                                <Label htmlFor="name">Tên</Label>
-                                <Input type="text" name="name" id="name" placeholder="PS5" onChange={(e) => this.changeValue(e)} value = {this.state.name} required="required" disabled={this.state.status === 'Disconnected'}/>
-                                {this.state.key === 'supplier' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
-                            </FormGroup>
-                            <FormGroup>
-                                <Label htmlFor="address">Địa Chỉ</Label>
-                                <Input type="text" name="address" id="address" placeholder="1 Street, 2 Ward, 3 District, Ho Chi Minh City" onChange={(e) => this.changeValue(e)} value = {this.state.address} required="required" disabled={this.state.status === 'Disconnected'}/>
-                                {this.state.key === 'address' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
-                            </FormGroup>
-                            <FormGroup>
-                                <Label htmlFor="phone">Số Điện Thoại</Label>
-                                <Input type="text" name="phone" id="phone" minLength="10" maxLength="10" placeholder="0123456789" onChange={(e) => this.changeValue(e)} value = {this.state.phone} required="required" disabled={this.state.status === 'Disconnected'}/>
-                                {this.state.key === 'phone' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
-                            </FormGroup>
-                            <div className="mt-3">
-                                <Button type="submit" outline color="warning">Cập Nhật</Button>{' '}
-                                <Button outline color="danger" onClick={this.handleClear.bind(this)}>Hủy</Button>
-                            </div>
-                        </Form>
-                    {/* </Col>
-                </Row> */}
+                <Form onSubmit={(event) => this.handleUpdate(event)}>
+                    <FormGroup>
+                        <Label htmlFor="name">Tên</Label>
+                        <Input type="text" name="name" id="name" placeholder="PS5" onChange={(e) => this.changeValue(e)} value = {this.state.name} required="required" disabled={this.state.status === 'Inactive'}/>
+                        {this.state.key === 'supplier' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
+                    </FormGroup>
+                    <FormGroup>
+                        <Label htmlFor="address">Địa Chỉ</Label>
+                        <Input type="text" name="address" id="address" placeholder="1 Đường, Phường 2, Quận 3, Thành phố Hồ Chí Minh" onChange={(e) => this.changeValue(e)} value = {this.state.address} required="required" disabled={this.state.status === 'Inactive'}/>
+                        {this.state.key === 'address' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
+                    </FormGroup>
+                    <FormGroup>
+                        <Label htmlFor="phone">Số Điện Thoại</Label>
+                        <Input type="text" name="phone" id="phone" minLength="10" maxLength="10" placeholder="0123456789" onChange={(e) => this.changeValue(e)} value = {this.state.phone} required="required" disabled={this.state.status === 'Inactive'}/>
+                        {this.state.key === 'phone' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
+                    </FormGroup>
+                    <div className="mt-3">
+                        <Button type="submit" outline color="warning">Cập Nhật</Button>{' '}
+                        <Button outline color="danger" onClick={this.handleClear.bind(this)}>Hủy</Button>
+                    </div>
+                </Form>
             </div>
         )
     }

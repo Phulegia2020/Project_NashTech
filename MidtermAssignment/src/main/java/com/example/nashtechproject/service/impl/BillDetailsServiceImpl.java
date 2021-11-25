@@ -1,7 +1,6 @@
 package com.example.nashtechproject.service.impl;
 
 import com.example.nashtechproject.entity.BillDetails;
-import com.example.nashtechproject.entity.Product;
 import com.example.nashtechproject.page.ProductPage;
 import com.example.nashtechproject.repository.BillDetailsRepository;
 import com.example.nashtechproject.service.BillDetailsService;
@@ -9,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

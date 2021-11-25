@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Icon, Segment, Grid, Header, Rating, Divider, Table, Message, Comment, Button, Form, Menu} from 'semantic-ui-react'
+import {Icon, Segment, Grid, Header, Rating, Divider, Table, Message, Comment, Button, Form} from 'semantic-ui-react'
 import ButtonAddToCart from "./ButtonAddToCart";
 import { get, post, put } from '../../../Utils/httpHelper';
 import { formatCurrency, formatQuantity } from '../../../Utils/Utils';
@@ -7,7 +7,6 @@ import { withRouter } from "react-router";
 import './style.css';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import {  Link, Switch, Redirect } from 'react-router-dom';
 
 class ProductDetails extends Component {
     constructor(props) {
@@ -32,7 +31,6 @@ class ProductDetails extends Component {
 
     componentDidMount() {
         window.scrollTo(0, 0);
-        // this.props.handleChatBot1(true);
         this.state.ShoppingCartItems = JSON.parse(localStorage.getItem('shopping-cart') || '[]');
         get(`/products/${this.props.match.params.id}`)
         .then((response) => {
@@ -43,12 +41,10 @@ class ProductDetails extends Component {
                     totalrating: response.data.totalrating,
                     image: response.data.url_image
                 });
-                // console.log(this.state.product_id)
                 get(`/products/search?categoryId=${this.state.Product.category.id}`)
                 .then((response) => {
                     this.setState({
                         proHint: response.data.slice(0, 5)
-                        // .filter(p => p.id != this.state.product_id)
                     });
                 })
                 .catch(error => console.log(error));
@@ -122,7 +118,6 @@ class ProductDetails extends Component {
         event.preventDefault();
         if (localStorage.getItem('user_id') === null)
         {
-            // alert('Login to rate this product');
             toast.warning("Vui lòng đăng nhập để đánh giá sản phẩm!")
             return;
         }
@@ -135,7 +130,6 @@ class ProductDetails extends Component {
             {
                 if (this.onCheckRated(this.state.user_id) === true)
                 {
-                    // alert(`You rated this product. Rating another product, thanks!`);
                     toast.warning("Bạn đã đánh giá sản phẩm này. Cám ơn!")
                 }
                 else
@@ -146,8 +140,6 @@ class ProductDetails extends Component {
                         {
                             this.handleTotalRating();
                             this.handleUpdateRating(this.state.product_id, this.state.Product);
-                            // alert('Thanks for review');
-                            //window.location.reload();
                             toast.success("Cám ơn đã đánh giá điểm");
                         }
                     })
@@ -196,7 +188,6 @@ class ProductDetails extends Component {
             username: localStorage.getItem('username'),
             product_id: this.state.product_id
         });
-        //console.log(body);
         post('/comments', body)
         .then((response) => {
             if (response.status === 200)
@@ -214,7 +205,6 @@ class ProductDetails extends Component {
 
     handleProductHint = (e, id) => {
         e.preventDefault();
-        // this.setState({redirect: true, product_id: id}, () => this.props.history.push(`/WebPlayStation/product/${this.state.product_id}`));
         this.props.history.push(`/WebPlayStation/product/${id}`)
     }
 
@@ -230,7 +220,6 @@ class ProductDetails extends Component {
     }
 
     componentWillUnmount() {
-        // this.props.handleChatBot1(false);
         // fix Warning: Can't perform a React state update on an unmounted component
         this.setState = (state,callback)=>{
             return;
@@ -238,9 +227,6 @@ class ProductDetails extends Component {
     }
 
     render() {
-        // if (this.state.redirect) {
-        //     return <Redirect push to={`/WebPlayStation/product/${this.state.product_id}`} />;
-        // }
         const product = this.state.Product;
         return (
             <div className="product-detail">
@@ -248,14 +234,12 @@ class ProductDetails extends Component {
                 <Grid container stackable verticalAlign='middle'>
                     <Grid.Row className="table-product">
                         <Grid.Column width={4}>
-                            {/* <img src={`data:image/jpeg;base64,${product.imageurl}`} alt='PlayStation' className='img-border'/> */}
                             <img src={this.state.image} alt='PlayStation' className='img-border'/>
                             <div className={this.state.images.length > 4 ? "sub-picture-more" : 'sub-picture'}>
                                 {this.state.images.length > 0 && <img src={product.url_image} alt='PlayStation' onClick={(e) => this.handlePicture(e, product.url_image)} className="image-main"/>}
                                 {this.state.images.map((picture, index) => (
                                     <img src={picture.imagePath} alt='PlayStation' onClick={(e) => this.handlePicture(e, picture.imagePath)} key={index}/>
                                 ))}
-                                {/* <img src='https://firebasestorage.googleapis.com/v0/b/theplaystation-89769.appspot.com/o/images%2FPlaystation-4-Pro.jpg?alt=media&token=3faa70d0-6298-450f-b640-d76d9fb4b522' alt='PlayStation'/> */}
                             </div>
                         </Grid.Column>
                         <Grid.Column width={12}>
@@ -265,8 +249,7 @@ class ProductDetails extends Component {
                             <hr/>
                             <p style={{ fontSize: '1.33em' }} className="figure"><b>Giá: </b>{formatCurrency(product.price)}</p>
                             <hr/>
-                            <p style={{ fontSize: '1.33em' }} className="figure"><b>Đánh Giá: </b><Rating icon='star'  maxRating={5} onRate={this.onRating} name="rate" rating={this.state.totalrating} disabled/>({product.totalrating}.0/5.0)</p>
-                            {/* product.totalrating */}
+                            <p style={{ fontSize: '1.33em' }} className="figure"><b>Đánh Giá: </b><Rating icon='star'  maxRating={5} onRate={this.onRating} name="rate" rating={this.state.totalrating} disabled/>({product.totalrating} / 5)</p>
                             <Message info>
                                 <Message.Header>Liên hệ Mua Sản Phẩm: (028) 38.295.258</Message.Header>
                                 <p>Vui Lòng Kiểm Tra Số Lượng Của Sản Phẩm Trước Khi Tới Cửa Hàng!</p>
@@ -303,10 +286,6 @@ class ProductDetails extends Component {
                                     <Table.Cell>Thời Hạn Bảo Hành</Table.Cell>
                                     <Table.Cell>3 Năm</Table.Cell>
                                 </Table.Row>
-                                {/* <Table.Row>
-                                    <Table.Cell>CAM KẾT & CHÍNH SÁCH</Table.Cell>
-                                    <Table.Cell>Giá áp dụng khi mua kèm game bất kỳ. Giao hàng miễn phí nội thành HCM (*)</Table.Cell>
-                                </Table.Row> */}
                                 <Table.Row>
                                     <Table.Cell>Số Lượng Còn Lại</Table.Cell>
                                     <Table.Cell>{product.quantity === 0 ? 'Hết Hàng' : `${formatQuantity(product.quantity)} Máy`}</Table.Cell>
@@ -347,22 +326,11 @@ class ProductDetails extends Component {
                                                     <Comment.Content>
                                                         <Comment.Author>{comment.username}</Comment.Author>
                                                         <Comment.Metadata>{comment.date_comment}
-                                                        {/* <div></div> */}
                                                         </Comment.Metadata>
                                                         <Comment.Text>{comment.content}
-                                                        {/* <p>
-                                                            The hours, minutes and seconds stand as visible reminders that your
-                                                            effort put them all there.
-                                                        </p>
-                                                        <p>
-                                                            Preserve until your next run, when the watch lets you see how
-                                                            Impermanent your efforts are.
-                                                        </p> */}
                                                         </Comment.Text>
                                                     </Comment.Content>
                                                 </Comment>
-                                                
-                                            
                                         )
                                     ))}    
                                 </div>
@@ -385,27 +353,12 @@ class ProductDetails extends Component {
                                 <a href={`/WebPlayStation/product/${p.id}`} key={index}>Máy {p.name} </a>
 
                                 // <span key={index} onClick={(e) => this.handleProductHint(e, p.id)}>Máy {p.name}, </span>
-
-                                // <Menu.Item as={Link} to={`/WebPlayStation/product/${p.id}`} name="home">
-                                //              Máy {p.name}, 
-                                // </Menu.Item>
                             ))}
                             <span>...</span>
                         </div>
                     </Grid.Row>
                 </Grid>
-
-                
-                
-                
             </Segment>
-            
-            {/* <df-messenger
-                intent="WELCOME"
-                chat-title="THE PLAYSTATION SHOP"
-                agent-id="3d2eb8db-0f5e-4a16-9c2a-3cea0cadb3a7"
-                language-code="en"
-            ></df-messenger> */}
             <ToastContainer position="top-right"
                     autoClose={1500}
                     hideProgressBar
@@ -415,8 +368,6 @@ class ProductDetails extends Component {
                     pauseOnFocusLoss
                     draggable
                     pauseOnHover/>
-
-            
             </div>
         );
     }

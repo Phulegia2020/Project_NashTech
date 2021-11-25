@@ -1,13 +1,5 @@
 package com.example.nashtechproject.dto;
 
-import com.example.nashtechproject.entity.Product;
-import com.example.nashtechproject.entity.User;
-
-import javax.persistence.Column;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-
 public class RatingDTO {
 
     private float ratingPoint;

@@ -68,14 +68,12 @@ export default class Supplier extends Component {
                 })
             }
         })
-        // .catch(error => {alert('This Supplier is supplying products. Can not delete!')})
         .catch(error => {toast.error('Máy của nhà cung cấp này vẫn đang được bán tại cửa hàng!')})
     }
 
     createSupplier(newSupplier){
         post(`/suppliers`, {name: newSupplier.name.trim(), address: newSupplier.address.trim(), phone: newSupplier.phone.trim()})
         .then((response) => {
-            //window.location.reload();
             this.setState({
                 suppliers: [response.data, ...this.state.suppliers ],
                 isDisplayForm: false,
@@ -205,7 +203,6 @@ export default class Supplier extends Component {
 
     handleSortInc = (e, key) => {
         e.preventDefault();
-        //this.state.categories.sort((e1, e2) => (e1.id > e2.id ? 1 : -1));
         if (key === 'id')
         {
             this.setState({
@@ -230,12 +227,10 @@ export default class Supplier extends Component {
                 suppliers: this.state.suppliers.sort((e1, e2) => (e1.phone > e2.phone ? 1 : -1))
             })
         }
-        // console.log('sort');
     }
 
     handleSortDes = (e, key) => {
         e.preventDefault();
-        //this.state.categories.sort((e1, e2) => (e1.id > e2.id ? 1 : -1));
         if (key === 'id')
         {
             this.setState({
@@ -260,7 +255,6 @@ export default class Supplier extends Component {
                 suppliers: this.state.suppliers.sort((e1, e2) => (e2.phone > e1.phone ? 1 : -1))
             })
         }
-        // console.log('sort');
     }
 
     componentWillUnmount() {
@@ -273,7 +267,7 @@ export default class Supplier extends Component {
     render() {
         const sections = [
             { key: 'Quản Lý', content: 'Quản Lý', link: false },
-            { key: 'Nhà Cung Cấp', content: 'Nhà Cung Cấp', active: true }
+            { key: 'Nhà Cung Cấp', content: 'Danh Sách Nhà Cung Cấp', active: true }
           ]
         return (
             <div>

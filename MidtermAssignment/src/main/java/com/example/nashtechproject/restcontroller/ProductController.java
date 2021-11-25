@@ -1,16 +1,13 @@
 package com.example.nashtechproject.restcontroller;
 
-import com.example.nashtechproject.dto.BillDTO;
 import com.example.nashtechproject.dto.ProductDTO;
 import com.example.nashtechproject.dto.StatisticalDTO;
-import com.example.nashtechproject.dto.UserDTO;
 import com.example.nashtechproject.entity.*;
 import com.example.nashtechproject.exception.CategoryException;
 import com.example.nashtechproject.exception.ProductException;
 import com.example.nashtechproject.exception.SupplierException;
 import com.example.nashtechproject.page.ProductPage;
 import com.example.nashtechproject.page.STATE;
-import com.example.nashtechproject.page.UserPage;
 import com.example.nashtechproject.payload.response.MessageResponse;
 import com.example.nashtechproject.service.*;
 import io.swagger.annotations.*;
@@ -24,7 +21,6 @@ import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -168,7 +164,6 @@ public class ProductController {
     {
         List<ProductDTO> prosDTO = new ArrayList<>();
         List<Product> products = productService.getProductsByStatus();
-        //ratingNow(products);
         for (int i = 0; i < products.size(); i++) {
             ProductDTO p = convertToDTO(products.get(i));
             prosDTO.add(p);
@@ -191,10 +186,6 @@ public class ProductController {
     {
         List<ProductDTO> prosDTO = new ArrayList<>();
         List<Product> products = productService.getProductsByTotalRating();
-//        for (int i = 0; i < 5; i++) {
-//            ProductDTO p = convertToDTO(products.get(i));
-//            prosDTO.add(p);
-//        }
         for (int i = 0; i < products.size(); i++) {
             if (products.get(i).getStatus().equals(STATE.SALE))
             {
@@ -210,20 +201,15 @@ public class ProductController {
     {
         int thang = Integer.valueOf(month);
         List<StatisticalDTO> topSale = new ArrayList<>();
-//        List<Bill> billList = billService.retrieveBills();
         List<Bill> billList = billService.getBillsDone();
         List<Bill> bills = new ArrayList<>();
         for (int i = 0; i < billList.size(); i++)
         {
-//            if (billList.get(i).getBillStatus().getId() == 1)
-//            {
-                if (billList.get(i).getCheckout_date().getMonth().getValue() == thang)
-                {
-                    bills.add(billList.get(i));
-                }
-//            }
+            if (billList.get(i).getCheckout_date().getMonth().getValue() == thang)
+            {
+                bills.add(billList.get(i));
+            }
         }
-//        List<Product> products = productService.retrieveProducts();
         List<Product> products = productService.getProductsByStatus();
         for (int i = 0; i < products.size(); i++)
         {
@@ -252,7 +238,6 @@ public class ProductController {
     {
         if (type.equals("1"))
         {
-            System.out.println();
             return productService.getProductPriceLess().size();
         }
         else if (type.equals("2"))
@@ -364,7 +349,6 @@ public class ProductController {
         }
         product.setStatus(STATE.STOP);
         productService.updateProduct(product);
-//        productService.deleteProduct(productId);
         return ResponseEntity.ok(new MessageResponse("Delete Successfully"));
     }
 
@@ -394,7 +378,6 @@ public class ProductController {
         product.setDescription(productDetails.getDescription());
         product.setQuantity(productDetails.getQuantity());
         product.setPrice(productDetails.getPrice());
-//        product.setImageurl(productDetails.getImageurl());
         product.setUrl_image(productDetails.getUrl_image());
         product.setTotalrating(productDetails.getTotalrating());
         product.setUpdateddate(LocalDateTime.now());

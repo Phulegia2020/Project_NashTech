@@ -77,7 +77,7 @@ class SideBar extends Component {
                         <NavItem className="nav-item">
                             <NavLink tag={Link} to={"/admin/product"} className="letter m-2">
                                 <FontAwesomeIcon icon={faBox}/>{' '}
-                                Máy PS
+                                Máy PlayStation
                             </NavLink>
                         </NavItem>
                         <NavItem>
@@ -117,7 +117,6 @@ class SideBar extends Component {
                             </NavLink>
                         </NavItem>
                         <SubMenu title="Thống Kê" icon={faChartArea} items={this.state.statistical} url="statistical"/>
-                        {/* <SubMenu title="Information" icon={faInfo} items={this.state.info} url="info"/> */}
                         <NavItem>
                             <NavLink tag={Link} to={"/admin/info"} className="letter m-2">
                                 <FontAwesomeIcon icon={faAddressCard}/>{' '}

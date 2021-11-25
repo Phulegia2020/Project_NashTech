@@ -3,25 +3,21 @@ package com.example.nashtechproject.restcontroller;
 import com.example.nashtechproject.dto.MailRequestDTO;
 import com.example.nashtechproject.dto.UserDTO;
 import com.example.nashtechproject.entity.Role;
-import com.example.nashtechproject.entity.RoleName;
 import com.example.nashtechproject.entity.User;
 import com.example.nashtechproject.exception.ObjectNotFoundException;
 import com.example.nashtechproject.exception.UserException;
 import com.example.nashtechproject.page.STATE;
 import com.example.nashtechproject.page.UserPage;
 import com.example.nashtechproject.payload.response.MessageResponse;
-import com.example.nashtechproject.repository.RoleRepository;
 import com.example.nashtechproject.service.BillService;
 import com.example.nashtechproject.service.RoleService;
 import com.example.nashtechproject.service.UserService;
-import com.fasterxml.jackson.databind.util.JSONPObject;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -29,10 +25,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import javax.print.attribute.standard.Media;
 import javax.validation.Valid;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -243,7 +237,6 @@ public class UserController {
         }
         user.setActive_status(STATE.INACTIVE);
         userService.updateUser(user);
-//        userService.deleteUser(userId);
         return ResponseEntity.ok(new MessageResponse("Delete Successfully"));
     }
 

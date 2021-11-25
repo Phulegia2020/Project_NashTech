@@ -1,9 +1,5 @@
 package com.example.nashtechproject.dto;
 
-import org.hibernate.annotations.Type;
-
-import javax.persistence.*;
-
 public class ProductDTO {
     private Long id;
 
@@ -18,10 +14,6 @@ public class ProductDTO {
     private float totalrating;
 
     private String status;
-
-//    @Lob
-//    @Type(type="org.hibernate.type.BinaryType")
-//    private byte[] imageurl;
 
     private String url_image;
 
@@ -76,14 +68,6 @@ public class ProductDTO {
     public void setTotalrating(float totalrating) {
         this.totalrating = totalrating;
     }
-
-//    public byte[] getImageurl() {
-//        return imageurl;
-//    }
-//
-//    public void setImageurl(byte[] imageurl) {
-//        this.imageurl = imageurl;
-//    }
 
     public String getUrl_image() {
         return url_image;

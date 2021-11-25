@@ -1,7 +1,6 @@
 package com.example.nashtechproject.restcontroller;
 
 import com.example.nashtechproject.dto.PlaceOrderDetailsDTO;
-import com.example.nashtechproject.entity.ImportDetails;
 import com.example.nashtechproject.entity.PlaceOrder;
 import com.example.nashtechproject.entity.PlaceOrderDetails;
 import com.example.nashtechproject.entity.Product;
@@ -21,8 +20,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -158,8 +155,6 @@ public class PlaceOrderDetailsController {
         PlaceOrderDetails placeOrderDetails = modelMapper.map(placeOrderDetailsDTO, PlaceOrderDetails.class);
         PlaceOrder placeOrder = placeOrderService.getPlaceOrder(Long.valueOf(placeOrderDetailsDTO.getPlaceorder_id()));
         Product pro = productService.getProduct(Long.valueOf(placeOrderDetailsDTO.getProduct_id()));
-//        placeOrderDetails.setPlaceOrder(placeOrder);
-//        placeOrderDetails.setProduct(pro);
         placeOrderDetails.setKey(new PlaceOrderDetailsKey(placeOrder, pro));
         return placeOrderDetails;
     }

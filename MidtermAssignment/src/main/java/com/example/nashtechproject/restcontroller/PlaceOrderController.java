@@ -1,7 +1,6 @@
 package com.example.nashtechproject.restcontroller;
 
 import com.example.nashtechproject.dto.PlaceOrderDTO;
-import com.example.nashtechproject.entity.Import;
 import com.example.nashtechproject.entity.PlaceOrder;
 import com.example.nashtechproject.entity.Supplier;
 import com.example.nashtechproject.entity.User;
@@ -21,7 +20,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -118,9 +116,7 @@ public class PlaceOrderController {
         }
         PlaceOrder po = convertToEntity(placeOrder);
         po.setCreateddate(LocalDateTime.now());
-//        po.setStatus("Waiting");
         po.setStatus(STATE.WAITING);
-//        return convertToDTO(placeOrderService.savePlaceOrder(po));
         return placeOrderService.savePlaceOrder(po);
     }
 
@@ -165,7 +161,6 @@ public class PlaceOrderController {
         {
             throw new InvalidDataException("The PlaceOrder is imported. Can not delete!");
         }
-//        placeOrderService.deletePlaceOrder(placeOrderId);
         placeOrder.setStatus(STATE.CANCEL);
         placeOrderService.updatePlaceOrder(placeOrder);
         return ResponseEntity.ok(new MessageResponse("Delete Successfully"));

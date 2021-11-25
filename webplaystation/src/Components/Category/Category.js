@@ -68,18 +68,15 @@ export default class Category extends Component {
                 })
             }
         })
-        // .catch(error => {alert('This category had products. Can not delete!')})
         .catch(error => toast.error('Không thể xóa loại máy vẫn đang được kinh doanh!'))
     }
 
     createCategory(newCategory){
         post(`/categories`, {name: newCategory.name.trim(), description: newCategory.description.trim()})
         .then((response) => {
-            //window.location.reload();
             this.setState({
                 categories: [response.data, ...this.state.categories],
                 isDisplayForm: false,
-                //pageToTal: Math.ceil(this.state.categories.length / 5)
             });
         })
         .catch(error => toast.error('Loại máy này đã tồn tại!'))
@@ -157,13 +154,6 @@ export default class Category extends Component {
         }
     }
 
-    // handleDelete(id){
-    //     this.setState({
-    //         isDisplayFormDel: !this.state.isDisplayFormDel,
-    //         iddel: id
-    //     })
-    // }
-
     async handleSearch(e){
         e.preventDefault()
         await this.setState({
@@ -215,7 +205,6 @@ export default class Category extends Component {
 
     handleSortInc = (e, key) => {
         e.preventDefault();
-        //this.state.categories.sort((e1, e2) => (e1.id > e2.id ? 1 : -1));
         if (key === 'id')
         {
             this.setState({
@@ -228,12 +217,10 @@ export default class Category extends Component {
                 categories: this.state.categories.sort((e1, e2) => (e1.name > e2.name ? 1 : -1))
             })
         }
-        // console.log('sort');
     }
 
     handleSortDes = (e, key) => {
         e.preventDefault();
-        //this.state.categories.sort((e1, e2) => (e1.id > e2.id ? 1 : -1));
         if (key === 'id')
         {
             this.setState({
@@ -246,7 +233,6 @@ export default class Category extends Component {
                 categories: this.state.categories.sort((e1, e2) => (e2.name > e1.name ? 1 : -1))
             })
         }
-        // console.log('sort');
     }
 
     componentWillUnmount() {
@@ -259,7 +245,7 @@ export default class Category extends Component {
     render() {
         const sections = [
             { key: 'Quản Lý', content: 'Quản Lý', link: false },
-            { key: 'Loại Sản Phẩm', content: 'Loại Sản Phẩm', active: true }
+            { key: 'Loại Sản Phẩm', content: 'Danh Sách Loại Sản Phẩm', active: true }
           ]
         return (
             <div>
@@ -298,7 +284,7 @@ export default class Category extends Component {
                 <table id="table">
                     <thead>
                         <tr>
-                            <th><b>Mã Loại</b>{' '}<FontAwesomeIcon icon={faArrowCircleUp} className="sort-icon" onClick={(e) => this.handleSortInc(e, 'id')}/><FontAwesomeIcon icon={faArrowCircleDown} className="sort-icon" onClick={(e) => this.handleSortDes(e, 'id')}/></th>
+                            <th><b>Mã ID</b>{' '}<FontAwesomeIcon icon={faArrowCircleUp} className="sort-icon" onClick={(e) => this.handleSortInc(e, 'id')}/><FontAwesomeIcon icon={faArrowCircleDown} className="sort-icon" onClick={(e) => this.handleSortDes(e, 'id')}/></th>
                             <th><b>Tên</b>{' '}<FontAwesomeIcon icon={faArrowCircleUp} className="sort-icon" onClick={(e) => this.handleSortInc(e, 'name')}/><FontAwesomeIcon icon={faArrowCircleDown} className="sort-icon" onClick={(e) => this.handleSortDes(e, 'name')}/></th>
                             <th><b>Mô Tả</b></th>
                             <th>Cập Nhập</th>

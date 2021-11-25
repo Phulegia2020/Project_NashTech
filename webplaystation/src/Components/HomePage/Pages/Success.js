@@ -5,7 +5,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { withRouter } from 'react-router-dom';
 import { get, post } from '../../../Utils/httpHelper';
-import {formatCurrency, formatQuantity} from "../../../Utils/Utils";
+import {formatQuantity} from "../../../Utils/Utils";
 
 class Success extends Component {
     constructor(props) {
@@ -35,8 +35,6 @@ class Success extends Component {
         localStorage.setItem('shopping-cart', []);
         this.props.handleNumberCart(0);
         var billId = "";
-        // console.log(pttt);
-        // console.log(shoppingCartItems);
 
         await get(`/users/${localStorage.getItem('user_id')}`)
         .then((response) => {
@@ -52,9 +50,6 @@ class Success extends Component {
         .then((response) => {
             if (response.status === 200)
             {
-                // this.setState({
-                //     bill: response.data
-                // })
                 billId = response.data.id;
                 localStorage.removeItem('destination');
             }
@@ -75,7 +70,6 @@ class Success extends Component {
         .then((response) => {
             if (response.status === 200)
             {
-                //console.log(response.data);
                 this.setState({
                     bill: response.data
                 })
@@ -91,12 +85,9 @@ class Success extends Component {
         .then((response) => {
             if (response.status === 200)
             {
-                // localStorage.setItem('shopping-cart', []);
             }
         })
         .catch((error) => console.log(error));
-
-        // this.props.handleNumberCart(0);
         window.onbeforeunload = function () {
             window.history.replaceState(null, "");
         }.bind(this);
@@ -114,12 +105,9 @@ class Success extends Component {
             <div style={{marginTop:'50px'}}>
                 <div className="row">
                     <div className="col-md-12 text-center">
-                        {/* <i className="fas fa-check-circle fa-5x text-success"></i> */}
                         <FontAwesomeIcon icon={faCheckCircle} className="fas fa-check-circle fa-5x text-success"/>
                         <h2 className="display-3 text-black">Cám ơn!</h2>
-                        {/* <p className="lead mb-5">Bạn đã thanh toán thành công.</p> */}
                         <p className="lead mb-5">Quý khách đã thanh toán mua máy thành công.</p>
-                        {/* <p><a href="/" className="btn btn-lg btn-primary">Quay về cửa hàng</a></p> */}
                         <p><a href="/" className="btn btn-lg btn-primary">Quay về trang chủ</a></p>
                     </div>
                 </div>

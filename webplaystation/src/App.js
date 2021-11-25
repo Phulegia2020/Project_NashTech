@@ -40,26 +40,9 @@ class App extends React.Component{
         })
     }
 
-    // componentDidUpdate(prevProps, prevState)
-    // {
-    //     if (prevState.numberCart !== this.state.numberCart)
-    //     {
-    //         return;
-    //     }
-        
-    //     // if (prevState.numberCart !== localStorage.getItem('shopping-cart').length)
-    //     // {
-    //     //     console.log(localStorage.getItem('shopping-cart').length);
-    //     //     this.setState({
-    //     //         numberCart: localStorage.getItem('shopping-cart').length
-    //     //     });
-    //     // }
-    // }
-
     toggleSidebar = () => {
         this.setState({
             sidebarIsOpen: !this.state.sidebarIsOpen,
-            // chatbot: false
         })
     };
 
@@ -69,17 +52,8 @@ class App extends React.Component{
         })
     }
 
-    // handleChatBot1 = (data) => {
-    //     console.log(data);
-    //     this.setState({
-    //         isOpen: data
-    //     })
-    // }
-
     handleNumberCart(data)
     {
-        // console.log(data);
-        // var amount = data;
         this.setState({
             numberCart: data
         });
@@ -90,8 +64,6 @@ class App extends React.Component{
       return (
           <Router>
               <Switch>
-                  {/* <Route> */}
-                  
                   <Route exact path="/" render={() => (
                       <Redirect to="/WebPlayStation"/>
                   )}>
@@ -99,7 +71,7 @@ class App extends React.Component{
                   <Route exact path="/WebPlayStation">
                       <MainMenu numberCart={this.state.numberCart} handleNumberCart={this.handleNumberCart}/>
                       <Products handleNumberCart={this.handleNumberCart}/>
-                      {/* <Footer/> */}
+                      <Footer/>
                   </Route>
                   <Route exact path="/WebPlayStation/about">
                       <MainMenu numberCart={this.state.numberCart} handleNumberCart={this.handleNumberCart}/>
@@ -124,9 +96,7 @@ class App extends React.Component{
                   <Route exact path="/WebPlayStation/changpassword">
                       <MainMenu numberCart={this.state.numberCart} handleNumberCart={this.handleNumberCart}/>
                       <ChangePassword/>
-                      <div className="fixed-bottom">
-                        <Footer/>
-                      </div>
+                      <Footer/>
                   </Route>
                   <Route exact path="/WebPlayStation/forgetPassword">
                       <MainMenu numberCart={this.state.numberCart} handleNumberCart={this.handleNumberCart}/>
@@ -146,14 +116,10 @@ class App extends React.Component{
                       <MainMenu numberCart={this.state.numberCart} handleNumberCart={this.handleNumberCart}/>
                       <ProductDetails handleNumberCart={this.handleNumberCart}/>
                       <Footer/>
-                      {/* handleChatBot1={this.handleChatBot1} */}
                   </Route>
                   <Route exact path="/WebPlayStation/category/:id">
                       <MainMenu numberCart={this.state.numberCart} handleNumberCart={this.handleNumberCart}/>
                       <ProductsByCategory handleNumberCart={this.handleNumberCart}/>
-                      {/* <div className="fixed-bottom">
-                        
-                      </div> */}
                       <Footer/>
                   </Route>
                   <Route exact path="/WebPlayStation/order">
@@ -174,31 +140,25 @@ class App extends React.Component{
                         <Footer/>
                       </div>
                   </Route>
-
-                  
-
-                  {/* </Route> */}
                   <Router path="/admin">
                     <div className="AppSideBar wrapper">
                         <SideBar toggle={this.toggleSidebar} isOpen={this.state.sidebarIsOpen}/>
                         <Content toggleSidebar={this.toggleSidebar} sidebarIsOpen={this.state.sidebarIsOpen} handleChatBot={this.handleChatBot}/>
                     </div>
                   </Router>
-
-                  
               </Switch>
               {this.state.chatbot === true && <df-messenger
                     intent="WELCOME"
                     chat-title="THE PLAYSTATION SHOP 🎮"
                     agent-id="3d2eb8db-0f5e-4a16-9c2a-3cea0cadb3a7"
                     language-code="en"
-                    // wait-open
-                    // chat-icon="https://image.flaticon.com/icons/png/512/588/588258.png"
+                    wait-open
+                    chat-icon="https://image.flaticon.com/icons/png/512/588/588258.png"
                     // chat-icon="https://media.comicbook.com/2019/02/playstation-logo-orange-1157594.jpeg"
                     // chat-icon="https://upload.wikimedia.org/wikipedia/vi/3/37/Mortal_Kombat_Logo.png"
                     // chat-icon="https://cdn3.iconfinder.com/data/icons/black-easy/512/538309-game_512x512.png"
                 ></df-messenger>}
-          </Router>
+           </Router>
       );
   }
 }

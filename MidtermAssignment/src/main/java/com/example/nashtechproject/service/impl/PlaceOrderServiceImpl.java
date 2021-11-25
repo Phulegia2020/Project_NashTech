@@ -1,13 +1,10 @@
 package com.example.nashtechproject.service.impl;
 
-import com.example.nashtechproject.dto.PlaceOrderDTO;
-import com.example.nashtechproject.entity.Import;
 import com.example.nashtechproject.entity.PlaceOrder;
 import com.example.nashtechproject.page.ProductPage;
 import com.example.nashtechproject.page.STATE;
 import com.example.nashtechproject.repository.PlaceOrderRepository;
 import com.example.nashtechproject.service.PlaceOrderService;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { get, put } from '../../Utils/httpHelper'
 import { withRouter } from "react-router";
-import { Col, Row, Button, Form, FormGroup, Label, Input } from 'reactstrap';
+import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
 import "../Category/Category.css";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -102,7 +102,6 @@ class UpdateBillDetails extends Component {
                 this.props.history.push(`/admin/bill/${this.state.bill_id}`);
             }
         })
-        // .catch((error) => {'This product does not have enough quantity!'})
         .catch((error) => toast.error(`Hiện tại không có đủ ${this.state.quantity} máy loại này!`))
     }
 
@@ -124,33 +123,29 @@ class UpdateBillDetails extends Component {
         return (
             <div className="update-form">
                 <h3>Cập Nhật Chi Tiết</h3>
-                {/* <Row form>
-                    <Col md={4}> */}
-                        <Form onSubmit={(event) => this.handleUpdate(event)}>
-                        <FormGroup>
-                            <Label htmlFor="quantity">Số Lượng</Label>
-                            <Input type="number" name="quantity" id="quantity" placeholder="100" onChange={(e) => this.changeValue(e)} value = {this.state.quantity} required="required"/>
-                            {this.state.key === 'quantity' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
-                        </FormGroup>
-                        
-                        <FormGroup className="mb-2">
-                            <Label htmlFor="product">Máy</Label>
-                            <Input type="select" name="product_id" id="product" value = {this.state.product_id} onChange={(e) => this.changeValue(e)} required disabled>
-                                {
-                                    this.state.products.map((p) => (
-                                        <option key={p.id} value={p.id}>{p.name}</option>
-                                    ))
-                                }
-                            </Input>
-                            {this.state.key === 'product' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
-                        </FormGroup>
-                        <div className="mb-5">
-                            <Button type="submit" outline color="warning" >Cập Nhật</Button>{' '}
-                            <Button outline color="danger" onClick={this.handleClear.bind(this)}>Hủy</Button>
-                        </div>
-                        </Form>
-                    {/* </Col>
-                </Row> */}
+                <Form onSubmit={(event) => this.handleUpdate(event)}>
+                    <FormGroup>
+                        <Label htmlFor="quantity">Số Lượng</Label>
+                        <Input type="number" name="quantity" id="quantity" placeholder="100" onChange={(e) => this.changeValue(e)} value = {this.state.quantity} required="required"/>
+                        {this.state.key === 'quantity' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
+                    </FormGroup>
+                    
+                    <FormGroup className="mb-2">
+                        <Label htmlFor="product">Máy</Label>
+                        <Input type="select" name="product_id" id="product" value = {this.state.product_id} onChange={(e) => this.changeValue(e)} required disabled>
+                            {
+                                this.state.products.map((p) => (
+                                    <option key={p.id} value={p.id}>{p.name}</option>
+                                ))
+                            }
+                        </Input>
+                        {this.state.key === 'product' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
+                    </FormGroup>
+                    <div className="mb-5">
+                        <Button type="submit" outline color="warning" >Cập Nhật</Button>{' '}
+                        <Button outline color="danger" onClick={this.handleClear.bind(this)}>Hủy</Button>
+                    </div>
+                </Form>
                 <ToastContainer position="top-center"
                     autoClose={2000}
                     hideProgressBar

@@ -3,10 +3,8 @@ package com.example.nashtechproject.restcontroller;
 import com.example.nashtechproject.dto.BillDTO;
 import com.example.nashtechproject.dto.MailRequestDTO;
 import com.example.nashtechproject.dto.RevenueDTO;
-import com.example.nashtechproject.dto.StatisticalDTO;
 import com.example.nashtechproject.entity.*;
 import com.example.nashtechproject.exception.BillException;
-import com.example.nashtechproject.exception.BillStatusException;
 import com.example.nashtechproject.exception.InvalidDataException;
 import com.example.nashtechproject.exception.UserException;
 import com.example.nashtechproject.page.ProductPage;
@@ -24,13 +22,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.text.DecimalFormat;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -47,9 +42,6 @@ public class BillController {
 
     @Autowired
     private UserService userService;
-
-//    @Autowired
-//    private BillStatusService billStatusService;
 
     @Autowired
     private ProductService productService;
@@ -176,7 +168,6 @@ public class BillController {
         List<Bill> list = new ArrayList<>();
         for (int i = 0; i < bills.size(); i++)
         {
-            //income = income + bills.get(i).getTotal();
             if (bills.get(i).getCheckout_date().getYear() == Integer.valueOf(year))
             {
                 if (quy.equals("1"))
@@ -230,7 +221,6 @@ public class BillController {
     {
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         LocalDateTime from = LocalDateTime.parse(dateFrom + " 00:00:00", dateFormat);
-//        from = LocalDateTime.parse(dateFormat.format(from), dateFormat);
         LocalDateTime to = LocalDateTime.parse(dateTo + " 23:59:59", dateFormat);
         List<Bill> bills = billService.getBillsDone();
         List<Bill> list = new ArrayList<>();
@@ -295,15 +285,9 @@ public class BillController {
         {
             throw new UserException(u.getId());
         }
-//        BillStatus bs = billStatusService.getBillStatus(Long.valueOf(bill.getBillStatus_id()));
-//        if (bs == null)
-//        {
-//            throw new BillStatusException(bs.getId());
-//        }
         Bill b = convertToEntity(bill);
         b.setCreateddate(LocalDateTime.now());
         b.setStatus(STATE.WAITING);
-//        return convertToDTO(billService.saveBill(b));
         return billService.saveBill(b);
     }
 
@@ -326,15 +310,9 @@ public class BillController {
             {
                 throw new UserException(u.getId());
             }
-//            BillStatus bs = billStatusService.getBillStatus(Long.valueOf(billDetails.getBillStatus_id()));
-//            if (bs == null)
-//            {
-//                throw new BillStatusException(bs.getId());
-//            }
             bill.setTotal(billDetails.getTotal());
             bill.setUser(u);
             bill.setDestination(billDetails.getDestination());
-//            bill.setBillStatus(bs);
             billService.updateBill(bill);
         }
         return convertToDTO(bill);
@@ -359,20 +337,7 @@ public class BillController {
             {
                 throw new UserException(u.getId());
             }
-//            BillStatus bs = billStatusService.getBillStatus(Long.valueOf(billDetails.getBillStatus_id()));
-//            if (bs == null)
-//            {
-//                throw new BillStatusException(bs.getId());
-//            }
             bill.setCheckout_date(LocalDateTime.now());
-//            bill.setBillStatus(bs);
-//            List<BillDetails> list = billDetailsService.getBillDetailsByBill(billId);
-//            for (int i = 0; i < list.size(); i++)
-//            {
-//                Product pro = productService.getProduct(list.get(i).getKey().getProduct().getId());
-//                pro.setQuantity(pro.getQuantity() - list.get(i).getQuantity());
-//                productService.updateProduct(pro);
-//            }
             bill.setStatus(STATE.DONE);
             billService.updateBill(bill);
         }
@@ -395,7 +360,6 @@ public class BillController {
         {
             throw new InvalidDataException("The bill is checked out. Can not delete!");
         }
-//        billService.deleteBill(billId);
         List<BillDetails> list = billDetailsService.getBillDetailsByBill(billId);
         for (int i = 0; i < list.size(); i++)
         {
@@ -413,10 +377,10 @@ public class BillController {
         String content = mailRequest.getContent();
         Bill b = billService.getBill(bill);
 
-        content = content + "<b>Thông tin khách hàng</b><br/>Người nhận: " + b.getUser().getName() + "<br/>"
+        content = content + "<br/><b>Thông tin khách hàng</b><br/>Người nhận: " + b.getUser().getName() + "<br/>"
                             + "Địa chỉ nhận hàng: " + b.getDestination() + "<br/>"
                             + "Số điện thoại: " + b.getUser().getPhone() + "<br/>"
-                            + "<b>Chi tiết đơn hàng</b>"
+                            + "<br/><b>Chi tiết đơn hàng</b>"
                             + "<table width='600px' style='border:2px solid black; border-collapse: collapse;'>"
                             + "<tr align='center'>"
                             + "<td><b>Máy </b></td>"
@@ -426,10 +390,8 @@ public class BillController {
         List<BillDetails> list = billDetailsService.getBillDetailsByBill(bill);
         for (int i = 0; i < list.size(); i++)
         {
-            //content = content + "<br><br><b>Product:</b> " + list.get(i).getKey().getProduct().getName() + " <br><b>Quantity:</b> " + String.format("%,d", list.get(i).getQuantity()) + " <br><b>Price:</b> " + String.format("%,d", list.get(i).getKey().getProduct().getPrice())  + " VND";
             content = content + "<tr align='center' style='border-top: 1px solid #ddd'> "+"<td>"  + list.get(i).getKey().getProduct().getName()+ "</td>"+ "<td>"  + String.format("%,d", list.get(i).getQuantity()) + "</td>"+ "<td>" + String.format("%,d", list.get(i).getKey().getProduct().getPrice())  + " VND"+ "</td>"+"</tr>";
         }
-//        content = content + "</table> <p>Tổng giá trị đơn hàng: </p><b>" + String.format("%,f", b.getTotal()) + " VNĐ</b>";
         content = content + "</table>";
         mailRequest.setContent(content);
         billService.sendEmail(mailRequest);
@@ -441,7 +403,6 @@ public class BillController {
         BillDTO billDTO = modelMapper.map(b, BillDTO.class);
         String uid = String.valueOf(b.getUser().getId());
         billDTO.setUser_id(uid);
-//        billDTO.setBillStatus_id(String.valueOf(b.getBillStatus().getId()));
         return billDTO;
     }
 
@@ -450,8 +411,6 @@ public class BillController {
         Bill bill = modelMapper.map(b, Bill.class);
         User u = userService.getUser(Long.valueOf(b.getUser_id()));
         bill.setUser(u);
-//        BillStatus billStatus = billStatusService.getBillStatus(Long.valueOf(b.getBillStatus_id()));
-//        bill.setBillStatus(billStatus);
         return bill;
     }
 }

@@ -1,16 +1,11 @@
 package com.example.nashtechproject.service.impl;
 
-import com.example.nashtechproject.dto.BillDTO;
 import com.example.nashtechproject.dto.MailRequestDTO;
 import com.example.nashtechproject.entity.Bill;
-import com.example.nashtechproject.entity.BillStatus;
-import com.example.nashtechproject.exception.BillStatusException;
 import com.example.nashtechproject.page.ProductPage;
 import com.example.nashtechproject.page.STATE;
 import com.example.nashtechproject.repository.BillRepository;
-import com.example.nashtechproject.repository.BillStatusRepository;
 import com.example.nashtechproject.service.BillService;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -22,7 +17,6 @@ import org.springframework.stereotype.Service;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service

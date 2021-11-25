@@ -25,10 +25,6 @@ export default class ChangePassword extends Component {
             }
         })
     }
-
-	// changeValue = (e, { name, value }) => {
-	// 	this.setState({ [name]: value });
-    // }
     
     changeValue(e){
         this.setState({
@@ -63,15 +59,11 @@ export default class ChangePassword extends Component {
 			});
 			return;
         }
-        // console.log(localStorage.getItem('user_id'));
-        // console.log(this.state.newpassword);
-        // console.log(this.state.confirmpassword);
 		post('/auth/profile', {user_id: localStorage.getItem('user_id'), newpassword: this.state.newpassword,
                                             confirmpassword: this.state.confirmpassword})
         .then((response) => {
             if (response.status === 200)
             {
-                // alert(response.data.message);
                 toast.success('Thay đổi mật khẩu thành công!');
 				this.setState({
 					newpassword: "",
@@ -80,7 +72,6 @@ export default class ChangePassword extends Component {
             }
             
         })
-        // .catch(error => alert('Check Password again!'));
         .catch(error => toast.error('Kiểm tra lại xác nhận mật khẩu'));
     }
 
@@ -114,7 +105,6 @@ export default class ChangePassword extends Component {
                                 <FormGroup style={{marginBottom: '10px', marginLeft: '50px'}}>
                                     <Label htmlFor="confirmpassword">Nhập Lại Mật Khẩu</Label>
                                     <Input type="password" name="confirmpassword" id="confirmpassword" placeholder="Nhập Lại Mật Khẩu..." onChange={(e) => this.changeValue(e)} value = {this.state.confirmpassword} required/>
-                                    {/* {this.state.key === 'password' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' } */}
                                 </FormGroup>
                                 <Button type='submit' style={{marginTop: '10px', marginLeft: '50px'}} color='success' disabled={this.state.change}>Xác Nhận</Button>
                             </Form>

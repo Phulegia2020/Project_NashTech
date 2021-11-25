@@ -1,20 +1,16 @@
 package com.example.nashtechproject.service.impl;
 
 import com.example.nashtechproject.entity.User;
-import com.example.nashtechproject.dto.UserDTO;
-import com.example.nashtechproject.page.ProductPage;
 import com.example.nashtechproject.page.STATE;
 import com.example.nashtechproject.page.UserPage;
 import com.example.nashtechproject.repository.UserRepository;
 import com.example.nashtechproject.service.UserService;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-
 import java.util.*;
 
 @Service
@@ -67,7 +63,6 @@ public class UserServiceImpl implements UserService {
     {
         Sort sort = Sort.by(userPage.getSortDirection(), userPage.getSortBy());
         Pageable pageable = PageRequest.of(userPage.getPageNumber(), userPage.getPageSize(), sort);
-//        Page<User> page = userRepository.findByActivestatus(STATE.ACTIVE, pageable);
         Page<User> page = userRepository.findAll(pageable);
         List<User> list = page.getContent();
         return list;

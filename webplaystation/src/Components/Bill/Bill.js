@@ -7,7 +7,7 @@ import { withRouter } from "react-router";
 import Add from "./Add"
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Pagination, PaginationItem, PaginationLink } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheck, faEdit, faInfo, faPlus, faTrash, faArrowCircleUp, faArrowCircleDown, faInfoCircle, faReceipt } from '@fortawesome/free-solid-svg-icons';
+import { faCheck, faEdit, faPlus, faTrash, faArrowCircleUp, faArrowCircleDown, faReceipt } from '@fortawesome/free-solid-svg-icons';
 import { Label, Breadcrumb, Input } from 'semantic-ui-react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -19,7 +19,6 @@ class Bill extends Component {
         isDisplayFormDel: false,
         pageNumber: 0,
         pageToTal: 0,
-        users: [],
         billCheckOut: {},
         billdetails: [],
         user:"",
@@ -49,15 +48,6 @@ class Bill extends Component {
             });
         })
         .catch(error => console.log(error));
-
-        get("/users")
-        .then((response) => {
-            if (response.status === 200)
-            {
-                this.setState({users: response.data});
-            }
-        })
-        .catch(error => {console.log(error)})
     }
 
     find(id){
@@ -80,20 +70,18 @@ class Bill extends Component {
                                isDisplayFormDel: false})
             }
         })
-        // .catch(error => {alert('This Bill had Details. Can not Delete!')})
         .catch(error => {toast.error('Hóa đơn đã được lập chi tiết!')})
     }
 
     createBill(newBill){
-        // post(`/bills`, {total: 0, user_id: newBill.user_id, billStatus_id: newBill.billStatus_id})
         post(`/bills`, {total: 0, user_id: newBill.user_id, status: newBill.status, destination: newBill.destination, payment: newBill.payment})
         .then((response) => {
-            //window.location.reload();
             this.setState({
                 bills: [response.data, ...this.state.bills],
                 isDisplayForm: false,
             });
-        });
+        })
+        .catch(error => console.log(error));
     }
 
     onToggleForm = () => {
@@ -190,29 +178,16 @@ class Bill extends Component {
             }
         })
         .catch((error) => {})
-        //console.log(this.state.billdetails.length);
         if (this.state.billdetails.length === 0)
         {
-            // alert('The Bill does not details. Can not Check Out');
             toast.error('Kiểm tra lại chi tiết hóa đơn trước khi xác nhận!');
             return;
         }
-        // var status;
-        // if (key == 'notcheck')
-        // {
-        //     status = '1';
-        // }
-        // else
-        // {
-        //     status = '3';
-        // }
-        // put(`/bills/confirm/${id}`, {total: this.state.billCheckOut.total, user_id: this.state.billCheckOut.user_id, billStatus_id: status})
         await put(`/bills/confirm/${id}`, {total: this.state.billCheckOut.total, user_id: this.state.billCheckOut.user_id, status: 'Done'})
         .then((response) => {
             if (response.status === 200)
             {
                 this.props.history.push("/admin/bill");
-                // window.location.reload();
             }
         })
 
@@ -289,7 +264,6 @@ class Bill extends Component {
 
     handleSortInc = (e, key) => {
         e.preventDefault();
-        //this.state.categories.sort((e1, e2) => (e1.id > e2.id ? 1 : -1));
         if (key === 'id')
         {
             this.setState({
@@ -314,12 +288,10 @@ class Bill extends Component {
                 bills: this.state.bills.sort((e1, e2) => (e1.checkout_date > e2.checkout_date ? 1 : -1))
             })
         }
-        // console.log('sort');
     }
 
     handleSortDes = (e, key) => {
         e.preventDefault();
-        //this.state.categories.sort((e1, e2) => (e1.id > e2.id ? 1 : -1));
         if (key === 'id')
         {
             this.setState({
@@ -344,7 +316,6 @@ class Bill extends Component {
                 bills: this.state.bills.sort((e1, e2) => (e2.checkout_date > e1.checkout_date ? 1 : -1))
             })
         }
-        // console.log('sort');
     }
 
     componentWillUnmount() {
@@ -357,7 +328,7 @@ class Bill extends Component {
     render() {
         const sections = [
             { key: 'Quản Lý', content: 'Quản Lý', link: false },
-            { key: 'Hóa Đơn', content: 'Hóa Đơn', active: true }
+            { key: 'Hóa Đơn', content: 'Danh Sách Hóa Đơn', active: true }
           ]
         return (
             <div>
@@ -421,7 +392,6 @@ class Bill extends Component {
                                     <td>{b.user.name}</td>
                                     {b.payment === 'Cod' && <td>Tiền Mặt</td>}
                                     {b.payment === 'PayPal' && <td>PayPal</td>}
-                                    {/* <td>{b.billStatus.id === 1 ? <Label color="teal">Done</Label> : <Label color="grey">Waiting CheckOut</Label>}</td> */}
                                     <td>{b.status === 'Done' ? <Label color="teal">Hoàn Tất</Label> : <Label color="grey">Chờ Xác Nhận</Label>}</td>
                                     {/* <td> */}
                                         {/* {b.billStatus.id != 1 ? 
@@ -446,7 +416,6 @@ class Bill extends Component {
                                         }
                                     </td> */}
                                     <td>
-                                        {/* <button onClick={(e) => this.onToggleFormDel(e, b.id)} className="btn btn-danger" disabled={b.billStatus.id == 1}> */}
                                         <button onClick={(e) => this.onToggleFormDel(e, b.id)} className="btn btn-danger" disabled={b.status === 'Done'}>
                                             <FontAwesomeIcon icon={faTrash} className="mr-2" />{' '}
                                         </button>
@@ -459,14 +428,8 @@ class Bill extends Component {
                                         </Link>
                                     </td>
                                     <td>
-                                        {/* <Link to={`/admin/bill`} onClick={b.billStatus.id == 1 ? (e) => e.preventDefault() : (event) => this.handleCheckOut(event, b.id, 'notcheck')} className={b.billStatus.id == 1 ? "disable-link" : ""}>
-                                            <button className="btn btn-warning" disabled={b.billStatus.id == 1}>
-                                            <FontAwesomeIcon icon={faCheck} className="mr-2"/>{' '}
-                                                
-                                            </button>
-                                        </Link> */}
                                         <Link to={`/admin/bill`} onClick={b.status === 'Done' ? (e) => e.preventDefault() : (event) => this.handleCheckOut(event, b.id, '')} className={b.status === 'Done' ? "disable-link" : ""}>
-                                            <button className="btn btn-warning" disabled={b.status === 'Done'}>
+                                            <button className="btn btn-success" disabled={b.status === 'Done'}>
                                                 <FontAwesomeIcon icon={faCheck} className="mr-2"/>{' '}
                                             </button>
                                         </Link>

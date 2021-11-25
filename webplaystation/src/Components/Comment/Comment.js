@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 import "./../Category/Category.css";
 import {del, get, post} from "./../../Utils/httpHelper";
-import { Link } from 'react-router-dom';
 import { withRouter } from "react-router";
 import Add from "./Add"
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Pagination, PaginationItem, PaginationLink } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faPlus, faTrash, faArrowCircleUp, faArrowCircleDown } from '@fortawesome/free-solid-svg-icons';
+import { faTrash, faArrowCircleUp, faArrowCircleDown } from '@fortawesome/free-solid-svg-icons';
 import { Input, Breadcrumb } from 'semantic-ui-react';
 
 class Comment extends React.Component {
@@ -70,11 +69,9 @@ class Comment extends React.Component {
         .then((response) => {
             if (response.status === 200)
             {
-                //window.location.reload();
                 this.setState({
                     comments: [response.data, ...this.state.comments],
                 });
-                //console.log(response.data);
             }
         });
     }
@@ -202,7 +199,6 @@ class Comment extends React.Component {
 
     handleSortInc = (e, key) => {
         e.preventDefault();
-        //this.state.categories.sort((e1, e2) => (e1.id > e2.id ? 1 : -1));
         if (key === 'id')
         {
             this.setState({
@@ -227,12 +223,10 @@ class Comment extends React.Component {
                 comments: this.state.comments.sort((e1, e2) => (e1.username > e2.username ? 1 : -1))
             })
         }
-        // console.log('sort');
     }
 
     handleSortDes = (e, key) => {
         e.preventDefault();
-        //this.state.categories.sort((e1, e2) => (e1.id > e2.id ? 1 : -1));
         if (key === 'id')
         {
             this.setState({
@@ -257,7 +251,6 @@ class Comment extends React.Component {
                 comments: this.state.comments.sort((e1, e2) => (e2.username > e1.username ? 1 : -1))
             })
         }
-        // console.log('sort');
     }
 
     componentWillUnmount() {
@@ -270,7 +263,7 @@ class Comment extends React.Component {
     render() {
         const sections = [
             { key: 'Quản Lý', content: 'Quản Lý', link: false },
-            { key: 'Bình Luận', content: 'Bình Luận', active: true }
+            { key: 'Bình Luận', content: 'Danh Sách Bình Luận', active: true }
           ]
         return (
             <div>
@@ -311,7 +304,7 @@ class Comment extends React.Component {
                 <table id="table">
                     <thead>
                         <tr>
-                            <th><b>Mã</b>{' '}<FontAwesomeIcon icon={faArrowCircleUp} className="sort-icon" onClick={(e) => this.handleSortInc(e, 'id')}/><FontAwesomeIcon icon={faArrowCircleDown} className="sort-icon" onClick={(e) => this.handleSortDes(e, 'id')}/></th>
+                            <th><b>ID</b>{' '}<FontAwesomeIcon icon={faArrowCircleUp} className="sort-icon" onClick={(e) => this.handleSortInc(e, 'id')}/><FontAwesomeIcon icon={faArrowCircleDown} className="sort-icon" onClick={(e) => this.handleSortDes(e, 'id')}/></th>
                             <th><b>Sản Phẩm</b></th>
                             <th><b>Tên Sản Phẩm</b>{' '}<FontAwesomeIcon icon={faArrowCircleUp} className="sort-icon" onClick={(e) => this.handleSortInc(e, 'product')}/><FontAwesomeIcon icon={faArrowCircleDown} className="sort-icon" onClick={(e) => this.handleSortDes(e, 'product')}/></th>
                             <th><b>Thời Gian</b>{' '}<FontAwesomeIcon icon={faArrowCircleUp} className="sort-icon" onClick={(e) => this.handleSortInc(e, 'time')}/><FontAwesomeIcon icon={faArrowCircleDown} className="sort-icon" onClick={(e) => this.handleSortDes(e, 'time')}/></th>
@@ -327,7 +320,6 @@ class Comment extends React.Component {
                                 <tr key={c.id}>
                                     <td>{c.id}</td>
                                     <td>
-                                        {/* <img src={`data:image/jpeg;base64,${c.productImg}`} alt="" height="50px"></img> */}
                                         <img src={c.productImg} alt="" height="50px"></img>
                                     </td>
                                     <td>{c.productName}</td>

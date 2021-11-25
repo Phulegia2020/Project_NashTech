@@ -19,8 +19,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -130,9 +128,7 @@ public class RatingPointController {
     private RatingDTO convertToDTO(Rating rating)
     {
         RatingDTO ratingDTO = modelMapper.map(rating, RatingDTO.class);
-//        ratingDTO.setProduct_id(String.valueOf(rating.getKey().getProduct().getId()));
         ratingDTO.setProduct_id(String.valueOf(rating.getKey().getProductId()));
-//        ratingDTO.setUser_id(String.valueOf(rating.getKey().getUser().getId()));
         ratingDTO.setUser_id(String.valueOf(rating.getKey().getUserId()));
         return ratingDTO;
     }

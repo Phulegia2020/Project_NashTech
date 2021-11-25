@@ -74,11 +74,6 @@
 }
 
 .update-form h3, .update-form-product h3{
-  /* text-align: center;
-  align-content: center;
-  justify-content: center;
-  justify-items: center;
-  align-items: center; */
   font-weight: 600;
 }
 
@@ -90,7 +85,6 @@
 
 .update-form Input
 {
-  /* margin-top: 5px; */
   margin-bottom: 15px;
 }
 
@@ -115,6 +109,4 @@
 .update-form h3, .update-form-product h3
 {
   text-align: center;
-  /* border-bottom: 2px solid black;
-  padding-bottom: 10px; */
 }

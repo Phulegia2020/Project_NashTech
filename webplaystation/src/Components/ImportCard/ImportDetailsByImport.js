@@ -28,7 +28,6 @@ class ImportDetailsByImport extends Component {
             if (response.status === 200)
             {
                 this.setState({
-                    //importdetails: response.data
                     pageToTal: Math.ceil(response.data.length / this.state.currentPage)
                 })
             }
@@ -170,7 +169,6 @@ class ImportDetailsByImport extends Component {
                     <FontAwesomeIcon icon={faPlus} className="mr-2"/>{' '}
                     Tạo Chi Tiết Mới
                 </button>} */}
-                {/* <h3 style={{ textAlign:'center', margin:'20px 0 20px 0' }}>Danh Sách Chi Tiết</h3> */}
                 <h3>Danh Sách Chi Tiết Phiếu Nhập {this.state.id}</h3>
                 <table id="table">
                     <thead>
@@ -190,7 +188,6 @@ class ImportDetailsByImport extends Component {
                                 <tr key={index}>
                                     <td>{this.state.pageNumber*this.state.currentPage + index + 1}</td>
                                     <td>
-                                        {/* <img src={`data:image/jpeg;base64,${imp.productImg}`} alt="" height="100px"></img> */}
                                         <img src={imp.productImg || "http://via.placeholder.com/300"} alt="" height="100px"></img>
                                     </td>
                                     <td>{imp.productName}</td>

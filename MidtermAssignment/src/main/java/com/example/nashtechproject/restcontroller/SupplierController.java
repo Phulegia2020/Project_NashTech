@@ -1,8 +1,5 @@
 package com.example.nashtechproject.restcontroller;
 
-import com.example.nashtechproject.dto.PlaceOrderDTO;
-import com.example.nashtechproject.entity.Bill;
-import com.example.nashtechproject.entity.PlaceOrder;
 import com.example.nashtechproject.entity.Supplier;
 import com.example.nashtechproject.exception.SupplierException;
 import com.example.nashtechproject.page.ProductPage;
@@ -16,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,7 +26,6 @@ public class SupplierController {
     @GetMapping
     public List<Supplier> getAllSupplier()
     {
-//        List<Supplier> suppliers = supplierService.retrieveSuppliers();
         List<Supplier> suppliers = supplierService.getSupplierByStatus();
         return suppliers.stream().sorted(Comparator.comparingLong(Supplier::getId)).collect(Collectors.toList());
     }
@@ -105,7 +100,6 @@ public class SupplierController {
         {
             throw new SupplierException(supplierId);
         }
-//        supplierService.deleteSupplier(supplierId);
         supplier.setStatus(STATE.INACTIVE);
         supplierService.updateSupplier(supplier);
         return ResponseEntity.ok(new MessageResponse("Delete Successfully"));

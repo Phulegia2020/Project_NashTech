@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import Add from "./Add"
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Pagination, PaginationItem, PaginationLink } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faInfo, faPlus, faTrash, faArrowCircleDown, faArrowCircleUp, faReceipt } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faPlus, faTrash, faArrowCircleDown, faArrowCircleUp, faReceipt } from '@fortawesome/free-solid-svg-icons';
 import { Label, Breadcrumb, Input } from 'semantic-ui-react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -59,14 +59,12 @@ export default class PlaceOrder extends Component {
         .then((response) => {
             this.setState({placeorders: this.state.placeorders.filter(b => b.id !== id), isDisplayFormDel: false})
         })
-        // .catch((error) => {alert('The Place Order had details or approved by import card. Can not delete!')});
         .catch((error) => {toast.error('Phiếu đặt này đã được lập chi tiết!')});
     }
 
     createPlaceOrder(newPlaceOrder){
         post(`/placeorders`, {total: 0, user_id: newPlaceOrder.user_id, supplier_id: newPlaceOrder.supplier_id})
         .then((response) => {
-            //window.location.reload();
             if (response.status === 200)
             {
                 this.setState({
@@ -150,7 +148,6 @@ export default class PlaceOrder extends Component {
 
     handleSortInc = (e, key) => {
         e.preventDefault();
-        //this.state.categories.sort((e1, e2) => (e1.id > e2.id ? 1 : -1));
         if (key === 'id')
         {
             this.setState({
@@ -175,12 +172,10 @@ export default class PlaceOrder extends Component {
                 placeorders: this.state.placeorders.sort((e1, e2) => (e1.supplier.name > e2.supplier.name ? 1 : -1))
             })
         }
-        // console.log('sort');
     }
 
     handleSortDes = (e, key) => {
         e.preventDefault();
-        //this.state.categories.sort((e1, e2) => (e1.id > e2.id ? 1 : -1));
         if (key === 'id')
         {
             this.setState({
@@ -205,7 +200,6 @@ export default class PlaceOrder extends Component {
                 placeorders: this.state.placeorders.sort((e1, e2) => (e2.supplier.name > e1.supplier.name ? 1 : -1))
             })
         }
-        // console.log('sort');
     }
 
     async handleSearch(e){
@@ -267,7 +261,7 @@ export default class PlaceOrder extends Component {
     render() {
         const sections = [
             { key: 'Quản Lý', content: 'Quản Lý', link: false },
-            { key: 'Phiếu Đặt', content: 'Phiếu Đặt', active: true }
+            { key: 'Phiếu Đặt', content: 'Danh Sách Phiếu Đặt', active: true }
           ]
         return (
             <div>

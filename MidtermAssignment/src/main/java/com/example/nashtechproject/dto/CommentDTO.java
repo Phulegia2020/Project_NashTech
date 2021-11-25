@@ -1,9 +1,6 @@
 package com.example.nashtechproject.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import org.hibernate.annotations.Type;
-
-import javax.persistence.Lob;
 import java.time.LocalDateTime;
 
 public class CommentDTO {
@@ -17,9 +14,6 @@ public class CommentDTO {
 
     private String product_id;
 
-//    @Lob
-//    @Type(type="org.hibernate.type.BinaryType")
-//    private byte[] productImg;
     private String productImg;
 
     private String productName;
@@ -66,15 +60,6 @@ public class CommentDTO {
     public void setProduct_id(String product_id) {
         this.product_id = product_id;
     }
-
-//    public byte[] getProductImg() {
-//        return productImg;
-//    }
-//
-//    public void setProductImg(byte[] productImg) {
-//        this.productImg = productImg;
-//    }
-
 
     public String getProductImg() {
         return productImg;

@@ -26,7 +26,6 @@ class ProductByCategory extends Component {
             if (response.status === 200)
             {
                 this.setState({
-                    //products: response.data
                     pageToTal: Math.ceil(response.data.length / this.state.currentPage)
                 });
             }
@@ -105,22 +104,60 @@ class ProductByCategory extends Component {
         .catch(error => {console.log(error)})
     }
 
-    handleSortInc = (e) => {
+    handleSortInc = (e, key) => {
         e.preventDefault();
-        //this.state.categories.sort((e1, e2) => (e1.id > e2.id ? 1 : -1));
-        this.setState({
-            products: this.state.products.sort((e1, e2) => (e1.price > e2.price ? 1 : -1))
-        })
-        // console.log('sort');
+        if (key === 'id')
+        {
+            this.setState({
+                products: this.state.products.sort((e1, e2) => (e1.id > e2.id ? 1 : -1))
+            })
+        }
+        else if (key === 'name')
+        {
+            this.setState({
+                products: this.state.products.sort((e1, e2) => (e1.name > e2.name ? 1 : -1))
+            })
+        }
+        else if (key === 'quantity')
+        {
+            this.setState({
+                products: this.state.products.sort((e1, e2) => (e1.quantity > e2.quantity ? 1 : -1))
+            })
+        }
+        else if (key === 'price')
+        {
+            this.setState({
+                products: this.state.products.sort((e1, e2) => (e1.price > e2.price ? 1 : -1))
+            })
+        }
     }
 
-    handleSortDes = (e) => {
+    handleSortDes = (e, key) => {
         e.preventDefault();
-        //this.state.categories.sort((e1, e2) => (e1.id > e2.id ? 1 : -1));
-        this.setState({
-            products: this.state.products.sort((e1, e2) => (e2.price > e1.price ? 1 : -1))
-        })
-        // console.log('sort');
+        if (key === 'id')
+        {
+            this.setState({
+                products: this.state.products.sort((e1, e2) => (e2.id > e1.id ? 1 : -1))
+            })
+        }
+        else if (key === 'name')
+        {
+            this.setState({
+                products: this.state.products.sort((e1, e2) => (e2.name > e1.name ? 1 : -1))
+            })
+        }
+        else if (key === 'quantity')
+        {
+            this.setState({
+                products: this.state.products.sort((e1, e2) => (e2.quantity > e1.quantity ? 1 : -1))
+            })
+        }
+        else if (key === 'price')
+        {
+            this.setState({
+                products: this.state.products.sort((e1, e2) => (e2.price > e1.price ? 1 : -1))
+            })
+        }
     }
 
     componentWillUnmount() {
@@ -165,12 +202,12 @@ class ProductByCategory extends Component {
                 <table id="table">
                     <thead>
                         <tr>
-                            <th><b>Mã Máy</b></th>
+                            <th><b>Mã ID</b>{' '}<FontAwesomeIcon icon={faArrowCircleUp} className="sort-icon" onClick={(e) => this.handleSortInc(e, 'id')}/><FontAwesomeIcon icon={faArrowCircleDown} className="sort-icon" onClick={(e) => this.handleSortDes(e, 'id')}/></th>
                             <th><b>Hình Ảnh</b></th>
-                            <th><b>Tên</b></th>
+                            <th><b>Tên</b>{' '}<FontAwesomeIcon icon={faArrowCircleUp} className="sort-icon" onClick={(e) => this.handleSortInc(e, 'name')}/><FontAwesomeIcon icon={faArrowCircleDown} className="sort-icon" onClick={(e) => this.handleSortDes(e, 'name')}/></th>
                             <th><b>Thông Tin</b></th>
-                            <th><b>Số Lượng</b></th>
-                            <th><b>Đơn Giá</b>{' '}<FontAwesomeIcon icon={faArrowCircleUp} className="sort-icon" onClick={(e) => this.handleSortInc(e)}/><FontAwesomeIcon icon={faArrowCircleDown} className="sort-icon" onClick={(e) => this.handleSortDes(e)}/></th>
+                            <th><b>Số Lượng</b>{' '}<FontAwesomeIcon icon={faArrowCircleUp} className="sort-icon" onClick={(e) => this.handleSortInc(e, 'quantity')}/><FontAwesomeIcon icon={faArrowCircleDown} className="sort-icon" onClick={(e) => this.handleSortDes(e, 'quantity')}/></th>
+                            <th><b>Đơn Giá</b>{' '}<FontAwesomeIcon icon={faArrowCircleUp} className="sort-icon" onClick={(e) => this.handleSortInc(e, 'price')}/><FontAwesomeIcon icon={faArrowCircleDown} className="sort-icon" onClick={(e) => this.handleSortDes(e, 'price')}/></th>
                             <th>Cập Nhật</th>
                             <th>Xóa</th>
                         </tr>
@@ -181,14 +218,12 @@ class ProductByCategory extends Component {
                                 <tr key={p.id}>
                                     <td>{p.id}</td>
                                     <td>
-                                        {/* <img src={`data:image/jpeg;base64,${p.imageurl}`} alt="" height="100px"></img> */}
                                         <img src={p.url_image || "http://via.placeholder.com/300"} alt="" height="100px"/>
                                     </td>
                                     <td>{p.name}</td>
                                     <td className="descriptionTable">{p.description}</td>
                                     <td>{formatQuantity(p.quantity)}</td>
                                     <td>{formatCurrency(p.price)}</td>
-                                    {/* <td>{p.status}</td> */}
                                     <td>
                                         <Link to={`/admin/product/update/${p.id}`}>
                                             <button className="btn btn-success">

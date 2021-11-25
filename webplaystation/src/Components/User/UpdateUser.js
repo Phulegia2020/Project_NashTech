@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { withRouter } from "react-router";
 import { put, get } from '../../Utils/httpHelper';
-import { Col, Row, Button, Form, FormGroup, Label, Input } from 'reactstrap';
+import { Col, Button, Form, FormGroup, Label, Input } from 'reactstrap';
 import { checkPhoneNumber } from '../../Utils/Utils';
 import "../Category/Category.css";
 
@@ -158,66 +158,62 @@ class UpdateUser extends React.Component {
         return (
             <div className="update-form">
                 <h3>Cập Nhật Người Dùng</h3>
-                {/* <Row form>
-                    <Col md={4}> */}
-                        <Form onSubmit={(event) => this.handleUpdate(event)}>
-                        <FormGroup>
-                            <Label htmlFor="name">Họ Tên</Label>
-                            <Input type="text" name="name" id="name" placeholder="Phu Le Gia" onChange={(e) => this.changeValue(e)} value = {this.state.name} required disabled={this.state.active_status === 'Inactive'}/>
+                <Form onSubmit={(event) => this.handleUpdate(event)}>
+                    <FormGroup>
+                        <Label htmlFor="name">Họ Tên</Label>
+                        <Input type="text" name="name" id="name" placeholder="Phu Le Gia" onChange={(e) => this.changeValue(e)} value = {this.state.name} required disabled={this.state.active_status === 'Inactive'}/>
+                    </FormGroup>
+                    <FormGroup tag="fieldset" row>
+                        <legend className="col-form-label col-sm-2">Giới Tính</legend>
+                        <Col md={4}>
+                        <FormGroup check>
+                            <Label check>
+                            <Input type="radio" name="gender" value = "Male" onChange={(e) => this.changeValue(e)} checked={this.state.gender === "Male"} disabled={this.state.active_status === 'Inactive'}/>{' '}
+                            Nam
+                            </Label>
                         </FormGroup>
-                        <FormGroup tag="fieldset" row>
-                            <legend className="col-form-label col-sm-2">Giới Tính</legend>
-                            <Col md={4}>
-                            <FormGroup check>
-                                <Label check>
-                                <Input type="radio" name="gender" value = "Male" onChange={(e) => this.changeValue(e)} checked={this.state.gender === "Male"} disabled={this.state.active_status === 'Inactive'}/>{' '}
-                                Nam
-                                </Label>
+                        <FormGroup check>
+                            <Label check>
+                            <Input type="radio" name="gender" value = "Female" onChange={(e) => this.changeValue(e)} checked={this.state.gender === "Female"} disabled={this.state.active_status === 'Inactive'}/>{' '}
+                            Nữ
+                            </Label>
+                        </FormGroup>
+                        </Col>
+                    </FormGroup>
+                            <FormGroup>
+                                <Label htmlFor="username">Tài Khoản</Label>
+                                <Input type="text" name="username" id="username" placeholder="Football" onChange={(e) => this.changeValue(e)} value = {this.state.username} disabled/>
+                                {this.state.key === 'username' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
                             </FormGroup>
-                            <FormGroup check>
-                                <Label check>
-                                <Input type="radio" name="gender" value = "Female" onChange={(e) => this.changeValue(e)} checked={this.state.gender === "Female"} disabled={this.state.active_status === 'Inactive'}/>{' '}
-                                Nữ
-                                </Label>
+                            <FormGroup>
+                                <Label htmlFor="email">Email</Label>
+                                <Input type="email" name="email" id="email" placeholder="abc@gmail.com" onChange={(e) => this.changeValue(e)} value = {this.state.email} required disabled={this.state.active_status === 'Inactive'}/>
+                                {this.state.key === 'email' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
                             </FormGroup>
-                            </Col>
-                        </FormGroup>
-                                <FormGroup>
-                                    <Label htmlFor="username">Tài Khoản</Label>
-                                    <Input type="text" name="username" id="username" placeholder="Football" onChange={(e) => this.changeValue(e)} value = {this.state.username} disabled/>
-                                    {this.state.key === 'username' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
-                                </FormGroup>
-                                <FormGroup>
-                                    <Label htmlFor="email">Email</Label>
-                                    <Input type="email" name="email" id="email" placeholder="abc@gmail.com" onChange={(e) => this.changeValue(e)} value = {this.state.email} required disabled={this.state.active_status === 'Inactive'}/>
-                                    {this.state.key === 'email' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
-                                </FormGroup>
-                        <FormGroup>
-                            <Label htmlFor="address">Địa Chỉ</Label>
-                            <Input type="text" name="address" id="address" placeholder="1 Đường, Phường 2, Quận 3, Thành phố Hồ Chí Minh" onChange={(e) => this.changeValue(e)} value = {this.state.address} required disabled={this.state.active_status === 'Inactive'}/>
-                        </FormGroup>
-                        <FormGroup>
-                            <Label htmlFor="phone">Số Điện Thoại</Label>
-                            <Input type="text" minLength={10} maxLength={10} name="phone" id="phone" placeholder="0987654321" onChange={(e) => this.changeValue(e)} value = {this.state.phone} required disabled={this.state.active_status === 'Inactive'}/>
-                            {this.state.key === 'phone' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
-                        </FormGroup>
-                        <FormGroup className="mb-2">
-                            <Label htmlFor="role">Vai Trò</Label>
-                            <Input type="select" name="role_id" id="role" value = {this.state.role_id} onChange={(e) => this.changeValue(e)} disabled={localStorage.getItem('role') === 'STAFF' || this.state.active_status === 'Inactive'}>
-                                {
-                                    this.state.roles.map((r) => (
-                                        <option key={r.id} value={r.id}>{r.name}</option>
-                                    ))
-                                }
-                            </Input>
-                        </FormGroup>
-                        <div className="mb-5">
-                            <Button outline color="warning" disabled={this.state.active_status === 'Inactive'}>Cập Nhật</Button>{' '}
-                            <Button outline color="danger" onClick={this.handleClear.bind(this)}>Hủy</Button>
-                        </div>
-                        </Form>
-                    {/* </Col>
-                </Row> */}
+                    <FormGroup>
+                        <Label htmlFor="address">Địa Chỉ</Label>
+                        <Input type="text" name="address" id="address" placeholder="1 Đường, Phường 2, Quận 3, Thành phố Hồ Chí Minh" onChange={(e) => this.changeValue(e)} value = {this.state.address} required disabled={this.state.active_status === 'Inactive'}/>
+                    </FormGroup>
+                    <FormGroup>
+                        <Label htmlFor="phone">Số Điện Thoại</Label>
+                        <Input type="text" minLength={10} maxLength={10} name="phone" id="phone" placeholder="0987654321" onChange={(e) => this.changeValue(e)} value = {this.state.phone} required disabled={this.state.active_status === 'Inactive'}/>
+                        {this.state.key === 'phone' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
+                    </FormGroup>
+                    <FormGroup className="mb-2">
+                        <Label htmlFor="role">Vai Trò</Label>
+                        <Input type="select" name="role_id" id="role" value = {this.state.role_id} onChange={(e) => this.changeValue(e)} disabled={localStorage.getItem('role') === 'STAFF' || this.state.active_status === 'Inactive'}>
+                            {
+                                this.state.roles.map((r) => (
+                                    <option key={r.id} value={r.id}>{r.name}</option>
+                                ))
+                            }
+                        </Input>
+                    </FormGroup>
+                    <div className="mb-5">
+                        <Button outline color="warning" disabled={this.state.active_status === 'Inactive'}>Cập Nhật</Button>{' '}
+                        <Button outline color="danger" onClick={this.handleClear.bind(this)}>Hủy</Button>
+                    </div>
+                </Form>
             </div>
         )
     }

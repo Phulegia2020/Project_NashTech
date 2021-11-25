@@ -1,18 +1,15 @@
 package com.example.nashtechproject.service.impl;
 
 import com.example.nashtechproject.entity.Import;
-import com.example.nashtechproject.entity.PlaceOrder;
 import com.example.nashtechproject.page.ProductPage;
 import com.example.nashtechproject.page.STATE;
 import com.example.nashtechproject.repository.ImportRepository;
 import com.example.nashtechproject.service.ImportService;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -49,7 +46,6 @@ public class ImportServiceImpl implements ImportService {
 
     public List<Import> getImportsDone()
     {
-//        List<Import> imports = importRepository.findByStatus("Done");
         List<Import> imports = importRepository.findByStatus(STATE.DONE);
         return imports;
     }

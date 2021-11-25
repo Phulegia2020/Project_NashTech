@@ -1,7 +1,6 @@
 package com.example.nashtechproject.restcontroller;
 
 import com.example.nashtechproject.entity.Category;
-import com.example.nashtechproject.entity.User;
 import com.example.nashtechproject.exception.CategoryException;
 import com.example.nashtechproject.page.ProductPage;
 import com.example.nashtechproject.page.STATE;
@@ -18,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,7 +35,6 @@ public class CategoryController {
             @ApiResponse(code = 500, message = "Internal server error") })
     public List<Category> getAllCategories()
     {
-//        List<Category> categories = categoryService.retrieveCategories();
         List<Category> categories = categoryService.getCategoryByStatus();
         return categories.stream().sorted(Comparator.comparingLong(Category::getId)).collect(Collectors.toList());
     }
@@ -128,7 +125,6 @@ public class CategoryController {
         {
             throw new CategoryException(categoryId);
         }
-//        categoryService.deleteCategory(categoryId);
         category.setStatus(STATE.STOP);
         categoryService.updateCategory(category);
         return ResponseEntity.ok(new MessageResponse("Delete Successfully"));

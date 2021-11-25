@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom';
-import { Col, Row, Button, Form, FormGroup, Label, Input } from 'reactstrap';
+import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
 import { get, put } from '../../Utils/httpHelper';
 import "../Category/Category.css";
 
@@ -93,41 +93,37 @@ class UpdatePlaceOrder extends Component {
         return (
             <div className="update-form">
                 <h3>Cập Nhật Phiếu Đặt</h3>
-                {/* <Row form>
-                    <Col md={4}> */}
-                        <Form onSubmit={(event) => this.handleUpdate(event)}>
-                        <FormGroup>
-                            <Label htmlFor="total">Tổng Tiền</Label>
-                            <Input type="number" name="total" id="total" placeholder="VND" onChange={(e) => this.changeValue(e)} value = {this.state.total} disabled/>
-                            {this.state.key === 'total' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
-                        </FormGroup>
-                        <FormGroup className="mb-2">
-                            <Label htmlFor="user">Nhân Viên Lập</Label>
-                            <Input type="select" name="user_id" id="user" value = {this.state.user_id} onChange={(e) => this.changeValue(e)} disabled>
-                                {
-                                    this.state.users.map((u) => (
-                                        <option key={u.id} value={u.id}>{u.name}</option>
-                                    ))
-                                }
-                            </Input>
-                        </FormGroup>
-                        <FormGroup className="mb-2">
-                            <Label htmlFor="supplier">Nhà Cung Cấp</Label>
-                            <Input type="select" name="supplier_id" id="supplier" value = {this.state.supplier_id} onChange={(e) => this.changeValue(e)}>
-                                {
-                                    this.state.suppliers.map((sup) => (
-                                        <option key={sup.id} value={sup.id}>{sup.name}</option>
-                                    ))
-                                }
-                            </Input>
-                        </FormGroup>
-                        <div className="mb-5">
-                            <Button type="submit" outline color="warning" >Cập Nhật</Button>{' '}
-                            <Button outline color="danger" onClick={this.handleClear.bind(this)}>Hủy</Button>
-                        </div>
-                        </Form>
-                    {/* </Col>
-                </Row> */}
+                <Form onSubmit={(event) => this.handleUpdate(event)}>
+                    <FormGroup>
+                        <Label htmlFor="total">Tổng Tiền</Label>
+                        <Input type="number" name="total" id="total" placeholder="VND" onChange={(e) => this.changeValue(e)} value = {this.state.total} disabled/>
+                        {this.state.key === 'total' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
+                    </FormGroup>
+                    <FormGroup className="mb-2">
+                        <Label htmlFor="user">Nhân Viên Lập</Label>
+                        <Input type="select" name="user_id" id="user" value = {this.state.user_id} onChange={(e) => this.changeValue(e)} disabled>
+                            {
+                                this.state.users.map((u) => (
+                                    <option key={u.id} value={u.id}>{u.name}</option>
+                                ))
+                            }
+                        </Input>
+                    </FormGroup>
+                    <FormGroup className="mb-2">
+                        <Label htmlFor="supplier">Nhà Cung Cấp</Label>
+                        <Input type="select" name="supplier_id" id="supplier" value = {this.state.supplier_id} onChange={(e) => this.changeValue(e)}>
+                            {
+                                this.state.suppliers.map((sup) => (
+                                    <option key={sup.id} value={sup.id}>{sup.name}</option>
+                                ))
+                            }
+                        </Input>
+                    </FormGroup>
+                    <div className="mb-5">
+                        <Button type="submit" outline color="warning" >Cập Nhật</Button>{' '}
+                        <Button outline color="danger" onClick={this.handleClear.bind(this)}>Hủy</Button>
+                    </div>
+                </Form>
             </div>
         )
     }

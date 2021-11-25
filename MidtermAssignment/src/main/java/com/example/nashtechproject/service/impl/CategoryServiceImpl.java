@@ -39,7 +39,6 @@ public class CategoryServiceImpl implements CategoryService {
     {
         Sort sort = Sort.by(productPage.getSortDirection(), productPage.getSortBy());
         Pageable pageable = PageRequest.of(productPage.getPageNumber(), productPage.getPageSize(), sort);
-//        List<Category> categories = categoryRepository.findAll(pageable).getContent();
         List<Category> categories = categoryRepository.findByStatus(STATE.SALE, pageable).getContent();
         return categories;
     }

@@ -1,28 +1,17 @@
 package com.example.nashtechproject.restcontroller;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-
-import com.example.nashtechproject.entity.User;
-import com.example.nashtechproject.exception.UserException;
 import com.example.nashtechproject.payload.request.ChangPasswordRequest;
 import com.example.nashtechproject.security.jwt.JwtAuthTokenFilter;
 import com.example.nashtechproject.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import com.example.nashtechproject.entity.Role;
-import com.example.nashtechproject.entity.RoleName;
 import com.example.nashtechproject.payload.request.LoginRequest;
 import com.example.nashtechproject.payload.request.SignupRequest;
 import com.example.nashtechproject.payload.response.JwtResponse;
@@ -30,7 +19,6 @@ import com.example.nashtechproject.payload.response.MessageResponse;
 import com.example.nashtechproject.repository.RoleRepository;
 import com.example.nashtechproject.repository.UserRepository;
 import com.example.nashtechproject.security.jwt.JwtUtils;
-import com.example.nashtechproject.security.services.UserDetailsImpl;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController

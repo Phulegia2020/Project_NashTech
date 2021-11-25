@@ -130,13 +130,6 @@ export default class Add extends Component {
         this.setState({
             key: '',
             blankError: '',
-            // name: "",
-            // gender: "",
-            // address: "",
-            // email: "",
-            // phone: "",
-            // username: "",
-            // password: "",
         })
         this.props.onAdd(this.state);
     }

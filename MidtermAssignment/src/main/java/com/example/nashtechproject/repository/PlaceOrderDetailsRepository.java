@@ -1,7 +1,5 @@
 package com.example.nashtechproject.repository;
 
-import com.example.nashtechproject.dto.PlaceOrderDetailsDTO;
-import com.example.nashtechproject.entity.PlaceOrder;
 import com.example.nashtechproject.entity.PlaceOrderDetails;
 import com.example.nashtechproject.entity.embedded.PlaceOrderDetailsKey;
 import org.springframework.data.domain.Page;

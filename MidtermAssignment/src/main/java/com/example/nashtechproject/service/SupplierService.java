@@ -1,6 +1,5 @@
 package com.example.nashtechproject.service;
 
-import com.example.nashtechproject.dto.ProductDTO;
 import com.example.nashtechproject.entity.Supplier;
 import com.example.nashtechproject.page.ProductPage;
 

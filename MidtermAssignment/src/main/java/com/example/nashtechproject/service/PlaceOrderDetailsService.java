@@ -1,7 +1,5 @@
 package com.example.nashtechproject.service;
 
-import com.example.nashtechproject.dto.PlaceOrderDetailsDTO;
-import com.example.nashtechproject.entity.ImportDetails;
 import com.example.nashtechproject.entity.PlaceOrderDetails;
 import com.example.nashtechproject.page.ProductPage;
 

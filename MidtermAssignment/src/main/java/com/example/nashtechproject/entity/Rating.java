@@ -3,7 +3,6 @@ package com.example.nashtechproject.entity;
 import com.example.nashtechproject.entity.embedded.RateKey;
 
 import javax.persistence.*;
-import java.io.Serializable;
 
 @Entity
 @Table(name = "rating")

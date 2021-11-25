@@ -3,7 +3,6 @@ package com.example.nashtechproject.service.impl;
 import com.example.nashtechproject.entity.Role;
 import com.example.nashtechproject.entity.RoleName;
 import com.example.nashtechproject.entity.User;
-import com.example.nashtechproject.exception.ObjectNotFoundException;
 import com.example.nashtechproject.page.STATE;
 import com.example.nashtechproject.payload.request.ChangPasswordRequest;
 import com.example.nashtechproject.payload.request.LoginRequest;
@@ -15,7 +14,6 @@ import com.example.nashtechproject.repository.UserRepository;
 import com.example.nashtechproject.security.jwt.JwtUtils;
 import com.example.nashtechproject.security.services.UserDetailsImpl;
 import com.example.nashtechproject.service.AuthService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -70,27 +68,23 @@ public class AuthServiceImpl implements AuthService {
     }
 
     public ResponseEntity<?> getUserSignUp(SignupRequest signUpRequest)
-//    public ResponseEntity<User> getUserSignUp(SignupRequest signUpRequest)
     {
         if (userRepository.existsByAccount(signUpRequest.getUsername())) {
             return ResponseEntity
                     .badRequest()
                     .body(new MessageResponse("Error: Username is already taken!"));
-//            throw new ObjectNotFoundException("Error: Username is already taken!");
         }
 
         if (userRepository.existsByEmail(signUpRequest.getEmail())) {
             return ResponseEntity
                     .badRequest()
                     .body(new MessageResponse("Error: Email is already in use!"));
-//            throw new ObjectNotFoundException("Error: Email is already in use!");
         }
 
         if (userRepository.existsByPhone(signUpRequest.getPhone())) {
             return ResponseEntity
                     .badRequest()
                     .body(new MessageResponse("Error: Phone number is already in use!"));
-//            throw new ObjectNotFoundException("Error: Phone number is already in use!");
         }
 
         // Create new user's account
@@ -123,10 +117,7 @@ public class AuthServiceImpl implements AuthService {
                     user.setRole(userRole);
             }
             user.setActive_status(STATE.ACTIVE);
-//            return new ResponseEntity<>(userRepository.save(user), HttpStatus.OK);
         }
-//        return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
-//        return new ResponseEntity<>(userRepository.save(user), HttpStatus.OK);
         return ResponseEntity.ok().body(userRepository.save(user));
     }
 

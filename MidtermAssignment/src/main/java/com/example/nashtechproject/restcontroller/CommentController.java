@@ -1,15 +1,11 @@
 package com.example.nashtechproject.restcontroller;
 
-import com.example.nashtechproject.dto.BillDTO;
 import com.example.nashtechproject.dto.CommentDTO;
-import com.example.nashtechproject.dto.ProductDTO;
 import com.example.nashtechproject.entity.Comment;
 import com.example.nashtechproject.entity.Product;
-import com.example.nashtechproject.entity.Supplier;
 import com.example.nashtechproject.entity.User;
 import com.example.nashtechproject.exception.ObjectNotFoundException;
 import com.example.nashtechproject.exception.ProductException;
-import com.example.nashtechproject.exception.RatingPointException;
 import com.example.nashtechproject.exception.UserException;
 import com.example.nashtechproject.page.ProductPage;
 import com.example.nashtechproject.payload.response.MessageResponse;
@@ -22,7 +18,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;

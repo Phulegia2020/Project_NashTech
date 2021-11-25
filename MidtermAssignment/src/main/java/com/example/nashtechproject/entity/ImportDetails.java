@@ -7,9 +7,6 @@ import javax.persistence.*;
 @Entity
 @Table(name = "import_details")
 public class ImportDetails {
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    private Long id;
     @EmbeddedId
     private ImportDetailsKey key;
 
@@ -27,14 +24,6 @@ public class ImportDetails {
         this.key = key;
     }
 
-    //    public Long getId() {
-//        return id;
-//    }
-//
-//    public void setId(Long id) {
-//        this.id = id;
-//    }
-
     public int getQuantity() {
         return quantity;
     }
@@ -50,6 +39,4 @@ public class ImportDetails {
     public void setPrice(float price) {
         this.price = price;
     }
-
-
 }

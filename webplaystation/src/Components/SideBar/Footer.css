@@ -55,11 +55,7 @@
 	-moz-box-shadow: 2px 3px 4px rgba(0, 0, 0, .175);
     border-radius: 0;
 }
-/* li.dropdown.head-dpdn {
-    display: inline-block;
-    padding: 1em 0;    
-	float: left;
-} */
+
 li.dropdown.head-dpdn a.dropdown-toggle {
    margin: 1em 2em;
 }

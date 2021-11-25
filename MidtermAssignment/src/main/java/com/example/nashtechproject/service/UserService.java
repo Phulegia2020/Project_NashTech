@@ -1,11 +1,7 @@
 package com.example.nashtechproject.service;
 
-import com.example.nashtechproject.dto.UserDTO;
 import com.example.nashtechproject.entity.User;
-import com.example.nashtechproject.entity.User;
-import com.example.nashtechproject.page.ProductPage;
 import com.example.nashtechproject.page.UserPage;
-import org.springframework.data.domain.Page;
 
 import java.util.List;
 import java.util.Optional;

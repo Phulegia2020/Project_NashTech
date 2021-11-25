@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { withRouter } from "react-router";
 import { put, get } from '../../Utils/httpHelper';
-import { Col, Row, Button, Form, FormGroup, Label, Input } from 'reactstrap';
+import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
 import "./Category.css";
 
 class UpdateCategory extends React.Component {
@@ -69,7 +69,6 @@ class UpdateCategory extends React.Component {
             if (response.status === 200)
             {
                 this.props.history.push("/admin/category");
-                // window.location.reload();
             }
         })
     }
@@ -93,26 +92,22 @@ class UpdateCategory extends React.Component {
         return (
             <div className="update-form">
                 <h3>Cập Nhật Loại Máy</h3>
-                {/* <Row form>
-                    <Col md={4}> */}
-                        <Form onSubmit={(event) => this.handleUpdate(event)}>
-                            <FormGroup>
-                                <Label htmlFor="name">Tên</Label>
-                                <Input type="text" name="name" id="name" placeholder="PS5" onChange={(e) => this.changeValue(e)} value = {this.state.name} required="required"/>
-                                {this.state.key === 'name' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
-                            </FormGroup>
-                            <FormGroup>
-                                <Label htmlFor="description">Mô Tả</Label>
-                                <Input type="text" name="description" id="description" placeholder="PlayStation 5" onChange={(e) => this.changeValue(e)} value = {this.state.description} required="required"/>
-                            </FormGroup>
-                            
-                            <div className="mt-3">
-                                <Button type="submit" outline color="warning" >Cập Nhật</Button>{' '}
-                                <Button outline color="danger" onClick={this.handleClear.bind(this)}>Hủy</Button>
-                            </div>
-                        </Form>
-                    {/* </Col>
-                </Row> */}
+                <Form onSubmit={(event) => this.handleUpdate(event)}>
+                    <FormGroup>
+                        <Label htmlFor="name">Tên</Label>
+                        <Input type="text" name="name" id="name" placeholder="PS5" onChange={(e) => this.changeValue(e)} value = {this.state.name} required="required"/>
+                        {this.state.key === 'name' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
+                    </FormGroup>
+                    <FormGroup>
+                        <Label htmlFor="description">Mô Tả</Label>
+                        <Input type="text" name="description" id="description" placeholder="PlayStation 5" onChange={(e) => this.changeValue(e)} value = {this.state.description} required="required"/>
+                    </FormGroup>
+                    
+                    <div className="mt-3">
+                        <Button type="submit" outline color="warning" >Cập Nhật</Button>{' '}
+                        <Button outline color="danger" onClick={this.handleClear.bind(this)}>Hủy</Button>
+                    </div>
+                </Form>
             </div>
         )
     }

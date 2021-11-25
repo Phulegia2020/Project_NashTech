@@ -51,9 +51,7 @@ export default class Add extends Component {
             product_id: event.target.product_id.value,
             content: ''
         })
-        //console.log(this.state.content);
         this.props.onAdd(this.state);
-        //console.log(this.state.content);
     }
 
     handleClear = () => {
@@ -80,13 +78,6 @@ export default class Add extends Component {
                 </FormGroup>
                 <FormGroup className="mb-2">
                     <Label htmlFor="user">Người Dùng</Label>
-                    {/* <Input type="select" name="user_id" id="user" onChange={(e) => this.changeValue(e)} multiple required>
-                        {
-                            this.state.users.map((u) => (
-                                <option key={u.id} value={u.id}>{u.name}</option>
-                            ))
-                        }
-                    </Input> */}
                     <select name="user_id" id="user" className="form-control" size="5" onChange={(e) => this.changeValue(e)} required>
                         {
                             this.state.users.map((u) => (
@@ -98,13 +89,6 @@ export default class Add extends Component {
                     
                 <FormGroup className="mb-2">
                     <Label htmlFor="product">Sản Phẩm</Label>
-                    {/* <Input type="select" name="product_id" id="product" onChange={(e) => this.changeValue(e)} required multiple>
-                        {
-                            this.state.products.map((p) => (
-                                <option key={p.id} value={p.id}>{p.name}</option>
-                            ))
-                        }
-                    </Input> */}
                     <select name="product_id" id="product" className="form-control" size="5" onChange={(e) => this.changeValue(e)} required>
                         {
                             this.state.products.map((p) => (

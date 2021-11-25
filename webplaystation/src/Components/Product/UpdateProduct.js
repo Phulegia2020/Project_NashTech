@@ -53,7 +53,6 @@ class UpdateProduct extends Component {
                     quantity: response.data.quantity,
                     price: response.data.price,
                     totalrating: response.data.totalrating,
-                    // imageurl: response.data.imageurl,
                     url: response.data.url_image,
                     category_id: response.data.category.id,
                     supplier_id: response.data.supplier.id,
@@ -133,7 +132,6 @@ class UpdateProduct extends Component {
                     });
                     return;
                 }
-                //setImage(e.target.files[0]);
                 this.setState({
                     image: e.target.files[0]
                 }, () => console.log(this.state.image));
@@ -142,7 +140,6 @@ class UpdateProduct extends Component {
         }
         else if (key === 'list')
         {
-            // console.log(e.target.files);
             if (e.target.files.length > 0)
             {
                 for (let i = 0; i < e.target.files.length; i++)
@@ -164,34 +161,6 @@ class UpdateProduct extends Component {
             }
         }
     };
-
-    // handleUpload(){
-    //     const uploadTask = storage.ref(`images/${this.state.image.name}`).put(this.state.image);
-    //     uploadTask.on(
-    //         "state_changed",
-    //         snapshot => {
-    //         // const progress = Math.round(
-    //         //   (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-    //         // );
-    //         // setProgress(progress);
-    //         },
-    //         error => {
-    //         console.log(error);
-    //         },
-    //         () => {
-    //         storage
-    //             .ref("images")
-    //             .child(this.state.image.name)
-    //             .getDownloadURL()
-    //             .then(url => {
-    //                 // setUrl(url);
-    //                 this.setState({
-    //                     url: url
-    //                 }, () => console.log(this.state.url));
-    //             });
-    //         }
-    //     );
-    // };
 
     changeValue(e){
         this.setState({
@@ -218,16 +187,6 @@ class UpdateProduct extends Component {
                 }
             }
         }
-        if (event.target.quantity.value.trim() <= 0)
-        {
-            this.setState({
-                key: 'quantity'
-            })
-            this.setState({
-                Error: "Số lượng không nhỏ hơn 1!"
-            });
-            return;
-        }
         if (event.target.price.value.trim() <= 0)
         {
             this.setState({
@@ -238,90 +197,33 @@ class UpdateProduct extends Component {
             });
             return;
         }
-
-        
-
-        // this.handleUpload();
-        // console.log(this.state.url);
-
         if (this.state.image_sub.length > 0)
         {
-            // if (this.state.type_img !== '')
-            // {
-            //     if (this.state.type_img === 'replace')
-            //     {
-            //         this.state.pictures.map((pic) => {
-            //             del(`/productImages/${pic.id}`)
-            //             .then((response) => {
-            //                 if (response.status === 200)
-            //                 {}
-            //             })
-            //             .catch((error) => console.log(error));
-            //         })
-            //     }
-                // this.state.image_sub.map((img) => {
-                //     const uploadTask = storage.ref(`images/${img.name}`).put(img);
-                //     uploadTask.on(
-                //         "state_changed",
-                //         snapshot => {
-                //         // const progress = Math.round(
-                //         //   (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-                //         // );
-                //         // setProgress(progress);
-                //         },
-                //         error => {
-                //         console.log(error);
-                //         },
-                //         () => {
-                //         storage
-                //             .ref("images")
-                //             .child(img.name)
-                //             .getDownloadURL()
-                //             .then(url => {
-                //                 // setUrl(url);
-                //                 post(`/productImages`, {imagePath: url, product_id: this.state.id})
-                //                 .then((response) => {
-                //                     if (response.status === 200)
-                //                     {}
-                //                 })
-                //                 .catch((error) => console.log(error));
-                //             });
-                //         }
-                //     );
-                // })
-
-                for (let i = 0; i < this.state.image_sub.length; i++)
-                {
-                    const uploadTask = storage.ref(`images/${this.state.image_sub[i].name}`).put(this.state.image_sub[i]);
-                    uploadTask.on(
-                        "state_changed",
-                        snapshot => {
-                        // const progress = Math.round(
-                        //   (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-                        // );
-                        // setProgress(progress);
-                        },
-                        error => {
-                        console.log(error);
-                        },
-                        () => {
-                        storage
-                            .ref("images")
-                            .child(this.state.image_sub[i].name)
-                            .getDownloadURL()
-                            .then(url => {
-                                // setUrl(url);
-                                post(`/productImages`, {imagePath: url, product_id: this.state.id})
-                                .then((response) => {
-                                    if (response.status === 200)
-                                    {}
-                                })
-                                .catch((error) => console.log(error));
-                            });
-                        }
-                    );
-                }
-            // }
+            for (let i = 0; i < this.state.image_sub.length; i++)
+            {
+                const uploadTask = storage.ref(`images/${this.state.image_sub[i].name}`).put(this.state.image_sub[i]);
+                uploadTask.on(
+                    "state_changed",
+                    snapshot => {},
+                    error => {
+                    console.log(error);
+                    },
+                    () => {
+                    storage
+                        .ref("images")
+                        .child(this.state.image_sub[i].name)
+                        .getDownloadURL()
+                        .then(url => {
+                            post(`/productImages`, {imagePath: url, product_id: this.state.id})
+                            .then((response) => {
+                                if (response.status === 200)
+                                {}
+                            })
+                            .catch((error) => console.log(error));
+                        });
+                    }
+                );
+            }
         }
 
         if (this.state.image !== null)
@@ -329,12 +231,7 @@ class UpdateProduct extends Component {
             const uploadTask = storage.ref(`images/${this.state.image.name}`).put(this.state.image);
             uploadTask.on(
                 "state_changed",
-                snapshot => {
-                // const progress = Math.round(
-                //   (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-                // );
-                // setProgress(progress);
-                },
+                snapshot => {},
                 error => {
                 console.log(error);
                 },
@@ -344,7 +241,6 @@ class UpdateProduct extends Component {
                     .child(this.state.image.name)
                     .getDownloadURL()
                     .then(url => {
-                        // setUrl(url);
                         this.setState({
                             url: url
                         }, () => {
@@ -354,7 +250,6 @@ class UpdateProduct extends Component {
                             .then((response) => {
                                 if (response.status === 200)
                                 {
-                                    // console.log(this.state.url)
                                     this.props.history.push("/admin/product");
                                 }
                             })
@@ -371,31 +266,11 @@ class UpdateProduct extends Component {
             .then((response) => {
                 if (response.status === 200)
                 {
-                    // console.log(this.state.url)
                     this.props.history.push("/admin/product");
                 }
             })
             .catch((error) => {})
         }
-        //console.log(this.state.url);
-        // console.log(this.state.type_img);
-        // console.log(this.state.image_sub);
-        // console.log(this.state.pictures);
-
-        // put(`/products/${this.state.id}`, {name: this.state.name.trim(), description:this.state.description.trim(), quantity: this.state.quantity, price: this.state.price,
-        //                                    totalrating:this.state.totalrating ,imageurl: this.state.imageurl, category_id: this.state.category_id, supplier_id: this.state.supplier_id,
-        //                                    status: this.state.status})
-        // put(`/products/${this.state.id}`, {name: this.state.name.trim(), description:this.state.description.trim(), quantity: this.state.quantity, price: this.state.price,
-        //     totalrating:this.state.totalrating , imageurl: this.state.imageurl, url_image: this.state.url, category_id: this.state.category_id, supplier_id: this.state.supplier_id,
-        //     status: this.state.status})
-        // .then((response) => {
-        //     if (response.status === 200)
-        //     {
-        //         console.log(this.state.url)
-        //         this.props.history.push("/admin/product");
-        //     }
-        // })
-        // .catch((error) => {})
     }
 
     handleDeleleImage = (e, id) => {
@@ -431,103 +306,77 @@ class UpdateProduct extends Component {
         return (
             <div className="update-form-product">
                 <h3>Cập Nhật Máy</h3>
-                {/* <Row form>
-                    <Col md={4}> */}
-                        <Form onSubmit={(event) => this.handleUpdate(event)}>
-                        <FormGroup>
-                            <Label htmlFor="name">Tên Máy</Label>
-                            <Input type="text" name="name" id="name" placeholder="PlayStation 4" onChange={(e) => this.changeValue(e)} value = {this.state.name} required="required" disabled={this.state.status === 'Stop'}/>
-                            {this.state.key === 'name' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
-                        </FormGroup>
-                        <FormGroup>
-                            <Label htmlFor="description">Thông Tin</Label><br></br>
-                            <textarea style={{resize: 'none', width: '100%'}} rows="3" name="description" id="description" placeholder="PlayStation 4 Pro" onChange={(e) => this.changeValue(e)} value = {this.state.description} required="required" disabled={this.state.status === 'Stop'}></textarea>
-                        </FormGroup>
-                        <FormGroup>
-                            <Label htmlFor="quantity">Số Lượng</Label>
-                            <Input type="number" name="quantity" id="quantity" placeholder="1000" onChange={(e) => this.changeValue(e)} value = {this.state.quantity} disabled/>
-                            {this.state.key === 'quantity' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
-                        </FormGroup>
-                        <FormGroup>
-                            <Label htmlFor="price">Đơn Giá</Label>
-                            <Input type="number" name="price" id="price" placeholder="1.000.000 VNĐ" onChange={(e) => this.changeValue(e)} value = {this.state.price} required="required" disabled={this.state.status === 'Stop'}/>
-                            {this.state.key === 'price' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
-                        </FormGroup>
-                        <FormGroup inline className="display-imges">
-                        <FormGroup>
-                            <Label htmlFor="image">Hình Ảnh Chính</Label>
-                            <br></br>
-                            {/* <Input type="file" name="image" id="image" accept=".jpeg, .png, .jpg" onChange={(e) => {this.uploadImage(e)}} disabled={this.state.status === 'Stop'}/> */}
-                            <Input type="file" name="image" id="image" accept=".jpeg, .png, .jpg" onChange={(e) => {this.handleChange(e, 'main')}}/>
-                            {this.state.key === 'image' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
-                            <br></br>
-                            {/* <img src={`data:image/jpeg;base64,${this.state.imageurl}`} alt="" height="150px"></img> */}
-                            {this.state.imageurl !== null ? <img src={`data:image/jpeg;base64,${this.state.imageurl}`} alt="" height="150px"></img> : <img src={this.state.url || "http://via.placeholder.com/300"} alt="" height="150px"/>}
-                            {/* <img src={this.state.url || "http://via.placeholder.com/300"} alt="" height="150px"/> */}
-                        </FormGroup>
-                        <FormGroup className="images-sub">
-                            <Label htmlFor="image-sub">Các Hình Ảnh Kèm Theo (Tùy Chọn)</Label>
-                            <br></br>
-                            {/* <Input type="file" name="image" id="image" accept=".jpeg, .png, .jpg" onChange={(e) => {this.uploadImage(e);}} required="required"/> */}
-                            <Input type="file" name="image-sub" id="image-sub" accept=".jpeg, .png, .jpg" onChange={(e) => {this.handleChange(e, 'list')}} multiple/>
-                            {this.state.key === 'image-sub' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
-                            {/* <FormGroup inline>
-                                <Label>
-                                    <Input type="radio" name="type_img" value="replace" checked={this.state.type_img === "replace"} onChange={(e) => this.changeValue(e)}/>
-                                    Thay Thế Tất Cả Ảnh
-                                </Label>{' '}
-                                <Label>
-                                    <Input type="radio" name="type_img" value="new" checked={this.state.type_img === "new"} onChange={(e) => this.changeValue(e)}/>
-                                    Thêm Mới
-                                </Label>
-                            </FormGroup> */}
-                            <div className={this.state.pictures.length > 5 ? "sub-picture-more" : 'sub-picture'}>
-                                {this.state.pictures.map((picture, index) => (
-                                    <div className="delete-picture">
-                                        <span>
-                                            {/* Xóa */}
-                                            <FontAwesomeIcon className="icon-delete" icon={faTimesCircle} onClick={(e) => this.handleDeleleImage(e, picture.id)}/>
-                                        </span>
-                                        <img src={picture.imagePath} alt='PlayStation' key={index}/>
-                                    </div>
-                                ))}
-                            </div>
-                        </FormGroup>
-                        </FormGroup>
-                        <FormGroup className="mb-2">
-                            <Label htmlFor="category">Loại Máy</Label>
-                            <Input type="select" name="category_id" id="category" value = {this.state.category_id} onChange={(e) => this.changeValue(e)} disabled={this.state.status === 'Stop'}>
-                                {
-                                    this.state.categories.map((c) => (
-                                        <option key={c.id} value={c.id}>{c.name}</option>
-                                    ))
-                                }
-                            </Input>
-                        </FormGroup>
-                        <FormGroup className="mb-2">
-                            <Label htmlFor="supplier">Nhà Cung Cấp</Label>
-                            <Input type="select" name="supplier_id" id="supplier" value = {this.state.supplier_id} onChange={(e) => this.changeValue(e)} disabled={this.state.status === 'Stop'}>
-                                {
-                                    this.state.suppliers.map((s) => (
-                                        <option key={s.id} value={s.id}>{s.name}</option>
-                                    ))
-                                }
-                            </Input>
-                            {/* <select name="supplier_id" id="supplier" className="form-control" size="2" onChange={(e) => this.changeValue(e)} value = {this.state.supplier_id} disabled={this.state.status === 'Stop'}>
-                                {
-                                    this.state.suppliers.map((s) => (
-                                        <option key={s.id} value={s.id}>{s.name}</option>
-                                    ))
-                                }
-                            </select> */}
-                        </FormGroup>
-                        <div className="mt-3">
-                            <Button type="submit" outline color="warning" >Cập Nhật</Button>{' '}
-                            <Button outline color="danger" onClick={this.handleClear.bind(this)}>Quay Lại</Button>
+                <Form onSubmit={(event) => this.handleUpdate(event)}>
+                    <FormGroup>
+                        <Label htmlFor="name">Tên Máy</Label>
+                        <Input type="text" name="name" id="name" placeholder="PlayStation 4" onChange={(e) => this.changeValue(e)} value = {this.state.name} required="required" disabled={this.state.status === 'Stop'}/>
+                        {this.state.key === 'name' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
+                    </FormGroup>
+                    <FormGroup>
+                        <Label htmlFor="description">Thông Tin</Label><br></br>
+                        <textarea style={{resize: 'none', width: '100%'}} rows="3" name="description" id="description" placeholder="PlayStation 4 Pro" onChange={(e) => this.changeValue(e)} value = {this.state.description} required="required" disabled={this.state.status === 'Stop'}></textarea>
+                    </FormGroup>
+                    <FormGroup>
+                        <Label htmlFor="quantity">Số Lượng</Label>
+                        <Input type="number" name="quantity" id="quantity" placeholder="1000" onChange={(e) => this.changeValue(e)} value = {this.state.quantity} disabled/>
+                        {this.state.key === 'quantity' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
+                    </FormGroup>
+                    <FormGroup>
+                        <Label htmlFor="price">Đơn Giá</Label>
+                        <Input type="number" name="price" id="price" placeholder="1.000.000 VNĐ" onChange={(e) => this.changeValue(e)} value = {this.state.price} required="required" disabled={this.state.status === 'Stop'}/>
+                        {this.state.key === 'price' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
+                    </FormGroup>
+                    <FormGroup inline className="display-imges">
+                    <FormGroup>
+                        <Label htmlFor="image">Hình Ảnh Chính</Label>
+                        <br></br>
+                        <Input type="file" name="image" id="image" accept=".jpeg, .png, .jpg" onChange={(e) => {this.handleChange(e, 'main')}}/>
+                        {this.state.key === 'image' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
+                        <br></br>
+                        {this.state.imageurl !== null ? <img src={`data:image/jpeg;base64,${this.state.imageurl}`} alt="" height="150px"></img> : <img src={this.state.url || "http://via.placeholder.com/300"} alt="" height="150px"/>}
+                    </FormGroup>
+                    <FormGroup className="images-sub">
+                        <Label htmlFor="image-sub">Các Hình Ảnh Kèm Theo (Tùy Chọn)</Label>
+                        <br></br>
+                        <Input type="file" name="image-sub" id="image-sub" accept=".jpeg, .png, .jpg" onChange={(e) => {this.handleChange(e, 'list')}} multiple/>
+                        {this.state.key === 'image-sub' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
+                        <div className={this.state.pictures.length > 5 ? "sub-picture-more" : 'sub-picture'}>
+                            {this.state.pictures.map((picture, index) => (
+                                <div className="delete-picture">
+                                    <span>
+                                        <FontAwesomeIcon className="icon-delete" icon={faTimesCircle} onClick={(e) => this.handleDeleleImage(e, picture.id)}/>
+                                    </span>
+                                    <img src={picture.imagePath} alt='PlayStation' key={index}/>
+                                </div>
+                            ))}
                         </div>
-                        </Form>
-                    {/* </Col>
-                </Row> */}
+                    </FormGroup>
+                    </FormGroup>
+                    <FormGroup className="mb-2">
+                        <Label htmlFor="category">Loại Máy</Label>
+                        <Input type="select" name="category_id" id="category" value = {this.state.category_id} onChange={(e) => this.changeValue(e)} disabled={this.state.status === 'Stop'}>
+                            {
+                                this.state.categories.map((c) => (
+                                    <option key={c.id} value={c.id}>{c.name}</option>
+                                ))
+                            }
+                        </Input>
+                    </FormGroup>
+                    <FormGroup className="mb-2">
+                        <Label htmlFor="supplier">Nhà Cung Cấp</Label>
+                        <Input type="select" name="supplier_id" id="supplier" value = {this.state.supplier_id} onChange={(e) => this.changeValue(e)} disabled={this.state.status === 'Stop'}>
+                            {
+                                this.state.suppliers.map((s) => (
+                                    <option key={s.id} value={s.id}>{s.name}</option>
+                                ))
+                            }
+                        </Input>
+                    </FormGroup>
+                    <div className="mt-3">
+                        <Button type="submit" outline color="warning" >Cập Nhật</Button>{' '}
+                        <Button outline color="danger" onClick={this.handleClear.bind(this)}>Quay Lại</Button>
+                    </div>
+                </Form>
             </div>
         )
     }

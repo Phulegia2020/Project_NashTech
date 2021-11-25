@@ -8,14 +8,12 @@ import {
     Visibility,
     Dropdown,
     Sticky,
-} from 'semantic-ui-react'
+} from 'semantic-ui-react';
 import ShoppingCart from "./../ShoppingCart/ShoppingCart";
 import {get} from "./../../../Utils/httpHelper";
 import Profile from '../Profile/Profile';
 import { withRouter } from "react-router";
 import "./MainMenu.css";
-// import { ToastContainer, toast } from 'react-toastify';
-// import 'react-toastify/dist/ReactToastify.css';
 
 class MainMenu extends Component {
     constructor(props) {
@@ -60,12 +58,6 @@ class MainMenu extends Component {
         .catch((error) => {})
     }
 
-    // notificationCart = (data) => toast.error(data);
-    // handleCategory = (e, id) => {
-    //     e.preventDefault();
-    //     this.props.history.push(`/WebPlayStation/category/${id}`)
-    // }
-
     handleNumberCart(data)
     {
         this.props.handleNumberCart(data);
@@ -92,24 +84,17 @@ class MainMenu extends Component {
                     
                     <div className="ps-logo">
                         <img src='https://gmedia.playstation.com/is/image/SIEPDC/ps-store-listing-thumb-01-en-05nov20?$facebook$' alt='logo' width='100px'></img>
-                        {/* <h3 className="navbar-brand">THE PLAYSTATION SHOP</h3> */}
-                        {/* <div><span>The</span></div> */}
                         <h3>The Playstation Store</h3>
-                        {/* <span>Store</span> */}
                     </div>
                     <Container>
                         <Menu inverted pointing secondary size='large'>
-                            <Menu.Item as={Link} to="/WebPlayStation" name='products' active={activeItem === "WebPlayStation"} onClick={this.onMenuItemClick}>Trang Chủ</Menu.Item> 
-                            {/* <Menu.Item position='left'>
-                            <img src='https://gmedia.playstation.com/is/image/SIEPDC/ps-store-listing-thumb-01-en-05nov20?$facebook$' alt='logo' ></img>
-                            </Menu.Item> */}
+                            <Menu.Item as={Link} to="/WebPlayStation" name='products' active={activeItem === "WebPlayStation"} onClick={this.onMenuItemClick}>Trang Chủ</Menu.Item>
                             <Dropdown text='Thể Loại' pointing className='link item'>
                                 <Dropdown.Menu>
                                     <Dropdown.Header>Danh Mục</Dropdown.Header>
                                     {
                                         this.state.categories.map((c) => (
                                         <Dropdown.Item as={Link} to={`/WebPlayStation/category/${c.id}`} key={c.id}>{c.name}</Dropdown.Item>
-                                        // <Dropdown.Item key={c.id} onClick={(e) => this.handleCategory(e, c.id)}>{c.name}</Dropdown.Item>
                                         ))
                                     }
                                 </Dropdown.Menu>
@@ -123,15 +108,6 @@ class MainMenu extends Component {
                             </Menu.Item>
                         </Menu>
                     </Container>
-                    {/* <ToastContainer position="top-right"
-                        autoClose={2000}
-                        hideProgressBar
-                        newestOnTop={false}
-                        closeOnClick
-                        rtl={false}
-                        pauseOnFocusLoss
-                        draggable
-                        pauseOnHover/> */}
                 </Segment>
             </Visibility>
             </Sticky>

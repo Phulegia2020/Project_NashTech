@@ -7,7 +7,6 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 @Entity
 @Table(name = "bill")
@@ -31,9 +30,6 @@ public class Bill {
     @JoinColumn(name = "user_id")
     private User user;
 
-//    @ManyToOne(fetch = FetchType.EAGER)
-//    @JoinColumn(name = "billstatus_id")
-//    private BillStatus billStatus;
     @Column(name = "status")
     private String status;
 
@@ -87,14 +83,6 @@ public class Bill {
     public void setUser(User user) {
         this.user = user;
     }
-
-//    public BillStatus getBillStatus() {
-//        return billStatus;
-//    }
-//
-//    public void setBillStatus(BillStatus billStatus) {
-//        this.billStatus = billStatus;
-//    }
 
     public String getStatus() {
         return status;

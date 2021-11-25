@@ -21,7 +21,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -93,7 +92,6 @@ public class ImportController {
         List<Import> list = new ArrayList<>();
         for (int i = 0; i < imports.size(); i++)
         {
-            //income = income + bills.get(i).getTotal();
             if (imports.get(i).getCreateddate().getYear() == Integer.valueOf(year))
             {
                 if (quy.equals("1"))
@@ -174,7 +172,6 @@ public class ImportController {
     {
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         LocalDateTime from = LocalDateTime.parse(dateFrom + " 00:00:00", dateFormat);
-//        from = LocalDateTime.parse(dateFormat.format(from), dateFormat);
         LocalDateTime to = LocalDateTime.parse(dateTo + " 23:59:59", dateFormat);
         List<Import> imports = importService.getImportsDone();
         List<Import> list = new ArrayList<>();
@@ -218,7 +215,6 @@ public class ImportController {
         }
         Import i = convertToEntity(imp);
         i.setCreateddate(LocalDateTime.now());
-//        i.setStatus("Waiting");
         i.setStatus(STATE.WAITING);
         ImportDTO importDTO = convertToDTO(importService.saveImport(i));
         if (importDTO == null)
@@ -230,8 +226,6 @@ public class ImportController {
         for (int k = 0; k < l.size(); k++)
         {
             ImportDetails impd = new ImportDetails();
-//            impd.getKey().setImp(i);
-//            impd.getKey().setProduct(l.get(k).getKey().getProduct());
             impd.setKey(new ImportDetailsKey(i, l.get(k).getKey().getProduct()));
             impd.setQuantity(l.get(k).getQuantity());
             impd.setPrice(l.get(k).getPrice());
@@ -241,10 +235,8 @@ public class ImportController {
         Import updateImp = importService.getImport(i.getId());
         updateImp.setTotal(total);
         importService.updateImport(updateImp);
-//        po.setStatus("Done");
         po.setStatus(STATE.DONE);
         placeOrderService.updatePlaceOrder(po);
-//        return importDTO;
         return updateImp;
     }
 
@@ -267,10 +259,8 @@ public class ImportController {
             }
 
             PlaceOrder placeOrder = placeOrderService.getPlaceOrder(imp.getPlaceOrder().getId());
-//            placeOrder.setStatus("Done");
             placeOrder.setStatus(STATE.DONE);
             placeOrderService.updatePlaceOrder(placeOrder);
-//            imp.setStatus("Done");
             imp.setStatus(STATE.DONE);
             importService.updateImport(imp);
             return ResponseEntity.ok(new MessageResponse("Confirm Import successfully!"));
@@ -317,12 +307,6 @@ public class ImportController {
         {
             throw new InvalidDataException("The Import is checked out. Can not delete!");
         }
-//        List<PlaceOrderDetails> list = placeOrderDetailsService.getPlaceOrderDetailsByPlaceOrder(imp.getPlaceOrder().getId());
-//        for (int i = 0; i < list.size(); i++)
-//        {
-//            placeOrderDetailsService.deletePlaceOrderDetails(list.get(i).getKey().getPlaceOrder().getId(), list.get(i).getKey().getProduct().getId());
-//        }
-//        importService.deleteImport(importId);
         PlaceOrder placeOrder = placeOrderService.getPlaceOrder(imp.getPlaceOrder().getId());
         placeOrder.setStatus(STATE.CANCEL);
         placeOrderService.updatePlaceOrder(placeOrder);

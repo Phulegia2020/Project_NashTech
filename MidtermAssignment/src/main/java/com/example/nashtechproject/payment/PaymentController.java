@@ -1,9 +1,7 @@
 package com.example.nashtechproject.payment;
 
-import com.example.nashtechproject.payload.response.MessageResponse;
 import com.paypal.api.payments.Links;
 import com.paypal.api.payments.Payment;
-import com.paypal.api.payments.RedirectUrls;
 import com.paypal.base.rest.PayPalRESTException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,14 +25,8 @@ public class PaymentController {
     @Autowired
     private PaypalService paypalService;
 
-//    @GetMapping("/")
-//    public String index(){
-//        return "index";
-//    }
-
     @PostMapping("/pay")
     public String pay(HttpServletRequest request, @RequestParam("price") double price ){
-//        String cancelUrl = "http://localhost:8080/api/payment" + URL_PAYPAL_CANCEL;
         String cancelUrl = "http://localhost:3000/WebPlayStation/order";
         String successUrl = "http://localhost:8080/api/payment" + URL_PAYPAL_SUCCESS;
         try {
@@ -48,7 +40,6 @@ public class PaymentController {
                     successUrl);
             for(Links links : payment.getLinks()){
                 if(links.getRel().equals("approval_url")){
-//                    return "redirect:" + links.getHref();
                     return links.getHref();
                 }
             }
@@ -68,10 +59,6 @@ public class PaymentController {
         try {
             Payment payment = paypalService.executePayment(paymentId, payerId);
             if(payment.getState().equals("approved")){
-                //return "success";
-                //RedirectUrls redirectUrls = new RedirectUrls();
-                //redirectUrls.setReturnUrl("http://localhost:3000/WebPlayStation");
-                //System.out.println("success");
                 return ResponseEntity.status(HttpStatus.FOUND).location(URI.create("http://localhost:3000/WebPlayStation/success")).build();
             }
 
@@ -79,8 +66,6 @@ public class PaymentController {
         catch (PayPalRESTException e) {
             log.error(e.getMessage());
         }
-        //return "redirect:/";
-        //return;
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).location(URI.create("http://localhost:3000/WebPlayStation/404")).build();
     }
 }

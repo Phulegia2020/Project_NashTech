@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { PieChart, Pie, Cell, LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip } from 'recharts';
+import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip } from 'recharts';
 import {get} from "../../Utils/httpHelper";
-import { Input } from 'reactstrap';
 import "./Statistical.css";
 import {formatQuantity, formatCurrency} from "./../../Utils/Utils";
 import ReactExport from "react-data-export";
@@ -12,9 +11,6 @@ const CustomTooltip = ({ active, payload, label }) => {
       return (
         <div className="custom-tooltip">
             <p className="label">{`Tháng ${label} : ${formatQuantity(payload[0].value * 1000000)} VNĐ`}</p>
-          {/* {payload[0].value > 0 && <p className="label">{`Tháng ${label} : ${payload[0].value}.000.000 VNĐ`}</p>}
-          {payload[0].value <= 0 && <p className="label">{`Tháng ${label} : ${payload[0].value * 1000000} VNĐ`}</p>} */}
-          {/* <p className="intro">{getIntroOfPage(label)}</p> */}
           <p className="desc">Doanh Thu Theo Tháng</p>
         </div>
       );
@@ -22,7 +18,6 @@ const CustomTooltip = ({ active, payload, label }) => {
     return null;
 };
 
-// const ReactExport = require("react-data-export");
 const ExcelFile = ReactExport.ExcelFile;
 const ExcelSheet = ExcelFile.ExcelSheet;
 
@@ -48,46 +43,6 @@ export default class Chart extends Component {
     }
 
     componentDidMount(){
-        // get(`/bills/profit?month=${parseInt(new Date().getMonth() + 1)}&quy=${this.state.quyValue}&year=${parseInt(new Date().getFullYear())}`)
-        // .then((response) => {
-        //     if (response.status === 200)
-        //     {
-        //         var doanhthu = 0;
-        //         this.setState({
-        //             bills: response.data,
-        //         }, () => console.log(response.data));
-        //         for (var i = 0; i < response.data.length; i++)
-        //         {
-        //             doanhthu = doanhthu + response.data[i].total
-                    
-        //         }
-        //         this.setState({
-        //             income: doanhthu
-        //         })
-        //     }
-        // })
-        // .catch(error => {console.log(error)})
-
-        // get(`/imports/profit?month=${parseInt(new Date().getMonth() + 1)}&quy=${this.state.quyValue}&year=${parseInt(new Date().getFullYear())}`)
-        // .then((response) => {
-        //     if (response.status === 200)
-        //     {
-        //         var doanhthu = 0;
-        //         this.setState({
-        //             imports: response.data,
-        //         }, () => console.log(response.data));
-        //         for (var i = 0; i < response.data.length; i++)
-        //         {
-        //             doanhthu = doanhthu + response.data[i].total
-                    
-        //         }
-        //         this.setState({
-        //             outcome: doanhthu
-        //         })
-        //     }
-        // })
-        // .catch(error => {console.log(error)})
-
         get(`/bills/profitDate?dateFrom=${this.state.dateFrom}&dateTo=${this.state.dateTo}`)
         .then((response) => {
             if (response.status === 200)
@@ -141,54 +96,6 @@ export default class Chart extends Component {
     }
 
     componentDidUpdate(prevProps, prevState){
-        // if (prevState.monthValue !== this.state.monthValue || prevState.quyValue !== this.state.quyValue || prevState.yearValue !== this.state.yearValue) 
-        // {
-        //     if (this.state.monthValue === '')
-        //     {
-        //         this.setState({
-        //             monthValue: '0'
-        //         })
-        //     }
-        //     get(`/bills/profit?month=${parseInt(this.state.monthValue)}&quy=${this.state.quyValue}&year=${this.state.yearValue}`)
-        //     .then((response) => {
-        //         if (response.status === 200)
-        //         {
-        //             var doanhthu = 0;
-        //             this.setState({
-        //                 bills: response.data,
-        //             }, () => console.log(response.data));
-        //             for (var i = 0; i < response.data.length; i++)
-        //             {
-        //                 doanhthu = doanhthu + response.data[i].total
-                        
-        //             }
-        //             this.setState({
-        //                 income: doanhthu
-        //             })
-        //         }
-        //     })
-        //     .catch(error => {console.log(error)})
-        //     get(`/imports/profit?month=${parseInt(this.state.monthValue)}&quy=${this.state.quyValue}&year=${this.state.yearValue}`)
-        //     // parseInt(new Date().getFullYear())
-        //     .then((response) => {
-        //         if (response.status === 200)
-        //         {
-        //             var doanhthu = 0;
-        //             this.setState({
-        //                 imports: response.data,
-        //             }, () => console.log(response.data));
-        //             for (var i = 0; i < response.data.length; i++)
-        //             {
-        //                 doanhthu = doanhthu + response.data[i].total
-                        
-        //             }
-        //             this.setState({
-        //                 outcome: doanhthu
-        //             })
-        //         }
-        //     })
-        //     .catch(error => {console.log(error)})
-        // }
         if (prevState.dateFrom !== this.state.dateFrom || prevState.dateTo !== this.state.dateTo)
         {
             get(`/bills/profitDate?dateFrom=${this.state.dateFrom}&dateTo=${this.state.dateTo}`)
@@ -293,39 +200,10 @@ export default class Chart extends Component {
             <div className="charts">
                 <h3 className="title-report">THỐNG KÊ BÁO CÁO DOANH THU</h3>
                 <div className='thang-quy-nam'>
-                    {/* <h4>THÁNG:</h4>
-                    <Input type="select" name="monthValue" id="month" value={this.state.monthValue} onChange={(e) => this.changeValue(e)} style={{width: '150px', marginRight:'20px'}}>
-                        {
-                            this.state.month.map((m, index) => (
-                                <option key={index} value={this.state.month[index]}>{this.state.month[index]}</option>
-                            ))
-                        }
-                    </Input>
-                    <h4>QUÝ:</h4>
-                    <Input type="select" name="quyValue" id="quy" value={this.state.quyValue} onChange={(e) => this.changeValue(e)} style={{width: '150px', marginRight:'20px'}}>
-                        {
-                            this.state.quy.map((q, index) => (
-                                <option key={index} value={this.state.quy[index]}>{this.state.quy[index]}</option>
-                            ))
-                        }
-                    </Input>
-
-                    <h4>NĂM:</h4>
-                    <Input type="select" name="yearValue" id="year" value={this.state.yearValue} onChange={(e) => this.changeValue(e)} style={{width: '150px'}}>
-                        {
-                            this.state.year.map((y, index) => (
-                                <option key={index} value={this.state.year[index]}>{this.state.year[index]}</option>
-                            ))
-                        }
-                    </Input> */}
-                    
                     <h4>TỪ: </h4>
                     <input type="date" name="dateFrom" onChange={(e) => this.changeValue(e)} defaultValue={this.state.dateFrom} className="input-from"></input>
-                    
-                    
                     <h4>ĐẾN: </h4>
                     <input type="date" name="dateTo" onChange={(e) => this.changeValue(e)} defaultValue={this.state.dateTo}></input>
-                    
                 </div>
                 <div className="bao-cao">
                     <div className="rp">
@@ -339,22 +217,14 @@ export default class Chart extends Component {
                                 <Statistic.Label>TỔNG DOANH THU</Statistic.Label>
                             </Statistic>
                         </Statistic.Group>
-                        {/* <h3>BILLS DONE: {formatQuantity(this.state.bills.length)}</h3>
-                        <h3>TOTAL INCOME: {formatCurrency(this.state.income)}</h3> */}
                     </div>
                     <div className="rp">
                         <Statistic.Group size='small' id="doanhthu">
-                            {/* <Statistic>
-                                <Statistic.Value>{formatQuantity(this.state.bills.length)}</Statistic.Value>
-                                <Statistic.Label>BILLS DONE</Statistic.Label>
-                            </Statistic> */}
                             <Statistic>
                                 <Statistic.Value>{formatCurrency(this.state.income - this.state.outcome)}</Statistic.Value>
                                 <Statistic.Label>LỢI NHUẬN</Statistic.Label>
                             </Statistic>
                         </Statistic.Group>
-                        {/* <h3>BILLS DONE: {formatQuantity(this.state.bills.length)}</h3>
-                        <h3>TOTAL INCOME: {formatCurrency(this.state.income)}</h3> */}
                     </div>
                     <div className="rp" id="outcome">
                         <Statistic.Group size='small'>
@@ -367,11 +237,8 @@ export default class Chart extends Component {
                                 <Statistic.Label>TỔNG CHI PHÍ</Statistic.Label>
                             </Statistic>
                         </Statistic.Group>
-                        {/* <h3>IMPORTS DONE: {formatQuantity(this.state.imports.length)}</h3>
-                        <h3>TOTAL OUTCOME: {formatCurrency(this.state.outcome)}</h3> */}
                     </div>
                 </div>
-
                 <div className="line-chart">
                     <h4>DOANH THU THEO TỪNG THÁNG TRONG NĂM {new Date().getFullYear()}</h4>
                     <LineChart width={900} height={550} data={this.state.revenue} margin={{ top: 5, right: 20, bottom: 5, left: 0 }}>

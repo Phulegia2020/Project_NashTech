@@ -1,7 +1,5 @@
 package com.example.nashtechproject.service.impl;
 
-import com.example.nashtechproject.dto.PlaceOrderDetailsDTO;
-import com.example.nashtechproject.entity.ImportDetails;
 import com.example.nashtechproject.entity.PlaceOrderDetails;
 import com.example.nashtechproject.page.ProductPage;
 import com.example.nashtechproject.repository.PlaceOrderDetailsRepository;
@@ -11,7 +9,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service

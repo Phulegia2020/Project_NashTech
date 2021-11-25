@@ -1,7 +1,6 @@
 package com.example.nashtechproject.repository;
 
 import com.example.nashtechproject.entity.ImportDetails;
-import com.example.nashtechproject.entity.PlaceOrderDetails;
 import com.example.nashtechproject.entity.embedded.ImportDetailsKey;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

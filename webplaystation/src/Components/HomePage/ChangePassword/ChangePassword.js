@@ -23,11 +23,8 @@ class ChangePassword extends Component {
 	{
 		if (this.props.location.state != null)
 		{
-			// console.log(this.props.location.state.email);
-			// console.log(this.props.location.state.otp);
 			this.setState({
 				email: this.props.location.state.email,
-				// otp: this.props.location.state.otp , otp: 0
 			})
 			window.onbeforeunload = function () {
 				window.history.replaceState(null, "");
@@ -75,20 +72,17 @@ class ChangePassword extends Component {
 					if (response.status === 200)
 					{
 						id = response.data.id;
-						// console.log(id);
 					}
 				})
 				.catch((error) => console.log(error));
 			}
 		}
-		console.log(id);
+		
 		post('/auth/profile', {user_id: id, newpassword: this.state.newpassword,
                                             confirmpassword: this.state.confirmpassword})
         .then((response) => {
             if (response.status === 200)
             {
-				// alert(response.data.message);
-				
 				toast.success('Thay đổi mật khẩu thành công!')
 				this.setState({
 					newpassword: "",
@@ -102,7 +96,6 @@ class ChangePassword extends Component {
             }
             
         })
-		// .catch(error => alert('Check Password again!'));
 		.catch(error => toast.error('Kiểm tra lại mật khẩu!'));
 	}
 
@@ -117,7 +110,7 @@ class ChangePassword extends Component {
     render() {
         return (
 			<div className="password-form">
-            <Segment style={{ padding: '8em 0em' }} vertical>
+            <Segment style={localStorage.getItem('user_id') !== null ? { padding: '8em 0em', marginBottom: '5.85%' } : { padding: '8em 0em', marginBottom: '6.1%' }} vertical>
 				<Grid container stackable verticalAlign='middle'>
 					<Grid.Row>
 						<Grid.Column width={8}>

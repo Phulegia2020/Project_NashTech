@@ -28,7 +28,6 @@ class PlaceOrderDetailsByPlaceOrder extends Component {
             if (response.status === 200)
             {
                 this.setState({
-                    //placeorderdetails: response.data
                     pageToTal: Math.ceil(response.data.length / this.state.currentPage)
                 })
             }
@@ -60,7 +59,6 @@ class PlaceOrderDetailsByPlaceOrder extends Component {
         .then((response) => {
             if (response.status === 200)
             {
-                // this.setState({placeorderdetails: this.state.placeorderdetails.filter(b => `${b.key.placeOrder.id}-${b.key.product.id}` !== `${id.placeOrder.id}-${id.product.id}`), isDisplayFormDel: false})
                 this.setState({placeorderdetails: this.state.placeorderdetails.filter(b => `${b.placeorder_id}-${b.product_id}` !== `${id.placeorder_id}-${id.product_id}`), isDisplayFormDel: false})
             }
         })
@@ -72,7 +70,6 @@ class PlaceOrderDetailsByPlaceOrder extends Component {
         .then((response) => {
             if (response.status === 200)
             {
-                //console.log(response.data);
                 this.setState({
                     placeorderdetails: [...this.state.placeorderdetails, response.data],
                     isDisplayForm: false,
@@ -193,8 +190,6 @@ class PlaceOrderDetailsByPlaceOrder extends Component {
                                 <tr key={index}>
                                     <td>{this.state.pageNumber*this.state.currentPage + index + 1}</td>
                                     <td>
-                                        {/* <img src={`data:image/jpeg;base64,${po.key.product.imageurl}`} alt="" height="100px"></img> */}
-                                        {/* <img src={`data:image/jpeg;base64,${po.productImg}`} alt="" height="100px"></img> */}
                                         <img src={po.productImg || "http://via.placeholder.com/300"} alt="" height="100px"></img>
                                     </td>
                                     <td>{po.productName}</td>

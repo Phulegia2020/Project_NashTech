@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import Add from "./Add"
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Pagination, PaginationItem, PaginationLink } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faInfo, faPlus, faTrash, faCheck, faArrowCircleUp, faArrowCircleDown, faReceipt } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faPlus, faTrash, faCheck, faArrowCircleUp, faArrowCircleDown, faReceipt } from '@fortawesome/free-solid-svg-icons';
 import { Label, Breadcrumb, Input } from 'semantic-ui-react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -63,7 +63,6 @@ export default class Import extends Component {
             this.setState({imports: this.state.imports.filter(b => b.id !== id),
                            isDisplayFormDel: false})
         })
-        // .catch(error => {alert('This Import had details. Can not Delete!')})
         .catch(error => {toast.error('Phiếu nhập đã được lập chi tiết!')})
     }
 
@@ -79,15 +78,12 @@ export default class Import extends Component {
         })
         if (this.state.placeorderdetails.length === 0)
         {
-            // alert('The Place Order has not details');
             toast.error('Phiếu đặt này chưa được lập chi tiết!');
             return;
         }
         post(`/imports`, {total: 0, user_id: newImport.user_id, placeOrder_id: newImport.placeorder_id})
         .then((response) => {
-            //window.location.reload();
             this.setState({
-                // imports: [...this.state.imports, response.data],
                 imports: [response.data, ...this.state.imports],
                 isDisplayForm: false,
             });
@@ -181,7 +177,6 @@ export default class Import extends Component {
         .then((response) => {
             if (response.status === 200)
             {
-                // window.location.href="/admin/import";
             }
         })
         .catch((error)=> {})
@@ -197,7 +192,6 @@ export default class Import extends Component {
 
     handleSortInc = (e, key) => {
         e.preventDefault();
-        //this.state.categories.sort((e1, e2) => (e1.id > e2.id ? 1 : -1));
         if (key === 'id')
         {
             this.setState({
@@ -222,12 +216,10 @@ export default class Import extends Component {
                 imports: this.state.imports.sort((e1, e2) => (e1.placeOrder.id > e2.placeOrder.id ? 1 : -1))
             })
         }
-        // console.log('sort');
     }
 
     handleSortDes = (e, key) => {
         e.preventDefault();
-        //this.state.categories.sort((e1, e2) => (e1.id > e2.id ? 1 : -1));
         if (key === 'id')
         {
             this.setState({
@@ -252,7 +244,6 @@ export default class Import extends Component {
                 imports: this.state.imports.sort((e1, e2) => (e2.placeOrder.id > e1.placeOrder.id ? 1 : -1))
             })
         }
-        // console.log('sort');
     }
 
     async handleSearch(e){
@@ -314,7 +305,7 @@ export default class Import extends Component {
     render() {
         const sections = [
             { key: 'Quản Lý', content: 'Quản Lý', link: false },
-            { key: 'Phiếu Nhập', content: 'Phiếu Nhập', active: true }
+            { key: 'Phiếu Nhập', content: 'Danh Sách Phiếu Nhập', active: true }
           ]
         return (
             <div>
@@ -393,16 +384,14 @@ export default class Import extends Component {
                                     <td>
                                         <Link to={`/admin/import/${imp.id}`}>
                                             <button className="btn btn-info">
-                                            <FontAwesomeIcon icon={faReceipt} className="mr-2"/>{' '}
-                                                
+                                                <FontAwesomeIcon icon={faReceipt} className="mr-2"/>{' '}
                                             </button>
                                         </Link>
                                     </td>
                                     <td>
                                         <Link to={`/admin/import`}  onClick={imp.status !== 'Waiting' ? (e) => e.preventDefault() : ''} className={imp.status !== 'Waiting' ? "disable-link" : ""}>
-                                            <button className="btn btn-warning" onClick={(event) => this.handleConfirm(event, imp.id)} disabled={imp.status !== 'Waiting'}>
-                                            <FontAwesomeIcon icon={faCheck} className="mr-2"/>{' '}
-                                                
+                                            <button className="btn btn-success" onClick={(event) => this.handleConfirm(event, imp.id)} disabled={imp.status !== 'Waiting'}>
+                                                <FontAwesomeIcon icon={faCheck} className="mr-2"/>{' '}
                                             </button>
                                         </Link>
                                     </td>

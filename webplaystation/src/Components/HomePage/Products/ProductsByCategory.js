@@ -37,10 +37,6 @@ class ProductsByCategry extends Component {
             }
         })
         .catch(error => {console.log(error)})
-
-        // window.onbeforeunload = function () {
-        //     window.history.replaceState(null, "");
-        // }.bind(this);
     }
 
     componentDidUpdate(prevProps, prevState)
@@ -93,17 +89,12 @@ class ProductsByCategry extends Component {
         const activePage = this.state.activePage;
         return (
             <Segment style={{ padding: '2em 0em', marginBottom: '17px' }} vertical>
-                {/* , marginTop: '56px' */}
                 <Grid container stackable verticalAlign='middle'>
                     <Grid.Row>
                         <Grid.Column textAlign='center'>
-                            {/* <Header as='h3' style={{ fontSize: '2em' }}>Products</Header> */}
                             <Divider horizontal style={{marginBottom: '45px'}}>
-                                {/* <Header as='h1'>
-                                    Sản Phẩm
-                                </Header> */}
                                 <Header>
-                                    <h3 className="header-home">Máy PS</h3>
+                                    <h3 className="header-home">Máy PlayStation</h3>
                                 </Header>
                             </Divider>
                             <ProductList products={this.state.Products} handleNumberCart={this.props.handleNumberCart}
@@ -119,14 +110,6 @@ class ProductsByCategry extends Component {
                             ellipsisItem={null}
                         />
                 </Grid>
-                {/* <df-messenger
-                intent="WELCOME"
-                chat-title="THE PLAYSTATION SHOP"
-                agent-id="3d2eb8db-0f5e-4a16-9c2a-3cea0cadb3a7"
-                language-code="en"
-                // wait-open="true"
-                // chat-icon="https://media.comicbook.com/2019/02/playstation-logo-orange-1157594.jpeg"
-                ></df-messenger> */}
             </Segment>
         );
     }

@@ -111,7 +111,6 @@ export default class Add extends Component {
                     <Input type="number" name="price" id="price" placeholder="1.000.000 VND" onChange={(e) => this.changeValue(e)} value = {this.state.price} required="required"/>
                     {this.state.key === 'price' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
                 </FormGroup>
-                
                 <FormGroup className="mb-2">
                     <Label htmlFor="product">Máy</Label>
                     <Input type="select" name="product_id" id="product" onChange={(e) => this.changeValue(e)} required>

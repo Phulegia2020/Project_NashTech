@@ -18,10 +18,6 @@ class Login extends Component {
 		this.state = { username: '', password: '', show: false};
 	}
 
-	// componentDidMount(){
-	// 	this.props.handleChatBot();
-	// }
-
 	handleChange = (e, { name, value }) => {
 		if (name === 'username')
         {
@@ -66,7 +62,6 @@ class Login extends Component {
             }
             
         })
-		// .catch(error => alert('Username or Password is wrong!'));
 		.catch(error => toast.error('Tài khoản hoặc mật khẩu không hợp lệ!'));
 	}
 
@@ -75,52 +70,41 @@ class Login extends Component {
 			<div className="login-form">
 				<Segment style={{ padding: '8em 0em', marginTop: '4rem' }} placeholder>
 					<Grid columns={2} relaxed='very' stackable>
-					{/* <div className="login-form"> */}
-					<Grid.Column width={8}>
-					
-						<h2  className="login-title">ĐĂNG NHẬP</h2>
-						{/* style={{ marginLeft: '355px', marginBottom: '25px', fontWeight: '900' }} */}
-						<Form onSubmit={(event) => this.handleSubmit(event)}>
-						<Form.Input
-							icon='user'
-							iconPosition='left'
-							label='Tài Khoản'
-							placeholder='Tên Tài Khoản... '
-							name='username' value={this.state.username} onChange={this.handleChange}
-							required
-						/>
-						<Form.Input
-							icon='lock'
-							iconPosition='left'
-							label='Mật Khẩu'
-							type='password'
-							placeholder='Mật Khẩu... '
-							type={this.state.show === false ? 'password' : 'text'}
-							name='password' value={this.state.password} onChange={this.handleChange}
-							required
-						/>
-						<Form.Field>
-							<Checkbox label='Hiển thị' onChange={(e) => this.handleShowPassword(e)}/>
-						</Form.Field>
-						<Button type='submit' content='Đăng nhập' primary/>
-						</Form>
-						<Link to={`/WebPlayStation/forgetPassword`} style={{ textDecoration: 'none' }} className="forget-password">Quên Mật Khẩu?</Link>
-					</Grid.Column>
-					{/* </div> */}
-					
-					<Grid.Column verticalAlign='middle'>
-						<Button as={Link} to="/WebPlayStation/signup" content='ĐĂNG KÝ' icon='signup' size='big' id="btn-signup"/>
+						<Grid.Column width={8}>
+							<h2  className="login-title">ĐĂNG NHẬP</h2>
+							<Form onSubmit={(event) => this.handleSubmit(event)}>
+								<Form.Input
+									icon='user'
+									iconPosition='left'
+									label='Tài Khoản'
+									placeholder='Tên Tài Khoản... '
+									name='username' value={this.state.username} onChange={this.handleChange}
+									required
+								/>
+								<Form.Input
+									icon='lock'
+									iconPosition='left'
+									label='Mật Khẩu'
+									type='password'
+									placeholder='Mật Khẩu... '
+									type={this.state.show === false ? 'password' : 'text'}
+									name='password' value={this.state.password} onChange={this.handleChange}
+									required
+								/>
+								<Form.Field>
+									<Checkbox label='Hiển thị' onChange={(e) => this.handleShowPassword(e)}/>
+								</Form.Field>
+								<Button type='submit' content='Đăng nhập' primary/>
+							</Form>
+							<Link to={`/WebPlayStation/forgetPassword`} style={{ textDecoration: 'none' }} className="forget-password">Quên Mật Khẩu?</Link>
+						</Grid.Column>
 						
-					</Grid.Column>
-					
+						<Grid.Column verticalAlign='middle'>
+							<Button as={Link} to="/WebPlayStation/signup" content='ĐĂNG KÝ' icon='signup' size='big' id="btn-signup"/>
+						</Grid.Column>
 					</Grid>
 
 					<Divider vertical>Nếu Bạn Chưa Có Tài Khoản. Đăng Ký Ở Đây?</Divider>
-
-					{/* <Button animated='fade' as={Link} to="/WebPlayStation/signup" icon='signup' size='big'>
-						<Button.Content visible className="btn-signup">ĐĂNG KÝ</Button.Content>
-						<Button.Content hidden className="btn-signup">$12.99 a month</Button.Content>
-						</Button> */}
 					<ToastContainer position="top-center"
 						autoClose={2000}
 						hideProgressBar

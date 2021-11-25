@@ -3,7 +3,6 @@ package com.example.nashtechproject.restcontroller;
 import com.example.nashtechproject.dto.ImportDetailsDTO;
 import com.example.nashtechproject.entity.*;
 import com.example.nashtechproject.entity.embedded.ImportDetailsKey;
-import com.example.nashtechproject.exception.BillDetailsException;
 import com.example.nashtechproject.exception.InvalidDataException;
 import com.example.nashtechproject.exception.ObjectNotFoundException;
 import com.example.nashtechproject.exception.ProductException;
@@ -20,8 +19,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -48,8 +45,6 @@ public class ImportDetailsController {
     public List<ImportDetails> getAllImportDetails()
     {
         List<ImportDetails> importDetails = importDetailsService.retrieveImportDetails();
-//        return importDetails.stream().sorted(Comparator.comparing(ImportDetails::getId).reversed())
-//                .collect(Collectors.toList());
         return importDetails;
     }
 
@@ -68,9 +63,6 @@ public class ImportDetailsController {
     public List<ImportDetails> getImportDetailsByImport(@PathVariable(name = "importId") Long importId)
     {
         List<ImportDetails> importDetails = importDetailsService.getImportDetailsByImport(importId);
-//        return importDetails.stream()
-//                .sorted(Comparator.comparing(ImportDetails::getId))
-//                .collect(Collectors.toList());
         return importDetails;
     }
 

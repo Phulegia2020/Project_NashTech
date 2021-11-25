@@ -70,13 +70,6 @@ export default class Add extends Component {
                 </FormGroup>
                 <FormGroup className="mb-2">
                     <Label htmlFor="supplier">Nhà Cung Cấp</Label>
-                    {/* <Input type="select" name="supplier_id" id="supplier" onChange={(e) => this.changeValue(e)} multiple required>
-                        {
-                            this.state.suppliers.map((sup) => (
-                                <option key={sup.id} value={sup.id}>{sup.name}</option>
-                            ))
-                        }
-                    </Input> */}
                     <select name="supplier_id" id="supplier" className="form-control" size="5" onChange={(e) => this.changeValue(e)} required>
                         {
                             this.state.suppliers.map((sup) => (

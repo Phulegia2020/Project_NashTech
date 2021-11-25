@@ -21,7 +21,6 @@ class Order extends Component {
             user: {},
             type: 'cod',
             destination: ''
-            //loading: false
         };
         this.onCheckOut = this.onCheckOut.bind(this);
     }
@@ -47,7 +46,6 @@ class Order extends Component {
         var total = Object.keys(this.state.ShoppingCartItems).reduce((previous, key) => {
             return previous + this.state.ShoppingCartItems[key].price * this.state.ShoppingCartItems[key].quantity;
         }, 0);
-        // return formatCurrency(total);
         return total;
     }
 
@@ -55,61 +53,22 @@ class Order extends Component {
         const shoppingCartItems = JSON.parse(localStorage.getItem('shopping-cart') || '[]');
         if (shoppingCartItems.length == 0)
         {
-            alert('The Order is empty. Can not Confirm!');
+            toast('Giỏ hàng trống!');
+            return;
+        }
+        if (this.state.destination === '')
+        {
+            toast('Địa chỉ nhận hàng không tồn tại!');
             return;
         }
         localStorage.setItem('destination', this.state.destination);
         if (this.state.type === 'cod')
         {
-            // await this.setState({
-            //     loading: true
-            // })
             toast('Vui lòng chờ xử lý hóa đơn!');
-            setTimeout(() => this.props.history.push("/WebPlayStation/success", {pttt: 'Thanh toán tiền mặt khi nhận hàng'}), 3000);
+            setTimeout(() => this.props.history.push("/WebPlayStation/success", {pttt: 'Thanh toán tiền mặt khi nhận hàng'}), 2000);
         }
-        // if (this.state.type === 'cod')
-        // {
-            // await post('/bills', {total: 0, user_id: localStorage.getItem('user_id'), status: 'Waiting'})
-            // .then((response) => {
-            //     if (response.status === 200)
-            //     {
-            //         this.setState({
-            //             bill: response.data
-            //         })
-            //     }
-            // })
-            // .catch(error => alert('Login to Purchase!'));
-
-            // for (let i = 0; i < shoppingCartItems.length; i++) {
-            //     await post('/billDetails', {bill_id: this.state.bill.id, product_id: shoppingCartItems[i].id, quantity: shoppingCartItems[i].quantity})
-            //     .then((res) => {
-            //         if (res.status === 200)
-            //         {
-            //         }
-            //     })
-            //     .catch(error => alert('Login to Purchase!'));
-            // }
-
-            // await get(`/bills/${this.state.bill.id}`)
-            // .then((response) => {
-            //     if (response.status === 200)
-            //     {
-            //         //console.log(response.data);
-            //         this.setState({
-            //             bill: response.data
-            //         })
-            //     }
-            // })
-            //localStorage.setItem('shopping-cart', []);
-
-            //this.handleSendMail();
-
-            // console.log('paypal');
-        // }
-        // else 
         if (this.state.type === 'paypal')
         {
-            // var pay = (this.state.bill.total) / 20000;
             // var pay = 5;
             var pay = this.getTotal() / 20000;
             post(`/payment/pay?price=${pay}`)
@@ -117,72 +76,40 @@ class Order extends Component {
                 if (response.status === 200)
                 {
                     window.location.href=`${response.data}`;
-                    //console.log(response.data);
                 }
             })
             .catch(error => console.log(error));
-
-            // alert('paypal');
-            // console.log(pay);
         }
-        // else
-        // {
-        //     toast('Vui lòng chờ xử lý thanh toán');
-        // }
     }
 
-    handleSendMail()
-    {
-        // var contentmail = `<b>Dear, ${localStorage.getItem('username')}</b><br>`+
-        //                `<p>Thanks for visiting and buying in our store. We are very happy that you found products you are looking for. Here is your Bill:</p>`+
-        //                `<h3>BILL HD${this.state.bill.id}</h3><br>`+
-        //                 `<b>TOTAL:</b> ${formatQuantity(this.state.bill.total)} VND`;
-        var pttt = '';
-        if (this.state.type === 'cod')
-        {
-            pttt = 'Thanh toán tiền mặt khi nhận hàng'
-        }
-        else
-        {
-            pttt = 'Thanh toàn trực tuyến paypal';
-        }
-        var contentmail = `<b>Chào, ${localStorage.getItem('username')}</b><br/>`+
-                       `<p>Cám ơn quý khách đã ghé thăm và mua sản phẩm tại cửa hàng. Chúng tôi rất vui khi bạn đã mua được những sản phẩm mà bạn đang tìm kiếm. Đây là hóa đơn của bạn:</p>`+
-                       `Hóa Đơn <h3>#HD${this.state.bill.id}</h3>`+
-                       `Tổng giá trị đơn hàng: <b>${formatQuantity(this.state.bill.total)} VNĐ</b><br/>`+
-                    //    `Hóa Đơn <h3>#HD</h3>`+
-                       `Phương thức thanh toán: <b>${pttt}</b><br/>`;
-                        // `Tổng giá trị đơn hàng: <b>${formatQuantity(this.state.bill.total)} VNĐ</b>`;
-                        // `<b>Chi tiết đơn hàng</b>`;
-        post(`/bills/sendmail/${this.state.bill.id}`, {from: 'ps4gamemachine@gmail.com', to: this.state.user.email, subject: "THE PLAYSTATION SHOP - XÁC NHẬN HÓA ĐƠN", content: contentmail})
-        //post(`/bills/sendmail/141`, {from: 'ps4gamemachine@gmail.com', to: this.state.user.email, subject: "THE PLAYSTATION SHOP - XÁC NHẬN HÓA ĐƠN", content: contentmail})
-        .then((response) => {
-            if (response.status === 200)
-            {
-                
-                // this.setState({
-                //     loading: false
-                // })
-                
-                if (this.state.type === 'cod')
-                {
-                    // alert('Thank you for Purchasing, Confirm your email!');
-                    // window.location.href='/WebPlayStation';
-                    window.location.href='/WebPlayStation/success';
-                }
-            }
-        })
-        .catch((error) => console.log(error));
-        // this.setState({
-        //     loading: false
-        // })
-        
-        // if (this.state.type === 'cod')
-        // {
-        //     alert('Thank you for Purchasing, Confirm your email!');
-        //     window.location.href='/WebPlayStation';
-        // }
-    }
+    // handleSendMail()
+    // {
+    //     var pttt = '';
+    //     if (this.state.type === 'cod')
+    //     {
+    //         pttt = 'Thanh toán tiền mặt khi nhận hàng'
+    //     }
+    //     else
+    //     {
+    //         pttt = 'Thanh toàn trực tuyến paypal';
+    //     }
+    //     var contentmail = `<b>Chào, ${localStorage.getItem('username')}</b><br/>`+
+    //                    `<p>Cám ơn quý khách đã ghé thăm và mua sản phẩm tại cửa hàng. Chúng tôi rất vui khi bạn đã mua được những sản phẩm mà bạn đang tìm kiếm. Đây là hóa đơn của bạn:</p>`+
+    //                    `Hóa Đơn <h3>#HD${this.state.bill.id}</h3>`+
+    //                    `Tổng giá trị đơn hàng: <b>${formatQuantity(this.state.bill.total)} VNĐ</b><br/>`+
+    //                    `Phương thức thanh toán: <b>${pttt}</b><br/>`;
+    //     post(`/bills/sendmail/${this.state.bill.id}`, {from: 'ps4gamemachine@gmail.com', to: this.state.user.email, subject: "THE PLAYSTATION SHOP - XÁC NHẬN HÓA ĐƠN", content: contentmail})
+    //     .then((response) => {
+    //         if (response.status === 200)
+    //         {
+    //             if (this.state.type === 'cod')
+    //             {
+    //                 window.location.href='/WebPlayStation/success';
+    //             }
+    //         }
+    //     })
+    //     .catch((error) => console.log(error));
+    // }
 
     changeValue(e){
         this.setState({
@@ -200,26 +127,8 @@ class Order extends Component {
     render() {
         return (
             <div className='order-bill'>
-                {/* <h3 style={{textAlign: 'center', marginTop: '1rem'}}>THE ORDER</h3>
-                <div style={{marginLeft: '35rem'}}>
-                    <h4 className='info-user'>Full Name: {this.state.user.name}</h4>
-                    <h4 className='info-user' style={{marginLeft: '34.5rem'}}>Address: {this.state.user.address}</h4>
-                </div>
-                <div style={{marginLeft: '35rem'}}>
-                    <h4 className='info-user'>Email: {this.state.user.email}</h4>
-                    <h4 style={{marginLeft: '28rem'}} className='info-user'>Phone: {this.state.user.phone}</h4>
-                </div> */}
-                
                 <div className="order-confirm">
                     <h3 style={{fontWeight:'bold'}}>Thanh Toán Đơn Hàng</h3>
-                    {/* <div id='info'>
-                        <h4 >Full Name: {this.state.user.name}</h4>
-                        <h4 >Address: {this.state.user.address}</h4>
-                    </div>
-                    <div id='info-user'>
-                        <h4 >Email: {this.state.user.email}</h4>
-                        <h4 >Phone: {this.state.user.phone}</h4>
-                    </div> */}
                     <Table celled>
                         <Table.Header>
                             <Table.Row>
@@ -232,13 +141,11 @@ class Order extends Component {
                             </Table.Row>
                         </Table.Header>
                         <Table.Body>
-                            {/* <div className='scroll-table-order'> */}
                             {
                                 this.state.ShoppingCartItems.map((item, index) =>
                                     <Table.Row key={item.id}>
                                         <Table.Cell textAlign="center" >{index + 1}</Table.Cell>
                                         <Table.Cell textAlign="center" >
-                                            {/* <Image style={{height: '75px'}} src={`data:image/jpeg;base64,${item.url}`}/> */}
                                             <Image style={{height: '75px'}} src={item.url}/>
                                         </Table.Cell>
                                         <Table.Cell textAlign="center" >{item.name}</Table.Cell>
@@ -248,12 +155,10 @@ class Order extends Component {
                                     </Table.Row>
                                 )
                             }
-                            {/* </div> */}
                         </Table.Body>
                     </Table>
                     <Header style={{marginLeft: '75rem'}}>Tổng Tiền: {formatCurrency(this.getTotal())}</Header>
                     <Button positive icon='checkmark' labelPosition='right' content="Xác Nhận" onClick={this.onCheckOut} style={{marginLeft: '75rem'}}/>
-                    {/* loading={this.state.loading} */}
                 </div>
 
                 <div className='info-user'>
@@ -276,22 +181,18 @@ class Order extends Component {
                         <Input type="radio" name="type" value = 'paypal' checked={this.state.type === 'paypal'} onChange={(e) => this.changeValue(e)}/>{' '}
                         <Icon name="cc paypal" size="large"/>
                         Thanh toán trực tuyến PayPal ({formatQuantity(this.getTotal() / 20000) } USD)
-                        {/* credit card alternative */}
                     </Label>
                 </div>
 
                 <div className='destination-form'>
                     <div className="title-destination">
                         <FontAwesomeIcon icon={faMapMarked} size='lg'/>{' '}
-                        {/* <Icon name="map marker alternate" size="large"></Icon> */}
                         <h4 style={{fontWeight:'bold', textAlign:'center'}}>Địa Điểm Nhận Hàng</h4>
                     </div>
                     <Label>
                         <Input type="text" name="destination" placeholder="Địa điểm nhận hàng..." value={this.state.destination} onChange={(e) => this.changeValue(e)} required className="input-destination"/>
                     </Label>
                 </div>
-                {/* <Header style={{marginLeft: '100rem'}}>TOTAL: {this.getTotal()}</Header>
-                <Button positive icon='checkmark' labelPosition='right' content="Confirm" onClick={this.onCheckOut} style={{marginLeft: '100rem', marginBottom: '1rem'}}/> */}
                 <div className={this.state.ShoppingCartItems.length < 4 ? "fixed-bottom": ''}>
                     <Footer/>
                 </div>

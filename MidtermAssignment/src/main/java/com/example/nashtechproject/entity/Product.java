@@ -1,10 +1,7 @@
 package com.example.nashtechproject.entity;
 
-import com.example.nashtechproject.entity.embedded.RateKey;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.hibernate.annotations.Type;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -43,11 +40,6 @@ public class Product {
     @Column(name = "updateddate")
     private LocalDateTime updateddate;
 
-//    @Lob
-//    @Type(type="org.hibernate.type.BinaryType")
-//    @Column(name = "imageURL")
-//    private byte[] imageurl;
-
     @Column(name = "url_image")
     private String url_image;
 
@@ -62,7 +54,6 @@ public class Product {
     @JoinColumn(name = "status")
     private String status;
 
-//    @Transient
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Rating> ratings = new ArrayList<>();
@@ -72,7 +63,6 @@ public class Product {
     @JsonIgnore
     private Collection<BillDetails> billDetails;
 
-//    @Transient
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Comment> comments;
@@ -92,7 +82,6 @@ public class Product {
         this.price = price;
         this.createddate = createddate;
         this.updateddate = updateddate;
-//        this.imageurl = imageurl;
         this.url_image = url_image;
         this.category = category;
         this.supplier = supplier;
@@ -164,14 +153,6 @@ public class Product {
         this.updateddate = updateddate;
     }
 
-//    public byte[] getImageurl() {
-//        return imageurl;
-//    }
-//
-//    public void setImageurl(byte[] imageurl) {
-//        this.imageurl = imageurl;
-//    }
-
     public String getUrl_image() {
         return url_image;
     }
@@ -195,14 +176,6 @@ public class Product {
     public void setSupplier(Supplier supplier) {
         this.supplier = supplier;
     }
-
-//    public List<Rating> getRatings() {
-//        return ratings;
-//    }
-//
-//    public void setRatings(List<Rating> ratings) {
-//        this.ratings = ratings;
-//    }
 
     public String getStatus() {
         return status;

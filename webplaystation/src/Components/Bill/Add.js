@@ -9,7 +9,6 @@ export default class Add extends Component {
         this.state = {
             total: 0,
             user_id: "",
-            // billStatus_id: "",
             status: '',
             users: [],
             billStatus: [],
@@ -29,16 +28,6 @@ export default class Add extends Component {
             }
         })
         .catch(error => {console.log(error)})
-
-        // get("/billstatuses")
-        // .then((response) => {
-        //     if (response.status === 200)
-        //     {
-        //         this.setState({
-        //             billStatus: response.data
-        //         });
-        //     }
-        // })
     }
 
     changeValue(e){
@@ -51,7 +40,6 @@ export default class Add extends Component {
         event.preventDefault();
         await this.setState({
             user_id: event.target.user_id.value,
-            // billStatus_id: "3"
             status: 'Waiting'
         })
 
@@ -62,7 +50,6 @@ export default class Add extends Component {
         this.setState({
             total: 0,
             user_id: "",
-            // billStatus_id: "",
             status: "",
         });
         this.props.onCloseForm();
@@ -87,13 +74,6 @@ export default class Add extends Component {
                 
                 <FormGroup className="mb-2">
                     <Label htmlFor="user">Khách Hàng</Label>
-                    {/* <Input type="select" name="user_id" id="user" onChange={(e) => this.changeValue(e)} multiple required>
-                        {
-                            this.state.users.map((u) => (
-                                <option key={u.id} value={u.id}>{u.name}</option>
-                            ))
-                        }
-                    </Input> */}
                     <select name="user_id" id="user" className="form-control" size="5" onChange={(e) => this.changeValue(e)} required>
                         {
                             this.state.users.map((u) => (

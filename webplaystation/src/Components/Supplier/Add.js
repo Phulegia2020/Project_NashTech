@@ -81,7 +81,6 @@ export default class Add extends Component {
         }
         if (!checkPhoneNumber(event.target.phone.value.trim()))
         {
-            // console.log('error')
             this.setState({
                 key: 'phone'
             })

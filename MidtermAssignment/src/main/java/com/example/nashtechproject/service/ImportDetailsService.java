@@ -1,6 +1,5 @@
 package com.example.nashtechproject.service;
 
-import com.example.nashtechproject.entity.BillDetails;
 import com.example.nashtechproject.entity.ImportDetails;
 import com.example.nashtechproject.page.ProductPage;
 

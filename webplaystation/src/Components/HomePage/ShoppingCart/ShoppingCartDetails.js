@@ -23,7 +23,6 @@ class ShoppingCartDetails extends Component {
                 if (response.status === 200)
                 {
                     this.state.products.push(response.data);
-                    //console.log(response.data);
                 }
             })
             .catch((error) => console.log(error))
@@ -41,7 +40,6 @@ class ShoppingCartDetails extends Component {
                 return false;
             }
         }
-        // this.props.handleNumberCart(this.state.ShoppingCartItems.length);
     }
 
     onIncreaseQuantity(item) {
@@ -50,7 +48,6 @@ class ShoppingCartDetails extends Component {
             if (items[i].id === item.id) {
                 for (var j = 0; j < this.state.products.length; j++)
                 {
-                    //console.log(this.state.products[j]);
                     if (this.state.products[j].id === item.id && this.state.products[j].quantity === item.quantity)
                     {
                         return;
@@ -109,7 +106,6 @@ class ShoppingCartDetails extends Component {
                                 <Table.Row key={item.id}>
                                     <Table.Cell textAlign="right">{index + 1}</Table.Cell>
                                     <Table.Cell textAlign="right">
-                                        {/* <Image style={{height: '75px'}} src={`data:image/jpeg;base64,${item.url}`}/> */}
                                         <Image style={{height: '75px'}} src={item.url}/>
                                     </Table.Cell>
                                     <Table.Cell textAlign="left">{item.name}</Table.Cell>

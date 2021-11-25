@@ -1,6 +1,5 @@
 package com.example.nashtechproject.dto;
 
-import com.example.nashtechproject.entity.BillStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.time.LocalDateTime;
@@ -18,7 +17,6 @@ public class BillDTO {
 
     private String user_id;
 
-//    private String billStatus_id;
     private String status;
 
     private String destination;
@@ -64,14 +62,6 @@ public class BillDTO {
     public void setUser_id(String user_id) {
         this.user_id = user_id;
     }
-
-//    public String getBillStatus_id() {
-//        return billStatus_id;
-//    }
-//
-//    public void setBillStatus_id(String billStatus_id) {
-//        this.billStatus_id = billStatus_id;
-//    }
 
     public String getStatus() {
         return status;

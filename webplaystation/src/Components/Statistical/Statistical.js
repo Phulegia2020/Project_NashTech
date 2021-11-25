@@ -1,23 +1,12 @@
 import React, { Component } from 'react'
-// import "./../Category/Category.css";
 import { get } from "./../../Utils/httpHelper";
-import {formatQuantity, formatCurrency} from "./../../Utils/Utils";
-import { Statistic } from 'semantic-ui-react'
+import {formatCurrency} from "./../../Utils/Utils";
 import "./Statistical.css";
 import { Input } from 'reactstrap';
 import {Rating} from 'semantic-ui-react';
-import { PieChart, Pie, Cell, LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip } from 'recharts';
+import { PieChart, Pie, Cell, Tooltip } from 'recharts';
 
 const CustomizedLabel = ({ active, payload, label }) => {
-    // const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
-    // const x = cx + radius * Math.cos(-midAngle * RADIAN);
-    // const y = cy + radius * Math.sin(-midAngle * RADIAN);
-  
-    // return (
-    //   <text x={x} y={y} fill="white" textAnchor={x > cx ? 'start' : 'end'} dominantBaseline="central">
-    //     {`${(percent * 100).toFixed(0)}%`}
-    //   </text>
-    // );
     if (active && payload && payload.length) {
         return (
           <div className="custom-tooltip">
@@ -56,37 +45,6 @@ class Statistical extends Component {
             }
         })
         .catch(error => {console.log(error)})
-
-        // get(`/bills/income`)
-        // .then((response) => {
-        //     this.setState({
-        //         income: response.data,
-        //     });
-        // })
-        // .catch(error => console.log(error));
-
-        // get(`/bills/done`)
-        // .then((response) => {
-        //     this.setState({
-        //         bills: response.data,
-        //     });
-        // })
-        // .catch(error => console.log(error));
-
-        // await get(`/imports/done`)
-        // .then((response) => {
-        //     this.setState({
-        //         imports: response.data,
-        //     });
-        // })
-        // .catch(error => console.log(error));
-
-        // for (let i = 0; i < this.state.imports.length; i++)
-        // {
-        //     this.setState({
-        //         outcome: this.state.outcome + this.state.imports[i].total
-        //     })
-        // }
 
         get(`/products/topSale?month=${parseInt(this.state.monthValue)}`)
         .then((response) => {
@@ -147,8 +105,6 @@ class Statistical extends Component {
                     <PieChart width={1000} height={400} onMouseEnter={this.onPieEnter}>
                         <Pie
                         data={this.state.data}
-                        // cx={800}
-                        // cy={160}
                         cx={370}
                         cy={170}
                         innerRadius={90}
@@ -194,7 +150,6 @@ class Statistical extends Component {
                                     <tr key={p.id}>
                                         <td>{p.id}</td>
                                         <td>
-                                            {/* <img src={`data:image/jpeg;base64,${p.imageurl}`} alt="" height="75px"></img> */}
                                             <img src={p.url_image || "http://via.placeholder.com/300"} alt="" height="75px"/>
                                         </td>
                                         <td>{p.name}</td>
@@ -203,24 +158,6 @@ class Statistical extends Component {
                                     </tr>
                                 ))
                             }
-                            {/* <tr id="tr-tk">
-                                        <td>a</td>
-                                        <td>
-                                            b
-                                        </td>
-                                        <td>c</td>
-                                        <td>d</td>
-                                        <td>e</td>
-                                    </tr>
-                                    <tr>
-                                        <td>a</td>
-                                        <td>
-                                            b
-                                        </td>
-                                        <td>c</td>
-                                        <td>d</td>
-                                        <td>e</td>
-                                    </tr> */}
                         </tbody>
                     </table>
                 </div>

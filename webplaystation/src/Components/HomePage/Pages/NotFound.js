@@ -8,7 +8,6 @@ export default class NotFound extends Component {
             <div style={{marginTop:'50px'}}>
                 <div className="row">
                     <div className="col-md-12 text-center">
-                        {/* <i class="fas fa-check-circle fa-5x text-success"></i> */}
                         <FontAwesomeIcon icon={faExclamationCircle} className="fas fa-check-circle fa-5x text-danger"/>
                         <h2 className="display-3 text-black">404</h2>
                         <p className="lead mb-5">Không tìm thấy trang</p>

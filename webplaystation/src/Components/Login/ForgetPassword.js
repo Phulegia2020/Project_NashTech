@@ -2,8 +2,6 @@ import React, { Component } from 'react'
 import { get } from '../../Utils/httpHelper';
 import { withRouter } from 'react-router-dom';
 import "./Login.css";
-// import { ToastContainer, toast } from 'react-toastify';
-// import 'react-toastify/dist/ReactToastify.css';
 
 class ForgetPassword extends Component {
     constructor(props) {
@@ -24,23 +22,6 @@ class ForgetPassword extends Component {
     handleForget(e)
     {
         e.preventDefault();
-        // toast("Vui lòng chờ mã gửi về email!");
-        // get(`/users/forgetPassword?email=${this.state.email}`)
-        // .then((response) => {
-        //     if (response.status === 200)
-        //     {
-        //         this.props.history.push("/WebPlayStation/confirm", {otp: response.data, email: this.state.email});
-        //     }
-        // })
-        // .catch((error) => {
-        //     this.setState({
-		// 		key: 'email'
-		// 	})
-		// 	this.setState({
-		// 		Error: "Email không hợp lệ."
-		// 	});
-		// 	// return;
-        // });
         get(`/users/email/${this.state.email}`)
         .then((response) => {
             if (response.status === 200)
@@ -73,16 +54,6 @@ class ForgetPassword extends Component {
                         <button className="btn btn-success" type="submit">Gửi</button>
                     </form>
                 </div>
-                {/* <ToastContainer position="bottom-center"
-                    autoClose={3500}
-                    hideProgressBar={false}
-                    newestOnTop={false}
-                    closeOnClick={false}
-                    rtl={false}
-                    pauseOnFocusLoss
-                    draggable
-                    pauseOnHover
-					/> */}
             </div>
         )
     }

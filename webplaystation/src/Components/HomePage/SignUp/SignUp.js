@@ -1,10 +1,6 @@
 import React, { Component } from 'react'
-import { Button, Checkbox, Form, Radio, Label } from 'semantic-ui-react';
-import {
-	Segment,
-	Grid,
-} from 'semantic-ui-react'
-import {post, postLogin} from "./../../../Utils/httpHelper";
+import { Checkbox, Form, Radio, Label } from 'semantic-ui-react';
+import {post} from "./../../../Utils/httpHelper";
 import { withRouter } from "react-router";
 import {get} from '../../../Utils/httpHelper';
 import { checkPhoneNumber } from '../../../Utils/Utils';
@@ -29,7 +25,6 @@ class SignUp extends Component {
     }
     
     componentDidMount(){
-        // this.props.handleChatBot();
         get("/users")
         .then((response) => {
             if (response.status === 200)
@@ -124,23 +119,7 @@ class SignUp extends Component {
         .then((response) => {
             if (response.status === 200)
             {
-                // alert('Register Successfully!')
                 toast.success('Đăng ký thành công!')
-                // postLogin('/auth/signin', {username: this.state.username, password: this.state.password})
-                // .then((response) => {
-                //     if (response.status === 200)
-                //     {
-                //         localStorage.setItem('accessToken', response.data.accessToken);
-                //         localStorage.setItem('user_id', response.data.id);
-				//         localStorage.setItem('username', response.data.username);
-                //         if (response.data.roles[0] === "USER")
-                //         {
-                //             this.props.history.push("/");
-                //         }
-                //     }
-                    
-                // })
-                // .catch(error => console.log(error));
                 setTimeout(() => this.props.history.push("/WebPlayStation/login"), 1500);
             }
         })
@@ -157,80 +136,6 @@ class SignUp extends Component {
     render() {
         return (
             <div className='sign-up'>
-                {/* <Segment style={{ padding: '5em 0em', marginLeft: '600px' }} vertical>
-                    
-                    <Grid container stackable verticalAlign='middle'>
-                        
-                        <Grid.Row>
-                            <Grid.Column width={8}>
-                                <h2 className="title-profile">Register</h2>
-                                <Form onSubmit={(event) => this.handleSubmit(event)}>
-                                    <Form.Field >
-                                        <label>Name</label>
-                                        <Form.Input placeholder='Full Name' name='name' value={this.state.name} onChange={this.handleChange} required/>
-                                    </Form.Field>
-                                    <Form.Group inline>
-                                        <label>Gender</label>
-                                        <Form.Field
-                                            label='Male'
-                                            control={Radio}
-                                            value='Male'
-                                            name='gender'
-                                            onChange={this.handleChange}
-                                            checked={this.state.gender === 'Male'}
-                                        />
-                                        <Form.Field
-                                            label='Female'
-                                            control={Radio}
-                                            value='Female'
-                                            name='gender'
-                                            onChange={this.handleChange}
-                                            checked={this.state.gender === 'Female'}
-                                        />
-                                    </Form.Group>
-                                    <Form.Field inline required>
-                                        <label>Username</label>
-                                        <Form.Input placeholder='Username' name='username' value={this.state.username} onChange={this.handleChange} required/>
-                                        {this.state.key === 'username' ? <Label basic color='red' pointing='left'>{this.state.Error}</Label> : '' }
-                                    </Form.Field>
-                                    <Form.Group inline>
-                                        <Form.Field required inline>
-                                            <label>Password</label>
-                                            <Form.Input placeholder='123456' minLength="6" type={this.state.show === false? 'password' : 'text'} name='password' value={this.state.password} onChange={this.handleChange} required/>
-                                            {this.state.key === 'password' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
-                                        </Form.Field>
-                                        <Form.Field className="cb">
-                                            <Checkbox label='Show password' onChange={(e) => this.handleShowPassword(e)} className="cb"/>
-                                        </Form.Field>
-                                    </Form.Group>
-                                    <Form.Field>
-                                        <label>Email</label>
-                                        <Form.Input type="email" placeholder='abc@gmail.com' name='email' value={this.state.email} onChange={this.handleChange} required/>
-                                        {this.state.key === 'email' ? <Label basic color='red' pointing='left'>{this.state.Error}</Label> : '' }
-                                    </Form.Field>
-                                    <Form.Field >
-                                        <label>Address</label>
-                                        <Form.Input placeholder='123 Main st, Ward, District, Ho Chi Minh City' name='address' value={this.state.address} onChange={this.handleChange} required/>
-                                    </Form.Field>
-                                    <Form.Field inline required>
-                                        <label>Phone</label>
-                                        <Form.Input placeholder='0123456789' type="text" maxLength={10} minLength={10} name='phone' value={this.state.phone} onChange={this.handleChange} required/>
-                                        {this.state.key === 'phone' ? <Label basic color='red' pointing='left'>{this.state.Error}</Label> : '' }
-                                    </Form.Field>
-                                    <Button type='submit' color='google plus'>Sign Up</Button>
-                                </Form>
-                            </Grid.Column>
-                        </Grid.Row>
-                    </Grid>
-                </Segment> */}
-
-                {/* <df-messenger
-                    intent="WELCOME"
-                    chat-title="THE PLAYSTATION SHOP"
-                    agent-id="3d2eb8db-0f5e-4a16-9c2a-3cea0cadb3a7"
-                    language-code="en"
-                ></df-messenger> */}
-
                 <div className="site-section mt-3 mb-3">
                         <div className="container">
                             <div className="row">
@@ -244,10 +149,7 @@ class SignUp extends Component {
                                                 <div className="col-md-12">
                                                     <label className="text-black">Họ và tên<span
                                                         className="text-danger">*</span></label>
-                                                    <Form.Input placeholder='Full Name' name='name' value={this.state.name} onChange={this.handleChange} required/>
-                                                    {/* <input path="displayName" type="text" class="form-control"
-                                                        placeholder="Vui lòng nhập Họ và tên" />
-                                                    <errors path="displayName" /> */}
+                                                    <Form.Input placeholder='Họ tên' name='name' value={this.state.name} onChange={this.handleChange} required/>
                                                 </div>
                                             </div>
                                             <div className="form-group row mt-3">
@@ -277,10 +179,7 @@ class SignUp extends Component {
                                                 <div className="col-md-12">
                                                     <label className="text-black">Địa chỉ<span
                                                         className="text-danger">*</span></label>
-                                                    <Form.Input placeholder='123 Main st, Ward, District, Ho Chi Minh City' name='address' value={this.state.address} onChange={this.handleChange} required/>
-                                                    {/* <input path="displayName" type="text" class="form-control"
-                                                        placeholder="Vui lòng nhập Họ và tên" />
-                                                    <errors path="displayName" /> */}
+                                                    <Form.Input placeholder='1 Đường, Phường 2, Quận 3, Thành phố Hồ Chí Minh' name='address' value={this.state.address} onChange={this.handleChange} required/>
                                                 </div>
                                             </div>
                                             <div className="form-group row mt-3">
@@ -289,20 +188,14 @@ class SignUp extends Component {
                                                         className="text-danger">*</span></label>
                                                     <Form.Input type="email" placeholder='abc@gmail.com' name='email' value={this.state.email} onChange={this.handleChange} required/>
                                                     {this.state.key === 'email' ? <Label basic color='red' pointing='left'>{this.state.Error}</Label> : '' }
-                                                    {/* <input path="email" type="email" class="form-control"
-                                                        placeholder="Vui lòng nhập email của Quý khách" />
-                                                    <errors path="email" /> */}
                                                 </div>
                                             </div>
                                             <div className="form-group row mt-3">
                                                 <div className="col-md-12">
                                                     <label className="text-black">Số điện thoại<span
                                                         className="text-danger">*</span></label>
-                                                    <Form.Input placeholder='0123456789' type="text" maxLength={10} minLength={10} name='phone' value={this.state.phone} onChange={this.handleChange} required/>
+                                                    <Form.Input placeholder='0123******' type="text" maxLength={10} minLength={10} name='phone' value={this.state.phone} onChange={this.handleChange} required/>
                                                     {this.state.key === 'phone' ? <Label basic color='red' pointing='left'>{this.state.Error}</Label> : '' }
-                                                    {/* <input path="phone" type="number" class="form-control"
-                                                        placeholder="Vui lòng nhập số điện thoại của Quý khách" />
-                                                    <errors path="phone" /> */}
                                                 </div>
                                             </div>
                                             <div className="form-group row mt-3">
@@ -311,9 +204,6 @@ class SignUp extends Component {
                                                         className="text-danger">*</span></label>
                                                     <Form.Input placeholder='Tài khoản' minLength="3" name='username' value={this.state.username} onChange={this.handleChange} required/>
                                                     {this.state.key === 'username' ? <Label basic color='red' pointing='left'>{this.state.Error}</Label> : '' }
-                                                    {/* <input path="username" type="text" class="form-control"
-                                                        placeholder="Vui lòng nhập tên tài khoản của Quý khách" />
-                                                    <errors path="username" /> */}
                                                 </div>
                                             </div>
                                             <div className="form-group row mt-3">
@@ -323,22 +213,8 @@ class SignUp extends Component {
                                                     <Form.Input placeholder='Mật khẩu' minLength="6" type={this.state.show === false? 'password' : 'text'} name='password' value={this.state.password} onChange={this.handleChange} required/>
                                                     {this.state.key === 'password' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
                                                     <Checkbox label='Hiển thị' onChange={(e) => this.handleShowPassword(e)} className="cb"/>
-                                                    {/* <input path="password" type="password"
-                                                        class="form-control"
-                                                        placeholder="Vui lòng nhập password của Quý khách" />
-                                                    <errors path="password" /> */}
                                                 </div>
                                             </div>
-                                            {/* <div class="form-group row">
-                                                <div class="col-md-12">
-                                                    <label class="text-black">Nhập lại mật khẩu<span
-                                                        class="text-danger">*</span></label>
-                                                    <input path="confirmPassword" type="password"
-                                                        class="form-control"
-                                                        placeholder="Vui lòng nhập lại password của Quý khách" />
-                                                    <errors path="confirmPassword" />
-                                                </div>
-                                            </div> */}
                                             <br/>
                                             <div className="form-group row">
                                                 <div className="col-lg-12">
@@ -348,20 +224,6 @@ class SignUp extends Component {
                                         </div>
                                         </Form>
                                 </div>
-                                {/* <div className="col-md-6 ml-auto">
-                                    <label className="text-black">HOẶC ĐĂNG NHẬP BẰNG</label>
-                                    <hr/>
-                                    <div className="form-group row">
-                                        <div className="col-lg-6">
-                                            <a href="#" className="btn btn-primary btn-lg btn-block"><i
-                                                className="fa fa-facebook-square"></i> FACEBOOK</a>
-                                        </div>
-                                        <div className="col-lg-6">
-                                            <a href="#" className="btn btn-danger btn-lg btn-block"><i
-                                                className="fa fa-google-plus-official"></i> GOOGLE +</a>
-                                        </div>
-                                    </div>
-                                </div> */}
                             </div>
                         </div>
                     </div>

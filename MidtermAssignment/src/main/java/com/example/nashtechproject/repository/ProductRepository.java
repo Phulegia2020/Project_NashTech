@@ -1,6 +1,5 @@
 package com.example.nashtechproject.repository;
 
-import com.example.nashtechproject.dto.ProductDTO;
 import com.example.nashtechproject.entity.Product;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

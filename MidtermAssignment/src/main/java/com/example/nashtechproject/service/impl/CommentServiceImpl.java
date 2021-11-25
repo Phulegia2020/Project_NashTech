@@ -1,6 +1,5 @@
 package com.example.nashtechproject.service.impl;
 
-import com.example.nashtechproject.dto.CommentDTO;
 import com.example.nashtechproject.entity.Comment;
 import com.example.nashtechproject.page.ProductPage;
 import com.example.nashtechproject.repository.CommentRepository;
@@ -10,8 +9,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
 import java.util.List;
 
 @Service

@@ -1,7 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Kanit:wght@600&family=Play:wght@700&display=swap');
 .info-user-bill {
     position: relative;
-    /* top: 0;
-    right: 10px; */
     background: rgba(240, 242, 245, 1);
     padding: 15px;
     border-width: 1px;
@@ -11,5 +10,14 @@
     margin-top: 10px;
     width: 100%;
     text-align: center;
-    font-size: 15px;
+    font-size: 14px;
+}
+
+.title-bill-detail
+{
+    /* font-family: 'Play', sans-serif; */
+    /* font-family: 'Anton', sans-serif; */
+    font-family: 'Kanit', sans-serif;
+    text-align: center;
+    text-decoration: underline;
 }

@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import Add from "./Add"
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Pagination, PaginationItem, PaginationLink } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faPlus, faTrash, faUnlock, faUserLock, faArrowCircleDown, faArrowCircleUp } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faPlus, faUnlock, faUserLock, faArrowCircleDown, faArrowCircleUp } from '@fortawesome/free-solid-svg-icons';
 import { Breadcrumb, Input, Label } from 'semantic-ui-react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -27,7 +27,6 @@ export default class User extends Component {
             notice: "",
             currentPage: 7
         }
-
         this.onPage = this.onPage.bind(this);
     }
     
@@ -78,11 +77,9 @@ export default class User extends Component {
             .then((response) => {
                 if (response.status === 200)
                 {
-                    // this.setState({users: this.state.users.filter(u => u.id !== id)})
                     this.setState({isDisplayFormDel: false})
                 }
             })
-            // .catch(error => {alert('The user had bill. Can not delete!')})
             .catch(error => {toast.error('Khách hàng đã có hóa đơn tại cửa hàng!')})
         }
         else
@@ -127,12 +124,10 @@ export default class User extends Component {
     }
 
     createUser(newUser){
-        //console.log(newUser.role);
         post(`/auth/signup`, {name: newUser.fullname.trim(), gender: newUser.gender, address: newUser.address.trim(),
                         email: newUser.email.trim(), phone: newUser.phone.trim(), username: newUser.username,
                         password: newUser.password, role: newUser.role})
         .then((response) => {
-            // window.location.reload();
             this.setState({
                 users: [response.data, ...this.state.users],
                 isDisplayForm: false,
@@ -182,7 +177,6 @@ export default class User extends Component {
     }
 
     onAdd = (data) => {
-        //console.log(data);
         this.createUser(data);
     }
 
@@ -277,7 +271,6 @@ export default class User extends Component {
 
     handleSortInc = (e, key) => {
         e.preventDefault();
-        //this.state.categories.sort((e1, e2) => (e1.id > e2.id ? 1 : -1));
         if (key === 'id')
         {
             this.setState({
@@ -320,12 +313,10 @@ export default class User extends Component {
                 users: this.state.users.sort((e1, e2) => (e1.account > e2.account ? 1 : -1))
             })
         }
-        // console.log('sort');
     }
 
     handleSortDes = (e, key) => {
         e.preventDefault();
-        //this.state.categories.sort((e1, e2) => (e1.id > e2.id ? 1 : -1));
         if (key === 'id')
         {
             this.setState({
@@ -368,7 +359,6 @@ export default class User extends Component {
                 users: this.state.users.sort((e1, e2) => (e2.account > e1.account ? 1 : -1))
             })
         }
-        // console.log('sort');
     }
 
     componentWillUnmount() {
@@ -381,7 +371,7 @@ export default class User extends Component {
     render() {
         const sections = [
             { key: 'Quản Lý', content: 'Quản Lý', link: false },
-            { key: 'Người Dùng', content: 'Người Dùng', active: true }
+            { key: 'Người Dùng', content: 'Danh Sách Người Dùng', active: true }
           ]
         return (
             <div>
@@ -392,12 +382,10 @@ export default class User extends Component {
                     toggle={this.onToggleFormDel}
                     >
                     <ModalHeader>
-                        {/* Xóa Người Dùng */}
                         {this.state.title}
                     </ModalHeader>
                     <ModalBody>
                         <p>
-                        {/* Bạn có chắc chắn muốn xóa? */}
                         {this.state.notice}
                         </p>
                     </ModalBody>
@@ -434,7 +422,6 @@ export default class User extends Component {
                             <th><b>Vai Trò</b></th>
                             <th><b>Trạng Thái</b></th>
                             <th>Cập Nhập</th>
-                            {/* <th>Xóa</th> */}
                             <th>Kích Hoạt/Khóa</th>
                         </tr>
                     </thead>
@@ -444,7 +431,6 @@ export default class User extends Component {
                                 <tr key={u.id}>
                                     <td>{u.id}</td>
                                     <td>{u.name}</td>
-                                    {/* <td>{u.gender}</td> */}
                                     {u.gender === 'Male' && <td>Nam</td>}
                                     {u.gender === 'Female' && <td>Nữ</td>}
                                     <td style={{width: '400px'}}>{u.address}</td>
@@ -466,17 +452,13 @@ export default class User extends Component {
                                     {u.active_status === 'Active' &&
                                     <td>
                                         <button className="btn btn-danger" onClick={(e) => this.onToggleFormDel(e, u.id, 'lock')} disabled={localStorage.getItem('role') === 'STAFF'}>
-                                        {/* || u.active_status === 'Inactive' */}
-                                        {/* <FontAwesomeIcon icon={faTrash} className="mr-2"/>{' '} */}
-                                        <FontAwesomeIcon icon={faUserLock} className="mr-2"/>{' '}
+                                            <FontAwesomeIcon icon={faUserLock} className="mr-2"/>{' '}
                                         </button>
                                     </td>}
                                     {u.active_status === 'Inactive' &&
                                     <td>
                                         <button className="btn btn-primary" onClick={(e) => this.onToggleFormDel(e, u.id, 'unlock')} disabled={localStorage.getItem('role') === 'STAFF'}>
-                                        {/* || u.active_status === 'Inactive' */}
-                                        {/* <FontAwesomeIcon icon={faTrash} className="mr-2"/>{' '} */}
-                                        <FontAwesomeIcon icon={faUnlock} className="mr-2"/>{' '}
+                                            <FontAwesomeIcon icon={faUnlock} className="mr-2"/>{' '}
                                         </button>
                                     </td>}
                                 </tr>

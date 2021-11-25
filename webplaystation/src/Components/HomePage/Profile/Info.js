@@ -1,9 +1,5 @@
 import React, { Component } from 'react'
-import { Button, Form, Label } from 'semantic-ui-react';
-import {
-	Segment,
-	Grid,
-} from 'semantic-ui-react'
+import { Form, Label } from 'semantic-ui-react';
 import {put} from "./../../../Utils/httpHelper";
 import { withRouter } from "react-router";
 import {get} from '../../../Utils/httpHelper';
@@ -76,7 +72,7 @@ class SignUp extends Component {
                         key: 'username'
                     })
                     this.setState({
-                        Error: "This username is existed!"
+                        Error: "Tên tài khoản này đã được sử dụng!"
                     });
                     return;
                 }
@@ -86,7 +82,7 @@ class SignUp extends Component {
                         key: 'email'
                     })
                     this.setState({
-                        Error: "This email is used already!"
+                        Error: "Email này đã được sử dụng!"
                     });
                     return;
                 }
@@ -96,7 +92,7 @@ class SignUp extends Component {
                         key: 'phone'
                     })
                     this.setState({
-                        Error: "This phone number is existed!"
+                        Error: "Số điện thoại này đã được sử dụng!"
                     });
                     return;
                 }
@@ -109,7 +105,7 @@ class SignUp extends Component {
                 key: 'phone'
             })
             this.setState({
-                Error: "Phone must be numbers and start with 0!"
+                Error: "Số điện thoại phải có 10 chữ số và bắt đầu bẳng số 0!"
             });
             return;
         }
@@ -118,12 +114,11 @@ class SignUp extends Component {
         .then((response) => {
             if (response.status === 200)
             {
-                // alert('Update Profile Successfully!')
                 toast.success('Cập nhật thông tin thành công!')
                 setTimeout(() => window.location.href="/WebPlayStation/profile", 1500);
             }
         })
-        .catch(error => {alert('Update Profile Failed!')});
+        .catch(error => {alert('Cập nhật thất bại!')});
     }
 
     componentWillUnmount() {
@@ -136,67 +131,6 @@ class SignUp extends Component {
     render() {
         return (
             <div className="info-profile">
-                {/* <Segment style={{ padding: '5em 0em', marginLeft: '600px' }} vertical id="alter-user">
-                
-                    <Grid container stackable verticalAlign='middle'>
-                        <Grid.Row>
-                            <Grid.Column width={8}>
-                                <h2 className="title-profile">Infomation User</h2>
-                                <Form onSubmit={(event) => this.handleSubmit(event)}>
-                                    <Form.Field >
-                                        <label>Name</label>
-                                        <Form.Input placeholder='Full Name' name='name' value={this.state.name} onChange={this.handleChange} required/>
-                                    </Form.Field>
-                                    <Form.Group inline>
-                                        <label>Gender</label>
-                                        <Form.Radio
-                                            label='Male'
-                                            value="Male"
-                                            name='gender'
-                                            checked={this.state.gender == "Male"}
-                                            onChange={this.handleChange}
-                                        />
-                                        <Form.Radio
-                                            label='Female'
-                                            value="Female"
-                                            name='gender'
-                                            checked={this.state.gender == "Female"}
-                                            onChange={this.handleChange}
-                                        />
-                                    </Form.Group>
-                                    <Form.Field inline>
-                                        <label>Username</label>
-                                        <Form.Input placeholder='Username' name='username' value={this.state.username} onChange={this.handleChange} required disabled style={{backgroundColor: '#fff'}}/>
-                                        {this.state.key === 'username' ? <Label basic color='red' pointing='left'>{this.state.Error}</Label> : '' }
-                                    </Form.Field>
-                                    <Form.Field>
-                                        <label>Email</label>
-                                        <Form.Input type="email" placeholder='abc@gmail.com' name='email' value={this.state.email} onChange={this.handleChange} required/>
-                                        {this.state.key === 'email' ? <Label basic color='red' pointing='left'>{this.state.Error}</Label> : '' }
-                                    </Form.Field>
-                                    <Form.Field >
-                                        <label>Address</label>
-                                        <Form.Input placeholder='123 Main st, Ward, District, Ho Chi Minh City' name='address' value={this.state.address} onChange={this.handleChange} required/>
-                                    </Form.Field>
-                                    <Form.Field inline>
-                                        <label>Phone</label>
-                                        <Form.Input placeholder='0123456789' type="text" name='phone' maxLength={10} minLength={10} value={this.state.phone} onChange={this.handleChange} required/>
-                                        {this.state.key === 'phone' ? <Label basic color='red' pointing='left'>{this.state.Error}</Label> : '' }
-                                    </Form.Field>
-                                    <Button type='submit' disabled={this.state.btndis} color="green">Update</Button>
-                                </Form>
-                            </Grid.Column>
-                        </Grid.Row>
-                    </Grid>
-                </Segment> */}
-
-                {/* <df-messenger
-                    intent="WELCOME"
-                    chat-title="THE PLAYSTATION SHOP"
-                    agent-id="3d2eb8db-0f5e-4a16-9c2a-3cea0cadb3a7"
-                    language-code="en"
-                ></df-messenger> */}
-
                 <div className="site-section mt-3 mb-4">
                         <div className="container">
                             <div className="row">
@@ -207,19 +141,12 @@ class SignUp extends Component {
                                     </div>
                                     <Form onSubmit={(event) => this.handleSubmit(event)}>
                                         <div className="p-3 p-lg-6 border" id="account-form">
-                                            {/* <div class="form-group row">
-                                                <div class="col-md-12">
-                                                    <p class="text-danger">${message}</p>
-                                                </div>
-                                            </div> */}
                                             <div className="form-group row">
                                                 <div className="col-md-2">
                                                     <label className="text-black">Họ tên</label>
                                                 </div>
                                                 <div className="col-md-10">
                                                     <Form.Input placeholder='Họ tên' name='name' value={this.state.name} onChange={this.handleChange} required/>
-                                                    {/* <input value="${sessionScope.usersession.displayName}"
-                                                        type="text" class="form-control" readonly /> */}
                                                 </div>
                                             </div>
                                             <div className="form-group row mt-5">
@@ -261,8 +188,6 @@ class SignUp extends Component {
                                                 <div className="col-md-10">
                                                     <Form.Input type="email" placeholder='Email' name='email' value={this.state.email} onChange={this.handleChange} required/>
                                                     {this.state.key === 'email' ? <Label basic color='red' pointing='left'>{this.state.Error}</Label> : '' }
-                                                    {/* <input value="${sessionScope.usersession.email}" type="email"
-                                                        class="form-control" readonly /> */}
                                                 </div>
                                             </div>
                                             <div className="form-group row mt-5">
@@ -280,45 +205,8 @@ class SignUp extends Component {
                                                 <div className="col-md-10">
                                                     <Form.Input placeholder='Số điện thoại' type="text" name='phone' maxLength={10} minLength={10} value={this.state.phone} onChange={this.handleChange} required/>
                                                     {this.state.key === 'phone' ? <Label basic color='red' pointing='left'>{this.state.Error}</Label> : '' }
-                                                    {/* <input value="${sessionScope.usersession.phone}" type="number"
-                                                        class="form-control" readonly /> */}
                                                 </div>
                                             </div>
-                                            {/* <div class="form-group row">
-                                                <div class="col-md-6 justify-content-center">
-                                                    <label class="h4 mb-3 text-black">Thay đổi mật khẩu</label>
-                                                </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <div class="col-md-4">
-                                                    <label class="text-black">Mật khẩu cũ</label>
-                                                </div>
-                                                <div class="col-md-8">
-                                                    <input path="password" type="password"
-                                                        class="form-control" />
-                                                    <errors path="password" />
-                                                </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <div class="col-md-4">
-                                                    <label class="text-black">Mật khẩu mới</label>
-                                                </div>
-                                                <div class="col-md-8">
-                                                    <input path="newPassword" type="password"
-                                                        class="form-control"/>
-                                                    <errors path="newPassword" />
-                                                </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <div class="col-md-4">
-                                                    <label class="text-black">Nhập lại mật khẩu mới</label>
-                                                </div>
-                                                <div class="col-md-8">
-                                                    <input path="confirmNewPassword" type="password"
-                                                        class="form-control"/>
-                                                    <errors path="confirmNewPassword" />
-                                                </div>
-                                            </div> */}
                                             <br/>
                                             <div className="form-group row">
                                                 <div className="col-lg-5"></div>

@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom';
-import { Col, Row, Button, Form, FormGroup, Label, Input } from 'reactstrap';
+import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
 import { get, put } from '../../Utils/httpHelper';
 import "../Category/Category.css"
 
@@ -96,9 +96,7 @@ class UpdateImport extends Component {
         return (
             <div className="update-form">
                 <h3>Cập Nhật Phiếu Nhập</h3>
-                {/* <Row form>
-                    <Col md={4}> */}
-                        <Form onSubmit={(event) => this.handleUpdate(event)}>
+                    <Form onSubmit={(event) => this.handleUpdate(event)}>
                         <FormGroup>
                             <Label htmlFor="total">Tổng Tiền</Label>
                             <Input type="number" name="total" id="total" placeholder="VND" onChange={(e) => this.changeValue(e)} value = {this.state.total} disabled/>
@@ -128,9 +126,7 @@ class UpdateImport extends Component {
                             <Button type="submit" outline color="warning" >Cập Nhật</Button>{' '}
                             <Button outline color="danger" onClick={this.handleClear.bind(this)}>Hủy</Button>
                         </div>
-                        </Form>
-                    {/* </Col>
-                </Row> */}
+                    </Form>
             </div>
         )
     }
