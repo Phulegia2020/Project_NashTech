@@ -48,7 +48,7 @@ export default class Add extends Component {
                 key: 'quantity'
             })
             this.setState({
-                Error: "Quantity is not less than 1!"
+                Error: "Số lượng không nhỏ hơn 1!"
             });
             return;
         }
@@ -58,7 +58,7 @@ export default class Add extends Component {
                 key: 'price'
             })
             this.setState({
-                Error: "Price is not less than 1!"
+                Error: "Giá không nhỏ hơn 1!"
             });
             return;
         }
@@ -70,7 +70,7 @@ export default class Add extends Component {
                     key: 'product'
                 })
                 this.setState({
-                    Error: "This product is existed in this Import!"
+                    Error: "Máy này đã có trong phiếu nhập!"
                 });
                 return;
             }

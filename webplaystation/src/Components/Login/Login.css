@@ -28,13 +28,13 @@
 .forget-form
 {
     position: absolute;
-    top: 30%;
-    left: 35%;
+    top: 27%;
+    left: 30%;
     text-align: center;
     align-content: center;
     justify-content: center;
     border: 2px solid #bdc3c7;
-    width: fit-content;
+    width: 40%;
     height: 230px;
     padding: 15px;
     background: rgba(240, 242, 245, 1);
@@ -52,7 +52,6 @@
 .btn-otp
 {
     background: #00ccff;
-    /* transition: 1s; */
     font-size: medium;
     color: white;
     border-color: #00ccff;
@@ -79,4 +78,10 @@
 .otp-form input::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
+}
+
+.otp-form h2, .forget-form h2
+{
+    font-weight: bold;
+    font-family: 'Merriweather', serif;
 }

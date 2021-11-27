@@ -37,7 +37,6 @@ class ForgetPassword extends Component {
                 Error: "Email không hợp lệ."
             });
         });
-        
     }
 
     render() {

@@ -74,7 +74,7 @@ class SignUp extends Component {
                     key: 'phone'
                 })
                 this.setState({
-                    Error: "Số điện thoại này đẫ được sử dụng!"
+                    Error: "Số điện thoại này đã được sử dụng!"
                 });
                 return;
             }

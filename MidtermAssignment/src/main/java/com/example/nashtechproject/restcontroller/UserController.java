@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.*;
 
-@CrossOrigin(origins = "*", maxAge = 3600)
+@CrossOrigin(origins = "http://localhost:3000", maxAge = 3600)
 @RestController
 @RequestMapping("api/users")
 @Api(tags = "Users Rest Controller")
@@ -103,7 +103,7 @@ public class UserController {
         User us = userService.getUserEmail(email.trim());
         if (us == null)
         {
-            throw new ObjectNotFoundException("The email does not exist!");
+            throw new ObjectNotFoundException("The email is not correct!");
         }
         return convertToDTO(us);
     }

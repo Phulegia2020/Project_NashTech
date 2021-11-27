@@ -112,7 +112,7 @@ public class UserServiceImpl implements UserService {
 
     public User getUserEmail(String email)
     {
-        User user = userRepository.findByEmail(email);
+        User user = userRepository.findByEmailAndActivestatus(email, STATE.ACTIVE);
         return user;
     }
 

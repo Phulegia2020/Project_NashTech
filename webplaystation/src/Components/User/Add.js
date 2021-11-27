@@ -228,7 +228,7 @@ export default class Add extends Component {
                             <option value="USER">USER</option>
                         </Input>
                     </FormGroup>
-                    <div className="mb-5">
+                    <div className="mb-1">
                         <Button type="submit" outline color="warning" >Thêm</Button>{' '}
                         <Button outline color="danger" onClick={this.handleClear.bind(this)}>Hủy</Button>
                     </div>

@@ -59,9 +59,11 @@ class ChangePassword extends Component {
 			return;
 		}
 		var id;
+		var lastest;
 		if (localStorage.getItem('user_id') !== null)
 		{
 			id = localStorage.getItem('user_id');
+			lastest= 'Thay đổi mật khẩu thành công!';
 		}
 		else
 		{
@@ -72,6 +74,7 @@ class ChangePassword extends Component {
 					if (response.status === 200)
 					{
 						id = response.data.id;
+						lastest = 'Xác nhận mật khẩu mới thành công!'
 					}
 				})
 				.catch((error) => console.log(error));
@@ -83,7 +86,7 @@ class ChangePassword extends Component {
         .then((response) => {
             if (response.status === 200)
             {
-				toast.success('Thay đổi mật khẩu thành công!')
+				toast.success(lastest);
 				this.setState({
 					newpassword: "",
 					confirmpassword: "",

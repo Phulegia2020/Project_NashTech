@@ -101,14 +101,14 @@ class App extends React.Component{
                   <Route exact path="/WebPlayStation/forgetPassword">
                       <MainMenu numberCart={this.state.numberCart} handleNumberCart={this.handleNumberCart}/>
                       <ForgetPassword/>
-                      <div className="fixed-bottom">
+                      <div style={{ marginTop: '31.5%' }}>
                         <Footer/>
                       </div>
                   </Route>
                   <Route exact path="/WebPlayStation/confirm">
                       <MainMenu numberCart={this.state.numberCart} handleNumberCart={this.handleNumberCart}/>
                       <OTP/>
-                      <div className="fixed-bottom">
+                      <div style={{ marginTop: '31.5%' }}>
                         <Footer/>
                       </div>
                   </Route>

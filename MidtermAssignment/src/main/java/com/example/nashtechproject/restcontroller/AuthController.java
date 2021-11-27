@@ -20,7 +20,7 @@ import com.example.nashtechproject.repository.RoleRepository;
 import com.example.nashtechproject.repository.UserRepository;
 import com.example.nashtechproject.security.jwt.JwtUtils;
 
-@CrossOrigin(origins = "*", maxAge = 3600)
+@CrossOrigin(origins = "http://localhost:3000", maxAge = 3600)
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
