@@ -396,9 +396,6 @@ class Products extends Component {
                         </div>
                     </div>
                 </div>
-                {/* <div >
-                    <Footer/>
-                </div> */}
                 <ToastContainer position="top-right"
                         autoClose={1500}
                         hideProgressBar

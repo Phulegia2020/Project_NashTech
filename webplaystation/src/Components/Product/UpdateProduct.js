@@ -309,12 +309,12 @@ class UpdateProduct extends Component {
                 <Form onSubmit={(event) => this.handleUpdate(event)}>
                     <FormGroup>
                         <Label htmlFor="name">Tên Máy</Label>
-                        <Input type="text" name="name" id="name" placeholder="PlayStation 4" onChange={(e) => this.changeValue(e)} value = {this.state.name} required="required" disabled={this.state.status === 'Stop'}/>
+                        <Input type="text" name="name" id="name" placeholder="PlayStation" onChange={(e) => this.changeValue(e)} value = {this.state.name} required="required" disabled={this.state.status === 'Stop'}/>
                         {this.state.key === 'name' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
                     </FormGroup>
                     <FormGroup>
                         <Label htmlFor="description">Thông Tin</Label><br></br>
-                        <textarea style={{resize: 'none', width: '100%'}} rows="3" name="description" id="description" placeholder="PlayStation 4 Pro" onChange={(e) => this.changeValue(e)} value = {this.state.description} required="required" disabled={this.state.status === 'Stop'}></textarea>
+                        <textarea style={{resize: 'none', width: '100%'}} rows="3" name="description" id="description" placeholder="PlayStation" onChange={(e) => this.changeValue(e)} value = {this.state.description} required="required" disabled={this.state.status === 'Stop'}></textarea>
                     </FormGroup>
                     <FormGroup>
                         <Label htmlFor="quantity">Số Lượng</Label>

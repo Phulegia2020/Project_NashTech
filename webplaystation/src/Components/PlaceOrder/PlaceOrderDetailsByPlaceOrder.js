@@ -190,7 +190,7 @@ class PlaceOrderDetailsByPlaceOrder extends Component {
                                 <tr key={index}>
                                     <td>{this.state.pageNumber*this.state.currentPage + index + 1}</td>
                                     <td>
-                                        <img src={po.productImg || "http://via.placeholder.com/300"} alt="" height="100px"></img>
+                                        <img src={po.productImg || "http://via.placeholder.com/300"} alt="" height="75px"></img>
                                     </td>
                                     <td>{po.productName}</td>
                                     <td>{formatQuantity(po.quantity)}</td>

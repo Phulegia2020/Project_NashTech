@@ -195,7 +195,6 @@ export default class AnalyticsDashboard1 extends Component {
     }
 
     render() {
-
         return (
             <Fragment>
                 <div>
@@ -407,8 +406,7 @@ export default class AnalyticsDashboard1 extends Component {
                                         <i className="lnr-heart icon-gradient bg-premium-dark"> </i>
                                     </div>
                                     <div className="widget-numbers">
-                                        {/* 4517.82 */}
-                                        50 Đơn Hàng/ Tháng
+                                        10 Đơn Hàng/ Tháng
                                     </div>
                                     <div className="widget-subheading">
                                         Hoạt Động Thương Mại
@@ -470,7 +468,6 @@ export default class AnalyticsDashboard1 extends Component {
                                                 <i className="lnr-laptop-phone text-danger"/>
                                             </div>
                                             <div className="widget-numbers">
-                                                {/* 5.82k */}
                                                 1 Triệu/ Máy
                                             </div>
                                             <div className="widget-subheading">

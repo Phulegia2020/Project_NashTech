@@ -42,16 +42,10 @@ public class DialogflowController {
                 .parse(GoogleCloudDialogflowV2WebhookRequest.class);
 
         String displayName = request.getQueryResult().getIntent().getDisplayName();
-//        List<GoogleCloudDialogflowV2IntentMessage> messages = new ArrayList<>();
         GoogleCloudDialogflowV2IntentMessage msg = new GoogleCloudDialogflowV2IntentMessage();
         GoogleCloudDialogflowV2IntentMessageText text = new GoogleCloudDialogflowV2IntentMessageText();
-//        GoogleCloudDialogflowV2IntentMessageImage img = new GoogleCloudDialogflowV2IntentMessageImage();
-//        List<ProductDTO> products = new ArrayList<>();
         ProductDTO products;
         List<String> chat = new ArrayList<>();
-//        String chat = "";
-//        Map<String, Object> map = new HashMap<>();
-//        ObjectMapper oMapper = new ObjectMapper();
 
         switch (displayName)
         {
@@ -94,7 +88,6 @@ public class DialogflowController {
                         chat.add("Hiện tại cửa hàng chưa kinh doanh máy này. Bạn có thể tham khảo về máy Playstation 4 và Playstation 5 tại shop !");
                     } else {
                         chat.add("Máy " + products.getName() + " có giá " + String.format("%,d", products.getPrice()) + " VNĐ \uD83D\uDCB8. Nếu bạn là một người đam mê playstation thì máy " + products.getName() + " là bộ máy hợp lý trong thời điểm hiện tại và cung cấp trải nghiệm chơi game hiệu quả cho nhiều người dùng");
-//                        img.setImageUri(products.getUrl_image());
                     }
                 }
                 break;
@@ -103,16 +96,8 @@ public class DialogflowController {
 
         text.setText(chat);
         msg.setText(text);
-//        msg.setImage(img);
-
-//        map = oMapper.convertValue(chat, Map.class);
-//        map.put(msg.getImage().getImageUri(), chat.get(0));
-//        messages.add(new GoogleCloudDialogflowV2IntentMessage().setPayload(map));
-
         GoogleCloudDialogflowV2WebhookResponse response = new GoogleCloudDialogflowV2WebhookResponse();
-//        response.setFulfillmentMessages(messages);
         response.setFulfillmentMessages(asList(msg));
-//        response.setPayload(map);
 
         StringWriter stringWriter = new StringWriter();
         JsonGenerator jsonGenerator = jacksonFactory.createJsonGenerator(stringWriter);

@@ -292,7 +292,7 @@ export default class PlaceOrder extends Component {
                 </button>
                 <Input
                     style={{marginLeft: '100rem'}}
-                    placeholder="Mã Phiếu Nhập..."
+                    placeholder="Mã Phiếu Đặt..."
                     value={this.state.search}
                     onChange={(e) => this.handleSearch(e)}
                     icon="search"

@@ -343,7 +343,7 @@ class Product extends Component {
                             <th><b>Mã ID</b>{' '}<FontAwesomeIcon icon={faArrowCircleUp} className="sort-icon" onClick={(e) => this.handleSortInc(e, 'id')}/><FontAwesomeIcon icon={faArrowCircleDown} className="sort-icon" onClick={(e) => this.handleSortDes(e, 'id')}/></th>
                             <th><b>Hình Ảnh</b></th>
                             <th><b>Tên</b>{' '}<FontAwesomeIcon icon={faArrowCircleUp} className="sort-icon" onClick={(e) => this.handleSortInc(e, 'name')}/><FontAwesomeIcon icon={faArrowCircleDown} className="sort-icon" onClick={(e) => this.handleSortDes(e, 'name')}/></th>
-                            <th><b>Thông Tin</b></th>
+                            {/* <th><b>Thông Tin</b></th> */}
                             <th><b>Số Lượng</b>{' '}<FontAwesomeIcon icon={faArrowCircleUp} className="sort-icon" onClick={(e) => this.handleSortInc(e, 'quantity')}/><FontAwesomeIcon icon={faArrowCircleDown} className="sort-icon" onClick={(e) => this.handleSortDes(e, 'quantity')}/></th>
                             <th><b>Đơn Giá</b>{' '}<FontAwesomeIcon icon={faArrowCircleUp} className="sort-icon" onClick={(e) => this.handleSortInc(e, 'price')}/><FontAwesomeIcon icon={faArrowCircleDown} className="sort-icon" onClick={(e) => this.handleSortDes(e, 'price')}/></th>
                             <th>Cập Nhập</th>
@@ -359,19 +359,19 @@ class Product extends Component {
                                         <img src={p.url_image || "http://via.placeholder.com/300"} alt="" height="100px"/>
                                     </td>
                                     <td>{p.name}</td>
-                                    <td className="descriptionTable">{p.description}</td>
+                                    {/* <td className="descriptionTable">{p.description}</td> */}
                                     <td>{formatQuantity(p.quantity)}</td>
                                     <td>{formatCurrency(p.price)}</td>
                                     <td>
                                         <Link to={`/admin/product/update/${p.id}`}>
                                             <button className="btn btn-success">
-                                            <FontAwesomeIcon icon={faEdit} className="mr-2"/>{' '}
-                                                
+                                                <FontAwesomeIcon icon={faEdit} className="mr-2"/>{' '}
                                             </button>
                                         </Link>
                                     </td>
-                                    <td><button onClick={(e) => this.onToggleFormDel(e, p.id)} className="btn btn-danger" disabled={p.status === 'Stop'}>
-                                        <FontAwesomeIcon icon={faTrash} className="mr-2"/>{' '}
+                                    <td>
+                                        <button onClick={(e) => this.onToggleFormDel(e, p.id)} className="btn btn-danger" disabled={p.status === 'Stop'}>
+                                            <FontAwesomeIcon icon={faTrash} className="mr-2"/>{' '}
                                         </button>
                                     </td>
                                 </tr>

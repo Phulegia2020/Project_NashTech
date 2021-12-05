@@ -188,7 +188,7 @@ class ImportDetailsByImport extends Component {
                                 <tr key={index}>
                                     <td>{this.state.pageNumber*this.state.currentPage + index + 1}</td>
                                     <td>
-                                        <img src={imp.productImg || "http://via.placeholder.com/300"} alt="" height="100px"></img>
+                                        <img src={imp.productImg || "http://via.placeholder.com/300"} alt="" height="75px"></img>
                                     </td>
                                     <td>{imp.productName}</td>
                                     <td>{formatQuantity(imp.quantity)}</td>
