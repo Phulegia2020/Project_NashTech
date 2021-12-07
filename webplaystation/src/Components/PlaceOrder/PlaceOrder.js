@@ -24,6 +24,19 @@ export default class PlaceOrder extends Component {
     }
 
     componentDidMount(){
+        this.listPlaceOrder();
+
+        get(`/placeorders/statusPage?pageNumber=0&pageSize=${this.state.currentPage}&sortBy=id`)
+        .then((response) => {
+            this.setState({
+                placeorders: response.data,
+            });
+        })
+        .catch(error => console.log(error));
+    }
+
+    listPlaceOrder()
+    {
         get("/placeorders/status")
         .then((response) => {
             if (response.status === 200)
@@ -34,14 +47,6 @@ export default class PlaceOrder extends Component {
             }
         })
         .catch(error => {console.log(error)})
-
-        get(`/placeorders/statusPage?pageNumber=0&pageSize=${this.state.currentPage}&sortBy=id`)
-        .then((response) => {
-            this.setState({
-                placeorders: response.data,
-            });
-        })
-        .catch(error => console.log(error));
     }
 
     find(id){
@@ -57,7 +62,7 @@ export default class PlaceOrder extends Component {
     {
         del(`/placeorders/${id}`)
         .then((response) => {
-            this.setState({placeorders: this.state.placeorders.filter(b => b.id !== id), isDisplayFormDel: false})
+            this.setState({placeorders: this.state.placeorders.filter(b => b.id !== id), isDisplayFormDel: false}, () => this.listPlaceOrder())
         })
         .catch((error) => {toast.error('Phiếu đặt này đã được lập chi tiết!')});
     }
@@ -70,6 +75,9 @@ export default class PlaceOrder extends Component {
                 this.setState({
                     placeorders: [response.data, ...this.state.placeorders],
                     isDisplayForm: false,
+                }, () => {
+                    this.setState({placeorders: this.state.placeorders.slice(0, this.state.currentPage)});
+                    this.listPlaceOrder();
                 });
             }
         });
@@ -209,16 +217,7 @@ export default class PlaceOrder extends Component {
         })
         if (this.state.search === '')
         {
-            get("/placeorders/status")
-            .then((response) => {
-                if (response.status === 200)
-                {
-                    this.setState({
-                        pageToTal: Math.ceil(response.data / this.state.currentPage)
-                    })
-                }
-            })
-            .catch(error => {console.log(error)})
+            this.listPlaceOrder();
 
             get(`/placeorders/statusPage?pageNumber=0&pageSize=${this.state.currentPage}&sortBy=id`)
             .then((response) => {
@@ -291,7 +290,7 @@ export default class PlaceOrder extends Component {
                     Tạo Phiết Đặt
                 </button>
                 <Input
-                    style={{marginLeft: '100rem'}}
+                    style={{marginLeft: '87%'}}
                     placeholder="Mã Phiếu Đặt..."
                     value={this.state.search}
                     onChange={(e) => this.handleSearch(e)}

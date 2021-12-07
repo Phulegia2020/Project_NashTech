@@ -24,15 +24,7 @@ class BillDetailsByBill extends Component {
     }
 
     componentDidMount(){
-        get(`/billDetails/bill/${this.state.id}`)
-        .then((response) => {
-            if (response.status === 200)
-            {
-                this.setState({
-                    pageToTal: Math.ceil(response.data.length / this.state.currentPage)
-                })
-            }
-        })
+        this.listBillDetail();
 
         get(`/billDetails/billPage/${this.state.id}?pageNumber=0&pageSize=${this.state.currentPage}&sortBy=id`)
         .then((response) => {
@@ -61,6 +53,19 @@ class BillDetailsByBill extends Component {
         });
     }
 
+    listBillDetail()
+    {
+        get(`/billDetails/bill/${this.state.id}`)
+        .then((response) => {
+            if (response.status === 200)
+            {
+                this.setState({
+                    pageToTal: Math.ceil(response.data.length / this.state.currentPage)
+                })
+            }
+        })
+    }
+
     delBillDetail = (e, id) =>
     {
         e.preventDefault();
@@ -69,7 +74,7 @@ class BillDetailsByBill extends Component {
             if (response.status === 200)
             {
                 this.setState({billdetails: this.state.billdetails.filter(b => `${b.key.bill.id}-${b.key.product.id}` !== `${id.bill.id}-${id.product.id}`),
-                               isDisplayFormDel: false})
+                               isDisplayFormDel: false}, () => this.listBillDetail())
             }
         })
         .catch(error => {console.log(error)})
@@ -83,6 +88,9 @@ class BillDetailsByBill extends Component {
                 this.setState({
                     billdetails: [...this.state.billdetails, response.data],
                     isDisplayForm: false,
+                }, () => {
+                    this.setState({billdetails: this.state.billdetails.slice(0, this.state.currentPage)});
+                    this.listBillDetail();
                 })
             }
         })

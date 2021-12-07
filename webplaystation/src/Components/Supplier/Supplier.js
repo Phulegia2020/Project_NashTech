@@ -24,6 +24,19 @@ export default class Supplier extends Component {
     }
 
     componentDidMount(){
+        this.listSupplier();
+
+        get(`/suppliers/page?pageNumber=0&pageSize=${this.state.currentPage}&sortBy=id`)
+        .then((response) => {
+            this.setState({
+                suppliers: response.data
+            });
+        })
+        .catch(error => console.log(error));
+    }
+
+    listSupplier()
+    {
         get("/suppliers")
         .then((response) => {
             if (response.status === 200)
@@ -34,14 +47,6 @@ export default class Supplier extends Component {
             }
         })
         .catch(error => {console.log(error)})
-
-        get(`/suppliers/page?pageNumber=0&pageSize=${this.state.currentPage}&sortBy=id`)
-        .then((response) => {
-            this.setState({
-                suppliers: response.data
-            });
-        })
-        .catch(error => console.log(error));
     }
 
     find(id){
@@ -60,7 +65,7 @@ export default class Supplier extends Component {
         .then((response) => {
             if (response.status === 200)
             {
-                this.setState({suppliers: this.state.suppliers.filter(sup => sup.id !== id), isDisplayFormDel: false})
+                this.setState({suppliers: this.state.suppliers.filter(sup => sup.id !== id), isDisplayFormDel: false}, () => this.listSupplier())
             }
             else{
                 this.setState({
@@ -77,6 +82,9 @@ export default class Supplier extends Component {
             this.setState({
                 suppliers: [response.data, ...this.state.suppliers ],
                 isDisplayForm: false,
+            }, () => {
+                this.setState({suppliers: this.state.suppliers.slice(0, this.state.currentPage)});
+                this.listSupplier();
             });
         });
     }
@@ -159,16 +167,7 @@ export default class Supplier extends Component {
         })
         if (this.state.search === '')
         {
-            get("/suppliers")
-            .then((response) => {
-                if (response.status === 200)
-                {
-                    this.setState({
-                        pageToTal: Math.ceil(response.data.length / this.state.currentPage)
-                    })
-                }
-            })
-            .catch(error => {console.log(error)})
+            this.listSupplier();
 
             get(`/suppliers/page?pageNumber=0&pageSize=${this.state.currentPage}&sortBy=id`)
             .then((response) => {
@@ -297,7 +296,7 @@ export default class Supplier extends Component {
                     Thêm Nhà Cung Cấp
                 </button>
                 <Input
-                    style={{marginLeft: '100rem'}}
+                    style={{marginLeft: '87%'}}
                     placeholder="Tên nhà cung cấp..."
                     value={this.state.search}
                     onChange={(e) => this.handleSearch(e)}

@@ -26,6 +26,19 @@ export default class Import extends Component {
     }
 
     componentDidMount(){
+        this.listImport();
+
+        get(`/imports/statusPage?pageNumber=0&pageSize=${this.state.currentPage}&sortBy=id`)
+        .then((response) => {
+            this.setState({
+                imports: response.data,
+            });
+        })
+        .catch(error => console.log(error));
+    }
+
+    listImport()
+    {
         get("/imports/status")
         .then((response) => {
             if (response.status === 200)
@@ -36,14 +49,6 @@ export default class Import extends Component {
             }
         })
         .catch(error => {console.log(error)})
-
-        get(`/imports/statusPage?pageNumber=0&pageSize=${this.state.currentPage}&sortBy=id`)
-        .then((response) => {
-            this.setState({
-                imports: response.data,
-            });
-        })
-        .catch(error => console.log(error));
     }
 
     find(id){
@@ -61,7 +66,7 @@ export default class Import extends Component {
         del(`/imports/${id}`)
         .then((response) => {
             this.setState({imports: this.state.imports.filter(b => b.id !== id),
-                           isDisplayFormDel: false})
+                           isDisplayFormDel: false}, () => this.listImport())
         })
         .catch(error => {toast.error('Phiếu nhập đã được lập chi tiết!')})
     }
@@ -86,6 +91,9 @@ export default class Import extends Component {
             this.setState({
                 imports: [response.data, ...this.state.imports],
                 isDisplayForm: false,
+            }, () => {
+                this.setState({imports: this.state.imports.slice(0, this.state.currentPage)});
+                this.listImport();
             });
         })
         .catch((error) => {});
@@ -253,16 +261,7 @@ export default class Import extends Component {
         })
         if (this.state.search === '')
         {
-            get("/imports/status")
-            .then((response) => {
-                if (response.status === 200)
-                {
-                    this.setState({
-                        pageToTal: Math.ceil(response.data / this.state.currentPage)
-                    })
-                }
-            })
-            .catch(error => {console.log(error)})
+            this.listImport();
 
             get(`/imports/statusPage?pageNumber=0&pageSize=${this.state.currentPage}&sortBy=id`)
             .then((response) => {
@@ -335,7 +334,7 @@ export default class Import extends Component {
                     Tạo Phiếu Nhập
                 </button>
                 <Input
-                    style={{marginLeft: '100rem'}}
+                    style={{marginLeft: '87%'}}
                     placeholder="Mã Phiếu Nhập..."
                     value={this.state.search}
                     onChange={(e) => this.handleSearch(e)}

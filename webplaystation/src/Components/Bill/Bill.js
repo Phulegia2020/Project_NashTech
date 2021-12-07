@@ -30,6 +30,19 @@ class Bill extends Component {
     }
 
     componentDidMount(){
+        this.listBill();
+
+        get(`/bills/statusPage?pageNumber=0&pageSize=${this.state.currentPage}&sortBy=id`)
+        .then((response) => {
+            this.setState({
+                bills: response.data,
+            });
+        })
+        .catch(error => console.log(error));
+    }
+
+    listBill()
+    {
         get("/bills/status")
         .then((response) => {
             if (response.status === 200)
@@ -40,14 +53,6 @@ class Bill extends Component {
             }
         })
         .catch(error => {console.log(error)})
-
-        get(`/bills/statusPage?pageNumber=0&pageSize=${this.state.currentPage}&sortBy=id`)
-        .then((response) => {
-            this.setState({
-                bills: response.data,
-            });
-        })
-        .catch(error => console.log(error));
     }
 
     find(id){
@@ -67,7 +72,7 @@ class Bill extends Component {
             if (response.status === 200)
             {
                 this.setState({bills: this.state.bills.filter(b => b.id !== id),
-                               isDisplayFormDel: false})
+                               isDisplayFormDel: false}, () => this.listBill())
             }
         })
         .catch(error => {toast.error('Hóa đơn đã được lập chi tiết!')})
@@ -79,6 +84,9 @@ class Bill extends Component {
             this.setState({
                 bills: [response.data, ...this.state.bills],
                 isDisplayForm: false,
+            }, () => {
+                this.setState({bills: this.state.bills.slice(0, this.state.currentPage)});
+                this.listBill();
             });
         })
         .catch(error => console.log(error));
@@ -220,16 +228,7 @@ class Bill extends Component {
         })
         if (this.state.search === '')
         {
-            get("/bills/status")
-            .then((response) => {
-                if (response.status === 200)
-                {
-                    this.setState({
-                        pageToTal: Math.ceil(response.data.length / this.state.currentPage)
-                    })
-                }
-            })
-            .catch(error => {console.log(error)})
+            this.listBill();
 
             get(`/bills/statusPage?pageNumber=0&pageSize=${this.state.currentPage}&sortBy=id`)
             .then((response) => {
@@ -358,7 +357,7 @@ class Bill extends Component {
                     Tạo Hóa Đơn
                 </button> */}
                 <Input
-                    style={{marginLeft: '100rem'}}
+                    style={{marginLeft: '87%'}}
                     placeholder="Tên khách hàng..."
                     value={this.state.search}
                     onChange={(e) => this.handleSearch(e)}

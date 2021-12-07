@@ -24,6 +24,19 @@ export default class Category extends Component {
     }
 
     componentDidMount(){
+        this.listCategory();
+
+        get(`/categories/page?pageNumber=0&pageSize=${this.state.currentPage}&sortBy=id`)
+        .then((response) => {
+            this.setState({
+                categories: response.data
+            });
+        })
+        .catch(error => console.log(error));
+    }
+
+    listCategory()
+    {
         get("/categories")
         .then((response) => {
             if (response.status === 200)
@@ -34,14 +47,6 @@ export default class Category extends Component {
             }
         })
         .catch(error => {console.log(error)})
-
-        get(`/categories/page?pageNumber=0&pageSize=${this.state.currentPage}&sortBy=id`)
-        .then((response) => {
-            this.setState({
-                categories: response.data
-            });
-        })
-        .catch(error => console.log(error));
     }
 
     find(id){
@@ -60,7 +65,7 @@ export default class Category extends Component {
         .then((response) => {
             if (response.status === 200)
             {
-                this.setState({categories: this.state.categories.filter(cate => cate.id !== id), isDisplayFormDel: false})
+                this.setState({categories: this.state.categories.filter(cate => cate.id !== id), isDisplayFormDel: false}, () => this.listCategory())
             }
             else{
                 this.setState({
@@ -77,6 +82,9 @@ export default class Category extends Component {
             this.setState({
                 categories: [response.data, ...this.state.categories],
                 isDisplayForm: false,
+            }, () => {
+                this.setState({categories: this.state.categories.slice(0, this.state.currentPage)});
+                this.listCategory();
             });
         })
         .catch(error => toast.error('Loại máy này đã tồn tại!'))
@@ -161,16 +169,7 @@ export default class Category extends Component {
         })
         if (this.state.search === '')
         {
-            get("/categories")
-            .then((response) => {
-                if (response.status === 200)
-                {
-                    this.setState({
-                        pageToTal: Math.ceil(response.data.length / this.state.currentPage)
-                    })
-                }
-            })
-            .catch(error => {console.log(error)})
+            this.listCategory();
 
             get(`/categories/page?pageNumber=0&pageSize=${this.state.currentPage}&sortBy=id`)
             .then((response) => {
@@ -275,7 +274,7 @@ export default class Category extends Component {
                     Thêm Loại Mới
                 </button>
                 <Input
-                    style={{marginLeft: '100rem'}}
+                    style={{marginLeft: '87%'}}
                     placeholder="Tên loại..."
                     value={this.state.search}
                     onChange={(e) => this.handleSearch(e)}

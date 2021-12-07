@@ -26,6 +26,19 @@ class Product extends Component {
     }
 
     componentDidMount(){
+        this.listProduct();
+
+        get(`/products/pageOnSale?pageNumber=0&pageSize=${this.state.currentPage}&sortBy=id`)
+        .then((response) => {
+            this.setState({
+                products: response.data,
+            });
+        })
+        .catch(error => console.log(error));
+    }
+
+    listProduct()
+    {
         get("/products/onSale")
         .then((response) => {
             if (response.status === 200)
@@ -36,14 +49,6 @@ class Product extends Component {
             }
         })
         .catch(error => {console.log(error)})
-
-        get(`/products/pageOnSale?pageNumber=0&pageSize=${this.state.currentPage}&sortBy=id`)
-        .then((response) => {
-            this.setState({
-                products: response.data,
-            });
-        })
-        .catch(error => console.log(error));
     }
 
     find(id){
@@ -62,7 +67,7 @@ class Product extends Component {
         .then((response) => {
             if (response.status === 200)
             {
-                this.setState({products: this.state.products.filter(p => p.id !== id)})
+                this.setState({products: this.state.products.filter(p => p.id !== id)}, () => this.listProduct())
                 this.setState({isDisplayFormDel: false})
             }
         })
@@ -108,6 +113,9 @@ class Product extends Component {
                 this.setState({
                     products: [response.data, ...this.state.products],
                     isDisplayForm: false,
+                }, () => {
+                    this.setState({products: this.state.products.slice(0, this.state.currentPage)});
+                    this.listProduct();
                 });
             }
         });
@@ -192,16 +200,7 @@ class Product extends Component {
         })
         if (this.state.search === '')
         {
-            get("/products/onSale")
-            .then((response) => {
-                if (response.status === 200)
-                {
-                    this.setState({
-                        pageToTal: Math.ceil(response.data.length / this.state.currentPage)
-                    })
-                }
-            })
-            .catch(error => {console.log(error)})
+            this.listProduct();
 
             get(`/products/pageOnSale?pageNumber=0&pageSize=${this.state.currentPage}&sortBy=id`)
             .then((response) => {
@@ -331,7 +330,7 @@ class Product extends Component {
                     Thêm Máy Mới
                 </button>
                 <Input
-                    style={{marginLeft: '100rem'}}
+                    style={{marginLeft: '87%'}}
                     placeholder="Tên Máy..."
                     value={this.state.search}
                     onChange={(e) => this.handleSearch(e)}

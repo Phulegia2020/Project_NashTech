@@ -295,7 +295,7 @@ class Comment extends React.Component {
                     Tạo Bình Luận
                 </button> */}
                 <Input
-                    style={{marginLeft: '100rem'}}
+                    style={{marginLeft: '87%'}}
                     placeholder="Tên sản phẩm..."
                     value={this.state.search}
                     onChange={(e) => this.handleSearch(e)}

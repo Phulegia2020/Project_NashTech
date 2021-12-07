@@ -23,15 +23,7 @@ class ImportDetailsByImport extends Component {
     }
 
     componentDidMount(){
-        get(`/importDetails/import/${this.state.id}`)
-        .then((response) => {
-            if (response.status === 200)
-            {
-                this.setState({
-                    pageToTal: Math.ceil(response.data.length / this.state.currentPage)
-                })
-            }
-        })
+        this.listImportDetail();
 
         get(`/importDetails/importPage/${this.state.id}?pageNumber=0&pageSize=${this.state.currentPage}&sortBy=id`)
         .then((response) => {
@@ -52,6 +44,19 @@ class ImportDetailsByImport extends Component {
         })
     }
 
+    listImportDetail()
+    {
+        get(`/importDetails/import/${this.state.id}`)
+        .then((response) => {
+            if (response.status === 200)
+            {
+                this.setState({
+                    pageToTal: Math.ceil(response.data.length / this.state.currentPage)
+                })
+            }
+        })
+    }
+
     delImportDetail = (e, id) =>
     {
         e.preventDefault();
@@ -59,7 +64,8 @@ class ImportDetailsByImport extends Component {
         .then((response) => {
             if (response.status === 200)
             {
-                this.setState({importdetails: this.state.importdetails.filter(b => `${b.imp_id}-${b.product_id}` !== `${id.imp_id}-${id.product_id}`), isDisplayFormDel: false})
+                this.setState({importdetails: this.state.importdetails.filter(b => `${b.imp_id}-${b.product_id}` !== `${id.imp_id}-${id.product_id}`), isDisplayFormDel: false},
+                               () => this.listImportDetail())
             }
         })
         .catch(error => {console.log(error)})
@@ -73,6 +79,9 @@ class ImportDetailsByImport extends Component {
                 this.setState({
                     importdetails: [...this.state.importdetails, response.data],
                     isDisplayForm: false,
+                }, () => {
+                    this.setState({importdetails: this.state.importdetails.slice(0, this.state.currentPage)});
+                    this.listImportDetail();
                 })
             }
         })

@@ -32,16 +32,7 @@ export default class User extends Component {
     
 
     componentDidMount(){
-        get("/users")
-        .then((response) => {
-            if (response.status === 200)
-            {
-                this.setState({
-                    pageToTal: Math.ceil(response.data.length / this.state.currentPage)
-                });
-            }
-        })
-        .catch(error => {console.log(error)})
+        this.listUser();
 
         get(`/users/page?pageNumber=0&pageSize=${this.state.currentPage}&sortBy=id`)
         .then((response) => {
@@ -57,6 +48,20 @@ export default class User extends Component {
                 roles: response.data
             });
         })
+    }
+
+    listUser()
+    {
+        get("/users")
+        .then((response) => {
+            if (response.status === 200)
+            {
+                this.setState({
+                    pageToTal: Math.ceil(response.data.length / this.state.currentPage)
+                });
+            }
+        })
+        .catch(error => {console.log(error)})
     }
 
     find(id){
@@ -131,6 +136,9 @@ export default class User extends Component {
             this.setState({
                 users: [response.data, ...this.state.users],
                 isDisplayForm: false,
+            }, () => {
+                this.setState({users: this.state.users.slice(0, this.state.currentPage)});
+                this.listUser();
             });
         });
     }
@@ -227,16 +235,7 @@ export default class User extends Component {
         })
         if (this.state.search === '')
         {
-            get("/users")
-            .then((response) => {
-                if (response.status === 200)
-                {
-                    this.setState({
-                        pageToTal: Math.ceil(response.data.length / this.state.currentPage)
-                    });
-                }
-            })
-            .catch(error => {console.log(error)})
+            this.listUser();
 
             get(`/users/page?pageNumber=0&pageSize=${this.state.currentPage}&sortBy=id`)
             .then((response) => {
@@ -402,7 +401,7 @@ export default class User extends Component {
                     Thêm Tài Khoản
                 </button>
                 <Input
-                    style={{marginLeft: '100rem'}}
+                    style={{marginLeft: '87%'}}
                     placeholder="Tên tài khoản..."
                     value={this.state.search}
                     onChange={(e) => this.handleSearch(e)}

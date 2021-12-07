@@ -23,15 +23,7 @@ class PlaceOrderDetailsByPlaceOrder extends Component {
     }
 
     componentDidMount(){
-        get(`/placeorderDetails/placeOrder/${this.state.id}`)
-        .then((response) => {
-            if (response.status === 200)
-            {
-                this.setState({
-                    pageToTal: Math.ceil(response.data.length / this.state.currentPage)
-                })
-            }
-        })
+        this.listPlaceOrderDetail();
 
         get(`/placeorderDetails/placeOrderPage/${this.state.id}?pageNumber=0&pageSize=${this.state.currentPage}&sortBy=id`)
         .then((response) => {
@@ -52,6 +44,19 @@ class PlaceOrderDetailsByPlaceOrder extends Component {
         })
     }
 
+    listPlaceOrderDetail()
+    {
+        get(`/placeorderDetails/placeOrder/${this.state.id}`)
+        .then((response) => {
+            if (response.status === 200)
+            {
+                this.setState({
+                    pageToTal: Math.ceil(response.data.length / this.state.currentPage)
+                })
+            }
+        })
+    }
+
     delPlaceOrderDetail = (e, id) =>
     {
         e.preventDefault();
@@ -59,7 +64,8 @@ class PlaceOrderDetailsByPlaceOrder extends Component {
         .then((response) => {
             if (response.status === 200)
             {
-                this.setState({placeorderdetails: this.state.placeorderdetails.filter(b => `${b.placeorder_id}-${b.product_id}` !== `${id.placeorder_id}-${id.product_id}`), isDisplayFormDel: false})
+                this.setState({placeorderdetails: this.state.placeorderdetails.filter(b => `${b.placeorder_id}-${b.product_id}` !== `${id.placeorder_id}-${id.product_id}`), isDisplayFormDel: false},
+                                () => this.listPlaceOrderDetail())
             }
         })
         .catch(error => {console.log(error)})
@@ -73,6 +79,9 @@ class PlaceOrderDetailsByPlaceOrder extends Component {
                 this.setState({
                     placeorderdetails: [...this.state.placeorderdetails, response.data],
                     isDisplayForm: false,
+                }, () => {
+                    this.setState({placeorderdetails: this.state.placeorderdetails.slice(0, this.state.currentPage)});
+                    this.listPlaceOrderDetail();
                 })
             }
         })
