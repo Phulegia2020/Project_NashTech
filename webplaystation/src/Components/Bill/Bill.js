@@ -153,7 +153,15 @@ class Bill extends Component {
         }
         else
         {
-            get(`/bills/fullNamePage?name=${this.state.search}&pageNumber=${pageNumber}&pageSize=${this.state.currentPage}&sortBy=id`)
+            // get(`/bills/fullNamePage?name=${this.state.search}&pageNumber=${pageNumber}&pageSize=${this.state.currentPage}&sortBy=id`)
+            // .then((response) => {
+            //     this.setState({
+            //         bills: response.data,
+            //     });
+            // })
+            // .catch(error => console.log(error));
+
+            get(`/bills/searchPage?id=${this.state.search}&pageNumber=0&pageSize=${this.state.currentPage}&sortBy=id`)
             .then((response) => {
                 this.setState({
                     bills: response.data,
@@ -211,7 +219,15 @@ class Bill extends Component {
         }
         else
         {
-            get(`/bills/fullNamePage?name=${this.state.search}&pageNumber=${this.state.pageNumber}&pageSize=${this.state.currentPage}&sortBy=id`)
+            // get(`/bills/fullNamePage?name=${this.state.search}&pageNumber=${this.state.pageNumber}&pageSize=${this.state.currentPage}&sortBy=id`)
+            // .then((response) => {
+            //     this.setState({
+            //         bills: response.data,
+            //     });
+            // })
+            // .catch(error => console.log(error));
+
+            get(`/bills/searchPage?id=${this.state.search}&pageNumber=0&pageSize=${this.state.currentPage}&sortBy=id`)
             .then((response) => {
                 this.setState({
                     bills: response.data,
@@ -240,7 +256,26 @@ class Bill extends Component {
         }
         else
         {
-            get(`/bills/fullName?name=${this.state.search}`)
+            // get(`/bills/fullName?name=${this.state.search}`)
+            // .then((response) => {
+            //     if (response.status === 200)
+            //     {
+            //         this.setState({
+            //             pageToTal: Math.ceil(response.data / this.state.currentPage)
+            //         });
+            //     }
+            // })
+            // .catch(error => {console.log(error)})
+
+            // get(`/bills/fullNamePage?name=${this.state.search}&pageNumber=0&pageSize=${this.state.currentPage}&sortBy=id`)
+            // .then((response) => {
+            //     this.setState({
+            //         bills: response.data,
+            //     });
+            // })
+            // .catch(error => console.log(error));
+
+            get(`/bills/search?id=${this.state.search}`)
             .then((response) => {
                 if (response.status === 200)
                 {
@@ -251,7 +286,7 @@ class Bill extends Component {
             })
             .catch(error => {console.log(error)})
 
-            get(`/bills/fullNamePage?name=${this.state.search}&pageNumber=0&pageSize=${this.state.currentPage}&sortBy=id`)
+            get(`/bills/searchPage?id=${this.state.search}&pageNumber=0&pageSize=${this.state.currentPage}&sortBy=id`)
             .then((response) => {
                 this.setState({
                     bills: response.data,
@@ -358,7 +393,8 @@ class Bill extends Component {
                 </button> */}
                 <Input
                     style={{marginLeft: '87%'}}
-                    placeholder="Tên khách hàng..."
+                    // placeholder="Tên khách hàng..."
+                    placeholder="Mã hóa đơn..."
                     value={this.state.search}
                     onChange={(e) => this.handleSearch(e)}
                     icon="search"

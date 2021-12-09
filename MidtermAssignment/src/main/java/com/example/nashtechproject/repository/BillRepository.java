@@ -19,4 +19,8 @@ public interface BillRepository extends JpaRepository<Bill, Long> {
     List<Bill> findByUserNameContains(String name);
 
     Page<Bill> findByUserNameContains(String name, Pageable pageable);
+
+    List<Bill> findByIdAndStatusNot(Long id, String status);
+
+    Page<Bill> findByIdAndStatusNot(Long id, String status, Pageable pageable);
 }

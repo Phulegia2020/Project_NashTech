@@ -222,14 +222,14 @@ class BillDetailsByBill extends Component {
                                     <td>{b.quantity}</td>
                                     <td>{formatCurrency(b.key.product.price)}</td>
                                     {this.state.bill.status === 'Waiting' && this.state.bill.payment === 'Cod' && <td>
-                                        <Link to={`/admin/billDetails/update/${b.key.bill.id}-${b.key.product.id}`} billId={this.state.id} onClick={this.state.bill.status === 'Done' ? (e) => e.preventDefault() : ''}>
+                                        <Link to={`/admin/billDetails/update/${b.key.bill.id}-${b.key.product.id}`} billId={this.state.id}>
                                             <button className="btn btn-success" disabled={this.state.bill.status === 'Done'}>
                                                 <FontAwesomeIcon icon={faEdit} className="mr-2"/>{' '}
                                             </button>
                                         </Link>
                                     </td>}
                                     {this.state.bill.status === 'Waiting' && this.state.bill.payment === 'Cod' && <td>
-                                        <button onClick={(e) => this.onToggleFormDel(e, b.key)} className="btn btn-danger" disabled={this.state.bill.status === 'Done'}>
+                                        <button onClick={(e) => this.onToggleFormDel(e, b.key)} className="btn btn-danger">
                                             <FontAwesomeIcon icon={faTrash} className="mr-2"/>{' '}
                                         </button>
                                     </td>}

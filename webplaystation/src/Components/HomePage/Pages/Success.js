@@ -78,7 +78,7 @@ class Success extends Component {
 
         var contentmail = `<b>Chào, ${localStorage.getItem('username')}</b><br/>`+
                        `<p>Cám ơn quý khách đã ghé thăm và mua sản phẩm tại cửa hàng. Chúng tôi rất vui khi bạn đã mua được những sản phẩm mà bạn đang tìm kiếm. Đây là hóa đơn của bạn:</p>`+
-                       `Hóa Đơn <h3>#HD${this.state.bill.id}</h3>`+
+                       `<h3>Hóa Đơn #${this.state.bill.id}</h3>`+
                        `Tổng giá trị đơn hàng: <b>${formatQuantity(this.state.bill.total)} VNĐ</b><br/>`+
                        `Phương thức thanh toán: <b>${pttt}</b><br/>`;
         post(`/bills/sendmail/${this.state.bill.id}`, {from: 'ps4gamemachine@gmail.com', to: this.state.email, subject: "THE PLAYSTATION SHOP - XÁC NHẬN HÓA ĐƠN", content: contentmail})

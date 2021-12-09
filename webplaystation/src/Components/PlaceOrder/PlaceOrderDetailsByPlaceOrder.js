@@ -205,16 +205,15 @@ class PlaceOrderDetailsByPlaceOrder extends Component {
                                     <td>{formatQuantity(po.quantity)}</td>
                                     <td>{formatCurrency(po.price)}</td>
                                     {this.state.placeorder.status === 'Waiting' && <td>
-                                        <Link to={`/admin/placeorderDetails/update/${po.placeorder_id}-${po.product_id}`} onClick={this.state.placeorder.status === 'Done' ? (e) => e.preventDefault() : ''} className={this.state.placeorder.status === 'Done' ? "disable-link" : ""}>
+                                        <Link to={`/admin/placeorderDetails/update/${po.placeorder_id}-${po.product_id}`} className={this.state.placeorder.status === 'Done' ? "disable-link" : ""}>
                                             <button className="btn btn-success" disabled={this.state.placeorder.status === 'Done'}>
-                                            <FontAwesomeIcon icon={faEdit} className="mr-2"/>{' '}
-                                                
+                                                <FontAwesomeIcon icon={faEdit} className="mr-2"/>{' '}
                                             </button>
                                         </Link>
                                     </td>}
-                                    {this.state.placeorder.status === 'Waiting' && <td><button onClick={(e) => this.onToggleFormDel(e, po)} className="btn btn-danger" disabled={this.state.placeorder.status === 'Done'}>
-                                        <FontAwesomeIcon icon={faTrash} className="mr-2"/>{' '}
-                                        
+                                    {this.state.placeorder.status === 'Waiting' && <td>
+                                        <button onClick={(e) => this.onToggleFormDel(e, po)} className="btn btn-danger">
+                                            <FontAwesomeIcon icon={faTrash} className="mr-2"/>{' '}
                                         </button>
                                     </td>}
                                 </tr>

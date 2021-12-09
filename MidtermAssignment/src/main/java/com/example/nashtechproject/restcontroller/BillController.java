@@ -273,6 +273,19 @@ public class BillController {
         return revenue;
     }
 
+    @GetMapping("/search")
+    public int getBillSearch(@RequestParam String id)
+    {
+        List<Bill> bills = billService.getBillSearch(id);
+        return bills.size();
+    }
+
+    @GetMapping("/searchPage")
+    public ResponseEntity<List<Bill>> getBillSearchPages(ProductPage productPage, @RequestParam String id)
+    {
+        return new ResponseEntity<>(billService.getBillSearchPage(id, productPage), HttpStatus.OK);
+    }
+
     @PostMapping()
     @ApiOperation(value = "Create New bill")
     @ApiResponses(value = { @ApiResponse(code = 200, message = "Success"),

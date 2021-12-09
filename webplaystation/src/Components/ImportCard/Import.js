@@ -347,7 +347,7 @@ export default class Import extends Component {
                             <th><b>Tổng Tiền</b>{' '}<FontAwesomeIcon icon={faArrowCircleUp} className="sort-icon" onClick={(e) => this.handleSortInc(e, 'total')}/><FontAwesomeIcon icon={faArrowCircleDown} className="sort-icon" onClick={(e) => this.handleSortDes(e, 'total')}/></th>
                             <th><b>Thời Gian</b>{' '}<FontAwesomeIcon icon={faArrowCircleUp} className="sort-icon" onClick={(e) => this.handleSortInc(e, 'time')}/><FontAwesomeIcon icon={faArrowCircleDown} className="sort-icon" onClick={(e) => this.handleSortDes(e, 'time')}/></th>
                             <th><b>Phiếu Đặt</b>{' '}<FontAwesomeIcon icon={faArrowCircleUp} className="sort-icon" onClick={(e) => this.handleSortInc(e, 'poid')}/><FontAwesomeIcon icon={faArrowCircleDown} className="sort-icon" onClick={(e) => this.handleSortDes(e, 'poid')}/></th>
-                            <th><b>Nhân Viên</b></th>
+                            {/* <th><b>Nhân Viên</b></th> */}
                             <th><b>Trạng Thái</b></th>
                             {/* <th>Cập Nhật</th> */}
                             <th>Xóa</th>
@@ -364,7 +364,7 @@ export default class Import extends Component {
                                     <td>{formatCurrency(imp.total)}</td>
                                     <td>{imp.createddate}</td>
                                     <td>{imp.placeOrder.id}</td>
-                                    <td>{imp.user.name}</td>
+                                    {/* <td>{imp.user.name}</td> */}
                                     {imp.status === 'Done' && (<td><Label color="teal">Hoàn Tất</Label></td>)}
                                     {imp.status === 'Waiting' && (<td><Label color="grey">Chờ Xác Nhận</Label></td>)}
                                     {/* <td>
@@ -375,9 +375,9 @@ export default class Import extends Component {
                                             </button>
                                         </Link>
                                     </td> */}
-                                    <td><button onClick={(e) => this.onToggleFormDel(e, imp.id)} className="btn btn-danger" disabled={imp.status !== 'Waiting'}>
-                                        <FontAwesomeIcon icon={faTrash} className="mr-2"/>{' '}
-                                        
+                                    <td>
+                                        <button onClick={(e) => this.onToggleFormDel(e, imp.id)} className="btn btn-danger" disabled={imp.status !== 'Waiting'}>
+                                            <FontAwesomeIcon icon={faTrash} className="mr-2"/>{' '}
                                         </button>
                                     </td>
                                     <td>
@@ -388,7 +388,7 @@ export default class Import extends Component {
                                         </Link>
                                     </td>
                                     <td>
-                                        <Link to={`/admin/import`}  onClick={imp.status !== 'Waiting' ? (e) => e.preventDefault() : ''} className={imp.status !== 'Waiting' ? "disable-link" : ""}>
+                                        <Link to={`/admin/import`} onClick={imp.status !== 'Waiting' ? (e) => e.preventDefault() : () => {}} className={imp.status !== 'Waiting' ? "disable-link" : ""}>
                                             <button className="btn btn-success" onClick={(event) => this.handleConfirm(event, imp.id)} disabled={imp.status !== 'Waiting'}>
                                                 <FontAwesomeIcon icon={faCheck} className="mr-2"/>{' '}
                                             </button>

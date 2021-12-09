@@ -21,6 +21,10 @@ public interface BillService {
 
     public List<Bill> getBillByStatusPage(ProductPage productPage);
 
+    public List<Bill> getBillSearch(String id);
+
+    public List<Bill> getBillSearchPage(String id, ProductPage productPage);
+
     public Bill saveBill(Bill bill);
 
     public void deleteBill(Long billId);

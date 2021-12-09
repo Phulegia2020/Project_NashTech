@@ -203,16 +203,15 @@ class ImportDetailsByImport extends Component {
                                     <td>{formatQuantity(imp.quantity)}</td>
                                     <td>{formatCurrency(imp.price)}</td>
                                     {this.state.import.status === 'Waiting' && <td>
-                                        <Link to={`/admin/importDetails/update/${imp.imp_id}-${imp.product_id}`}  onClick={this.state.import.status !== 'Waiting' ? (e) => e.preventDefault() : ''} className={this.state.import.status !== 'Waiting' ? "disable-link" : ""}>
+                                        <Link to={`/admin/importDetails/update/${imp.imp_id}-${imp.product_id}`} className={this.state.import.status !== 'Waiting' ? "disable-link" : ""}>
                                             <button className="btn btn-success" disabled={this.state.import.status !== 'Waiting'}>
-                                            <FontAwesomeIcon icon={faEdit} className="mr-2"/>{' '}
-                                                
+                                                <FontAwesomeIcon icon={faEdit} className="mr-2"/>{' '}
                                             </button>
                                         </Link>
                                     </td>}
-                                    {this.state.import.status === 'Waiting' && <td><button onClick={(e) => this.onToggleFormDel(e, imp)} className="btn btn-danger" disabled={this.state.import.status !== 'Waiting'}>
-                                        <FontAwesomeIcon icon={faTrash} className="mr-2"/>{' '}
-                                        
+                                    {this.state.import.status === 'Waiting' && <td>
+                                        <button onClick={(e) => this.onToggleFormDel(e, imp)} className="btn btn-danger">
+                                            <FontAwesomeIcon icon={faTrash} className="mr-2"/>{' '}
                                         </button>
                                     </td>}
                                 </tr>

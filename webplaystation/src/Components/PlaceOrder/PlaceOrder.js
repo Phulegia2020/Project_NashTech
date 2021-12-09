@@ -295,6 +295,7 @@ export default class PlaceOrder extends Component {
                     value={this.state.search}
                     onChange={(e) => this.handleSearch(e)}
                     icon="search"
+                    type='number'
                 />
                 <table id="table">
                     <thead>
@@ -302,7 +303,7 @@ export default class PlaceOrder extends Component {
                             <th><b>Mã Phiếu Đặt</b>{' '}<FontAwesomeIcon icon={faArrowCircleUp} className="sort-icon" onClick={(e) => this.handleSortInc(e, 'id')}/><FontAwesomeIcon icon={faArrowCircleDown} className="sort-icon" onClick={(e) => this.handleSortDes(e, 'id')}/></th>
                             <th><b>Tổng Tiền</b>{' '}<FontAwesomeIcon icon={faArrowCircleUp} className="sort-icon" onClick={(e) => this.handleSortInc(e, 'total')}/><FontAwesomeIcon icon={faArrowCircleDown} className="sort-icon" onClick={(e) => this.handleSortDes(e, 'total')}/></th>
                             <th><b>Thời Gian Lập</b>{' '}<FontAwesomeIcon icon={faArrowCircleUp} className="sort-icon" onClick={(e) => this.handleSortInc(e, 'time')}/><FontAwesomeIcon icon={faArrowCircleDown} className="sort-icon" onClick={(e) => this.handleSortDes(e, 'time')}/></th>
-                            <th><b>Nhân Viên</b></th>
+                            {/* <th><b>Nhân Viên</b></th> */}
                             <th><b>Nhà Cung Cấp</b>{' '}<FontAwesomeIcon icon={faArrowCircleUp} className="sort-icon" onClick={(e) => this.handleSortInc(e, 'sup')}/><FontAwesomeIcon icon={faArrowCircleDown} className="sort-icon" onClick={(e) => this.handleSortDes(e, 'sup')}/></th>
                             <th><b>Trạng Thái</b></th>
                             <th>Cập Nhật</th>
@@ -318,7 +319,7 @@ export default class PlaceOrder extends Component {
                                     <td>{po.id}</td>
                                     <td>{formatCurrency(po.total)}</td>
                                     <td>{po.createddate}</td>
-                                    <td>{po.user.name}</td>
+                                    {/* <td>{po.user.name}</td> */}
                                     <td>{po.supplier.name}</td>
                                     {po.status === 'Done' && (<td><Label color="teal">Hoàn Tất</Label></td>)}
                                     {po.status === 'Waiting' && (<td><Label color="grey">Chờ Xử Lý</Label></td>)}
@@ -327,24 +328,21 @@ export default class PlaceOrder extends Component {
                                         <Link to={`/admin/placeorder/update/${po.id}`}>
                                             <button className="btn btn-success">
                                                 <FontAwesomeIcon icon={faEdit} className="mr-2"/>{' '}
-                                                
                                             </button>
                                         </Link> : 
                                         <button className="btn btn-success" disabled>
                                             <FontAwesomeIcon icon={faEdit} className="mr-2"/>{' '}
-                                            
                                         </button>}
                                     </td>
-                                    <td><button onClick={(e) => this.onToggleFormDel(e, po.id)} className="btn btn-danger" disabled={po.status === "Done"}>
-                                        <FontAwesomeIcon icon={faTrash} className="mr-2"/>{' '}
-                                        
+                                    <td>
+                                        <button onClick={(e) => this.onToggleFormDel(e, po.id)} className="btn btn-danger" disabled={po.status === "Done"}>
+                                            <FontAwesomeIcon icon={faTrash} className="mr-2"/>{' '}
                                         </button>
                                     </td>
                                     <td>
                                         <Link to={`/admin/placeorder/${po.id}`}>
                                             <button className="btn btn-info">
-                                            <FontAwesomeIcon icon={faReceipt} className="mr-2"/>{' '}
-                                                
+                                                <FontAwesomeIcon icon={faReceipt} className="mr-2"/>{' '}
                                             </button>
                                         </Link>
                                     </td>
