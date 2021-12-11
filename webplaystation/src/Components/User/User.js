@@ -440,11 +440,9 @@ export default class User extends Component {
                                     {u.active_status === 'Active' && <td><Label color="green">Hoạt Động</Label></td>}
                                     {u.active_status === 'Inactive' && <td><Label color="red">Không Hoạt Động</Label></td>}
                                     <td>
-                                        <Link to={`/admin/user/update/${u.id}`} onClick={u.id == localStorage.getItem('user_id') && localStorage.getItem('role') === 'STAFF' || localStorage.getItem('role') === 'ADMIN' ? '' : (e) => e.preventDefault()}
-                                            >
+                                        <Link to={`/admin/user/update/${u.id}`} onClick={u.id == localStorage.getItem('user_id') && localStorage.getItem('role') === 'STAFF' || localStorage.getItem('role') === 'ADMIN' ? () => {} : (e) => e.preventDefault()}>
                                             <button className="btn btn-success" disabled={u.id != localStorage.getItem('user_id') && localStorage.getItem('role') === 'STAFF'}>
                                                 <FontAwesomeIcon icon={faEdit} className="mr-2"/>{' '}
-                                                
                                             </button>
                                         </Link>
                                     </td>

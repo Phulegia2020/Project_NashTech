@@ -273,24 +273,36 @@ export default class Import extends Component {
         }
         else
         {
-            get(`/imports/search?search=${this.state.search}`)
-            .then((response) => {
-                if (response.status === 200)
-                {
-                    this.setState({
-                        pageToTal: Math.ceil(response.data / this.state.currentPage)
-                    })
-                }
-            })
-            .catch(error => {console.log(error)})
-
-            get(`/imports/searchPage?search=${this.state.search}&pageNumber=0&pageSize=${this.state.currentPage}&sortBy=id`)
-            .then((response) => {
+            if (isNaN(this.state.search))
+            {
                 this.setState({
-                    imports: response.data,
+                    pageToTal: 0
+                })
+                this.setState({
+                    imports: [],
                 });
-            })
-            .catch(error => console.log(error));
+            }
+            else
+            {
+                get(`/imports/search?search=${this.state.search}`)
+                .then((response) => {
+                    if (response.status === 200)
+                    {
+                        this.setState({
+                            pageToTal: Math.ceil(response.data / this.state.currentPage)
+                        })
+                    }
+                })
+                .catch(error => {console.log(error)})
+
+                get(`/imports/searchPage?search=${this.state.search}&pageNumber=0&pageSize=${this.state.currentPage}&sortBy=id`)
+                .then((response) => {
+                    this.setState({
+                        imports: response.data,
+                    });
+                })
+                .catch(error => console.log(error));
+            }
         }
     }
 
@@ -347,9 +359,8 @@ export default class Import extends Component {
                             <th><b>Tổng Tiền</b>{' '}<FontAwesomeIcon icon={faArrowCircleUp} className="sort-icon" onClick={(e) => this.handleSortInc(e, 'total')}/><FontAwesomeIcon icon={faArrowCircleDown} className="sort-icon" onClick={(e) => this.handleSortDes(e, 'total')}/></th>
                             <th><b>Thời Gian</b>{' '}<FontAwesomeIcon icon={faArrowCircleUp} className="sort-icon" onClick={(e) => this.handleSortInc(e, 'time')}/><FontAwesomeIcon icon={faArrowCircleDown} className="sort-icon" onClick={(e) => this.handleSortDes(e, 'time')}/></th>
                             <th><b>Phiếu Đặt</b>{' '}<FontAwesomeIcon icon={faArrowCircleUp} className="sort-icon" onClick={(e) => this.handleSortInc(e, 'poid')}/><FontAwesomeIcon icon={faArrowCircleDown} className="sort-icon" onClick={(e) => this.handleSortDes(e, 'poid')}/></th>
-                            {/* <th><b>Nhân Viên</b></th> */}
+                            <th><b>Nhân Viên</b></th>
                             <th><b>Trạng Thái</b></th>
-                            {/* <th>Cập Nhật</th> */}
                             <th>Xóa</th>
                             <th>Chi Tiết</th>
                             <th>Xác Nhận</th>
@@ -364,17 +375,9 @@ export default class Import extends Component {
                                     <td>{formatCurrency(imp.total)}</td>
                                     <td>{imp.createddate}</td>
                                     <td>{imp.placeOrder.id}</td>
-                                    {/* <td>{imp.user.name}</td> */}
+                                    <td>{imp.user.name}</td>
                                     {imp.status === 'Done' && (<td><Label color="teal">Hoàn Tất</Label></td>)}
                                     {imp.status === 'Waiting' && (<td><Label color="grey">Chờ Xác Nhận</Label></td>)}
-                                    {/* <td>
-                                        <Link to={`/admin/import/update/${imp.id}`} onClick={imp.status !== 'Waiting' ? (e) => e.preventDefault() : ''} className={imp.status !== 'Waiting' ? "disable-link" : ""}>
-                                            <button className="btn btn-success" disabled={imp.status !== 'Waiting'}>
-                                            <FontAwesomeIcon icon={faEdit} className="mr-2"/>{' '}
-                                                
-                                            </button>
-                                        </Link>
-                                    </td> */}
                                     <td>
                                         <button onClick={(e) => this.onToggleFormDel(e, imp.id)} className="btn btn-danger" disabled={imp.status !== 'Waiting'}>
                                             <FontAwesomeIcon icon={faTrash} className="mr-2"/>{' '}

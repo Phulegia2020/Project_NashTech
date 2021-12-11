@@ -173,14 +173,3 @@ li a.dropdown-toggle::after {
     left: 68%;
   }
 }
-
-df-messenger {
-  /* --df-messenger-button-titlebar-color: #df9b56;
-  --df-messenger-chat-background-color: #fafafa;
-  --df-messenger-send-icon: #878fac; */
-
-  --df-messenger-bot-message: #636e72;
-  --df-messenger-font-color: white;
-  --df-messenger-user-message: #479b3d;
-  /* --df-messenger-button-titlebar-color: #5bb75b; */
-}

@@ -174,10 +174,6 @@ class ImportDetailsByImport extends Component {
                         <Button onClick={(e) => this.onCloseFormDel(e)}>Hủy</Button>
                     </ModalFooter>
                 </Modal>
-                {/* {this.state.import.status === 'Waiting' && <button type="button" className="btn btn-primary" onClick={this.onToggleForm} disabled>
-                    <FontAwesomeIcon icon={faPlus} className="mr-2"/>{' '}
-                    Tạo Chi Tiết Mới
-                </button>} */}
                 <h3>Danh Sách Chi Tiết Phiếu Nhập {this.state.id}</h3>
                 <table id="table">
                     <thead>

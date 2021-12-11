@@ -154,9 +154,6 @@ class App extends React.Component{
                     language-code="en"
                     wait-open
                     chat-icon="https://image.flaticon.com/icons/png/512/588/588258.png"
-                    // chat-icon="https://media.comicbook.com/2019/02/playstation-logo-orange-1157594.jpeg"
-                    // chat-icon="https://upload.wikimedia.org/wikipedia/vi/3/37/Mortal_Kombat_Logo.png"
-                    // chat-icon="https://cdn3.iconfinder.com/data/icons/black-easy/512/538309-game_512x512.png"
                 ></df-messenger>}
            </Router>
       );

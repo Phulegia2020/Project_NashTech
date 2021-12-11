@@ -4,7 +4,6 @@ import { get } from '../../../Utils/httpHelper';
 import ProductList from './ProductList';
 import { withRouter, Link } from 'react-router-dom';
 import { UncontrolledCarousel } from 'reactstrap';
-import Footer from '../Footer/Footer';
 import './style.css';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -257,31 +256,6 @@ class Products extends Component {
         return (
             <div>
                 <Segment style={this.state.Products.length > 0 ? { padding: '2em 0em' }:{ padding: '2em 0em', marginBottom: '181px' }} vertical>
-                    {/* <Jumbotron fluid className='jumb'>
-                        <Container fluid>
-                            <h3 style={{textAlign:'center'}}>Lọc Theo Giá</h3>
-                            <hr className="my-2" />
-                            <Label>
-                                <input type="radio" name="price" value = '1' checked={this.state.price === '1'} onChange={(e) => this.handleFilter(e)}/>{' '}
-                                Dưới 10 Triệu
-                            </Label>
-                            <br></br>
-                            <Label>
-                                <input type="radio" name="price" value = '2' checked={this.state.price === '2'} onChange={(e) => this.handleFilter(e)}/>{' '}
-                                Từ 10 Triệu - 15 Triệu
-                            </Label>
-                            <br/>
-                            <Label>
-                                <input type="radio" name="price" value = '3' checked={this.state.price === '3'} onChange={(e) => this.handleFilter(e)}/>{' '}
-                                Trên 15 Triệu
-                            </Label>
-                            <br/>
-                            <Label>
-                                <input type="radio" name="price" value = '0' checked={this.state.price === '0'} onChange={(e) => this.handleFilter(e)}/>{' '}
-                                Tất Cả
-                            </Label>
-                        </Container>
-                    </Jumbotron> */}
                     <Grid container stackable verticalAlign='middle'>
                         <UncontrolledCarousel items={items} controls={false}/>
                         <Grid.Row>

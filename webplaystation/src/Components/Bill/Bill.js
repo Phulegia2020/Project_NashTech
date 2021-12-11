@@ -7,7 +7,7 @@ import { withRouter } from "react-router";
 import Add from "./Add"
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Pagination, PaginationItem, PaginationLink } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheck, faEdit, faPlus, faTrash, faArrowCircleUp, faArrowCircleDown, faReceipt } from '@fortawesome/free-solid-svg-icons';
+import { faCheck, faTrash, faArrowCircleUp, faArrowCircleDown, faReceipt } from '@fortawesome/free-solid-svg-icons';
 import { Label, Breadcrumb, Input } from 'semantic-ui-react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -153,14 +153,6 @@ class Bill extends Component {
         }
         else
         {
-            // get(`/bills/fullNamePage?name=${this.state.search}&pageNumber=${pageNumber}&pageSize=${this.state.currentPage}&sortBy=id`)
-            // .then((response) => {
-            //     this.setState({
-            //         bills: response.data,
-            //     });
-            // })
-            // .catch(error => console.log(error));
-
             get(`/bills/searchPage?id=${this.state.search}&pageNumber=0&pageSize=${this.state.currentPage}&sortBy=id`)
             .then((response) => {
                 this.setState({
@@ -219,14 +211,6 @@ class Bill extends Component {
         }
         else
         {
-            // get(`/bills/fullNamePage?name=${this.state.search}&pageNumber=${this.state.pageNumber}&pageSize=${this.state.currentPage}&sortBy=id`)
-            // .then((response) => {
-            //     this.setState({
-            //         bills: response.data,
-            //     });
-            // })
-            // .catch(error => console.log(error));
-
             get(`/bills/searchPage?id=${this.state.search}&pageNumber=0&pageSize=${this.state.currentPage}&sortBy=id`)
             .then((response) => {
                 this.setState({
@@ -256,43 +240,36 @@ class Bill extends Component {
         }
         else
         {
-            // get(`/bills/fullName?name=${this.state.search}`)
-            // .then((response) => {
-            //     if (response.status === 200)
-            //     {
-            //         this.setState({
-            //             pageToTal: Math.ceil(response.data / this.state.currentPage)
-            //         });
-            //     }
-            // })
-            // .catch(error => {console.log(error)})
-
-            // get(`/bills/fullNamePage?name=${this.state.search}&pageNumber=0&pageSize=${this.state.currentPage}&sortBy=id`)
-            // .then((response) => {
-            //     this.setState({
-            //         bills: response.data,
-            //     });
-            // })
-            // .catch(error => console.log(error));
-
-            get(`/bills/search?id=${this.state.search}`)
-            .then((response) => {
-                if (response.status === 200)
-                {
-                    this.setState({
-                        pageToTal: Math.ceil(response.data / this.state.currentPage)
-                    });
-                }
-            })
-            .catch(error => {console.log(error)})
-
-            get(`/bills/searchPage?id=${this.state.search}&pageNumber=0&pageSize=${this.state.currentPage}&sortBy=id`)
-            .then((response) => {
+            if (isNaN(this.state.search))
+            {
                 this.setState({
-                    bills: response.data,
+                    pageToTal: 0
+                })
+                this.setState({
+                    bills: [],
                 });
-            })
-            .catch(error => console.log(error));
+            }
+            else
+            {
+                get(`/bills/search?id=${this.state.search}`)
+                .then((response) => {
+                    if (response.status === 200)
+                    {
+                        this.setState({
+                            pageToTal: Math.ceil(response.data / this.state.currentPage)
+                        });
+                    }
+                })
+                .catch(error => {console.log(error)})
+
+                get(`/bills/searchPage?id=${this.state.search}&pageNumber=0&pageSize=${this.state.currentPage}&sortBy=id`)
+                .then((response) => {
+                    this.setState({
+                        bills: response.data,
+                    });
+                })
+                .catch(error => console.log(error));
+            }
         }
     }
 
@@ -387,13 +364,8 @@ class Bill extends Component {
                 </Modal>
                 <Breadcrumb icon='right angle' sections={sections} size='large'/>
                 <br/>
-                {/* <button type="button" className="btn btn-primary" onClick={this.onToggleForm} style={{marginTop: '15px', marginBottom: '5px'}}>
-                    <FontAwesomeIcon icon={faPlus} className="mr-2"/>{' '}
-                    Tạo Hóa Đơn
-                </button> */}
                 <Input
                     style={{marginLeft: '87%'}}
-                    // placeholder="Tên khách hàng..."
                     placeholder="Mã hóa đơn..."
                     value={this.state.search}
                     onChange={(e) => this.handleSearch(e)}
@@ -409,7 +381,6 @@ class Bill extends Component {
                             <th><b>Khách Hàng</b></th>
                             <th><b>Thanh Toán</b></th>
                             <th><b>Trạng Thái</b></th>
-                            {/* <th>Cập Nhập</th> */}
                             <th>Xóa</th>
                             <th>Chi Tiết</th>
                             <th>Xác Nhận</th>
@@ -428,28 +399,6 @@ class Bill extends Component {
                                     {b.payment === 'Cod' && <td>Tiền Mặt</td>}
                                     {b.payment === 'PayPal' && <td>PayPal</td>}
                                     <td>{b.status === 'Done' ? <Label color="teal">Hoàn Tất</Label> : <Label color="grey">Chờ Xác Nhận</Label>}</td>
-                                    {/* <td> */}
-                                        {/* {b.billStatus.id != 1 ? 
-                                        <Link to={`/admin/bill/update/${b.id}`}>
-                                            <button className="btn btn-success" disabled={b.billStatus.id == 1}>
-                                            <FontAwesomeIcon icon={faEdit} className="mr-2"/>{' '}
-                                            </button>
-                                        </Link> : 
-                                        <button className="btn btn-success" disabled={b.billStatus.id == 1}>
-                                        <FontAwesomeIcon icon={faEdit} className="mr-2"/>{' '}
-                                        </button>
-                                        } */}
-                                        {/* {b.status !== 'Done' ? 
-                                        <Link to={`/admin/bill/update/${b.id}`}>
-                                            <button className="btn btn-success" disabled={b.status === 'Done'}>
-                                                <FontAwesomeIcon icon={faEdit} className="mr-2"/>{' '}
-                                            </button>
-                                        </Link> : 
-                                        <button className="btn btn-success" disabled={b.status === 'Done'}>
-                                            <FontAwesomeIcon icon={faEdit} className="mr-2"/>{' '}
-                                        </button>
-                                        }
-                                    </td> */}
                                     <td>
                                         <button onClick={(e) => this.onToggleFormDel(e, b.id)} className="btn btn-danger" disabled={b.status === 'Done'}>
                                             <FontAwesomeIcon icon={faTrash} className="mr-2" />{' '}

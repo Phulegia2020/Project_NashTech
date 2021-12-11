@@ -229,24 +229,36 @@ export default class PlaceOrder extends Component {
         }
         else
         {
-            get(`/placeorders/search?search=${this.state.search}`)
-            .then((response) => {
-                if (response.status === 200)
-                {
-                    this.setState({
-                        pageToTal: Math.ceil(response.data / this.state.currentPage)
-                    })
-                }
-            })
-            .catch(error => {console.log(error)})
-
-            get(`/placeorders/searchPage?search=${this.state.search}&pageNumber=0&pageSize=${this.state.currentPage}&sortBy=id`)
-            .then((response) => {
+            if (isNaN(this.state.search))
+            {
                 this.setState({
-                    placeorders: response.data,
+                    pageToTal: 0
+                })
+                this.setState({
+                    placeorders: [],
                 });
-            })
-            .catch(error => console.log(error));
+            }
+            else
+            {
+                get(`/placeorders/search?search=${this.state.search}`)
+                .then((response) => {
+                    if (response.status === 200)
+                    {
+                        this.setState({
+                            pageToTal: Math.ceil(response.data / this.state.currentPage)
+                        })
+                    }
+                })
+                .catch(error => {console.log(error)})
+
+                get(`/placeorders/searchPage?search=${this.state.search}&pageNumber=0&pageSize=${this.state.currentPage}&sortBy=id`)
+                .then((response) => {
+                    this.setState({
+                        placeorders: response.data,
+                    });
+                })
+                .catch(error => console.log(error));
+            }
         }
     }
 
@@ -295,7 +307,6 @@ export default class PlaceOrder extends Component {
                     value={this.state.search}
                     onChange={(e) => this.handleSearch(e)}
                     icon="search"
-                    type='number'
                 />
                 <table id="table">
                     <thead>
@@ -303,7 +314,7 @@ export default class PlaceOrder extends Component {
                             <th><b>Mã Phiếu Đặt</b>{' '}<FontAwesomeIcon icon={faArrowCircleUp} className="sort-icon" onClick={(e) => this.handleSortInc(e, 'id')}/><FontAwesomeIcon icon={faArrowCircleDown} className="sort-icon" onClick={(e) => this.handleSortDes(e, 'id')}/></th>
                             <th><b>Tổng Tiền</b>{' '}<FontAwesomeIcon icon={faArrowCircleUp} className="sort-icon" onClick={(e) => this.handleSortInc(e, 'total')}/><FontAwesomeIcon icon={faArrowCircleDown} className="sort-icon" onClick={(e) => this.handleSortDes(e, 'total')}/></th>
                             <th><b>Thời Gian Lập</b>{' '}<FontAwesomeIcon icon={faArrowCircleUp} className="sort-icon" onClick={(e) => this.handleSortInc(e, 'time')}/><FontAwesomeIcon icon={faArrowCircleDown} className="sort-icon" onClick={(e) => this.handleSortDes(e, 'time')}/></th>
-                            {/* <th><b>Nhân Viên</b></th> */}
+                            <th><b>Nhân Viên</b></th>
                             <th><b>Nhà Cung Cấp</b>{' '}<FontAwesomeIcon icon={faArrowCircleUp} className="sort-icon" onClick={(e) => this.handleSortInc(e, 'sup')}/><FontAwesomeIcon icon={faArrowCircleDown} className="sort-icon" onClick={(e) => this.handleSortDes(e, 'sup')}/></th>
                             <th><b>Trạng Thái</b></th>
                             <th>Cập Nhật</th>
@@ -319,7 +330,7 @@ export default class PlaceOrder extends Component {
                                     <td>{po.id}</td>
                                     <td>{formatCurrency(po.total)}</td>
                                     <td>{po.createddate}</td>
-                                    {/* <td>{po.user.name}</td> */}
+                                    <td>{po.user.name}</td>
                                     <td>{po.supplier.name}</td>
                                     {po.status === 'Done' && (<td><Label color="teal">Hoàn Tất</Label></td>)}
                                     {po.status === 'Waiting' && (<td><Label color="grey">Chờ Xử Lý</Label></td>)}
