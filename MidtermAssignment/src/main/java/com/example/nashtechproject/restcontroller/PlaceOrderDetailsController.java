@@ -23,7 +23,7 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@CrossOrigin(origins = "*", maxAge = 3600)
+@CrossOrigin(origins = "http://localhost:3000", maxAge = 3600)
 @RestController
 @RequestMapping("api/placeorderDetails")
 public class PlaceOrderDetailsController {
@@ -104,10 +104,6 @@ public class PlaceOrderDetailsController {
         }
         else
         {
-//            if (placeOrderDetails.getKey().getProduct().getId() == Long.valueOf(newPlaceOrderDetails.getProduct_id()))
-//            {
-//                throw new InvalidDataException("The Place Order had already this product");
-//            }
             placeOrderDetails.setQuantity(newPlaceOrderDetails.getQuantity());
             placeOrderDetails.setPrice(newPlaceOrderDetails.getPrice());
             placeOrderDetailsService.updatePlaceOrderDetails(placeOrderDetails);

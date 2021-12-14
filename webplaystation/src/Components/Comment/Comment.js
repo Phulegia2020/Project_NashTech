@@ -290,10 +290,6 @@ class Comment extends React.Component {
                 </Modal>
                 <Breadcrumb icon='right angle' sections={sections} size='large'/>
                 <br/>
-                {/* <button type="button" className="btn btn-primary" onClick={this.onToggleForm} style={{marginTop: '30px'}}>
-                    <FontAwesomeIcon icon={faPlus} className="mr-2"/>{' '}
-                    Tạo Bình Luận
-                </button> */}
                 <Input
                     style={{marginLeft: '87%'}}
                     placeholder="Tên sản phẩm..."
@@ -310,7 +306,6 @@ class Comment extends React.Component {
                             <th><b>Thời Gian</b>{' '}<FontAwesomeIcon icon={faArrowCircleUp} className="sort-icon" onClick={(e) => this.handleSortInc(e, 'time')}/><FontAwesomeIcon icon={faArrowCircleDown} className="sort-icon" onClick={(e) => this.handleSortDes(e, 'time')}/></th>
                             <th><b>Bình Luận</b></th>
                             <th><b>Tài Khoản</b>{' '}<FontAwesomeIcon icon={faArrowCircleUp} className="sort-icon" onClick={(e) => this.handleSortInc(e, 'account')}/><FontAwesomeIcon icon={faArrowCircleDown} className="sort-icon" onClick={(e) => this.handleSortDes(e, 'account')}/></th>
-                            {/* <th>Cập Nhật</th> */}
                             <th>Xóa</th>
                         </tr>
                     </thead>
@@ -326,14 +321,6 @@ class Comment extends React.Component {
                                     <td>{c.date_comment}</td>
                                     <td className="descriptionTable">{c.content}</td>
                                     <td>{c.username}</td>
-                                    {/* <td>
-                                        <Link to={`/admin/comment/update/${c.id}`}>
-                                            <button className="btn btn-success">
-                                            <FontAwesomeIcon icon={faEdit} className="mr-2"/>{' '}
-                                                
-                                            </button>
-                                        </Link>
-                                    </td> */}
                                     <td><button onClick={(e) => this.onToggleFormDel(e, c.id)} className="btn btn-danger">
                                         <FontAwesomeIcon icon={faTrash} className="mr-2"/>{' '}
                                         </button>

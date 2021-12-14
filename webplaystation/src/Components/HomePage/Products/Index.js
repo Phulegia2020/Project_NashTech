@@ -318,7 +318,6 @@ class Products extends Component {
                     </Grid>
                 </Segment>
             
-
                 <div className="section-4 bg-dark">
                     <div className="container">
                         <div className="row">

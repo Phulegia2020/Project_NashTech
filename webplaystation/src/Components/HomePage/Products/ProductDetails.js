@@ -347,12 +347,7 @@ class ProductDetails extends Component {
                             <span><b>Gợi ý: </b></span>
                             {this.state.proHint.map((p, index) => (
                                 p.id !== parseInt(this.state.product_id) &&
-                                
-                                // <Link to={`/WebPlayStation/product/${p.id}`} key={index} style={{ textDecoration: 'none' }} onClick={(e) => this.handleProductHint(e, p.id)}>Máy {p.name}, </Link>
-                                
                                 <a href={`/WebPlayStation/product/${p.id}`} key={index}>Máy {p.name} </a>
-
-                                // <span key={index} onClick={(e) => this.handleProductHint(e, p.id)}>Máy {p.name}, </span>
                             ))}
                             <span>...</span>
                         </div>

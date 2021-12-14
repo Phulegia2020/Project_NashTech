@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
 import { withRouter } from "react-router";
 import { put, get, del, post } from '../../Utils/httpHelper';
-import { Col, Row, Button, Form, FormGroup, Label, Input } from 'reactstrap';
+import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
 import "../Category/Category.css";
 import { storage } from "../../Utils/Firebase";
 import "./Product.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {faExclamationCircle, faTimesCircle} from "@fortawesome/free-solid-svg-icons";
+import {faTimesCircle} from "@fortawesome/free-solid-svg-icons";
 
 class UpdateProduct extends Component {
     state = {

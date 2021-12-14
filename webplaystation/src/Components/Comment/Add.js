@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
+import { Button, Form, FormGroup, Label } from 'reactstrap';
 import { get } from '../../Utils/httpHelper';
 
 export default class Add extends Component {

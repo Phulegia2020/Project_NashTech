@@ -69,7 +69,6 @@ class OTP extends Component {
                         <input type="number" name="confirm" onChange={(e) => this.handleChange(e)} placeholder="Nhập mã OTP..." required></input>
                         <br/>
                         {this.state.key === 'otp' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}<br/></span> : '' }
-                        
                         <button type="submit" className="btn-otp">Gửi</button>
                     </form>
                 </div>

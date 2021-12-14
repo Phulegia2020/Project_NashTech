@@ -69,7 +69,6 @@ class Order extends Component {
         }
         if (this.state.type === 'paypal')
         {
-            // var pay = 5;
             var pay = this.getTotal() / 20000;
             post(`/payment/pay?price=${pay}`)
             .then((response) => {
@@ -81,35 +80,6 @@ class Order extends Component {
             .catch(error => console.log(error));
         }
     }
-
-    // handleSendMail()
-    // {
-    //     var pttt = '';
-    //     if (this.state.type === 'cod')
-    //     {
-    //         pttt = 'Thanh toán tiền mặt khi nhận hàng'
-    //     }
-    //     else
-    //     {
-    //         pttt = 'Thanh toàn trực tuyến paypal';
-    //     }
-    //     var contentmail = `<b>Chào, ${localStorage.getItem('username')}</b><br/>`+
-    //                    `<p>Cám ơn quý khách đã ghé thăm và mua sản phẩm tại cửa hàng. Chúng tôi rất vui khi bạn đã mua được những sản phẩm mà bạn đang tìm kiếm. Đây là hóa đơn của bạn:</p>`+
-    //                    `Hóa Đơn <h3>#HD${this.state.bill.id}</h3>`+
-    //                    `Tổng giá trị đơn hàng: <b>${formatQuantity(this.state.bill.total)} VNĐ</b><br/>`+
-    //                    `Phương thức thanh toán: <b>${pttt}</b><br/>`;
-    //     post(`/bills/sendmail/${this.state.bill.id}`, {from: 'ps4gamemachine@gmail.com', to: this.state.user.email, subject: "THE PLAYSTATION SHOP - XÁC NHẬN HÓA ĐƠN", content: contentmail})
-    //     .then((response) => {
-    //         if (response.status === 200)
-    //         {
-    //             if (this.state.type === 'cod')
-    //             {
-    //                 window.location.href='/WebPlayStation/success';
-    //             }
-    //         }
-    //     })
-    //     .catch((error) => console.log(error));
-    // }
 
     changeValue(e){
         this.setState({

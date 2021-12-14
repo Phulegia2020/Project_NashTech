@@ -1,7 +1,7 @@
 //import React from "react";
 import classNames from "classnames";
 import { Container } from "reactstrap";
-import { Switch, Route, Redirect } from "react-router-dom";
+import { Switch, Route } from "react-router-dom";
 import Topbar from "./TopBar";
 import React, { Component } from 'react'
 import Category from "../Category/Category";

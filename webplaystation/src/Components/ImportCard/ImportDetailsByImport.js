@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { get, del, post } from '../../Utils/httpHelper'
 import { formatCurrency, formatQuantity } from '../../Utils/Utils'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Pagination, PaginationItem, PaginationLink } from 'reactstrap';
 import Add from '../ImportDetails/Add';

@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import Add from "./Add"
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Pagination, PaginationItem, PaginationLink } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faPlus, faTrash, faCheck, faArrowCircleUp, faArrowCircleDown, faReceipt } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faTrash, faCheck, faArrowCircleUp, faArrowCircleDown, faReceipt } from '@fortawesome/free-solid-svg-icons';
 import { Label, Breadcrumb, Input } from 'semantic-ui-react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
