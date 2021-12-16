@@ -235,7 +235,7 @@ class ProductDetails extends Component {
                     <Grid.Row className="table-product">
                         <Grid.Column width={4}>
                             <img src={this.state.image} alt='PlayStation' className='img-border'/>
-                            <div className={this.state.images.length > 4 ? "sub-picture-more" : 'sub-picture'}>
+                            <div className={this.state.images.length > 3 ? "sub-picture-more" : 'sub-picture'}>
                                 {this.state.images.length > 0 && <img src={product.url_image} alt='PlayStation' onClick={(e) => this.handlePicture(e, product.url_image)} className="image-main"/>}
                                 {this.state.images.map((picture, index) => (
                                     <img src={picture.imagePath} alt='PlayStation' onClick={(e) => this.handlePicture(e, picture.imagePath)} key={index}/>

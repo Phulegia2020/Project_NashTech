@@ -342,7 +342,7 @@ class UpdateProduct extends Component {
                         {this.state.key === 'image-sub' ? <span style={{ color: "red", fontStyle:"italic"}}>{this.state.Error}</span> : '' }
                         <div className={this.state.pictures.length > 5 ? "sub-picture-more" : 'sub-picture'}>
                             {this.state.pictures.map((picture, index) => (
-                                <div className="delete-picture">
+                                <div className="delete-picture" key={index}>
                                     <span>
                                         <FontAwesomeIcon className="icon-delete" icon={faTimesCircle} onClick={(e) => this.handleDeleleImage(e, picture.id)}/>
                                     </span>
